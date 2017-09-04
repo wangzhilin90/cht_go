@@ -4,6 +4,7 @@ import (
 	_ "cht/initial"
 	"cht/service/couponlistthriftservice"
 	"cht/service/loguserloginservice"
+	"cht/service/updatepasswdthriftservice"
 	"cht/service/userloginservice"
 )
 
@@ -19,6 +20,10 @@ func main() {
 
 	go func() {
 		loguserloginservice.StartLogUserLoginServer()
+	}()
+
+	go func() {
+		updatepasswdthriftservice.StartUpdatePasswdsServer()
 	}()
 	<-ch
 }

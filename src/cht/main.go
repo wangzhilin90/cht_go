@@ -4,6 +4,7 @@ import (
 	_ "cht/initial"
 	"cht/service/couponlistthriftservice"
 	"cht/service/loguserloginservice"
+	"cht/service/makeborrowservice"
 	"cht/service/rechargerecordthriftservice"
 	"cht/service/updatepasswdthriftservice"
 	"cht/service/userloginservice"
@@ -31,5 +32,8 @@ func main() {
 		rechargerecordthriftservice.StartRechargeRecordServer()
 	}()
 
+	go func() {
+		makeborrowservice.StartMakeBorrowServer()
+	}()
 	<-ch
 }

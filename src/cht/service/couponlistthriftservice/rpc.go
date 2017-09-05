@@ -28,16 +28,16 @@ type CouponRequestStruct struct {
 	OrderBy              string `thrift:"order_by,5" db:"order_by" json:"order_by"`
 }
 
-func NewCouponRequestStruct(userId int32, status int32, limit int32, log string, orderby string) *CouponRequestStruct {
-	crs := CouponRequestStruct{
-		UserID:               userId,
-		Status:               status,
-		Limit:                limit,
-		ChengHuiTongTraceLog: log,
-		OrderBy:              orderby,
-	}
-	return &crs
-}
+// func NewCouponRequestStruct(userId int32, status int32, limit int32, log string, orderby string) *CouponRequestStruct {
+// 	crs := CouponRequestStruct{
+// 		UserID:               userId,
+// 		Status:               status,
+// 		Limit:                limit,
+// 		ChengHuiTongTraceLog: log,
+// 		OrderBy:              orderby,
+// 	}
+// 	return &crs
+// }
 
 func (p *CouponRequestStruct) GetUserID() int32 {
 	return p.UserID

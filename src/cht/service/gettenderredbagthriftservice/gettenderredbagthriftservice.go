@@ -2,10 +2,10 @@ package gettenderredbagthriftservice
 
 import (
 	. "cht/common/logger"
-	// "cht/common/zkclient"
+	"cht/common/zkclient"
 	"cht/models/gettenderredbag"
-	// "fmt"
-	// "git.apache.org/thrift.git/lib/go/thrift"
+	"fmt"
+	"git.apache.org/thrift.git/lib/go/thrift"
 )
 
 type gettenderredservice struct{}
@@ -44,4 +44,33 @@ func (gts *gettenderredservice) GetRedbagInfo(requestObj *TenderRedbagRequestStr
 		Msg:         Status[QUERY_RED_BAG_SUCCESS],
 		RedbagMoney: res,
 	}, nil
+}
+
+func StartGetTenderRedBagServer() {
+	zkServers := []string{"192.168.8.212:2181", "192.168.8.213:2181", "192.168.8.214:2181"}
+	conn, err := zkclient.ConnectZk(zkServers)
+	if err != nil {
+		Logger.Fatalf("connect zk failed %v ", err)
+	}
+	defer conn.Close()
+
+	port := "30007"
+	ip, _ := zkclient.GetLocalIP()
+	listenAddr := fmt.Sprintf("%s:%s", ip, port)
+
+	servicename := "/cht/GetTenderRedbagThriftService/providers"
+	err = zkclient.RegisterNode(conn, servicename, listenAddr)
+	if err != nil {
+		Logger.Fatalf("RegisterNode failed", err)
+	}
+
+	serverTransport, err := thrift.NewTServerSocket(listenAddr)
+	if err != nil {
+		Logger.Fatal("NewTServerSocket failed", err)
+	}
+
+	handler := &gettenderredservice{}
+	processor := NewGetTenderRedbagThriftServiceProcessor(handler)
+	server := thrift.NewTSimpleServer2(processor, serverTransport)
+	server.Serve()
 }

@@ -32,15 +32,15 @@ func (uls *UserLoginService) GetUserLoginInfo(requestObj *UserlLoginRequestStruc
 	ulr.Password = requestObj.GetPassword()
 	ulr.IP = requestObj.GetIP()
 	ulr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
+	Logger.Debug("GetUserLoginInfo input param:", requestObj)
 
 	var v UserLoginResponseStruct
 	var max_retry_times int32 = 5
 	times, err := userlogin.GetLoginFailedTimes(ulr)
 	if times >= max_retry_times {
 		v = UserLoginResponseStruct{
-			Username: requestObj.GetUsername(),
-			Status:   RETRY_TOO_MUCH,
-			Msg:      Status[RETRY_TOO_MUCH],
+			Status: RETRY_TOO_MUCH,
+			Msg:    Status[RETRY_TOO_MUCH],
 		}
 		return &v, nil
 	}
@@ -48,18 +48,17 @@ func (uls *UserLoginService) GetUserLoginInfo(requestObj *UserlLoginRequestStruc
 	res, bExists, _ := userlogin.CheckLoginUserExists(ulr)
 	if bExists == false {
 		v = UserLoginResponseStruct{
-			Username: requestObj.GetUsername(),
-			Status:   ACCOUNT_NOT_EXIST,
-			Msg:      Status[ACCOUNT_NOT_EXIST],
+			Status: ACCOUNT_NOT_EXIST,
+			Msg:    Status[ACCOUNT_NOT_EXIST],
 		}
 		return &v, nil
 	}
 
 	if res.Islock == true {
 		v = UserLoginResponseStruct{
-			Username: requestObj.GetUsername(),
-			Status:   ACCOUNT_LOCKED,
-			Msg:      Status[ACCOUNT_LOCKED],
+			UserID: res.ID,
+			Status: ACCOUNT_LOCKED,
+			Msg:    Status[ACCOUNT_LOCKED],
 		}
 		return &v, nil
 	}
@@ -73,20 +72,21 @@ func (uls *UserLoginService) GetUserLoginInfo(requestObj *UserlLoginRequestStruc
 			userlogin.UpdateUserTimesTb(ulr)
 		}
 		v = UserLoginResponseStruct{
-			Username: requestObj.GetUsername(),
-			Status:   VERIFY_FAILED,
-			Msg:      Status[VERIFY_FAILED],
-			Flag:     max_retry_times - times - 1,
+			UserID: res.ID,
+			Status: VERIFY_FAILED,
+			Msg:    Status[VERIFY_FAILED],
+			Flag:   max_retry_times - times - 1,
 		}
 	} else {
 		userlogin.DeleteUserTimesTb(ulr)
 		v = UserLoginResponseStruct{
-			Username: requestObj.GetUsername(),
-			Status:   VERIFY_PASS,
-			Msg:      Status[VERIFY_PASS],
-			Flag:     max_retry_times,
+			UserID: res.ID,
+			Status: VERIFY_PASS,
+			Msg:    Status[VERIFY_PASS],
+			Flag:   max_retry_times,
 		}
 	}
+	Logger.Debug("GetUserLoginInfo return value:", v)
 	return &v, nil
 }
 

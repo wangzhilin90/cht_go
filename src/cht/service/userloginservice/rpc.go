@@ -254,23 +254,23 @@ func (p *UserlLoginRequestStruct) String() string {
 }
 
 // Attributes:
-//  - Username
+//  - UserID
 //  - Status
 //  - Msg
 //  - Flag
 type UserLoginResponseStruct struct {
-	Username string `thrift:"username,1" db:"username" json:"username"`
-	Status   int32  `thrift:"status,2" db:"status" json:"status"`
-	Msg      string `thrift:"msg,3" db:"msg" json:"msg"`
-	Flag     int32  `thrift:"flag,4" db:"flag" json:"flag"`
+	UserID int32  `thrift:"user_id,1" db:"user_id" json:"user_id"`
+	Status int32  `thrift:"status,2" db:"status" json:"status"`
+	Msg    string `thrift:"msg,3" db:"msg" json:"msg"`
+	Flag   int32  `thrift:"flag,4" db:"flag" json:"flag"`
 }
 
 func NewUserLoginResponseStruct() *UserLoginResponseStruct {
 	return &UserLoginResponseStruct{}
 }
 
-func (p *UserLoginResponseStruct) GetUsername() string {
-	return p.Username
+func (p *UserLoginResponseStruct) GetUserID() int32 {
+	return p.UserID
 }
 
 func (p *UserLoginResponseStruct) GetStatus() int32 {
@@ -330,10 +330,10 @@ func (p *UserLoginResponseStruct) Read(iprot thrift.TProtocol) error {
 }
 
 func (p *UserLoginResponseStruct) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI32(); err != nil {
 		return thrift.PrependError("error reading field 1: ", err)
 	} else {
-		p.Username = v
+		p.UserID = v
 	}
 	return nil
 }
@@ -393,14 +393,14 @@ func (p *UserLoginResponseStruct) Write(oprot thrift.TProtocol) error {
 }
 
 func (p *UserLoginResponseStruct) writeField1(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("username", thrift.STRING, 1); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:username: ", p), err)
+	if err := oprot.WriteFieldBegin("user_id", thrift.I32, 1); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:user_id: ", p), err)
 	}
-	if err := oprot.WriteString(string(p.Username)); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.username (1) field write error: ", p), err)
+	if err := oprot.WriteI32(int32(p.UserID)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.user_id (1) field write error: ", p), err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 1:username: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 1:user_id: ", p), err)
 	}
 	return err
 }

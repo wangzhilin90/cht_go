@@ -22,8 +22,8 @@ func main() {
 	var urlString string
 	var trans thrift.TTransport
 
-	flag.StringVar(&host, "h", "localhost", "Specify host and port")
-	flag.IntVar(&port, "p", 9100, "Specify port")
+	flag.StringVar(&host, "h", "192.168.8.209", "Specify host and port")
+	flag.IntVar(&port, "p", 30003, "Specify port")
 	flag.StringVar(&protocol, "P", "binary", "Specify the protocol (binary, compact, simplejson, json)")
 	flag.StringVar(&urlString, "u", "", "Specify the url")
 	flag.Parse()
@@ -61,7 +61,7 @@ func main() {
 	}
 	Logger.Debugf("start request")
 
-	ulrs := userloginservice.NewUserlLoginRequestStruct("大大盆子", "9f7add09b41ac15889441e467ff208bf", "", "")
+	ulrs := userloginservice.NewUserlLoginRequestStruct("July", "9f7add09b41ac15889441e467ff208bf", "", "")
 	res, err := client.GetUserLoginInfo(ulrs)
 	fmt.Println("GetUserLoginInfo res", res)
 	Logger.Debug("GetUserLoginInfo res", res)

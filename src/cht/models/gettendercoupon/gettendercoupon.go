@@ -1,4 +1,4 @@
-package gettenderredbag
+package gettendercoupon
 
 import (
 	"bytes"
@@ -8,10 +8,10 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-type TenderRedbagRequest struct {
+type TenderCouponRequest struct {
 	UserId               int32
 	TenderId             int32  //标ID
-	RedId                int32  //红包ID
+	CouponId             int32  //加息券ID
 	TenderMoney          string //用户投资金额
 	TimeLimit            int32
 	ChengHuiTongTraceLog string
@@ -27,14 +27,14 @@ type borrowStruct struct {
  * @return   int32 返回标类型
  * @DateTime 2017-09-06T11:00:19+0800
  */
-func getBorrowType(trr *TenderRedbagRequest) (int32, error) {
+func getBorrowType(tcr *TenderCouponRequest) (int32, error) {
 	o := orm.NewOrm()
 	o.Using("default")
-	Logger.Debug("getBorrowType input param:", trr)
+	Logger.Debug("getBorrowType input param:", tcr)
 	qb, _ := orm.NewQueryBuilder("mysql")
 	qb.Select("borrow_type").
 		From("jl_borrow").
-		Where(fmt.Sprintf("id=%d", trr.TenderId))
+		Where(fmt.Sprintf("id=%d", tcr.TenderId))
 
 	sql := qb.String()
 	Logger.Debug("getBorrowType sql:", sql)
@@ -48,19 +48,19 @@ func getBorrowType(trr *TenderRedbagRequest) (int32, error) {
 	return bs.BorrowType, nil
 }
 
-type MoneyStruct struct {
-	Money string `orm:"column(money)"`
+type CouponStruct struct {
+	Apr string `orm:"column(apr)"` //加息值
 }
 
 /**
- * [GetRedBagMoney 获取红包金额]
- * @param    trr *TenderRedbagRequest请求入参
- * @return   string 返回红包金额
+ * [GetRedBagMoney 获取加息值]
+ * @param    tcr *TenderCouponRequest 请求入参
+ * @return   string 返回加息值
  * @DateTime 2017-09-06T11:05:55+0800
  */
-func GetRedBagMoney(trr *TenderRedbagRequest) (string, error) {
-	Logger.Debug("GetRedBagMoney input param:", trr)
-	borrowType, err := getBorrowType(trr)
+func GetTenderCoupon(tcr *TenderCouponRequest) (string, error) {
+	Logger.Debug("GetTenderCoupon input param:", tcr)
+	borrowType, err := getBorrowType(tcr)
 	if err != nil {
 		return "", err
 	}
@@ -69,34 +69,34 @@ func GetRedBagMoney(trr *TenderRedbagRequest) (string, error) {
 	o.Using("default")
 
 	sql := bytes.Buffer{}
-	sql.WriteString("SELECT money FROM jl_three_redbag WHERE ")
-	sql.WriteString("user_id=? and id=? and status=1 ")
+	sql.WriteString("SELECT apr FROM jl_apr_coupon WHERE ")
+	sql.WriteString("user_id=? and id=? and status=1 ") //status=1为可用红包
 	sql.WriteString("and min_tender<=? and (max_tender=0 OR max_tender>=?) ")
 	sql.WriteString(" and FIND_IN_SET(?, time_limit) ")
 	sql.WriteString(" and FIND_IN_SET(?, borrow_type) ")
 	sql.WriteString(" LIMIT 1")
-	Logger.Debug("GetRedBagMoney sql:", sql.String())
-	Logger.Debug("user_id", trr.UserId)
-	Logger.Debug("red_id", trr.RedId)
+	Logger.Debug("GetTenderCoupon sql:", sql.String())
+	Logger.Debug("user_id ", tcr.UserId)
+	Logger.Debug("coupon_id ", tcr.CouponId)
 
 	//用户投资时间大于18个月，当18个月时间投资
-	if trr.TimeLimit > 18 {
-		trr.TimeLimit = 18
+	if tcr.TimeLimit > 18 {
+		tcr.TimeLimit = 18
 	}
 
-	var ms MoneyStruct
+	var cs CouponStruct
 	err = o.Raw(sql.String(),
-		trr.UserId,
-		trr.RedId,
-		trr.TenderMoney,
-		trr.TenderMoney,
-		trr.TimeLimit,
+		tcr.UserId,
+		tcr.CouponId,
+		tcr.TenderMoney,
+		tcr.TenderMoney,
+		tcr.TimeLimit,
 		borrowType,
-	).QueryRow(&ms)
+	).QueryRow(&cs)
 	if err != nil {
-		Logger.Errorf("GetRedBagMoney query failed ", err)
+		Logger.Errorf("GetTenderCoupon query failed ", err)
 		return "", err
 	}
-	Logger.Debugf("GetBorrowType res ", ms.Money)
-	return ms.Money, nil
+	Logger.Debugf("GetBorrowType res ", cs.Apr)
+	return cs.Apr, nil
 }

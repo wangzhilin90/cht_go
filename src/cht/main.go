@@ -3,6 +3,7 @@ package main
 import (
 	_ "cht/initial"
 	"cht/service/couponlistthriftservice"
+	"cht/service/gettendercouponthriftservice"
 	"cht/service/gettenderredbagthriftservice"
 	"cht/service/loguserloginservice"
 	"cht/service/makeborrowservice"
@@ -39,6 +40,10 @@ func main() {
 
 	go func() {
 		gettenderredbagthriftservice.StartGetTenderRedBagServer()
+	}()
+
+	go func() {
+		gettendercouponthriftservice.StartGetCouponServer()
 	}()
 
 	<-ch

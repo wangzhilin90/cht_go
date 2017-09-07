@@ -46,6 +46,7 @@ func (gts *gettendercouponservice) GetCouponInfo(requestObj *TenderCouponRequest
 	}, nil
 }
 
+/*开启立即投资，获取投标加息值服务*/
 func StartGetCouponServer() {
 	zkServers := []string{"192.168.8.212:2181", "192.168.8.213:2181", "192.168.8.214:2181"}
 	conn, err := zkclient.ConnectZk(zkServers)

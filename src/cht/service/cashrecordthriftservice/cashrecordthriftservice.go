@@ -65,7 +65,7 @@ func (cs *cashrecordservice) GetCashRecord(requestObj *CashRecordRequestStruct) 
 }
 
 /**
- * [StartUpdatePasswdsServer 开启查询提现记录服务]
+ * [StartUpdatePasswdsServer 开启充值提现，获取提现记录服务]
  * @DateTime 2017-08-24T15:19:45+0800
  */
 func StartCashRecordServer() {

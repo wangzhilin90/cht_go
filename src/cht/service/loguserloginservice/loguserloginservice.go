@@ -17,6 +17,16 @@ type LogUserlLoginRequest struct {
 
 type LogUserLoginService struct{}
 
+const (
+	UPDATE_LOG_FAILED  = 1001
+	UPDATE_LOG_SUCCESS = 1002
+)
+
+var Stat = map[int]string{
+	UPDATE_LOG_FAILED:  "更新登录日志失败",
+	UPDATE_LOG_SUCCESS: "更新登录日志成功",
+}
+
 func (luls *LogUserLoginService) UpdateLogUserlLogin(requestObj *LogUserlLoginRequestStruct) (r *LogUserLoginResponseStruct, err error) {
 	llr := new(loguserlogin.LogUserlLoginRequest)
 	llr.UserID = requestObj.GetUserID()
@@ -26,13 +36,17 @@ func (luls *LogUserLoginService) UpdateLogUserlLogin(requestObj *LogUserlLoginRe
 
 	b, err := loguserlogin.UpdateLogUserlLogin(llr)
 	if b == false {
-		Logger.Error("UpdateLogUserlLogin failed")
-		return nil, err
+		Logger.Error("UpdateLogUserlLogin failed", err)
+		return &LogUserLoginResponseStruct{
+			Status: UPDATE_LOG_FAILED,
+			Msg:    Stat[UPDATE_LOG_FAILED],
+		}, nil
 	}
-
-	var llrs LogUserLoginResponseStruct
-	llrs.UserID = llr.UserID
-	return &llrs, nil
+	Logger.Debug("UpdateLogUserlLogin success")
+	return &LogUserLoginResponseStruct{
+		Status: UPDATE_LOG_SUCCESS,
+		Msg:    Stat[UPDATE_LOG_SUCCESS],
+	}, nil
 }
 
 /**

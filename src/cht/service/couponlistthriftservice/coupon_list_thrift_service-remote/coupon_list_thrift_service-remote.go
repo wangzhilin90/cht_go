@@ -38,8 +38,8 @@ func main() {
 	_ = strconv.Atoi
 	_ = math.Abs
 	flag.Usage = Usage
-	flag.StringVar(&host, "h", "127.0.0.1", "Specify host and port")
-	flag.IntVar(&port, "p", 8100, "Specify port")
+	flag.StringVar(&host, "h", "192.168.8.209", "Specify host and port")
+	flag.IntVar(&port, "p", 30001, "Specify port")
 	flag.StringVar(&protocol, "P", "binary", "Specify the protocol (binary, compact, simplejson, json)")
 	flag.StringVar(&urlString, "u", "", "Specify the url")
 	flag.BoolVar(&framed, "framed", false, "Use framed transport")

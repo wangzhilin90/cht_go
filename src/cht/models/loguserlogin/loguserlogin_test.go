@@ -16,7 +16,7 @@ func NewLogUserlLoginRequest(userID int32, loginIP string, loginstyle int32, log
 }
 
 func TestGetBorrowInfo(t *testing.T) {
-	lulr := NewLogUserlLoginRequest(5003, "192.168.8.35", 0, "testlog")
+	lulr := NewLogUserlLoginRequest(28, "192.168.8.35", 0, "testlog")
 	res, err := GetBorrowInfo(lulr)
 	if err != nil {
 		t.Fatalf("GetBorrowInfo failed", err)
@@ -25,7 +25,7 @@ func TestGetBorrowInfo(t *testing.T) {
 }
 
 func TestUpdateLogUserlLogin(t *testing.T) {
-	lulr := NewLogUserlLoginRequest(5004, "192.168.8.35", 0, "testlog")
+	lulr := NewLogUserlLoginRequest(28, "192.168.8.35", 0, "testlog")
 	b, _ := UpdateLogUserlLogin(lulr)
 	if b == false {
 		t.Fatalf("TestUpdateLogUserlLogin failed")

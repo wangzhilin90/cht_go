@@ -18,7 +18,7 @@ func NewCouponRequestStruct(userId int32, status int32, limit int32, log string,
 
 func TestGetCoupon(t *testing.T) {
 	// crs := NewCouponRequestStruct(1, 3, 10, "", "app_add")
-	crs := NewCouponRequestStruct(0, 0, 0, "", "status,end_time,apr")
+	crs := NewCouponRequestStruct(28, 0, 0, "", "end_time")
 	cs := &CouponService{}
 	res, err := cs.GetCoupon(crs)
 	if err != nil {
@@ -27,8 +27,4 @@ func TestGetCoupon(t *testing.T) {
 	for _, v := range res.CouponList {
 		t.Log(v)
 	}
-}
-
-func TestStartCouponServer(t *testing.T) {
-	StartCouponServer()
 }

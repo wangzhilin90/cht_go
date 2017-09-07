@@ -15,321 +15,26 @@ var _ = fmt.Printf
 var _ = bytes.Equal
 
 // Attributes:
-//  - UserID
-//  - Status
-//  - Limit
-//  - ChengHuiTongTraceLog
-//  - OrderBy
-type CouponRequestStruct struct {
-  UserID int32 `thrift:"user_id,1" db:"user_id" json:"user_id"`
-  Status int16 `thrift:"status,2" db:"status" json:"status"`
-  Limit int16 `thrift:"limit,3" db:"limit" json:"limit"`
-  ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,4" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
-  OrderBy string `thrift:"order_by,5" db:"order_by" json:"order_by"`
-}
-
-func NewCouponRequestStruct() *CouponRequestStruct {
-  return &CouponRequestStruct{}
-}
-
-
-func (p *CouponRequestStruct) GetUserID() int32 {
-  return p.UserID
-}
-
-func (p *CouponRequestStruct) GetStatus() int16 {
-  return p.Status
-}
-
-func (p *CouponRequestStruct) GetLimit() int16 {
-  return p.Limit
-}
-
-func (p *CouponRequestStruct) GetChengHuiTongTraceLog() string {
-  return p.ChengHuiTongTraceLog
-}
-
-func (p *CouponRequestStruct) GetOrderBy() string {
-  return p.OrderBy
-}
-func (p *CouponRequestStruct) Read(iprot thrift.TProtocol) error {
-  if _, err := iprot.ReadStructBegin(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
-  }
-
-
-  for {
-    _, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
-    if err != nil {
-      return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
-    }
-    if fieldTypeId == thrift.STOP { break; }
-    switch fieldId {
-    case 1:
-      if err := p.ReadField1(iprot); err != nil {
-        return err
-      }
-    case 2:
-      if err := p.ReadField2(iprot); err != nil {
-        return err
-      }
-    case 3:
-      if err := p.ReadField3(iprot); err != nil {
-        return err
-      }
-    case 4:
-      if err := p.ReadField4(iprot); err != nil {
-        return err
-      }
-    case 5:
-      if err := p.ReadField5(iprot); err != nil {
-        return err
-      }
-    default:
-      if err := iprot.Skip(fieldTypeId); err != nil {
-        return err
-      }
-    }
-    if err := iprot.ReadFieldEnd(); err != nil {
-      return err
-    }
-  }
-  if err := iprot.ReadStructEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-  }
-  return nil
-}
-
-func (p *CouponRequestStruct)  ReadField1(iprot thrift.TProtocol) error {
-  if v, err := iprot.ReadI32(); err != nil {
-  return thrift.PrependError("error reading field 1: ", err)
-} else {
-  p.UserID = v
-}
-  return nil
-}
-
-func (p *CouponRequestStruct)  ReadField2(iprot thrift.TProtocol) error {
-  if v, err := iprot.ReadI16(); err != nil {
-  return thrift.PrependError("error reading field 2: ", err)
-} else {
-  p.Status = v
-}
-  return nil
-}
-
-func (p *CouponRequestStruct)  ReadField3(iprot thrift.TProtocol) error {
-  if v, err := iprot.ReadI16(); err != nil {
-  return thrift.PrependError("error reading field 3: ", err)
-} else {
-  p.Limit = v
-}
-  return nil
-}
-
-func (p *CouponRequestStruct)  ReadField4(iprot thrift.TProtocol) error {
-  if v, err := iprot.ReadString(); err != nil {
-  return thrift.PrependError("error reading field 4: ", err)
-} else {
-  p.ChengHuiTongTraceLog = v
-}
-  return nil
-}
-
-func (p *CouponRequestStruct)  ReadField5(iprot thrift.TProtocol) error {
-  if v, err := iprot.ReadString(); err != nil {
-  return thrift.PrependError("error reading field 5: ", err)
-} else {
-  p.OrderBy = v
-}
-  return nil
-}
-
-func (p *CouponRequestStruct) Write(oprot thrift.TProtocol) error {
-  if err := oprot.WriteStructBegin("CouponRequestStruct"); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err) }
-  if p != nil {
-    if err := p.writeField1(oprot); err != nil { return err }
-    if err := p.writeField2(oprot); err != nil { return err }
-    if err := p.writeField3(oprot); err != nil { return err }
-    if err := p.writeField4(oprot); err != nil { return err }
-    if err := p.writeField5(oprot); err != nil { return err }
-  }
-  if err := oprot.WriteFieldStop(); err != nil {
-    return thrift.PrependError("write field stop error: ", err) }
-  if err := oprot.WriteStructEnd(); err != nil {
-    return thrift.PrependError("write struct stop error: ", err) }
-  return nil
-}
-
-func (p *CouponRequestStruct) writeField1(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("user_id", thrift.I32, 1); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:user_id: ", p), err) }
-  if err := oprot.WriteI32(int32(p.UserID)); err != nil {
-  return thrift.PrependError(fmt.Sprintf("%T.user_id (1) field write error: ", p), err) }
-  if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 1:user_id: ", p), err) }
-  return err
-}
-
-func (p *CouponRequestStruct) writeField2(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("status", thrift.I16, 2); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:status: ", p), err) }
-  if err := oprot.WriteI16(int16(p.Status)); err != nil {
-  return thrift.PrependError(fmt.Sprintf("%T.status (2) field write error: ", p), err) }
-  if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 2:status: ", p), err) }
-  return err
-}
-
-func (p *CouponRequestStruct) writeField3(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("limit", thrift.I16, 3); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:limit: ", p), err) }
-  if err := oprot.WriteI16(int16(p.Limit)); err != nil {
-  return thrift.PrependError(fmt.Sprintf("%T.limit (3) field write error: ", p), err) }
-  if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 3:limit: ", p), err) }
-  return err
-}
-
-func (p *CouponRequestStruct) writeField4(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("chengHuiTongTraceLog", thrift.STRING, 4); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 4:chengHuiTongTraceLog: ", p), err) }
-  if err := oprot.WriteString(string(p.ChengHuiTongTraceLog)); err != nil {
-  return thrift.PrependError(fmt.Sprintf("%T.chengHuiTongTraceLog (4) field write error: ", p), err) }
-  if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 4:chengHuiTongTraceLog: ", p), err) }
-  return err
-}
-
-func (p *CouponRequestStruct) writeField5(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("order_by", thrift.STRING, 5); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 5:order_by: ", p), err) }
-  if err := oprot.WriteString(string(p.OrderBy)); err != nil {
-  return thrift.PrependError(fmt.Sprintf("%T.order_by (5) field write error: ", p), err) }
-  if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 5:order_by: ", p), err) }
-  return err
-}
-
-func (p *CouponRequestStruct) String() string {
-  if p == nil {
-    return "<nil>"
-  }
-  return fmt.Sprintf("CouponRequestStruct(%+v)", *p)
-}
-
-// Attributes:
 //  - ID
-//  - UserID
-//  - Addtime
-//  - StartTime
-//  - EndTime
-//  - UseTime
-//  - Status
-//  - TenderID
-//  - Apr
-//  - AppAdd
-//  - MinTender
-//  - MaxTender
-//  - TimeLimit
-//  - BorrowType
-//  - Name
-//  - Remark
-//  - ActivityName
-type CouponStruct struct {
+//  - Password
+type UpdatePasswdRequestStruct struct {
   ID int32 `thrift:"id,1" db:"id" json:"id"`
-  UserID int32 `thrift:"user_id,2" db:"user_id" json:"user_id"`
-  Addtime int32 `thrift:"addtime,3" db:"addtime" json:"addtime"`
-  StartTime int32 `thrift:"start_time,4" db:"start_time" json:"start_time"`
-  EndTime int32 `thrift:"end_time,5" db:"end_time" json:"end_time"`
-  UseTime int32 `thrift:"use_time,6" db:"use_time" json:"use_time"`
-  Status int16 `thrift:"status,7" db:"status" json:"status"`
-  TenderID int32 `thrift:"tender_id,8" db:"tender_id" json:"tender_id"`
-  Apr string `thrift:"apr,9" db:"apr" json:"apr"`
-  AppAdd string `thrift:"app_add,10" db:"app_add" json:"app_add"`
-  MinTender string `thrift:"min_tender,11" db:"min_tender" json:"min_tender"`
-  MaxTender string `thrift:"max_tender,12" db:"max_tender" json:"max_tender"`
-  TimeLimit string `thrift:"time_limit,13" db:"time_limit" json:"time_limit"`
-  BorrowType string `thrift:"borrow_type,14" db:"borrow_type" json:"borrow_type"`
-  Name string `thrift:"name,15" db:"name" json:"name"`
-  Remark string `thrift:"remark,16" db:"remark" json:"remark"`
-  ActivityName string `thrift:"activity_name,17" db:"activity_name" json:"activity_name"`
+  Password string `thrift:"password,2" db:"password" json:"password"`
 }
 
-func NewCouponStruct() *CouponStruct {
-  return &CouponStruct{}
+func NewUpdatePasswdRequestStruct() *UpdatePasswdRequestStruct {
+  return &UpdatePasswdRequestStruct{}
 }
 
 
-func (p *CouponStruct) GetID() int32 {
+func (p *UpdatePasswdRequestStruct) GetID() int32 {
   return p.ID
 }
 
-func (p *CouponStruct) GetUserID() int32 {
-  return p.UserID
+func (p *UpdatePasswdRequestStruct) GetPassword() string {
+  return p.Password
 }
-
-func (p *CouponStruct) GetAddtime() int32 {
-  return p.Addtime
-}
-
-func (p *CouponStruct) GetStartTime() int32 {
-  return p.StartTime
-}
-
-func (p *CouponStruct) GetEndTime() int32 {
-  return p.EndTime
-}
-
-func (p *CouponStruct) GetUseTime() int32 {
-  return p.UseTime
-}
-
-func (p *CouponStruct) GetStatus() int16 {
-  return p.Status
-}
-
-func (p *CouponStruct) GetTenderID() int32 {
-  return p.TenderID
-}
-
-func (p *CouponStruct) GetApr() string {
-  return p.Apr
-}
-
-func (p *CouponStruct) GetAppAdd() string {
-  return p.AppAdd
-}
-
-func (p *CouponStruct) GetMinTender() string {
-  return p.MinTender
-}
-
-func (p *CouponStruct) GetMaxTender() string {
-  return p.MaxTender
-}
-
-func (p *CouponStruct) GetTimeLimit() string {
-  return p.TimeLimit
-}
-
-func (p *CouponStruct) GetBorrowType() string {
-  return p.BorrowType
-}
-
-func (p *CouponStruct) GetName() string {
-  return p.Name
-}
-
-func (p *CouponStruct) GetRemark() string {
-  return p.Remark
-}
-
-func (p *CouponStruct) GetActivityName() string {
-  return p.ActivityName
-}
-func (p *CouponStruct) Read(iprot thrift.TProtocol) error {
+func (p *UpdatePasswdRequestStruct) Read(iprot thrift.TProtocol) error {
   if _, err := iprot.ReadStructBegin(); err != nil {
     return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
   }
@@ -350,66 +55,6 @@ func (p *CouponStruct) Read(iprot thrift.TProtocol) error {
       if err := p.ReadField2(iprot); err != nil {
         return err
       }
-    case 3:
-      if err := p.ReadField3(iprot); err != nil {
-        return err
-      }
-    case 4:
-      if err := p.ReadField4(iprot); err != nil {
-        return err
-      }
-    case 5:
-      if err := p.ReadField5(iprot); err != nil {
-        return err
-      }
-    case 6:
-      if err := p.ReadField6(iprot); err != nil {
-        return err
-      }
-    case 7:
-      if err := p.ReadField7(iprot); err != nil {
-        return err
-      }
-    case 8:
-      if err := p.ReadField8(iprot); err != nil {
-        return err
-      }
-    case 9:
-      if err := p.ReadField9(iprot); err != nil {
-        return err
-      }
-    case 10:
-      if err := p.ReadField10(iprot); err != nil {
-        return err
-      }
-    case 11:
-      if err := p.ReadField11(iprot); err != nil {
-        return err
-      }
-    case 12:
-      if err := p.ReadField12(iprot); err != nil {
-        return err
-      }
-    case 13:
-      if err := p.ReadField13(iprot); err != nil {
-        return err
-      }
-    case 14:
-      if err := p.ReadField14(iprot); err != nil {
-        return err
-      }
-    case 15:
-      if err := p.ReadField15(iprot); err != nil {
-        return err
-      }
-    case 16:
-      if err := p.ReadField16(iprot); err != nil {
-        return err
-      }
-    case 17:
-      if err := p.ReadField17(iprot); err != nil {
-        return err
-      }
     default:
       if err := iprot.Skip(fieldTypeId); err != nil {
         return err
@@ -425,7 +70,7 @@ func (p *CouponStruct) Read(iprot thrift.TProtocol) error {
   return nil
 }
 
-func (p *CouponStruct)  ReadField1(iprot thrift.TProtocol) error {
+func (p *UpdatePasswdRequestStruct)  ReadField1(iprot thrift.TProtocol) error {
   if v, err := iprot.ReadI32(); err != nil {
   return thrift.PrependError("error reading field 1: ", err)
 } else {
@@ -434,171 +79,21 @@ func (p *CouponStruct)  ReadField1(iprot thrift.TProtocol) error {
   return nil
 }
 
-func (p *CouponStruct)  ReadField2(iprot thrift.TProtocol) error {
-  if v, err := iprot.ReadI32(); err != nil {
+func (p *UpdatePasswdRequestStruct)  ReadField2(iprot thrift.TProtocol) error {
+  if v, err := iprot.ReadString(); err != nil {
   return thrift.PrependError("error reading field 2: ", err)
 } else {
-  p.UserID = v
+  p.Password = v
 }
   return nil
 }
 
-func (p *CouponStruct)  ReadField3(iprot thrift.TProtocol) error {
-  if v, err := iprot.ReadI32(); err != nil {
-  return thrift.PrependError("error reading field 3: ", err)
-} else {
-  p.Addtime = v
-}
-  return nil
-}
-
-func (p *CouponStruct)  ReadField4(iprot thrift.TProtocol) error {
-  if v, err := iprot.ReadI32(); err != nil {
-  return thrift.PrependError("error reading field 4: ", err)
-} else {
-  p.StartTime = v
-}
-  return nil
-}
-
-func (p *CouponStruct)  ReadField5(iprot thrift.TProtocol) error {
-  if v, err := iprot.ReadI32(); err != nil {
-  return thrift.PrependError("error reading field 5: ", err)
-} else {
-  p.EndTime = v
-}
-  return nil
-}
-
-func (p *CouponStruct)  ReadField6(iprot thrift.TProtocol) error {
-  if v, err := iprot.ReadI32(); err != nil {
-  return thrift.PrependError("error reading field 6: ", err)
-} else {
-  p.UseTime = v
-}
-  return nil
-}
-
-func (p *CouponStruct)  ReadField7(iprot thrift.TProtocol) error {
-  if v, err := iprot.ReadI16(); err != nil {
-  return thrift.PrependError("error reading field 7: ", err)
-} else {
-  p.Status = v
-}
-  return nil
-}
-
-func (p *CouponStruct)  ReadField8(iprot thrift.TProtocol) error {
-  if v, err := iprot.ReadI32(); err != nil {
-  return thrift.PrependError("error reading field 8: ", err)
-} else {
-  p.TenderID = v
-}
-  return nil
-}
-
-func (p *CouponStruct)  ReadField9(iprot thrift.TProtocol) error {
-  if v, err := iprot.ReadString(); err != nil {
-  return thrift.PrependError("error reading field 9: ", err)
-} else {
-  p.Apr = v
-}
-  return nil
-}
-
-func (p *CouponStruct)  ReadField10(iprot thrift.TProtocol) error {
-  if v, err := iprot.ReadString(); err != nil {
-  return thrift.PrependError("error reading field 10: ", err)
-} else {
-  p.AppAdd = v
-}
-  return nil
-}
-
-func (p *CouponStruct)  ReadField11(iprot thrift.TProtocol) error {
-  if v, err := iprot.ReadString(); err != nil {
-  return thrift.PrependError("error reading field 11: ", err)
-} else {
-  p.MinTender = v
-}
-  return nil
-}
-
-func (p *CouponStruct)  ReadField12(iprot thrift.TProtocol) error {
-  if v, err := iprot.ReadString(); err != nil {
-  return thrift.PrependError("error reading field 12: ", err)
-} else {
-  p.MaxTender = v
-}
-  return nil
-}
-
-func (p *CouponStruct)  ReadField13(iprot thrift.TProtocol) error {
-  if v, err := iprot.ReadString(); err != nil {
-  return thrift.PrependError("error reading field 13: ", err)
-} else {
-  p.TimeLimit = v
-}
-  return nil
-}
-
-func (p *CouponStruct)  ReadField14(iprot thrift.TProtocol) error {
-  if v, err := iprot.ReadString(); err != nil {
-  return thrift.PrependError("error reading field 14: ", err)
-} else {
-  p.BorrowType = v
-}
-  return nil
-}
-
-func (p *CouponStruct)  ReadField15(iprot thrift.TProtocol) error {
-  if v, err := iprot.ReadString(); err != nil {
-  return thrift.PrependError("error reading field 15: ", err)
-} else {
-  p.Name = v
-}
-  return nil
-}
-
-func (p *CouponStruct)  ReadField16(iprot thrift.TProtocol) error {
-  if v, err := iprot.ReadString(); err != nil {
-  return thrift.PrependError("error reading field 16: ", err)
-} else {
-  p.Remark = v
-}
-  return nil
-}
-
-func (p *CouponStruct)  ReadField17(iprot thrift.TProtocol) error {
-  if v, err := iprot.ReadString(); err != nil {
-  return thrift.PrependError("error reading field 17: ", err)
-} else {
-  p.ActivityName = v
-}
-  return nil
-}
-
-func (p *CouponStruct) Write(oprot thrift.TProtocol) error {
-  if err := oprot.WriteStructBegin("CouponStruct"); err != nil {
+func (p *UpdatePasswdRequestStruct) Write(oprot thrift.TProtocol) error {
+  if err := oprot.WriteStructBegin("UpdatePasswdRequestStruct"); err != nil {
     return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err) }
   if p != nil {
     if err := p.writeField1(oprot); err != nil { return err }
     if err := p.writeField2(oprot); err != nil { return err }
-    if err := p.writeField3(oprot); err != nil { return err }
-    if err := p.writeField4(oprot); err != nil { return err }
-    if err := p.writeField5(oprot); err != nil { return err }
-    if err := p.writeField6(oprot); err != nil { return err }
-    if err := p.writeField7(oprot); err != nil { return err }
-    if err := p.writeField8(oprot); err != nil { return err }
-    if err := p.writeField9(oprot); err != nil { return err }
-    if err := p.writeField10(oprot); err != nil { return err }
-    if err := p.writeField11(oprot); err != nil { return err }
-    if err := p.writeField12(oprot); err != nil { return err }
-    if err := p.writeField13(oprot); err != nil { return err }
-    if err := p.writeField14(oprot); err != nil { return err }
-    if err := p.writeField15(oprot); err != nil { return err }
-    if err := p.writeField16(oprot); err != nil { return err }
-    if err := p.writeField17(oprot); err != nil { return err }
   }
   if err := oprot.WriteFieldStop(); err != nil {
     return thrift.PrependError("write field stop error: ", err) }
@@ -607,7 +102,7 @@ func (p *CouponStruct) Write(oprot thrift.TProtocol) error {
   return nil
 }
 
-func (p *CouponStruct) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *UpdatePasswdRequestStruct) writeField1(oprot thrift.TProtocol) (err error) {
   if err := oprot.WriteFieldBegin("id", thrift.I32, 1); err != nil {
     return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:id: ", p), err) }
   if err := oprot.WriteI32(int32(p.ID)); err != nil {
@@ -617,188 +112,44 @@ func (p *CouponStruct) writeField1(oprot thrift.TProtocol) (err error) {
   return err
 }
 
-func (p *CouponStruct) writeField2(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("user_id", thrift.I32, 2); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:user_id: ", p), err) }
-  if err := oprot.WriteI32(int32(p.UserID)); err != nil {
-  return thrift.PrependError(fmt.Sprintf("%T.user_id (2) field write error: ", p), err) }
+func (p *UpdatePasswdRequestStruct) writeField2(oprot thrift.TProtocol) (err error) {
+  if err := oprot.WriteFieldBegin("password", thrift.STRING, 2); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:password: ", p), err) }
+  if err := oprot.WriteString(string(p.Password)); err != nil {
+  return thrift.PrependError(fmt.Sprintf("%T.password (2) field write error: ", p), err) }
   if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 2:user_id: ", p), err) }
+    return thrift.PrependError(fmt.Sprintf("%T write field end error 2:password: ", p), err) }
   return err
 }
 
-func (p *CouponStruct) writeField3(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("addtime", thrift.I32, 3); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:addtime: ", p), err) }
-  if err := oprot.WriteI32(int32(p.Addtime)); err != nil {
-  return thrift.PrependError(fmt.Sprintf("%T.addtime (3) field write error: ", p), err) }
-  if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 3:addtime: ", p), err) }
-  return err
-}
-
-func (p *CouponStruct) writeField4(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("start_time", thrift.I32, 4); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 4:start_time: ", p), err) }
-  if err := oprot.WriteI32(int32(p.StartTime)); err != nil {
-  return thrift.PrependError(fmt.Sprintf("%T.start_time (4) field write error: ", p), err) }
-  if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 4:start_time: ", p), err) }
-  return err
-}
-
-func (p *CouponStruct) writeField5(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("end_time", thrift.I32, 5); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 5:end_time: ", p), err) }
-  if err := oprot.WriteI32(int32(p.EndTime)); err != nil {
-  return thrift.PrependError(fmt.Sprintf("%T.end_time (5) field write error: ", p), err) }
-  if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 5:end_time: ", p), err) }
-  return err
-}
-
-func (p *CouponStruct) writeField6(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("use_time", thrift.I32, 6); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 6:use_time: ", p), err) }
-  if err := oprot.WriteI32(int32(p.UseTime)); err != nil {
-  return thrift.PrependError(fmt.Sprintf("%T.use_time (6) field write error: ", p), err) }
-  if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 6:use_time: ", p), err) }
-  return err
-}
-
-func (p *CouponStruct) writeField7(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("status", thrift.I16, 7); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 7:status: ", p), err) }
-  if err := oprot.WriteI16(int16(p.Status)); err != nil {
-  return thrift.PrependError(fmt.Sprintf("%T.status (7) field write error: ", p), err) }
-  if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 7:status: ", p), err) }
-  return err
-}
-
-func (p *CouponStruct) writeField8(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("tender_id", thrift.I32, 8); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 8:tender_id: ", p), err) }
-  if err := oprot.WriteI32(int32(p.TenderID)); err != nil {
-  return thrift.PrependError(fmt.Sprintf("%T.tender_id (8) field write error: ", p), err) }
-  if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 8:tender_id: ", p), err) }
-  return err
-}
-
-func (p *CouponStruct) writeField9(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("apr", thrift.STRING, 9); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 9:apr: ", p), err) }
-  if err := oprot.WriteString(string(p.Apr)); err != nil {
-  return thrift.PrependError(fmt.Sprintf("%T.apr (9) field write error: ", p), err) }
-  if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 9:apr: ", p), err) }
-  return err
-}
-
-func (p *CouponStruct) writeField10(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("app_add", thrift.STRING, 10); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 10:app_add: ", p), err) }
-  if err := oprot.WriteString(string(p.AppAdd)); err != nil {
-  return thrift.PrependError(fmt.Sprintf("%T.app_add (10) field write error: ", p), err) }
-  if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 10:app_add: ", p), err) }
-  return err
-}
-
-func (p *CouponStruct) writeField11(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("min_tender", thrift.STRING, 11); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 11:min_tender: ", p), err) }
-  if err := oprot.WriteString(string(p.MinTender)); err != nil {
-  return thrift.PrependError(fmt.Sprintf("%T.min_tender (11) field write error: ", p), err) }
-  if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 11:min_tender: ", p), err) }
-  return err
-}
-
-func (p *CouponStruct) writeField12(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("max_tender", thrift.STRING, 12); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 12:max_tender: ", p), err) }
-  if err := oprot.WriteString(string(p.MaxTender)); err != nil {
-  return thrift.PrependError(fmt.Sprintf("%T.max_tender (12) field write error: ", p), err) }
-  if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 12:max_tender: ", p), err) }
-  return err
-}
-
-func (p *CouponStruct) writeField13(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("time_limit", thrift.STRING, 13); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 13:time_limit: ", p), err) }
-  if err := oprot.WriteString(string(p.TimeLimit)); err != nil {
-  return thrift.PrependError(fmt.Sprintf("%T.time_limit (13) field write error: ", p), err) }
-  if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 13:time_limit: ", p), err) }
-  return err
-}
-
-func (p *CouponStruct) writeField14(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("borrow_type", thrift.STRING, 14); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 14:borrow_type: ", p), err) }
-  if err := oprot.WriteString(string(p.BorrowType)); err != nil {
-  return thrift.PrependError(fmt.Sprintf("%T.borrow_type (14) field write error: ", p), err) }
-  if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 14:borrow_type: ", p), err) }
-  return err
-}
-
-func (p *CouponStruct) writeField15(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("name", thrift.STRING, 15); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 15:name: ", p), err) }
-  if err := oprot.WriteString(string(p.Name)); err != nil {
-  return thrift.PrependError(fmt.Sprintf("%T.name (15) field write error: ", p), err) }
-  if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 15:name: ", p), err) }
-  return err
-}
-
-func (p *CouponStruct) writeField16(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("remark", thrift.STRING, 16); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 16:remark: ", p), err) }
-  if err := oprot.WriteString(string(p.Remark)); err != nil {
-  return thrift.PrependError(fmt.Sprintf("%T.remark (16) field write error: ", p), err) }
-  if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 16:remark: ", p), err) }
-  return err
-}
-
-func (p *CouponStruct) writeField17(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("activity_name", thrift.STRING, 17); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 17:activity_name: ", p), err) }
-  if err := oprot.WriteString(string(p.ActivityName)); err != nil {
-  return thrift.PrependError(fmt.Sprintf("%T.activity_name (17) field write error: ", p), err) }
-  if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 17:activity_name: ", p), err) }
-  return err
-}
-
-func (p *CouponStruct) String() string {
+func (p *UpdatePasswdRequestStruct) String() string {
   if p == nil {
     return "<nil>"
   }
-  return fmt.Sprintf("CouponStruct(%+v)", *p)
+  return fmt.Sprintf("UpdatePasswdRequestStruct(%+v)", *p)
 }
 
 // Attributes:
-//  - CouponList
-type CouponResponseStruct struct {
-  CouponList []*CouponStruct `thrift:"couponList,1" db:"couponList" json:"couponList"`
+//  - Status
+//  - Msg
+type UpdatePasswdResponseStruct struct {
+  Status int32 `thrift:"status,1" db:"status" json:"status"`
+  Msg string `thrift:"msg,2" db:"msg" json:"msg"`
 }
 
-func NewCouponResponseStruct() *CouponResponseStruct {
-  return &CouponResponseStruct{}
+func NewUpdatePasswdResponseStruct() *UpdatePasswdResponseStruct {
+  return &UpdatePasswdResponseStruct{}
 }
 
 
-func (p *CouponResponseStruct) GetCouponList() []*CouponStruct {
-  return p.CouponList
+func (p *UpdatePasswdResponseStruct) GetStatus() int32 {
+  return p.Status
 }
-func (p *CouponResponseStruct) Read(iprot thrift.TProtocol) error {
+
+func (p *UpdatePasswdResponseStruct) GetMsg() string {
+  return p.Msg
+}
+func (p *UpdatePasswdResponseStruct) Read(iprot thrift.TProtocol) error {
   if _, err := iprot.ReadStructBegin(); err != nil {
     return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
   }
@@ -813,6 +164,10 @@ func (p *CouponResponseStruct) Read(iprot thrift.TProtocol) error {
     switch fieldId {
     case 1:
       if err := p.ReadField1(iprot); err != nil {
+        return err
+      }
+    case 2:
+      if err := p.ReadField2(iprot); err != nil {
         return err
       }
     default:
@@ -830,31 +185,30 @@ func (p *CouponResponseStruct) Read(iprot thrift.TProtocol) error {
   return nil
 }
 
-func (p *CouponResponseStruct)  ReadField1(iprot thrift.TProtocol) error {
-  _, size, err := iprot.ReadListBegin()
-  if err != nil {
-    return thrift.PrependError("error reading list begin: ", err)
-  }
-  tSlice := make([]*CouponStruct, 0, size)
-  p.CouponList =  tSlice
-  for i := 0; i < size; i ++ {
-    _elem0 := &CouponStruct{}
-    if err := _elem0.Read(iprot); err != nil {
-      return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _elem0), err)
-    }
-    p.CouponList = append(p.CouponList, _elem0)
-  }
-  if err := iprot.ReadListEnd(); err != nil {
-    return thrift.PrependError("error reading list end: ", err)
-  }
+func (p *UpdatePasswdResponseStruct)  ReadField1(iprot thrift.TProtocol) error {
+  if v, err := iprot.ReadI32(); err != nil {
+  return thrift.PrependError("error reading field 1: ", err)
+} else {
+  p.Status = v
+}
   return nil
 }
 
-func (p *CouponResponseStruct) Write(oprot thrift.TProtocol) error {
-  if err := oprot.WriteStructBegin("CouponResponseStruct"); err != nil {
+func (p *UpdatePasswdResponseStruct)  ReadField2(iprot thrift.TProtocol) error {
+  if v, err := iprot.ReadString(); err != nil {
+  return thrift.PrependError("error reading field 2: ", err)
+} else {
+  p.Msg = v
+}
+  return nil
+}
+
+func (p *UpdatePasswdResponseStruct) Write(oprot thrift.TProtocol) error {
+  if err := oprot.WriteStructBegin("UpdatePasswdResponseStruct"); err != nil {
     return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err) }
   if p != nil {
     if err := p.writeField1(oprot); err != nil { return err }
+    if err := p.writeField2(oprot); err != nil { return err }
   }
   if err := oprot.WriteFieldStop(); err != nil {
     return thrift.PrependError("write field stop error: ", err) }
@@ -863,39 +217,40 @@ func (p *CouponResponseStruct) Write(oprot thrift.TProtocol) error {
   return nil
 }
 
-func (p *CouponResponseStruct) writeField1(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("couponList", thrift.LIST, 1); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:couponList: ", p), err) }
-  if err := oprot.WriteListBegin(thrift.STRUCT, len(p.CouponList)); err != nil {
-    return thrift.PrependError("error writing list begin: ", err)
-  }
-  for _, v := range p.CouponList {
-    if err := v.Write(oprot); err != nil {
-      return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", v), err)
-    }
-  }
-  if err := oprot.WriteListEnd(); err != nil {
-    return thrift.PrependError("error writing list end: ", err)
-  }
+func (p *UpdatePasswdResponseStruct) writeField1(oprot thrift.TProtocol) (err error) {
+  if err := oprot.WriteFieldBegin("status", thrift.I32, 1); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:status: ", p), err) }
+  if err := oprot.WriteI32(int32(p.Status)); err != nil {
+  return thrift.PrependError(fmt.Sprintf("%T.status (1) field write error: ", p), err) }
   if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 1:couponList: ", p), err) }
+    return thrift.PrependError(fmt.Sprintf("%T write field end error 1:status: ", p), err) }
   return err
 }
 
-func (p *CouponResponseStruct) String() string {
+func (p *UpdatePasswdResponseStruct) writeField2(oprot thrift.TProtocol) (err error) {
+  if err := oprot.WriteFieldBegin("msg", thrift.STRING, 2); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:msg: ", p), err) }
+  if err := oprot.WriteString(string(p.Msg)); err != nil {
+  return thrift.PrependError(fmt.Sprintf("%T.msg (2) field write error: ", p), err) }
+  if err := oprot.WriteFieldEnd(); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field end error 2:msg: ", p), err) }
+  return err
+}
+
+func (p *UpdatePasswdResponseStruct) String() string {
   if p == nil {
     return "<nil>"
   }
-  return fmt.Sprintf("CouponResponseStruct(%+v)", *p)
+  return fmt.Sprintf("UpdatePasswdResponseStruct(%+v)", *p)
 }
 
-type CouponListThriftService interface {
+type UpdatePasswdThriftService interface {
   // Parameters:
   //  - RequestObj
-  GetCoupon(requestObj *CouponRequestStruct) (r *CouponResponseStruct, err error)
+  UpdatePasswd(requestObj *UpdatePasswdRequestStruct) (r *UpdatePasswdResponseStruct, err error)
 }
 
-type CouponListThriftServiceClient struct {
+type UpdatePasswdThriftServiceClient struct {
   Transport thrift.TTransport
   ProtocolFactory thrift.TProtocolFactory
   InputProtocol thrift.TProtocol
@@ -903,8 +258,8 @@ type CouponListThriftServiceClient struct {
   SeqId int32
 }
 
-func NewCouponListThriftServiceClientFactory(t thrift.TTransport, f thrift.TProtocolFactory) *CouponListThriftServiceClient {
-  return &CouponListThriftServiceClient{Transport: t,
+func NewUpdatePasswdThriftServiceClientFactory(t thrift.TTransport, f thrift.TProtocolFactory) *UpdatePasswdThriftServiceClient {
+  return &UpdatePasswdThriftServiceClient{Transport: t,
     ProtocolFactory: f,
     InputProtocol: f.GetProtocol(t),
     OutputProtocol: f.GetProtocol(t),
@@ -912,8 +267,8 @@ func NewCouponListThriftServiceClientFactory(t thrift.TTransport, f thrift.TProt
   }
 }
 
-func NewCouponListThriftServiceClientProtocol(t thrift.TTransport, iprot thrift.TProtocol, oprot thrift.TProtocol) *CouponListThriftServiceClient {
-  return &CouponListThriftServiceClient{Transport: t,
+func NewUpdatePasswdThriftServiceClientProtocol(t thrift.TTransport, iprot thrift.TProtocol, oprot thrift.TProtocol) *UpdatePasswdThriftServiceClient {
+  return &UpdatePasswdThriftServiceClient{Transport: t,
     ProtocolFactory: nil,
     InputProtocol: iprot,
     OutputProtocol: oprot,
@@ -923,22 +278,22 @@ func NewCouponListThriftServiceClientProtocol(t thrift.TTransport, iprot thrift.
 
 // Parameters:
 //  - RequestObj
-func (p *CouponListThriftServiceClient) GetCoupon(requestObj *CouponRequestStruct) (r *CouponResponseStruct, err error) {
-  if err = p.sendGetCoupon(requestObj); err != nil { return }
-  return p.recvGetCoupon()
+func (p *UpdatePasswdThriftServiceClient) UpdatePasswd(requestObj *UpdatePasswdRequestStruct) (r *UpdatePasswdResponseStruct, err error) {
+  if err = p.sendUpdatePasswd(requestObj); err != nil { return }
+  return p.recvUpdatePasswd()
 }
 
-func (p *CouponListThriftServiceClient) sendGetCoupon(requestObj *CouponRequestStruct)(err error) {
+func (p *UpdatePasswdThriftServiceClient) sendUpdatePasswd(requestObj *UpdatePasswdRequestStruct)(err error) {
   oprot := p.OutputProtocol
   if oprot == nil {
     oprot = p.ProtocolFactory.GetProtocol(p.Transport)
     p.OutputProtocol = oprot
   }
   p.SeqId++
-  if err = oprot.WriteMessageBegin("getCoupon", thrift.CALL, p.SeqId); err != nil {
+  if err = oprot.WriteMessageBegin("updatePasswd", thrift.CALL, p.SeqId); err != nil {
       return
   }
-  args := CouponListThriftServiceGetCouponArgs{
+  args := UpdatePasswdThriftServiceUpdatePasswdArgs{
   RequestObj : requestObj,
   }
   if err = args.Write(oprot); err != nil {
@@ -951,7 +306,7 @@ func (p *CouponListThriftServiceClient) sendGetCoupon(requestObj *CouponRequestS
 }
 
 
-func (p *CouponListThriftServiceClient) recvGetCoupon() (value *CouponResponseStruct, err error) {
+func (p *UpdatePasswdThriftServiceClient) recvUpdatePasswd() (value *UpdatePasswdResponseStruct, err error) {
   iprot := p.InputProtocol
   if iprot == nil {
     iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -961,32 +316,32 @@ func (p *CouponListThriftServiceClient) recvGetCoupon() (value *CouponResponseSt
   if err != nil {
     return
   }
-  if method != "getCoupon" {
-    err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "getCoupon failed: wrong method name")
+  if method != "updatePasswd" {
+    err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "updatePasswd failed: wrong method name")
     return
   }
   if p.SeqId != seqId {
-    err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "getCoupon failed: out of sequence response")
+    err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "updatePasswd failed: out of sequence response")
     return
   }
   if mTypeId == thrift.EXCEPTION {
-    error1 := thrift.NewTApplicationException(thrift.UNKNOWN_APPLICATION_EXCEPTION, "Unknown Exception")
-    var error2 error
-    error2, err = error1.Read(iprot)
+    error0 := thrift.NewTApplicationException(thrift.UNKNOWN_APPLICATION_EXCEPTION, "Unknown Exception")
+    var error1 error
+    error1, err = error0.Read(iprot)
     if err != nil {
       return
     }
     if err = iprot.ReadMessageEnd(); err != nil {
       return
     }
-    err = error2
+    err = error1
     return
   }
   if mTypeId != thrift.REPLY {
-    err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "getCoupon failed: invalid message type")
+    err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "updatePasswd failed: invalid message type")
     return
   }
-  result := CouponListThriftServiceGetCouponResult{}
+  result := UpdatePasswdThriftServiceUpdatePasswdResult{}
   if err = result.Read(iprot); err != nil {
     return
   }
@@ -998,32 +353,32 @@ func (p *CouponListThriftServiceClient) recvGetCoupon() (value *CouponResponseSt
 }
 
 
-type CouponListThriftServiceProcessor struct {
+type UpdatePasswdThriftServiceProcessor struct {
   processorMap map[string]thrift.TProcessorFunction
-  handler CouponListThriftService
+  handler UpdatePasswdThriftService
 }
 
-func (p *CouponListThriftServiceProcessor) AddToProcessorMap(key string, processor thrift.TProcessorFunction) {
+func (p *UpdatePasswdThriftServiceProcessor) AddToProcessorMap(key string, processor thrift.TProcessorFunction) {
   p.processorMap[key] = processor
 }
 
-func (p *CouponListThriftServiceProcessor) GetProcessorFunction(key string) (processor thrift.TProcessorFunction, ok bool) {
+func (p *UpdatePasswdThriftServiceProcessor) GetProcessorFunction(key string) (processor thrift.TProcessorFunction, ok bool) {
   processor, ok = p.processorMap[key]
   return processor, ok
 }
 
-func (p *CouponListThriftServiceProcessor) ProcessorMap() map[string]thrift.TProcessorFunction {
+func (p *UpdatePasswdThriftServiceProcessor) ProcessorMap() map[string]thrift.TProcessorFunction {
   return p.processorMap
 }
 
-func NewCouponListThriftServiceProcessor(handler CouponListThriftService) *CouponListThriftServiceProcessor {
+func NewUpdatePasswdThriftServiceProcessor(handler UpdatePasswdThriftService) *UpdatePasswdThriftServiceProcessor {
 
-  self3 := &CouponListThriftServiceProcessor{handler:handler, processorMap:make(map[string]thrift.TProcessorFunction)}
-  self3.processorMap["getCoupon"] = &couponListThriftServiceProcessorGetCoupon{handler:handler}
-return self3
+  self2 := &UpdatePasswdThriftServiceProcessor{handler:handler, processorMap:make(map[string]thrift.TProcessorFunction)}
+  self2.processorMap["updatePasswd"] = &updatePasswdThriftServiceProcessorUpdatePasswd{handler:handler}
+return self2
 }
 
-func (p *CouponListThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+func (p *UpdatePasswdThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
   name, _, seqId, err := iprot.ReadMessageBegin()
   if err != nil { return false, err }
   if processor, ok := p.GetProcessorFunction(name); ok {
@@ -1031,25 +386,25 @@ func (p *CouponListThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol
   }
   iprot.Skip(thrift.STRUCT)
   iprot.ReadMessageEnd()
-  x4 := thrift.NewTApplicationException(thrift.UNKNOWN_METHOD, "Unknown function " + name)
+  x3 := thrift.NewTApplicationException(thrift.UNKNOWN_METHOD, "Unknown function " + name)
   oprot.WriteMessageBegin(name, thrift.EXCEPTION, seqId)
-  x4.Write(oprot)
+  x3.Write(oprot)
   oprot.WriteMessageEnd()
   oprot.Flush()
-  return false, x4
+  return false, x3
 
 }
 
-type couponListThriftServiceProcessorGetCoupon struct {
-  handler CouponListThriftService
+type updatePasswdThriftServiceProcessorUpdatePasswd struct {
+  handler UpdatePasswdThriftService
 }
 
-func (p *couponListThriftServiceProcessorGetCoupon) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-  args := CouponListThriftServiceGetCouponArgs{}
+func (p *updatePasswdThriftServiceProcessorUpdatePasswd) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+  args := UpdatePasswdThriftServiceUpdatePasswdArgs{}
   if err = args.Read(iprot); err != nil {
     iprot.ReadMessageEnd()
     x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-    oprot.WriteMessageBegin("getCoupon", thrift.EXCEPTION, seqId)
+    oprot.WriteMessageBegin("updatePasswd", thrift.EXCEPTION, seqId)
     x.Write(oprot)
     oprot.WriteMessageEnd()
     oprot.Flush()
@@ -1057,12 +412,12 @@ func (p *couponListThriftServiceProcessorGetCoupon) Process(seqId int32, iprot, 
   }
 
   iprot.ReadMessageEnd()
-  result := CouponListThriftServiceGetCouponResult{}
-var retval *CouponResponseStruct
+  result := UpdatePasswdThriftServiceUpdatePasswdResult{}
+var retval *UpdatePasswdResponseStruct
   var err2 error
-  if retval, err2 = p.handler.GetCoupon(args.RequestObj); err2 != nil {
-    x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing getCoupon: " + err2.Error())
-    oprot.WriteMessageBegin("getCoupon", thrift.EXCEPTION, seqId)
+  if retval, err2 = p.handler.UpdatePasswd(args.RequestObj); err2 != nil {
+    x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing updatePasswd: " + err2.Error())
+    oprot.WriteMessageBegin("updatePasswd", thrift.EXCEPTION, seqId)
     x.Write(oprot)
     oprot.WriteMessageEnd()
     oprot.Flush()
@@ -1070,7 +425,7 @@ var retval *CouponResponseStruct
   } else {
     result.Success = retval
 }
-  if err2 = oprot.WriteMessageBegin("getCoupon", thrift.REPLY, seqId); err2 != nil {
+  if err2 = oprot.WriteMessageBegin("updatePasswd", thrift.REPLY, seqId); err2 != nil {
     err = err2
   }
   if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -1093,26 +448,26 @@ var retval *CouponResponseStruct
 
 // Attributes:
 //  - RequestObj
-type CouponListThriftServiceGetCouponArgs struct {
-  RequestObj *CouponRequestStruct `thrift:"requestObj,1" db:"requestObj" json:"requestObj"`
+type UpdatePasswdThriftServiceUpdatePasswdArgs struct {
+  RequestObj *UpdatePasswdRequestStruct `thrift:"requestObj,1" db:"requestObj" json:"requestObj"`
 }
 
-func NewCouponListThriftServiceGetCouponArgs() *CouponListThriftServiceGetCouponArgs {
-  return &CouponListThriftServiceGetCouponArgs{}
+func NewUpdatePasswdThriftServiceUpdatePasswdArgs() *UpdatePasswdThriftServiceUpdatePasswdArgs {
+  return &UpdatePasswdThriftServiceUpdatePasswdArgs{}
 }
 
-var CouponListThriftServiceGetCouponArgs_RequestObj_DEFAULT *CouponRequestStruct
-func (p *CouponListThriftServiceGetCouponArgs) GetRequestObj() *CouponRequestStruct {
+var UpdatePasswdThriftServiceUpdatePasswdArgs_RequestObj_DEFAULT *UpdatePasswdRequestStruct
+func (p *UpdatePasswdThriftServiceUpdatePasswdArgs) GetRequestObj() *UpdatePasswdRequestStruct {
   if !p.IsSetRequestObj() {
-    return CouponListThriftServiceGetCouponArgs_RequestObj_DEFAULT
+    return UpdatePasswdThriftServiceUpdatePasswdArgs_RequestObj_DEFAULT
   }
 return p.RequestObj
 }
-func (p *CouponListThriftServiceGetCouponArgs) IsSetRequestObj() bool {
+func (p *UpdatePasswdThriftServiceUpdatePasswdArgs) IsSetRequestObj() bool {
   return p.RequestObj != nil
 }
 
-func (p *CouponListThriftServiceGetCouponArgs) Read(iprot thrift.TProtocol) error {
+func (p *UpdatePasswdThriftServiceUpdatePasswdArgs) Read(iprot thrift.TProtocol) error {
   if _, err := iprot.ReadStructBegin(); err != nil {
     return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
   }
@@ -1144,16 +499,16 @@ func (p *CouponListThriftServiceGetCouponArgs) Read(iprot thrift.TProtocol) erro
   return nil
 }
 
-func (p *CouponListThriftServiceGetCouponArgs)  ReadField1(iprot thrift.TProtocol) error {
-  p.RequestObj = &CouponRequestStruct{}
+func (p *UpdatePasswdThriftServiceUpdatePasswdArgs)  ReadField1(iprot thrift.TProtocol) error {
+  p.RequestObj = &UpdatePasswdRequestStruct{}
   if err := p.RequestObj.Read(iprot); err != nil {
     return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.RequestObj), err)
   }
   return nil
 }
 
-func (p *CouponListThriftServiceGetCouponArgs) Write(oprot thrift.TProtocol) error {
-  if err := oprot.WriteStructBegin("getCoupon_args"); err != nil {
+func (p *UpdatePasswdThriftServiceUpdatePasswdArgs) Write(oprot thrift.TProtocol) error {
+  if err := oprot.WriteStructBegin("updatePasswd_args"); err != nil {
     return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err) }
   if p != nil {
     if err := p.writeField1(oprot); err != nil { return err }
@@ -1165,7 +520,7 @@ func (p *CouponListThriftServiceGetCouponArgs) Write(oprot thrift.TProtocol) err
   return nil
 }
 
-func (p *CouponListThriftServiceGetCouponArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *UpdatePasswdThriftServiceUpdatePasswdArgs) writeField1(oprot thrift.TProtocol) (err error) {
   if err := oprot.WriteFieldBegin("requestObj", thrift.STRUCT, 1); err != nil {
     return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:requestObj: ", p), err) }
   if err := p.RequestObj.Write(oprot); err != nil {
@@ -1176,35 +531,35 @@ func (p *CouponListThriftServiceGetCouponArgs) writeField1(oprot thrift.TProtoco
   return err
 }
 
-func (p *CouponListThriftServiceGetCouponArgs) String() string {
+func (p *UpdatePasswdThriftServiceUpdatePasswdArgs) String() string {
   if p == nil {
     return "<nil>"
   }
-  return fmt.Sprintf("CouponListThriftServiceGetCouponArgs(%+v)", *p)
+  return fmt.Sprintf("UpdatePasswdThriftServiceUpdatePasswdArgs(%+v)", *p)
 }
 
 // Attributes:
 //  - Success
-type CouponListThriftServiceGetCouponResult struct {
-  Success *CouponResponseStruct `thrift:"success,0" db:"success" json:"success,omitempty"`
+type UpdatePasswdThriftServiceUpdatePasswdResult struct {
+  Success *UpdatePasswdResponseStruct `thrift:"success,0" db:"success" json:"success,omitempty"`
 }
 
-func NewCouponListThriftServiceGetCouponResult() *CouponListThriftServiceGetCouponResult {
-  return &CouponListThriftServiceGetCouponResult{}
+func NewUpdatePasswdThriftServiceUpdatePasswdResult() *UpdatePasswdThriftServiceUpdatePasswdResult {
+  return &UpdatePasswdThriftServiceUpdatePasswdResult{}
 }
 
-var CouponListThriftServiceGetCouponResult_Success_DEFAULT *CouponResponseStruct
-func (p *CouponListThriftServiceGetCouponResult) GetSuccess() *CouponResponseStruct {
+var UpdatePasswdThriftServiceUpdatePasswdResult_Success_DEFAULT *UpdatePasswdResponseStruct
+func (p *UpdatePasswdThriftServiceUpdatePasswdResult) GetSuccess() *UpdatePasswdResponseStruct {
   if !p.IsSetSuccess() {
-    return CouponListThriftServiceGetCouponResult_Success_DEFAULT
+    return UpdatePasswdThriftServiceUpdatePasswdResult_Success_DEFAULT
   }
 return p.Success
 }
-func (p *CouponListThriftServiceGetCouponResult) IsSetSuccess() bool {
+func (p *UpdatePasswdThriftServiceUpdatePasswdResult) IsSetSuccess() bool {
   return p.Success != nil
 }
 
-func (p *CouponListThriftServiceGetCouponResult) Read(iprot thrift.TProtocol) error {
+func (p *UpdatePasswdThriftServiceUpdatePasswdResult) Read(iprot thrift.TProtocol) error {
   if _, err := iprot.ReadStructBegin(); err != nil {
     return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
   }
@@ -1236,16 +591,16 @@ func (p *CouponListThriftServiceGetCouponResult) Read(iprot thrift.TProtocol) er
   return nil
 }
 
-func (p *CouponListThriftServiceGetCouponResult)  ReadField0(iprot thrift.TProtocol) error {
-  p.Success = &CouponResponseStruct{}
+func (p *UpdatePasswdThriftServiceUpdatePasswdResult)  ReadField0(iprot thrift.TProtocol) error {
+  p.Success = &UpdatePasswdResponseStruct{}
   if err := p.Success.Read(iprot); err != nil {
     return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Success), err)
   }
   return nil
 }
 
-func (p *CouponListThriftServiceGetCouponResult) Write(oprot thrift.TProtocol) error {
-  if err := oprot.WriteStructBegin("getCoupon_result"); err != nil {
+func (p *UpdatePasswdThriftServiceUpdatePasswdResult) Write(oprot thrift.TProtocol) error {
+  if err := oprot.WriteStructBegin("updatePasswd_result"); err != nil {
     return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err) }
   if p != nil {
     if err := p.writeField0(oprot); err != nil { return err }
@@ -1257,7 +612,7 @@ func (p *CouponListThriftServiceGetCouponResult) Write(oprot thrift.TProtocol) e
   return nil
 }
 
-func (p *CouponListThriftServiceGetCouponResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *UpdatePasswdThriftServiceUpdatePasswdResult) writeField0(oprot thrift.TProtocol) (err error) {
   if p.IsSetSuccess() {
     if err := oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
       return thrift.PrependError(fmt.Sprintf("%T write field begin error 0:success: ", p), err) }
@@ -1270,11 +625,11 @@ func (p *CouponListThriftServiceGetCouponResult) writeField0(oprot thrift.TProto
   return err
 }
 
-func (p *CouponListThriftServiceGetCouponResult) String() string {
+func (p *UpdatePasswdThriftServiceUpdatePasswdResult) String() string {
   if p == nil {
     return "<nil>"
   }
-  return fmt.Sprintf("CouponListThriftServiceGetCouponResult(%+v)", *p)
+  return fmt.Sprintf("UpdatePasswdThriftServiceUpdatePasswdResult(%+v)", *p)
 }
 
 

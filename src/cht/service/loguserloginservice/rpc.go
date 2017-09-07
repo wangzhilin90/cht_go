@@ -213,17 +213,23 @@ func (p *LogUserlLoginRequestStruct) String() string {
 }
 
 // Attributes:
-//  - UserID
+//  - Status
+//  - Msg
 type LogUserLoginResponseStruct struct {
-	UserID int32 `thrift:"user_id,1" db:"user_id" json:"user_id"`
+	Status int32  `thrift:"status,1" db:"status" json:"status"`
+	Msg    string `thrift:"msg,2" db:"msg" json:"msg"`
 }
 
 func NewLogUserLoginResponseStruct() *LogUserLoginResponseStruct {
 	return &LogUserLoginResponseStruct{}
 }
 
-func (p *LogUserLoginResponseStruct) GetUserID() int32 {
-	return p.UserID
+func (p *LogUserLoginResponseStruct) GetStatus() int32 {
+	return p.Status
+}
+
+func (p *LogUserLoginResponseStruct) GetMsg() string {
+	return p.Msg
 }
 func (p *LogUserLoginResponseStruct) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
@@ -241,6 +247,10 @@ func (p *LogUserLoginResponseStruct) Read(iprot thrift.TProtocol) error {
 		switch fieldId {
 		case 1:
 			if err := p.ReadField1(iprot); err != nil {
+				return err
+			}
+		case 2:
+			if err := p.ReadField2(iprot); err != nil {
 				return err
 			}
 		default:
@@ -262,7 +272,16 @@ func (p *LogUserLoginResponseStruct) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI32(); err != nil {
 		return thrift.PrependError("error reading field 1: ", err)
 	} else {
-		p.UserID = v
+		p.Status = v
+	}
+	return nil
+}
+
+func (p *LogUserLoginResponseStruct) ReadField2(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 2: ", err)
+	} else {
+		p.Msg = v
 	}
 	return nil
 }
@@ -273,6 +292,9 @@ func (p *LogUserLoginResponseStruct) Write(oprot thrift.TProtocol) error {
 	}
 	if p != nil {
 		if err := p.writeField1(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField2(oprot); err != nil {
 			return err
 		}
 	}
@@ -286,14 +308,27 @@ func (p *LogUserLoginResponseStruct) Write(oprot thrift.TProtocol) error {
 }
 
 func (p *LogUserLoginResponseStruct) writeField1(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("user_id", thrift.I32, 1); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:user_id: ", p), err)
+	if err := oprot.WriteFieldBegin("status", thrift.I32, 1); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:status: ", p), err)
 	}
-	if err := oprot.WriteI32(int32(p.UserID)); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.user_id (1) field write error: ", p), err)
+	if err := oprot.WriteI32(int32(p.Status)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.status (1) field write error: ", p), err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 1:user_id: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 1:status: ", p), err)
+	}
+	return err
+}
+
+func (p *LogUserLoginResponseStruct) writeField2(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("msg", thrift.STRING, 2); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:msg: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.Msg)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.msg (2) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:msg: ", p), err)
 	}
 	return err
 }

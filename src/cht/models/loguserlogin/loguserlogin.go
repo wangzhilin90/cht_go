@@ -15,10 +15,6 @@ type LogUserlLoginRequest struct {
 	ChengHuiTongTraceLog string `orm:"chengHuiTongTraceLog"`
 }
 
-type LogUserLoginResponse struct {
-	UserID int32
-}
-
 type UserBorrowInfo struct {
 	UserID     int32  `orm:"column(user_id)"`
 	Id         int32  `orm:"column(id)"`
@@ -48,10 +44,11 @@ func GetBorrowInfo(lulr *LogUserlLoginRequest) (*UserBorrowInfo, error) {
 	var ubi UserBorrowInfo
 	err := o.Raw("SELECT user_id,id,account_act,addtime FROM  jl_borrow_tender where user_id=? order by id desc limit 1", lulr.UserID).QueryRow(&ubi)
 	if err != nil {
-		Logger.Debugf("err", err)
-		return nil, err
+		Logger.Debugf("GetBorrowInfo query failed", err)
+		return &UserBorrowInfo{
+			AccountAct: "0.00",
+		}, nil
 	}
-	Logger.Debugf("GetBorrowInfo res", ubi)
 	return &ubi, nil
 }
 
@@ -68,12 +65,13 @@ func UpdateLogUserlLogin(lulr *LogUserlLoginRequest) (bool, error) {
 		Logger.Error("GetBorrowInfo failed", err)
 		return false, err
 	}
+	Logger.Debug("GetBorrowInfo res:", res)
 
 	o := orm.NewOrm()
 	o.Using("default")
 	_, err = o.Raw("insert into jl_user_login_log (id,user_id,login_time,login_style,login_ip,tender_money,tender_time) values(next VALUE FOR MYCATSEQ_USER_LOGIN_LOG,?,?,?,?,?,?)", lulr.UserID, time.Now().Unix(), lulr.LoginStyle, lulr.LoginIP, res.AccountAct, res.Addtime).Exec()
 	if err != nil {
-		Logger.Error("insert mysql failed")
+		Logger.Error("insert mysql failed", err)
 		return false, err
 	}
 	return true, nil

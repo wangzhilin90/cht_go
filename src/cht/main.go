@@ -2,6 +2,7 @@ package main
 
 import (
 	_ "cht/initial"
+	"cht/service/cashrecordthriftservice"
 	"cht/service/couponlistthriftservice"
 	"cht/service/gettendercouponthriftservice"
 	"cht/service/gettenderredbagthriftservice"
@@ -44,6 +45,10 @@ func main() {
 
 	go func() {
 		gettendercouponthriftservice.StartGetCouponServer()
+	}()
+
+	go func() {
+		cashrecordthriftservice.StartCashRecordServer()
 	}()
 
 	<-ch

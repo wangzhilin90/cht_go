@@ -196,7 +196,7 @@ func (p *CouponRequestStruct) writeField1(oprot thrift.TProtocol) (err error) {
 }
 
 func (p *CouponRequestStruct) writeField2(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("status", thrift.I16, 2); err != nil {
+	if err := oprot.WriteFieldBegin("status", thrift.I32, 2); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:status: ", p), err)
 	}
 	if err := oprot.WriteI32(int32(p.Status)); err != nil {
@@ -209,7 +209,7 @@ func (p *CouponRequestStruct) writeField2(oprot thrift.TProtocol) (err error) {
 }
 
 func (p *CouponRequestStruct) writeField3(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("limit", thrift.I16, 3); err != nil {
+	if err := oprot.WriteFieldBegin("limit", thrift.I32, 3); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:limit: ", p), err)
 	}
 	if err := oprot.WriteI32(int32(p.Limit)); err != nil {
@@ -758,7 +758,7 @@ func (p *CouponStruct) writeField6(oprot thrift.TProtocol) (err error) {
 }
 
 func (p *CouponStruct) writeField7(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("status", thrift.I16, 7); err != nil {
+	if err := oprot.WriteFieldBegin("status", thrift.I32, 7); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 7:status: ", p), err)
 	}
 	if err := oprot.WriteI32(int32(p.Status)); err != nil {

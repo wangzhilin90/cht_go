@@ -29,36 +29,15 @@ func (cps *CouponService) GetCoupon(requestObj *CouponRequestStruct) (r *CouponR
 		Logger.Fatalf("GetRateRoupon failed", err)
 	}
 	var crs CouponResponseStruct
-	// for _, v := range res {
-	// 	cs := new(CouponStruct)
-	// 	cs.ID = v.ID
-	// 	cs.UserID = v.UserID
-	// 	cs.Addtime = v.Addtime
-	// 	cs.StartTime = v.StartTime
-	// 	cs.EndTime = v.EndTime
-	// 	cs.UseTime = v.UseTime
-	// 	cs.Status = v.Status
-	// 	cs.TenderID = v.TenderID
-	// 	cs.Apr = v.Apr
-	// 	cs.AppAdd = v.AppAdd
-	// 	cs.MinTender = v.MinTender
-	// 	cs.MaxTender = v.MaxTender
-	// 	cs.TimeLimit = v.TimeLimit
-	// 	cs.BorrowType = v.BorrowType
-	// 	cs.Name = v.Name
-	// 	cs.Remark = v.Remark
-	// 	cs.ActivityName = v.ActivityName
-	// 	crs.CouponList = append(crs.CouponList, cs)
-	// }
 	for _, v := range res {
 		cs := new(CouponStruct)
-		cs.ID = 99999
+		cs.ID = v.ID
 		cs.UserID = v.UserID
 		cs.Addtime = v.Addtime
 		cs.StartTime = v.StartTime
 		cs.EndTime = v.EndTime
 		cs.UseTime = v.UseTime
-		cs.Status = 5
+		cs.Status = v.Status
 		cs.TenderID = v.TenderID
 		cs.Apr = v.Apr
 		cs.AppAdd = v.AppAdd
@@ -71,7 +50,6 @@ func (cps *CouponService) GetCoupon(requestObj *CouponRequestStruct) (r *CouponR
 		cs.ActivityName = v.ActivityName
 		crs.CouponList = append(crs.CouponList, cs)
 	}
-
 	Logger.Debug(crs.CouponList)
 	return &crs, nil
 }

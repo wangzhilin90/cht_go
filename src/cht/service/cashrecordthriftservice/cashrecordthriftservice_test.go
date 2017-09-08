@@ -19,7 +19,7 @@ func NewCashRecordRequestStruct(user_id, start_time, end_time, query_time, statu
 }
 
 func TestGetCashRecord(t *testing.T) {
-	rrr := NewCashRecordRequestStruct(221889, 1472486400, 1506441600, 0, 0, 2, 10, "")
+	rrr := NewCashRecordRequestStruct(2, 1376279359, 1376299359, 0, 0, 1, 1)
 	rrs := &cashrecordservice{}
 	res, err := rrs.GetCashRecord(rrr)
 	if err != nil {

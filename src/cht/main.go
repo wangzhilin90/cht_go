@@ -3,6 +3,7 @@ package main
 import (
 	_ "cht/initial"
 	"cht/service/cashrecordthriftservice"
+	"cht/service/collectionthriftservice"
 	"cht/service/couponlistthriftservice"
 	"cht/service/gettendercouponthriftservice"
 	"cht/service/gettenderredbagthriftservice"
@@ -60,5 +61,9 @@ func main() {
 		cashrecordthriftservice.StartCashRecordServer()
 	}()
 
+	go func() {
+		/*获取我的账户回款明细信息*/
+		collectionthriftservice.StartGetCollectionListServer()
+	}()
 	<-ch
 }

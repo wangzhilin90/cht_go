@@ -68,8 +68,6 @@ func GetCashRecord(crrs *CashRecordRequestStruct) ([]CashRecordStruct, int32, er
 		switch {
 		case crrs.QueryTime == 1:
 			/*查最近七天充值记录*/
-			Logger.Debug(time.Now().Unix())
-			Logger.Debug(EVEN_DAYS_QUANTUM)
 			qb.And(fmt.Sprintf("addtime >=%d", time.Now().Unix()-EVEN_DAYS_QUANTUM))
 		case crrs.QueryTime == 2:
 			/*查最近一个月充值记录*/

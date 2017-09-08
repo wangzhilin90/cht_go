@@ -18,12 +18,21 @@ func NewRechargeRecordRequest(user_id, start_time, end_time, query_time, status,
 	}
 }
 
+func TestGetRechargeTotalMoney(t *testing.T) {
+	rrr := NewRechargeRecordRequest(242972, 1472486400, 1506441600, 0, 0, 2, 10, "")
+	res, err := GetRechargeTotalMoney(rrr)
+	if err != nil {
+		t.Fatal("TestGetRechargeTotalMoney failed", err)
+	}
+	t.Log("TestGetRechargeTotalMoney return value:", res)
+}
+
 func TestGetRechargeRecord(t *testing.T) {
 	// rrr := NewRechargeRecordRequest(313579141, 1472486400, 1506441600, 0, 0, 0, 0, "")
 	rrr := NewRechargeRecordRequest(242972, 1472486400, 1506441600, 0, 0, 2, 10, "")
-	res, num, err := GetRechargeRecord(rrr)
+	res, num, money, err := GetRechargeRecord(rrr)
 	if err != nil {
 		t.Fatal("TestGetRechargeRecord failed", err)
 	}
-	t.Log("TestGetRechargeRecord return value:", res, num)
+	t.Log("TestGetRechargeRecord return value:", res, num, money)
 }

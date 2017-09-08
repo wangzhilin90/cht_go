@@ -39,13 +39,47 @@ type RechargeRecordStruct struct {
 }
 
 /**
+ * [GetRechargeTotalMoney 得到用户充值成功的总金额]
+ * @param    rrr *RechargeRecordRequest请求入参
+ * @return   string 返回用户充值成功的总金额
+ * @DateTime 2017-09-08T15:36:16+0800
+ */
+func GetRechargeTotalMoney(rrr *RechargeRecordRequest) (string, error) {
+	o := orm.NewOrm()
+	o.Using("default")
+	Logger.Debug("GetRechargeTotalMoney input param:", rrr)
+	qb, _ := orm.NewQueryBuilder("mysql")
+	qb.Select("SUM(money)").
+		From("jl_hs_recharge").
+		Where(fmt.Sprintf("user_id=%d", rrr.UserID)).
+		And(fmt.Sprintf("status=1"))
+
+	sql := qb.String()
+	Logger.Debug("GetRechargeTotalMoney sql:", sql)
+	var TotalMoney string
+	err := o.Raw(sql).QueryRow(&TotalMoney)
+	if err != nil {
+		Logger.Error("GetRechargeTotalMoney query failed:", err)
+		return "", err
+	}
+	Logger.Debugf("GetRechargeTotalMoney res ", TotalMoney)
+	return TotalMoney, nil
+}
+
+/**
  * [GetRechargeRecord 查询充值记录]
  * @param    rrr *RechargeRecordRequest请求入参 (
- * @return   int32 返回不带limit的查询记录总数
  * @return   *RechargeRecordStruct 返回充值查询记录信息
+ * @return   int32 充值总记录数
+ * @return   string 充值总金额
  * @DateTime 2017-09-04T17:02:40+0800
  */
-func GetRechargeRecord(rrr *RechargeRecordRequest) ([]RechargeRecordStruct, int32, error) {
+func GetRechargeRecord(rrr *RechargeRecordRequest) ([]RechargeRecordStruct, int32, string, error) {
+	money, err := GetRechargeTotalMoney(rrr)
+	if err != nil || money == "" {
+		money = "0.00"
+	}
+
 	o := orm.NewOrm()
 	o.Using("default")
 	qb, _ := orm.NewQueryBuilder("mysql")
@@ -96,7 +130,7 @@ func GetRechargeRecord(rrr *RechargeRecordRequest) ([]RechargeRecordStruct, int3
 	totalnum, err := o.Raw(sql).QueryRows(&rrs1)
 	if err != nil {
 		Logger.Error("GetRechargeRecord query failed:", err)
-		return nil, 0, err
+		return nil, 0, "0.00", err
 	}
 	/*得到总的查询数*/
 	Logger.Debug("GetRechargeRecord query totalnum:", totalnum)
@@ -115,8 +149,8 @@ func GetRechargeRecord(rrr *RechargeRecordRequest) ([]RechargeRecordStruct, int3
 	_, err = o.Raw(sql).QueryRows(&rrs)
 	if err != nil {
 		Logger.Debug("GetRechargeRecord queryrows failed")
-		return nil, 0, err
+		return nil, 0, "0.00", err
 	}
 	Logger.Debugf("GetRechargeRecord res:%v %d", rrs, totalnum)
-	return rrs, int32(totalnum), nil
+	return rrs, int32(totalnum), money, nil
 }

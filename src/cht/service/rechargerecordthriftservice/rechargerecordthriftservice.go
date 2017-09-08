@@ -30,12 +30,13 @@ func (rrs *rechargerecordservice) GetRechargeRecord(requestObj *RechargeRecordRe
 	rrr.LimitOffset = requestObj.GetLimitNum()
 	rrr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 
-	res, num, err := rechargerecord.GetRechargeRecord(rrr)
+	res, num, money, err := rechargerecord.GetRechargeRecord(rrr)
 	if err != nil {
 		return &RechargeRecordResponseStruct{
-			Status:   QUERY_RECHAGE_FAILED,
-			Msg:      Status[QUERY_RECHAGE_FAILED],
-			Totalnum: 0,
+			Status:               QUERY_RECHAGE_FAILED,
+			Msg:                  Status[QUERY_RECHAGE_FAILED],
+			Totalnum:             0,
+			TotalHsRechargeMoney: "0.00",
 		}, err
 	}
 	var rrrs RechargeRecordResponseStruct
@@ -56,6 +57,7 @@ func (rrs *rechargerecordservice) GetRechargeRecord(requestObj *RechargeRecordRe
 	rrrs.Status = QUERY_RECHAGE_SUCCESS
 	rrrs.Msg = Status[QUERY_RECHAGE_SUCCESS]
 	rrrs.Totalnum = num
+	rrrs.TotalHsRechargeMoney = money
 	Logger.Debug("GetRechargeRecord res:", rrrs)
 	return &rrrs, nil
 }

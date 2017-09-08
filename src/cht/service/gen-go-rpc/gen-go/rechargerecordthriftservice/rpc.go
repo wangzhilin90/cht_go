@@ -35,9 +35,7 @@ type RechargeRecordRequestStruct struct {
 }
 
 func NewRechargeRecordRequestStruct() *RechargeRecordRequestStruct {
-  return &RechargeRecordRequestStruct{
-RechargeStatus: 3,
-}
+  return &RechargeRecordRequestStruct{}
 }
 
 
@@ -670,12 +668,14 @@ func (p *RechargeRecordStruct) String() string {
 //  - Status
 //  - Msg
 //  - Totalnum
+//  - TotalHsRechargeMoney
 //  - RechargeRecordList
 type RechargeRecordResponseStruct struct {
   Status int32 `thrift:"status,1" db:"status" json:"status"`
   Msg string `thrift:"Msg,2" db:"Msg" json:"Msg"`
   Totalnum int32 `thrift:"totalnum,3" db:"totalnum" json:"totalnum"`
-  RechargeRecordList []*RechargeRecordStruct `thrift:"rechargeRecordList,4" db:"rechargeRecordList" json:"rechargeRecordList"`
+  TotalHsRechargeMoney string `thrift:"totalHsRechargeMoney,4" db:"totalHsRechargeMoney" json:"totalHsRechargeMoney"`
+  RechargeRecordList []*RechargeRecordStruct `thrift:"rechargeRecordList,5" db:"rechargeRecordList" json:"rechargeRecordList"`
 }
 
 func NewRechargeRecordResponseStruct() *RechargeRecordResponseStruct {
@@ -693,6 +693,10 @@ func (p *RechargeRecordResponseStruct) GetMsg() string {
 
 func (p *RechargeRecordResponseStruct) GetTotalnum() int32 {
   return p.Totalnum
+}
+
+func (p *RechargeRecordResponseStruct) GetTotalHsRechargeMoney() string {
+  return p.TotalHsRechargeMoney
 }
 
 func (p *RechargeRecordResponseStruct) GetRechargeRecordList() []*RechargeRecordStruct {
@@ -725,6 +729,10 @@ func (p *RechargeRecordResponseStruct) Read(iprot thrift.TProtocol) error {
       }
     case 4:
       if err := p.ReadField4(iprot); err != nil {
+        return err
+      }
+    case 5:
+      if err := p.ReadField5(iprot); err != nil {
         return err
       }
     default:
@@ -770,6 +778,15 @@ func (p *RechargeRecordResponseStruct)  ReadField3(iprot thrift.TProtocol) error
 }
 
 func (p *RechargeRecordResponseStruct)  ReadField4(iprot thrift.TProtocol) error {
+  if v, err := iprot.ReadString(); err != nil {
+  return thrift.PrependError("error reading field 4: ", err)
+} else {
+  p.TotalHsRechargeMoney = v
+}
+  return nil
+}
+
+func (p *RechargeRecordResponseStruct)  ReadField5(iprot thrift.TProtocol) error {
   _, size, err := iprot.ReadListBegin()
   if err != nil {
     return thrift.PrependError("error reading list begin: ", err)
@@ -797,6 +814,7 @@ func (p *RechargeRecordResponseStruct) Write(oprot thrift.TProtocol) error {
     if err := p.writeField2(oprot); err != nil { return err }
     if err := p.writeField3(oprot); err != nil { return err }
     if err := p.writeField4(oprot); err != nil { return err }
+    if err := p.writeField5(oprot); err != nil { return err }
   }
   if err := oprot.WriteFieldStop(); err != nil {
     return thrift.PrependError("write field stop error: ", err) }
@@ -836,8 +854,18 @@ func (p *RechargeRecordResponseStruct) writeField3(oprot thrift.TProtocol) (err 
 }
 
 func (p *RechargeRecordResponseStruct) writeField4(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("rechargeRecordList", thrift.LIST, 4); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 4:rechargeRecordList: ", p), err) }
+  if err := oprot.WriteFieldBegin("totalHsRechargeMoney", thrift.STRING, 4); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field begin error 4:totalHsRechargeMoney: ", p), err) }
+  if err := oprot.WriteString(string(p.TotalHsRechargeMoney)); err != nil {
+  return thrift.PrependError(fmt.Sprintf("%T.totalHsRechargeMoney (4) field write error: ", p), err) }
+  if err := oprot.WriteFieldEnd(); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field end error 4:totalHsRechargeMoney: ", p), err) }
+  return err
+}
+
+func (p *RechargeRecordResponseStruct) writeField5(oprot thrift.TProtocol) (err error) {
+  if err := oprot.WriteFieldBegin("rechargeRecordList", thrift.LIST, 5); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field begin error 5:rechargeRecordList: ", p), err) }
   if err := oprot.WriteListBegin(thrift.STRUCT, len(p.RechargeRecordList)); err != nil {
     return thrift.PrependError("error writing list begin: ", err)
   }
@@ -850,7 +878,7 @@ func (p *RechargeRecordResponseStruct) writeField4(oprot thrift.TProtocol) (err 
     return thrift.PrependError("error writing list end: ", err)
   }
   if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 4:rechargeRecordList: ", p), err) }
+    return thrift.PrependError(fmt.Sprintf("%T write field end error 5:rechargeRecordList: ", p), err) }
   return err
 }
 
@@ -1117,9 +1145,7 @@ func (p *RechargeRecordThriftServiceGetRechargeRecordArgs) Read(iprot thrift.TPr
 }
 
 func (p *RechargeRecordThriftServiceGetRechargeRecordArgs)  ReadField1(iprot thrift.TProtocol) error {
-  p.RequestObj = &RechargeRecordRequestStruct{
-  RechargeStatus: 3,
-}
+  p.RequestObj = &RechargeRecordRequestStruct{}
   if err := p.RequestObj.Read(iprot); err != nil {
     return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.RequestObj), err)
   }

@@ -1,39 +1,37 @@
-namespace go  cashrecordthriftservice
+namespace go  rechargerecordthriftservice
 
-struct  CashRecordRequestStruct {
+struct  RechargeRecordRequestStruct {
 	1:i32 user_id 
 	2:i32 start_time
 	3:i32 end_time    
-	4:i32 query_time //æŸ¥è¯¢å¤©æ•°, 0:æŸ¥å…¨éƒ¨  1ï¼šæŸ¥æœ€è¿‘7å¤© 2ï¼šæŸ¥ä¸€ä¸ªæœˆ 3ï¼šæŸ¥ä¸¤ä¸ªæœˆ
-	5:i32 recharge_status //å……å€¼çŠ¶æ€,0:æŸ¥å…¨éƒ¨ 1:å·²æˆåŠŸ 2:å®¡æ ¸ä¸­  3:å®¡æ ¸å¤±è´¥
-	6:i32 limit_offset  //æŸ¥è¯¢åç§»é‡
-	7:i32 limit_num     //æŸ¥è¯¢æ•°é‡
+	4:i32 query_time //²éÑ¯ÌìÊı, 0:²éÈ«²¿  1£º²é×î½ü7Ìì 2£º²éÒ»¸öÔÂ 3£º²éÁ½¸öÔÂ
+	5:i32 recharge_status //³äÖµ×´Ì¬,0:²éÈ«²¿ 1:ÒÑ³É¹¦ 2:ÉóºËÖĞ  3:ÉóºËÊ§°Ü
+	6:i32 limit_offset  //²éÑ¯Æ«ÒÆÁ¿
+	7:i32 limit_num     //²éÑ¯ÊıÁ¿
 	8:string chengHuiTongTraceLog
 }
 
-struct  CashRecordStruct{
+struct  RechargeRecordStruct{
 	1:i32 id 
 	2:i32 user_id
 	3:string order_sn
 	4:string money
-	5:string credited
-	6:string fee
-	7:string use_return_money
-	8:i32 use_free_num
-	9:i32 addtime
-	10:i32 status
-	11:i32 pay_way
-	12:i32 deal_time
-	13:string  fail_result
+	5:i32 addtime
+	6:i32 status
+	7:i32 deal_time
+	8:i32 pay_type
+	9:i32 pay_way
+	10:string  fail_result
 }
 
-struct CashRecordResponseStruct {
-	1:i32 status  //1001:æŸ¥è¯¢æç°è®°å½•å¤±è´¥ 1002 æŸ¥è¯¢æç°è®°å½•æˆåŠŸ
-	2:string msg
-	3:i32 totalnum
-	4:list<CashRecordStruct> cashRecordList	
+struct RechargeRecordResponseStruct {
+	1:i32 status  //0:²éÑ¯³äÖµ¼ÇÂ¼³É¹¦ 1001 ²éÑ¯³äÖµ¼ÇÂ¼Ê§°Ü
+	2:string Msg
+	3:i32 totalnum //³äÖµ×Ü¼ÇÂ¼Êı
+	4:string totalHsRechargeMoney //³äÖµ×Ü½ğ¶î SELECT SUM(money) FROM jl_hs_recharge WHERE user_id = $user_id  AND status = 1
+	5:list<RechargeRecordStruct> rechargeRecordList	
 }
 
-service CashRecordThriftService {
-	CashRecordResponseStruct getCashRecord(1:CashRecordRequestStruct requestObj)
+service RechargeRecordThriftService {
+	RechargeRecordResponseStruct getRechargeRecord(1:RechargeRecordRequestStruct requestObj)
 }

@@ -30,7 +30,7 @@ func (cs *cashrecordservice) GetCashRecord(requestObj *CashRecordRequestStruct) 
 	crrs.LimitOffset = requestObj.GetLimitNum()
 	crrs.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 
-	res, num, err := cashrecord.GetCashRecord(crrs)
+	res, CashStat, num, err := cashrecord.GetCashRecord(crrs)
 	if err != nil {
 		return &CashRecordResponseStruct{
 			Status:   QUERY_CASHRECORD_FAILED,
@@ -57,9 +57,15 @@ func (cs *cashrecordservice) GetCashRecord(requestObj *CashRecordRequestStruct) 
 		crs.FailResult = v.FailResult
 		response.CashRecordList = append(response.CashRecordList, crs)
 	}
+
+	css := new(CashStatsStruct)
+	css.Fee = CashStat.Fee
+	css.Money = CashStat.Money
 	response.Status = QUERY_CASHRECORD_SUCCESS
 	response.Msg = Status[QUERY_CASHRECORD_SUCCESS]
 	response.Totalnum = num
+	response.CashStat = css
+
 	Logger.Debug("GetCashRecord res:", response)
 	return &response, nil
 }

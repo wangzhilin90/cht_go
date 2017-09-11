@@ -41,6 +41,40 @@ type CashRecordStruct struct {
 	FailResult     string `orm:"column(fail_result)"`
 }
 
+type CashStats struct {
+	Money string //成功的总提现金额
+	Fee   string //成功的总提现手续费
+}
+
+/**
+ * [GetCashStats 得到提现成功的总金额和手续费]
+ * @param    crrs *CashRecordRequestStruct 请求入参
+ * @return   CashStats 返回提现的总金额和总手续费
+ * @DateTime 2017-09-11T14:43:41+0800
+ */
+func GetCashStats(crrs *CashRecordRequestStruct) (*CashStats, error) {
+	o := orm.NewOrm()
+	o.Using("default")
+	Logger.Debug("GetCashStats input param:", crrs)
+	qb, _ := orm.NewQueryBuilder("mysql")
+	qb.Select("SUM(money) AS money,SUM(fee) AS fee").
+		From("jl_hs_cash").
+		Where(fmt.Sprintf("user_id=%d", crrs.UserID)).
+		And(fmt.Sprintf("status=1"))
+
+	sql := qb.String()
+	Logger.Debug("GetCashStats sql:", sql)
+	var cs CashStats
+	err := o.Raw(sql).QueryRow(&cs)
+	if err != nil {
+		Logger.Error("GetCashStats query failed:", err)
+		return nil, err
+	}
+	Logger.Debugf("GetCashStats res Money", cs.Money)
+	Logger.Debugf("GetCashStats res Fee", cs.Fee)
+	return &cs, nil
+}
+
 /**
  * [GetRechargeRecord 查询提现记录]
  * @param    rrr *RechargeRecordRequest请求入参 (
@@ -48,7 +82,7 @@ type CashRecordStruct struct {
  * @return   *CashRecordStruct 返回充值查询记录信息
  * @DateTime 2017-09-04T17:02:40+0800
  */
-func GetCashRecord(crrs *CashRecordRequestStruct) ([]CashRecordStruct, int32, error) {
+func GetCashRecord(crrs *CashRecordRequestStruct) ([]CashRecordStruct, *CashStats, int32, error) {
 	o := orm.NewOrm()
 	o.Using("default")
 	qb, _ := orm.NewQueryBuilder("mysql")
@@ -96,8 +130,8 @@ func GetCashRecord(crrs *CashRecordRequestStruct) ([]CashRecordStruct, int32, er
 	var crs1 []CashRecordStruct
 	totalnum, err := o.Raw(sql).QueryRows(&crs1)
 	if err != nil {
-		Logger.Debug("GetCashRecord query failed:", err)
-		return nil, 0, err
+		Logger.Error("GetCashRecord query failed:", err)
+		return nil, nil, 0, err
 	}
 	/*得到总的查询数*/
 	Logger.Debug("GetCashRecord query totalnum:", totalnum)
@@ -116,8 +150,15 @@ func GetCashRecord(crrs *CashRecordRequestStruct) ([]CashRecordStruct, int32, er
 	_, err = o.Raw(sql).QueryRows(&crs)
 	if err != nil {
 		Logger.Debug("GetCashRecord queryrows failed")
-		return nil, 0, err
+		return nil, nil, 0, err
 	}
-	Logger.Debugf("GetCashRecord res:%v %d", crs, totalnum)
-	return crs, int32(totalnum), nil
+
+	cs, err := GetCashStats(crrs)
+	if err != nil {
+		Logger.Error("GetCashStats failed", err)
+		return nil, nil, 0, err
+	}
+
+	Logger.Debugf("GetCashRecord res:%v %v %d", crs, cs, totalnum)
+	return crs, cs, int32(totalnum), nil
 }

@@ -35,9 +35,7 @@ type CashRecordRequestStruct struct {
 }
 
 // func NewCashRecordRequestStruct() *CashRecordRequestStruct {
-// 	return &CashRecordRequestStruct{
-// 		RechargeStatus: 3,
-// 	}
+//   return &CashRecordRequestStruct{}
 // }
 
 func (p *CashRecordRequestStruct) GetUserID() int32 {
@@ -868,15 +866,145 @@ func (p *CashRecordStruct) String() string {
 }
 
 // Attributes:
+//  - Money
+//  - Fee
+type CashStatsStruct struct {
+	Money string `thrift:"money,1" db:"money" json:"money"`
+	Fee   string `thrift:"fee,2" db:"fee" json:"fee"`
+}
+
+func NewCashStatsStruct() *CashStatsStruct {
+	return &CashStatsStruct{}
+}
+
+func (p *CashStatsStruct) GetMoney() string {
+	return p.Money
+}
+
+func (p *CashStatsStruct) GetFee() string {
+	return p.Fee
+}
+func (p *CashStatsStruct) Read(iprot thrift.TProtocol) error {
+	if _, err := iprot.ReadStructBegin(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
+		if err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+		switch fieldId {
+		case 1:
+			if err := p.ReadField1(iprot); err != nil {
+				return err
+			}
+		case 2:
+			if err := p.ReadField2(iprot); err != nil {
+				return err
+			}
+		default:
+			if err := iprot.Skip(fieldTypeId); err != nil {
+				return err
+			}
+		}
+		if err := iprot.ReadFieldEnd(); err != nil {
+			return err
+		}
+	}
+	if err := iprot.ReadStructEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+	}
+	return nil
+}
+
+func (p *CashStatsStruct) ReadField1(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 1: ", err)
+	} else {
+		p.Money = v
+	}
+	return nil
+}
+
+func (p *CashStatsStruct) ReadField2(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 2: ", err)
+	} else {
+		p.Fee = v
+	}
+	return nil
+}
+
+func (p *CashStatsStruct) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("CashStatsStruct"); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+	}
+	if p != nil {
+		if err := p.writeField1(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField2(oprot); err != nil {
+			return err
+		}
+	}
+	if err := oprot.WriteFieldStop(); err != nil {
+		return thrift.PrependError("write field stop error: ", err)
+	}
+	if err := oprot.WriteStructEnd(); err != nil {
+		return thrift.PrependError("write struct stop error: ", err)
+	}
+	return nil
+}
+
+func (p *CashStatsStruct) writeField1(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("money", thrift.STRING, 1); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:money: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.Money)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.money (1) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 1:money: ", p), err)
+	}
+	return err
+}
+
+func (p *CashStatsStruct) writeField2(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("fee", thrift.STRING, 2); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:fee: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.Fee)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.fee (2) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:fee: ", p), err)
+	}
+	return err
+}
+
+func (p *CashStatsStruct) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("CashStatsStruct(%+v)", *p)
+}
+
+// Attributes:
 //  - Status
 //  - Msg
 //  - Totalnum
+//  - CashStat
 //  - CashRecordList
 type CashRecordResponseStruct struct {
 	Status         int32               `thrift:"status,1" db:"status" json:"status"`
 	Msg            string              `thrift:"msg,2" db:"msg" json:"msg"`
 	Totalnum       int32               `thrift:"totalnum,3" db:"totalnum" json:"totalnum"`
-	CashRecordList []*CashRecordStruct `thrift:"cashRecordList,4" db:"cashRecordList" json:"cashRecordList"`
+	CashStat       *CashStatsStruct    `thrift:"cashStat,4" db:"cashStat" json:"cashStat"`
+	CashRecordList []*CashRecordStruct `thrift:"cashRecordList,5" db:"cashRecordList" json:"cashRecordList"`
 }
 
 func NewCashRecordResponseStruct() *CashRecordResponseStruct {
@@ -895,9 +1023,22 @@ func (p *CashRecordResponseStruct) GetTotalnum() int32 {
 	return p.Totalnum
 }
 
+var CashRecordResponseStruct_CashStat_DEFAULT *CashStatsStruct
+
+func (p *CashRecordResponseStruct) GetCashStat() *CashStatsStruct {
+	if !p.IsSetCashStat() {
+		return CashRecordResponseStruct_CashStat_DEFAULT
+	}
+	return p.CashStat
+}
+
 func (p *CashRecordResponseStruct) GetCashRecordList() []*CashRecordStruct {
 	return p.CashRecordList
 }
+func (p *CashRecordResponseStruct) IsSetCashStat() bool {
+	return p.CashStat != nil
+}
+
 func (p *CashRecordResponseStruct) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
@@ -926,6 +1067,10 @@ func (p *CashRecordResponseStruct) Read(iprot thrift.TProtocol) error {
 			}
 		case 4:
 			if err := p.ReadField4(iprot); err != nil {
+				return err
+			}
+		case 5:
+			if err := p.ReadField5(iprot); err != nil {
 				return err
 			}
 		default:
@@ -971,6 +1116,14 @@ func (p *CashRecordResponseStruct) ReadField3(iprot thrift.TProtocol) error {
 }
 
 func (p *CashRecordResponseStruct) ReadField4(iprot thrift.TProtocol) error {
+	p.CashStat = &CashStatsStruct{}
+	if err := p.CashStat.Read(iprot); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.CashStat), err)
+	}
+	return nil
+}
+
+func (p *CashRecordResponseStruct) ReadField5(iprot thrift.TProtocol) error {
 	_, size, err := iprot.ReadListBegin()
 	if err != nil {
 		return thrift.PrependError("error reading list begin: ", err)
@@ -1005,6 +1158,9 @@ func (p *CashRecordResponseStruct) Write(oprot thrift.TProtocol) error {
 			return err
 		}
 		if err := p.writeField4(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField5(oprot); err != nil {
 			return err
 		}
 	}
@@ -1057,8 +1213,21 @@ func (p *CashRecordResponseStruct) writeField3(oprot thrift.TProtocol) (err erro
 }
 
 func (p *CashRecordResponseStruct) writeField4(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("cashRecordList", thrift.LIST, 4); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 4:cashRecordList: ", p), err)
+	if err := oprot.WriteFieldBegin("cashStat", thrift.STRUCT, 4); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 4:cashStat: ", p), err)
+	}
+	if err := p.CashStat.Write(oprot); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", p.CashStat), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 4:cashStat: ", p), err)
+	}
+	return err
+}
+
+func (p *CashRecordResponseStruct) writeField5(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("cashRecordList", thrift.LIST, 5); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 5:cashRecordList: ", p), err)
 	}
 	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.CashRecordList)); err != nil {
 		return thrift.PrependError("error writing list begin: ", err)
@@ -1072,7 +1241,7 @@ func (p *CashRecordResponseStruct) writeField4(oprot thrift.TProtocol) (err erro
 		return thrift.PrependError("error writing list end: ", err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 4:cashRecordList: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 5:cashRecordList: ", p), err)
 	}
 	return err
 }
@@ -1343,9 +1512,7 @@ func (p *CashRecordThriftServiceGetCashRecordArgs) Read(iprot thrift.TProtocol) 
 }
 
 func (p *CashRecordThriftServiceGetCashRecordArgs) ReadField1(iprot thrift.TProtocol) error {
-	p.RequestObj = &CashRecordRequestStruct{
-		RechargeStatus: 3,
-	}
+	p.RequestObj = &CashRecordRequestStruct{}
 	if err := p.RequestObj.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.RequestObj), err)
 	}

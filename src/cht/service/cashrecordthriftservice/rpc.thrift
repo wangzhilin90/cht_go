@@ -27,11 +27,17 @@ struct  CashRecordStruct{
 	13:string  fail_result
 }
 
+struct CashStatsStruct {
+	1:string money //成功的总提现金额
+	2:string fee      //成功的总提现手续费
+}
+
 struct CashRecordResponseStruct {
 	1:i32 status  //1001:查询提现记录失败 1002 查询提现记录成功
 	2:string msg
 	3:i32 totalnum
-	4:list<CashRecordStruct> cashRecordList	
+	4:CashStatsStruct cashStat
+	5:list<CashRecordStruct> cashRecordList	
 }
 
 service CashRecordThriftService {

@@ -65,5 +65,11 @@ func main() {
 		/*获取我的账户回款明细信息*/
 		collectionthriftservice.StartGetCollectionListServer()
 	}()
+
+	go func() {
+		/*开启短信服务，包括获取短信详情和短信记录数*/
+		messagethriftservice.StartMessageServer()
+	}()
+
 	<-ch
 }

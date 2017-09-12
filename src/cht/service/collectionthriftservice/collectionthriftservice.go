@@ -12,7 +12,7 @@ type collectionservice struct{}
 
 const (
 	QUERY_COLLECTION_FAILED  = 1001
-	QUERY_COLLECTION_SUCCESS = 1002
+	QUERY_COLLECTION_SUCCESS = 1000
 )
 
 var Status = map[int]string{

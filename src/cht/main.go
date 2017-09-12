@@ -9,6 +9,7 @@ import (
 	"cht/service/gettenderredbagthriftservice"
 	"cht/service/loguserloginservice"
 	"cht/service/makeborrowservice"
+	"cht/service/messagethriftservice"
 	"cht/service/rechargerecordthriftservice"
 	"cht/service/updatepasswdthriftservice"
 	"cht/service/userloginservice"

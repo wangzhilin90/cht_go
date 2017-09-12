@@ -28,25 +28,25 @@ type CollectionRequest struct {
 }
 
 type CollectionInfoStruct struct {
-	Username        string `orm:column(username)`
-	Title           string `orm:column(title)`
-	IsDatetype      int32  `orm:column(is_datetype)`
-	TimeLimit       int32  `orm:column(time_limit)`
-	Zhuanrangren    string `orm:column(zhuanrangren)`
-	RepayTime       int32  `orm:column(repay_time)`
-	BorrowID        int32  `orm:column(borrow_id)`
-	Periods         int32  `orm:column(periods)`
-	RepayYestime    int32  `orm:column(repay_yestime)`
-	RepayYesaccount string `orm:column(repay_yesaccount)`
-	RepayAccount    string `orm:column(repay_account)`
-	Capital         string `orm:column(capital)`
-	Interest        string `orm:column(interest)`
-	LateInterest    string `orm:column(late_interest)`
-	LateDays        int32  `orm:column(late_days)`
-	Status          int32  `orm:column(status)`
-	InterestAdd     string `orm:column(interest_add)`
-	OldUserID       int32  `orm:column(old_user_id)`
-	Style           int32  `orm:column(style)`
+	Username        string `orm:"column(username)"`
+	Title           string `orm:"column(title)"`
+	IsDatetype      int32  `orm:"column(is_datetype)"`
+	TimeLimit       int32  `orm:"column(time_limit)"`
+	Zhuanrangren    string `orm:"column(zhuanrangren)"`
+	RepayTime       int32  `orm:"column(repay_time)"`
+	BorrowID        int32  `orm:"column(borrow_id)"`
+	Periods         int32  `orm:"column(periods)"`
+	RepayYestime    int32  `orm:"column(repay_yestime)"`
+	RepayYesaccount string `orm:"column(repay_yesaccount)"`
+	RepayAccount    string `orm:"column(repay_account)"`
+	Capital         string `orm:"column(capital)"`
+	Interest        string `orm:"column(interest)"`
+	LateInterest    string `orm:"column(late_interest)"`
+	LateDays        int32  `orm:"column(late_days)"`
+	Status          int32  `orm:"column(status)"`
+	InterestAdd     string `orm:"column(interest_add)"`
+	OldUserID       int32  `orm:"column(old_user_id)"`
+	Style           int32  `orm:"column(style)"`
 }
 
 /**
@@ -94,7 +94,7 @@ func GetCollectionInfo(trr *CollectionRequest) ([]CollectionInfoStruct, int32, e
 			qb.And(fmt.Sprintf("BC.status=%d", 0))
 		case trr.State == 2:
 			/*查已回款记录*/
-			qb.And(fmt.Sprintf("BC.status=%d", 1)).OrderBy("BC.status").Asc().OrderBy("BC.repay_time").Desc().OrderBy("BC.id").Asc()
+			qb.And(fmt.Sprintf("BC.status=%d", 1)).OrderBy("BC.status ASC , BC.repay_time DESC , BC.id ASC")
 		}
 	}
 

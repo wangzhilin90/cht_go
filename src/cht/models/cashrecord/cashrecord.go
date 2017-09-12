@@ -90,39 +90,40 @@ func GetCashRecord(crrs *CashRecordRequestStruct) ([]CashRecordStruct, *CashStat
 		From("jl_hs_cash").
 		Where(fmt.Sprintf("user_id=%d", crrs.UserID))
 
-	/*两个都查全部，开始时间和结束时间才有效*/
-	if crrs.RechargeStatus == 0 && crrs.QueryTime == 0 {
+	//查询天数, 0:查全部  1：查最近7天 2：查一个月 3：查两个月
+	switch {
+	/*时间查全部，开始时间和结束时间才有效*/
+	case crrs.QueryTime == 0:
 		if crrs.StartTime != 0 {
 			qb.And(fmt.Sprintf("addtime >= %d", crrs.StartTime))
 		}
 		if crrs.EndTime != 0 {
 			qb.And(fmt.Sprintf("addtime <= %d", crrs.EndTime))
 		}
-	} else {
-		switch {
-		case crrs.QueryTime == 1:
-			/*查最近七天充值记录*/
-			qb.And(fmt.Sprintf("addtime >=%d", time.Now().Unix()-EVEN_DAYS_QUANTUM))
-		case crrs.QueryTime == 2:
-			/*查最近一个月充值记录*/
-			qb.And(fmt.Sprintf("addtime >=%d", time.Now().Unix()-ONE_MONTH_QUANTUM))
-		case crrs.QueryTime == 3:
-			/*查最近两个月充值记录*/
-			qb.And(fmt.Sprintf("addtime >=%d", time.Now().Unix()-TWO_MONTH_QUANTUM))
-		}
-
-		switch {
-		case crrs.RechargeStatus == 1:
-			/*查已成功充值记录*/
-			qb.And(fmt.Sprintf("status=%d", 1))
-		case crrs.RechargeStatus == 2:
-			/*查审核中充值记录*/
-			qb.And(fmt.Sprintf("status=%d", 0))
-		case crrs.RechargeStatus == 3:
-			/*查审核失败*/
-			qb.And(fmt.Sprintf("status=%d", 2))
-		}
+	case crrs.QueryTime == 1:
+		/*查最近七天充值记录*/
+		qb.And(fmt.Sprintf("addtime >=%d", time.Now().Unix()-EVEN_DAYS_QUANTUM))
+	case crrs.QueryTime == 2:
+		/*查最近一个月充值记录*/
+		qb.And(fmt.Sprintf("addtime >=%d", time.Now().Unix()-ONE_MONTH_QUANTUM))
+	case crrs.QueryTime == 3:
+		/*查最近两个月充值记录*/
+		qb.And(fmt.Sprintf("addtime >=%d", time.Now().Unix()-TWO_MONTH_QUANTUM))
 	}
+
+	//充值状态,0:查全部 1:已成功 2:审核中  3:审核失败
+	switch {
+	case crrs.RechargeStatus == 1:
+		/*查已成功充值记录*/
+		qb.And(fmt.Sprintf("status=%d", 1))
+	case crrs.RechargeStatus == 2:
+		/*查审核中充值记录*/
+		qb.And(fmt.Sprintf("status=%d", 0))
+	case crrs.RechargeStatus == 3:
+		/*查审核失败*/
+		qb.And(fmt.Sprintf("status=%d", 2))
+	}
+
 	qb.OrderBy("addtime").Desc()
 	sql := qb.String()
 	Logger.Debugf("GetCashRecord origin sql:", sql)

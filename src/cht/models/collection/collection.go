@@ -67,35 +67,35 @@ func GetCollectionInfo(trr *CollectionRequest) ([]CollectionInfoStruct, int32, e
 		LeftJoin("jl_borrow_tender BT").On("BC.tender_id=BT.id").
 		Where(fmt.Sprintf("BC.user_id=%d", trr.UserID))
 
-	/*两个都查全部，开始时间和结束时间才有效*/
-	if trr.State == 0 && trr.SearchTime == 0 {
+	//0：查全部,1:近7天，2:1个月，3:2个月
+	switch {
+	/*时间查全部，开始时间和结束时间才有效*/
+	case trr.SearchTime == 0:
 		if trr.Starttime != 0 {
 			qb.And(fmt.Sprintf("BC.repay_time >= %d", trr.Starttime))
 		}
 		if trr.Endtime != 0 {
 			qb.And(fmt.Sprintf("BC.repay_time <= %d", trr.Endtime))
 		}
-	} else {
-		switch {
-		case trr.SearchTime == 1:
-			/*查最近七天充值记录*/
-			qb.And(fmt.Sprintf("BC.repay_time >=%d", time.Now().Unix()-EVEN_DAYS_QUANTUM))
-		case trr.SearchTime == 2:
-			/*查最近一个月充值记录*/
-			qb.And(fmt.Sprintf("BC.repay_time >=%d", time.Now().Unix()-ONE_MONTH_QUANTUM))
-		case trr.SearchTime == 3:
-			/*查最近两个月充值记录*/
-			qb.And(fmt.Sprintf("BC.repay_time >=%d", time.Now().Unix()-TWO_MONTH_QUANTUM))
-		}
+	case trr.SearchTime == 1:
+		/*查最近七天充值记录*/
+		qb.And(fmt.Sprintf("BC.repay_time >=%d", time.Now().Unix()-EVEN_DAYS_QUANTUM))
+	case trr.SearchTime == 2:
+		/*查最近一个月充值记录*/
+		qb.And(fmt.Sprintf("BC.repay_time >=%d", time.Now().Unix()-ONE_MONTH_QUANTUM))
+	case trr.SearchTime == 3:
+		/*查最近两个月充值记录*/
+		qb.And(fmt.Sprintf("BC.repay_time >=%d", time.Now().Unix()-TWO_MONTH_QUANTUM))
+	}
 
-		switch {
-		case trr.State == 1:
-			/*查还款中记录*/
-			qb.And(fmt.Sprintf("BC.status=%d", 0))
-		case trr.State == 2:
-			/*查已回款记录*/
-			qb.And(fmt.Sprintf("BC.status=%d", 1)).OrderBy("BC.status ASC , BC.repay_time DESC , BC.id ASC")
-		}
+	//0:全部，1: 还款中2：已回款
+	switch {
+	case trr.State == 1:
+		/*查还款中记录*/
+		qb.And(fmt.Sprintf("BC.status=%d", 0))
+	case trr.State == 2:
+		/*查已回款记录*/
+		qb.And(fmt.Sprintf("BC.status=%d", 1)).OrderBy("BC.status ASC , BC.repay_time DESC , BC.id ASC")
 	}
 
 	if trr.Borrowid != "" {

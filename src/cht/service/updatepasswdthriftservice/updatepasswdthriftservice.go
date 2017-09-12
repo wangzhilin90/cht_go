@@ -12,7 +12,7 @@ type updatepasswdservice struct{}
 
 const (
 	UPDATEPASSWDFAILED  = 1001
-	UPDATEPASSWDSUCCESS = 1002
+	UPDATEPASSWDSUCCESS = 1000
 )
 
 var Status = map[int]string{

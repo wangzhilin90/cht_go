@@ -29,11 +29,17 @@ const (
 	QUERY_USER_INFO_FAILED  = 1003
 )
 
-var Status = map[int]string{
-	QUERY_MES_INFO_SUCCESS:  "查询短信详情成功",
-	QUERY_MES_INFO_FAILED:   "查询短信详情失败",
+var MesInfoStatus = map[int]string{
+	QUERY_MES_INFO_SUCCESS: "查询短信详情成功",
+	QUERY_MES_INFO_FAILED:  "查询短信详情失败",
+}
+
+var MesCountStatus = map[int]string{
 	QUERY_MES_COUNT_SUCCESS: "查询短信记录数成功",
 	QUERY_MES_COUNT_FAILED:  "查询短信记录数失败",
+}
+
+var UserInfoStatus = map[int]string{
 	QUERY_USER_INFO_SUCCESS: "查询用户信息成功",
 	QUERY_USER_INFO_FAILED:  "查询用户信息失败",
 }
@@ -50,7 +56,7 @@ func (ms *messageservice) GetMessageInfo(requestObj *MessageRequestStruct) (r *M
 		Logger.Debugf("GetMessageInfo query failed", err)
 		return &MessageInfoResponseStruct{
 			Status: QUERY_MES_INFO_FAILED,
-			Msg:    Status[QUERY_MES_INFO_FAILED],
+			Msg:    MesInfoStatus[QUERY_MES_INFO_FAILED],
 		}, nil
 	}
 
@@ -70,7 +76,7 @@ func (ms *messageservice) GetMessageInfo(requestObj *MessageRequestStruct) (r *M
 	response := new(MessageInfoResponseStruct)
 	response.MessageInfo = mis
 	response.Status = QUERY_MES_INFO_SUCCESS
-	response.Msg = Status[QUERY_MES_INFO_SUCCESS]
+	response.Msg = MesInfoStatus[QUERY_MES_INFO_SUCCESS]
 	Logger.Debugf("GetMessageInfo res %v", response)
 	return response, nil
 }
@@ -87,13 +93,13 @@ func (ms *messageservice) GetMessageCount(requestObj *MessageRequestStruct) (*Me
 		Logger.Debugf("GetMessageCount query failed", err)
 		return &MessageCountResponseStruct{
 			Status: QUERY_MES_COUNT_FAILED,
-			Msg:    Status[QUERY_MES_COUNT_FAILED],
+			Msg:    MesCountStatus[QUERY_MES_COUNT_FAILED],
 		}, nil
 	}
 
 	mcr := new(MessageCountResponseStruct)
 	mcr.Status = QUERY_MES_INFO_SUCCESS
-	mcr.Msg = Status[QUERY_MES_INFO_SUCCESS]
+	mcr.Msg = MesCountStatus[QUERY_MES_INFO_SUCCESS]
 	mcr.Count = num
 	return mcr, nil
 }
@@ -110,7 +116,7 @@ func (ms *messageservice) GetUserInfo(requestObj *MessageRequestStruct) (r *User
 		Logger.Debugf("GetUserInfo query failed", err)
 		return &UserInfoResponseStruct{
 			Status: QUERY_USER_INFO_FAILED,
-			Msg:    Status[QUERY_USER_INFO_FAILED],
+			Msg:    UserInfoStatus[QUERY_USER_INFO_FAILED],
 		}, nil
 	}
 
@@ -120,7 +126,7 @@ func (ms *messageservice) GetUserInfo(requestObj *MessageRequestStruct) (r *User
 
 	uirs := new(UserInfoResponseStruct)
 	uirs.Status = QUERY_USER_INFO_SUCCESS
-	uirs.Msg = Status[QUERY_USER_INFO_SUCCESS]
+	uirs.Msg = UserInfoStatus[QUERY_USER_INFO_SUCCESS]
 	uirs.UserInfo = uis
 	return uirs, nil
 }

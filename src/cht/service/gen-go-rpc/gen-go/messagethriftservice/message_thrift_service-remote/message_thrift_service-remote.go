@@ -23,6 +23,7 @@ func Usage() {
   fmt.Fprintln(os.Stderr, "\nFunctions:")
   fmt.Fprintln(os.Stderr, "  MessageInfoResponseStruct getMessageInfo(MessageRequestStruct requestObj)")
   fmt.Fprintln(os.Stderr, "  MessageCountResponseStruct getMessageCount(MessageRequestStruct requestObj)")
+  fmt.Fprintln(os.Stderr, "  UserInfoResponseStruct getUserInfo(MessageRequestStruct requestObj)")
   fmt.Fprintln(os.Stderr)
   os.Exit(0)
 }
@@ -122,19 +123,19 @@ func main() {
       fmt.Fprintln(os.Stderr, "GetMessageInfo requires 1 args")
       flag.Usage()
     }
-    arg6 := flag.Arg(1)
-    mbTrans7 := thrift.NewTMemoryBufferLen(len(arg6))
-    defer mbTrans7.Close()
-    _, err8 := mbTrans7.WriteString(arg6)
-    if err8 != nil {
+    arg8 := flag.Arg(1)
+    mbTrans9 := thrift.NewTMemoryBufferLen(len(arg8))
+    defer mbTrans9.Close()
+    _, err10 := mbTrans9.WriteString(arg8)
+    if err10 != nil {
       Usage()
       return
     }
-    factory9 := thrift.NewTSimpleJSONProtocolFactory()
-    jsProt10 := factory9.GetProtocol(mbTrans7)
+    factory11 := thrift.NewTSimpleJSONProtocolFactory()
+    jsProt12 := factory11.GetProtocol(mbTrans9)
     argvalue0 := messagethriftservice.NewMessageRequestStruct()
-    err11 := argvalue0.Read(jsProt10)
-    if err11 != nil {
+    err13 := argvalue0.Read(jsProt12)
+    if err13 != nil {
       Usage()
       return
     }
@@ -147,24 +148,49 @@ func main() {
       fmt.Fprintln(os.Stderr, "GetMessageCount requires 1 args")
       flag.Usage()
     }
-    arg12 := flag.Arg(1)
-    mbTrans13 := thrift.NewTMemoryBufferLen(len(arg12))
-    defer mbTrans13.Close()
-    _, err14 := mbTrans13.WriteString(arg12)
-    if err14 != nil {
+    arg14 := flag.Arg(1)
+    mbTrans15 := thrift.NewTMemoryBufferLen(len(arg14))
+    defer mbTrans15.Close()
+    _, err16 := mbTrans15.WriteString(arg14)
+    if err16 != nil {
       Usage()
       return
     }
-    factory15 := thrift.NewTSimpleJSONProtocolFactory()
-    jsProt16 := factory15.GetProtocol(mbTrans13)
+    factory17 := thrift.NewTSimpleJSONProtocolFactory()
+    jsProt18 := factory17.GetProtocol(mbTrans15)
     argvalue0 := messagethriftservice.NewMessageRequestStruct()
-    err17 := argvalue0.Read(jsProt16)
-    if err17 != nil {
+    err19 := argvalue0.Read(jsProt18)
+    if err19 != nil {
       Usage()
       return
     }
     value0 := argvalue0
     fmt.Print(client.GetMessageCount(value0))
+    fmt.Print("\n")
+    break
+  case "getUserInfo":
+    if flag.NArg() - 1 != 1 {
+      fmt.Fprintln(os.Stderr, "GetUserInfo requires 1 args")
+      flag.Usage()
+    }
+    arg20 := flag.Arg(1)
+    mbTrans21 := thrift.NewTMemoryBufferLen(len(arg20))
+    defer mbTrans21.Close()
+    _, err22 := mbTrans21.WriteString(arg20)
+    if err22 != nil {
+      Usage()
+      return
+    }
+    factory23 := thrift.NewTSimpleJSONProtocolFactory()
+    jsProt24 := factory23.GetProtocol(mbTrans21)
+    argvalue0 := messagethriftservice.NewMessageRequestStruct()
+    err25 := argvalue0.Read(jsProt24)
+    if err25 != nil {
+      Usage()
+      return
+    }
+    value0 := argvalue0
+    fmt.Print(client.GetUserInfo(value0))
     fmt.Print("\n")
     break
   case "":

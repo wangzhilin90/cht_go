@@ -31,12 +31,24 @@ struct MessageInfoResponseStruct {
 }
 
 struct MessageCountResponseStruct {
-	1:i32 status,	//状态 1000返回成功， 1001返回失败
+	1:i32 status,	//状态 1000返回成功， 1002返回失败
 	2:string msg,		
 	3:i32 count ,	//获取短信记录数
 }
 
+struct UserInfoStruct {
+	1:i32 id,  //用户ID
+	2:string phone, //手机号	
+}
+
+struct UserInfoResponseStruct {
+	1:i32 status,//状态 1000返回成功， 1003返回失败
+	2:string msg,
+	3:UserInfoStruct userInfo,
+}
+
 service MessageThriftService {
-    	MessageInfoResponseStruct getMessageInfo(1:MessageRequestStruct requestObj)
+    MessageInfoResponseStruct getMessageInfo(1:MessageRequestStruct requestObj)
 	MessageCountResponseStruct getMessageCount(1:MessageRequestStruct requestObj)
+	UserInfoResponseStruct getUserInfo(1:MessageRequestStruct requestObj)
 }

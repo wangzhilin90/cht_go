@@ -31,3 +31,12 @@ func TestGetMessageCount(t *testing.T) {
 	}
 	t.Log("TestGetMessageCount res %v", res)
 }
+
+func TestGetUserInfo(t *testing.T) {
+	mr := NewMessageRequest(475151, "01234567359", "1497542521", 0)
+	res, err := GetUserInfo(mr)
+	if err != nil {
+		t.Fatalf("TestGetUserInfo failed %v", err)
+	}
+	t.Log("TestGetUserInfo res %v", res)
+}

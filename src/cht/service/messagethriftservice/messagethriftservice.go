@@ -19,10 +19,14 @@ type MessageRequest struct {
 type messageservice struct{}
 
 const (
-	QUERY_MES_INFO_SUCCESS  = 1000
-	QUERY_MES_INFO_FAILED   = 1001
-	QUERY_MES_COUNT_SUCCESS = 1002
-	QUERY_MES_COUNT_FAILED  = 1003
+	QUERY_MES_INFO_SUCCESS = 1000
+	QUERY_MES_INFO_FAILED  = 1001
+
+	QUERY_MES_COUNT_SUCCESS = 1000
+	QUERY_MES_COUNT_FAILED  = 1002
+
+	QUERY_USER_INFO_SUCCESS = 1000
+	QUERY_USER_INFO_FAILED  = 1003
 )
 
 var Status = map[int]string{
@@ -30,6 +34,8 @@ var Status = map[int]string{
 	QUERY_MES_INFO_FAILED:   "查询短信详情失败",
 	QUERY_MES_COUNT_SUCCESS: "查询短信记录数成功",
 	QUERY_MES_COUNT_FAILED:  "查询短信记录数失败",
+	QUERY_USER_INFO_SUCCESS: "查询用户信息成功",
+	QUERY_USER_INFO_FAILED:  "查询用户信息失败",
 }
 
 /*获取短信详情*/
@@ -90,6 +96,33 @@ func (ms *messageservice) GetMessageCount(requestObj *MessageRequestStruct) (*Me
 	mcr.Msg = Status[QUERY_MES_INFO_SUCCESS]
 	mcr.Count = num
 	return mcr, nil
+}
+
+/*根据phone获取用户id和手机号*/
+func (ms *messageservice) GetUserInfo(requestObj *MessageRequestStruct) (r *UserInfoResponseStruct, err error) {
+	mr := new(message.MessageRequest)
+	mr.Smsid = requestObj.GetSmsid()
+	mr.Phone = requestObj.GetPhone()
+	mr.Addtime = requestObj.GetAddtime()
+	mr.Type = requestObj.GetType()
+	userInfo, err := message.GetUserInfo(mr)
+	if err != nil {
+		Logger.Debugf("GetUserInfo query failed", err)
+		return &UserInfoResponseStruct{
+			Status: QUERY_USER_INFO_FAILED,
+			Msg:    Status[QUERY_USER_INFO_FAILED],
+		}, nil
+	}
+
+	uis := new(UserInfoStruct)
+	uis.ID = userInfo.ID
+	uis.Phone = userInfo.Phone
+
+	uirs := new(UserInfoResponseStruct)
+	uirs.Status = QUERY_USER_INFO_SUCCESS
+	uirs.Msg = Status[QUERY_USER_INFO_SUCCESS]
+	uirs.UserInfo = uis
+	return uirs, nil
 }
 
 /**

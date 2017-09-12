@@ -29,6 +29,11 @@ type MessageInfoStruct struct {
 	Status     int32  `orm:column(status)`
 }
 
+type UserInfoStruct struct {
+	ID    int32  `orm:"column(id)"`
+	Phone string `orm:"column(phone)`
+}
+
 /**
  * [GetMessageInfo 获取短信详情]
  * @param    mr *MessageRequest 请求入参
@@ -82,4 +87,31 @@ func GetMessageCount(mr *MessageRequest) (int32, error) {
 
 	Logger.Debugf("GetMessageCount res %v", MessageNum)
 	return MessageNum, nil
+}
+
+/**
+ * [GetUserInfo 根据手机号获取用户ID和phone]
+ * @param    mr *MessageRequest 请求入参
+ * @return   *UserInfoStruct    用户信息:包括用户ID和手机号
+ * @DateTime 2017-09-12T11:09:39+0800
+ */
+func GetUserInfo(mr *MessageRequest) (*UserInfoStruct, error) {
+	o := orm.NewOrm()
+	o.Using("default")
+
+	buf := bytes.Buffer{}
+	buf.WriteString("select id,phone from  jl_user where phone=? limit 1")
+	sql := buf.String()
+
+	Logger.Debugf("GetUserInfo sql %v", sql)
+
+	var uis UserInfoStruct
+	err := o.Raw(sql, mr.Phone).QueryRow(&uis)
+	if err != nil {
+		Logger.Error("GetUserInfo  query failed:", err)
+		return nil, err
+	}
+
+	Logger.Debugf("GetUserInfo res %v", uis)
+	return &uis, nil
 }

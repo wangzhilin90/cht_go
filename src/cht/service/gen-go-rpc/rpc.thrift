@@ -1,37 +1,54 @@
-namespace go  rechargerecordthriftservice
+namespace  go messagethriftservice 
 
-struct  RechargeRecordRequestStruct {
-	1:i32 user_id 
-	2:i32 start_time
-	3:i32 end_time    
-	4:i32 query_time //查询天数, 0:查全部  1：查最近7天 2：查一个月 3：查两个月
-	5:i32 recharge_status //充值状态,0:查全部 1:已成功 2:审核中  3:审核失败
-	6:i32 limit_offset  //查询偏移量
-	7:i32 limit_num     //查询数量
-	8:string chengHuiTongTraceLog
+//请求结构体
+struct MessageRequestStruct {
+	1:i32 smsid ,//短信id
+	2:string phone ,//手机号
+	3:string addtime, //添加时间
+	4:i32 type, //类型     
+	5:string chengHuiTongTraceLog
 }
 
-struct  RechargeRecordStruct{
-	1:i32 id 
-	2:i32 user_id
-	3:string order_sn
-	4:string money
-	5:i32 addtime
-	6:i32 status
-	7:i32 deal_time
-	8:i32 pay_type
-	9:i32 pay_way
-	10:string  fail_result
+//响应结构体
+struct MessageInfoStruct {
+	1:i32 id,
+	2:i32 type,
+	3:i32 user_id,
+	4:string send_to ,
+	5:string subject ,
+	6:string content ,
+	7:string attachment,
+	8:i32 addtime,
+	9:string ip,
+	10:i32 posttime,
+	11:i32 status
 }
 
-struct RechargeRecordResponseStruct {
-	1:i32 status  //0:查询充值记录成功 1001 查询充值记录失败
-	2:string Msg
-	3:i32 totalnum //充值总记录数
-	4:string totalHsRechargeMoney //充值总金额 SELECT SUM(money) FROM jl_hs_recharge WHERE user_id = $user_id  AND status = 1
-	5:list<RechargeRecordStruct> rechargeRecordList	
+struct MessageInfoResponseStruct {
+	1:i32 status,	//状态 1000返回成功， 1001返回失败
+	2:string msg,	
+	3:MessageInfoStruct MessageInfo //获取短信详情
 }
 
-service RechargeRecordThriftService {
-	RechargeRecordResponseStruct getRechargeRecord(1:RechargeRecordRequestStruct requestObj)
+struct MessageCountResponseStruct {
+	1:i32 status,	//状态 1000返回成功， 1002返回失败
+	2:string msg,		
+	3:i32 count ,	//获取短信记录数
+}
+
+struct UserInfoStruct {
+	1:i32 id,  //用户ID
+	2:string phone, //手机号	
+}
+
+struct UserInfoResponseStruct {
+	1:i32 status,//状态 1000返回成功， 1003返回失败
+	2:string msg,
+	3:UserInfoStruct userInfo,
+}
+
+service MessageThriftService {
+    	MessageInfoResponseStruct getMessageInfo(1:MessageRequestStruct requestObj)
+	MessageCountResponseStruct getMessageCount(1:MessageRequestStruct requestObj)
+	UserInfoResponseStruct getUserInfo(1:MessageRequestStruct requestObj)
 }

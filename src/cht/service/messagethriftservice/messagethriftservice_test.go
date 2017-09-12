@@ -33,3 +33,13 @@ func TestGetMessageCount(t *testing.T) {
 	}
 	t.Log("TestGetMessageInfo res %v", res)
 }
+
+func TestGetUserInfo(t *testing.T) {
+	mirs := NewMessageRequestStruct(475151, "01234567359", "1497542521", 0)
+	ms := &messageservice{}
+	res, err := ms.GetUserInfo(mirs)
+	if err != nil {
+		t.Fatalf("TestGetUserInfo failed %v", err)
+	}
+	t.Log("TestGetUserInfo res %v", res)
+}

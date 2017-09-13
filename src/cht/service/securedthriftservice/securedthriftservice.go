@@ -44,8 +44,8 @@ func (ss *securedservice) GetSecuredList(requestObj *SecuredRequestStruct) (r *S
 	return response, nil
 }
 
-/*开启做标服务---分账人服务*/
-func StartsubledgerServer() {
+/*开启做标服务---担保人服务*/
+func StartSecuredServer() {
 	zkServers := []string{"192.168.8.208:2181"}
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {

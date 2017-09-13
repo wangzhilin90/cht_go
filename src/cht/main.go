@@ -78,12 +78,12 @@ func main() {
 
 	go func() {
 		/*开启做标服务---分账人服务*/
-		securedthriftservice.StartsubledgerServer()
+		subledgerthriftservice.StartsubledgerServer()
 	}()
 
 	go func() {
-		/*开启做标服务---分账人服务*/
-		subledgerthriftservice.StartsubledgerServer()
+		/*开启做标服务---担保人服务*/
+		securedthriftservice.StartSecuredServer()
 	}()
 
 	go func() {

@@ -2,6 +2,7 @@ package main
 
 import (
 	_ "cht/initial"
+	"cht/service/borrowerthriftservice"
 	"cht/service/cashrecordthriftservice"
 	"cht/service/collectionthriftservice"
 	"cht/service/couponlistthriftservice"
@@ -11,6 +12,8 @@ import (
 	"cht/service/makeborrowservice"
 	"cht/service/messagethriftservice"
 	"cht/service/rechargerecordthriftservice"
+	"cht/service/securedthriftservice"
+	"cht/service/subledgerthriftservice"
 	"cht/service/updatepasswdthriftservice"
 	"cht/service/userloginservice"
 )
@@ -71,6 +74,21 @@ func main() {
 	go func() {
 		/*开启短信服务，包括获取短信详情和短信记录数*/
 		messagethriftservice.StartMessageServer()
+	}()
+
+	go func() {
+		/*开启做标服务---分账人服务*/
+		securedthriftservice.StartsubledgerServer()
+	}()
+
+	go func() {
+		/*开启做标服务---分账人服务*/
+		subledgerthriftservice.StartsubledgerServer()
+	}()
+
+	go func() {
+		/*开启做标服务---借款人服务*/
+		borrowerthriftservice.StartCashRecordServer()
 	}()
 
 	<-ch

@@ -12,7 +12,7 @@ func NewSubledgerRequest(arrUser string) *SubledgerRequest {
 }
 
 func TestGetSubledgerList(t *testing.T) {
-	sr := NewSubledgerRequest("143242314")
+	sr := NewSubledgerRequest("1,2,3")
 	res, err := GetSubledgerList(sr)
 	if err != nil {
 		t.Fatalf("TestGetSubledgerList failed %v", err)

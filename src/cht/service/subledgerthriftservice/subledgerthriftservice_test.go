@@ -12,7 +12,7 @@ func NewSubledgerRequestStruct(arrUser string) *SubledgerRequestStruct {
 }
 
 func TestGetSubledgerList(t *testing.T) {
-	srs := NewSubledgerRequestStruct("1,2,3")
+	srs := NewSubledgerRequestStruct("1,2,3,4444")
 	ss := &subledgerservice{}
 	res, err := ss.GetSubledgerList(srs)
 	if err != nil {

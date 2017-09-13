@@ -2,10 +2,10 @@ package subledgerthriftservice
 
 import (
 	. "cht/common/logger"
-	// "cht/common/zkclient"
+	"cht/common/zkclient"
 	"cht/models/subledger"
-	// "fmt"
-	// "git.apache.org/thrift.git/lib/go/thrift"
+	"fmt"
+	"git.apache.org/thrift.git/lib/go/thrift"
 )
 
 const (
@@ -45,4 +45,37 @@ func (ss *subledgerservice) GetSubledgerList(requestObj *SubledgerRequestStruct)
 	response.Msg = Status[QUERY_SUBLEDGER_SUCCESS]
 	Logger.Debugf("GetSubledgerList res:%v", response)
 	return &response, nil
+}
+
+/**
+ * [StartLogUserLoginServer 开启做标服务---分账人服务]
+ * @DateTime 2017-09-13T17:58:45+0800
+ */
+func StartsubledgerServer() {
+	zkServers := []string{"192.168.8.208:2181"}
+	conn, err := zkclient.ConnectZk(zkServers)
+	if err != nil {
+		Logger.Fatalf("connect zk failed %v ", err)
+	}
+	defer conn.Close()
+
+	port := "30012"
+	ip, _ := zkclient.GetLocalIP()
+	listenAddr := fmt.Sprintf("%s:%s", ip, port)
+
+	servicename := "/cht/SubledgerThriftService/providers"
+	err = zkclient.RegisterNode(conn, servicename, listenAddr)
+	if err != nil {
+		Logger.Fatalf("RegisterNode failed", err)
+	}
+
+	serverTransport, err := thrift.NewTServerSocket(listenAddr)
+	if err != nil {
+		Logger.Fatal("NewTServerSocket failed", err)
+	}
+
+	handler := &subledgerservice{}
+	processor := NewSubledgerThriftServiceProcessor(handler)
+	server := thrift.NewTSimpleServer2(processor, serverTransport)
+	server.Serve()
 }

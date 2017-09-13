@@ -54,7 +54,7 @@ func (luls *LogUserLoginService) UpdateLogUserlLogin(requestObj *LogUserlLoginRe
  * @DateTime 2017-08-30T17:58:45+0800
  */
 func StartLogUserLoginServer() {
-	zkServers := []string{"192.168.8.212:2181", "192.168.8.213:2181", "192.168.8.214:2181"}
+	zkServers := []string{"192.168.8.208:2181"}
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

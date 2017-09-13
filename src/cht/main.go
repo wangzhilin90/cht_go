@@ -17,6 +17,7 @@ import (
 
 func main() {
 	ch := make(chan bool)
+
 	go func() {
 		/*开启加息券服务API*/
 		couponlistthriftservice.StartCouponServer()

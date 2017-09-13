@@ -43,7 +43,7 @@ func (ups *updatepasswdservice) UpdatePasswd(requestObj *UpdatePasswdRequestStru
  * @DateTime 2017-08-24T15:19:45+0800
  */
 func StartUpdatePasswdsServer() {
-	zkServers := []string{"192.168.8.212:2181", "192.168.8.213:2181", "192.168.8.214:2181"}
+	zkServers := []string{"192.168.8.208:2181"}
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

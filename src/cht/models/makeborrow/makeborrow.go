@@ -5,6 +5,7 @@ import (
 	. "cht/common/logger"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
+	"time"
 )
 
 type MakeBorrowRequest struct {
@@ -175,7 +176,7 @@ func InsertBorrowTbl(mbr *MakeBorrowRequest) error {
 		mbr.OpenCredit,
 		mbr.OpenZiliao,
 		mbr.Material,
-		mbr.Addtime,
+		time.Now().Unix(),
 		mbr.Addip,
 		mbr.Status,
 		mbr.RutenAllnumber,

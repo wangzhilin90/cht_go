@@ -43,7 +43,7 @@ func TestGetUserIdByhsid(t *testing.T) {
 }
 
 func TestUpdatePhone(t *testing.T) {
-	ubrs := NewUpdatePhoneRequestStruct(204742, "1371405791111")
+	ubrs := NewUpdatePhoneRequestStruct(204742, "1371405792")
 	pts := &phoneattestationservice{}
 	str, _ := pts.UpdatePhone(ubrs)
 	if str == "1001" {

@@ -11,10 +11,8 @@ import (
 type phoneattestationservice struct{}
 
 const (
-	PHONE_USED           = "1001"
-	PHONE_UNUSED         = "1000"
-	UPDATE_PHONE_SUCCESS = "1000"
-	UPDATE_PHONE_FAILED  = "1001"
+	PHONE_USED   = "1001"
+	PHONE_UNUSED = "1000"
 )
 
 func (pts *phoneattestationservice) CheckPhoneUse(requestObj *CheckPhoneUseRequestStruct) (string, error) {
@@ -47,14 +45,10 @@ func (pts *phoneattestationservice) UpdatePhone(requestObj *UpdatePhoneRequestSt
 	upr := new(phoneattestation.UpdatePhoneRequest)
 	upr.Phone = requestObj.GetPhone()
 	upr.UserID = requestObj.GetUserID()
-	b := phoneattestation.UpdatePhone(upr)
-	if b == false {
-		Logger.Errorf("UpdatePhone failed")
-		return UPDATE_PHONE_FAILED, nil
-	} else {
-		Logger.Debugf("UpdatePhone success status:%v", UPDATE_PHONE_SUCCESS)
-		return UPDATE_PHONE_SUCCESS, nil
-	}
+	status := phoneattestation.UpdatePhone(upr)
+
+	Logger.Debugf("UpdatePhone success status:%v", status)
+	return status, nil
 }
 
 /**

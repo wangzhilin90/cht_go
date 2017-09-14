@@ -1,9 +1,11 @@
 package phoneattestation
 
 import (
+	"bytes"
 	. "cht/common/logger"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
+	"time"
 )
 
 type CheckPhoneUseRequest struct {
@@ -65,17 +67,56 @@ func GetUserIdByhsid(gibr *GetUserIdByhsidRequest) (int32, error) {
 /**
  * [UpdatePhone 更新jl_user表修改该用户的手机号]
  * @param    upr *UpdatePhoneRequest 请求入参
- * @return   更新成功返回true，否则返回false
+ * @return   string 1000:更新手机号成功 1001:查找原手机号失败 1002：新手机号与原手机号一致 1003:插入日志失败 1004:更新手机号失败
  * @DateTime 2017-09-14T10:34:50+0800
  */
-func UpdatePhone(upr *UpdatePhoneRequest) bool {
+func UpdatePhone(upr *UpdatePhoneRequest) string {
 	o := orm.NewOrm()
 	o.Using("default")
 
-	res, _ := o.Raw("update jl_user set phone=? where id=?", upr.Phone, upr.UserID).Exec()
+	o.Begin()
+	buf := bytes.Buffer{}
+	buf.WriteString("select phone from jl_user where id=?")
+	sql := buf.String()
+	Logger.Debugf("UpdatePhone query oldphone sql:%v", sql)
+
+	var oldPhone string
+	err := o.Raw(sql, upr.UserID).QueryRow(&oldPhone)
+	if err != nil {
+		o.Rollback()
+		Logger.Debug("UpdatePhone query oldphone failed")
+		return "1001"
+	}
+
+	if oldPhone == upr.Phone {
+		o.Rollback()
+		Logger.Debug("UpdatePhone newphone same with oldphone")
+		return "1002"
+	}
+
+	buf = bytes.Buffer{}
+	buf.WriteString("insert into jl_phone_log (id,user_id,addtime,old_phone,new_phone) values(next VALUE FOR MYCATSEQ_PHONE_LOG,?,?,?,?)")
+	sql = buf.String()
+	Logger.Debugf("UpdatePhone insert sql :%v", sql)
+	_, err = o.Raw(sql, upr.UserID, time.Now().Unix(), oldPhone, upr.Phone).Exec()
+	if err != nil {
+		o.Rollback()
+		Logger.Debug("UpdatePhone insert sql failed")
+		return "1003"
+	}
+
+	buf = bytes.Buffer{}
+	buf.WriteString("update jl_user set phone=? where id=?")
+	sql = buf.String()
+	Logger.Debugf("UpdatePhone update sql :%v", sql)
+	res, _ := o.Raw(sql, upr.Phone, upr.UserID).Exec()
 	num, _ := res.RowsAffected()
 	if num == 0 {
-		return false
+		o.Rollback()
+		Logger.Debug("UpdatePhone update phone failed")
+		return "1004"
 	}
-	return true
+	o.Commit()
+	Logger.Debugf("UpdatePhone update success ")
+	return "1000"
 }

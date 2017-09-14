@@ -12,7 +12,7 @@ func NewBorrowerInfoRequestStruct(username string) *BorrowerInfoRequestStruct {
 }
 
 func TestGetBorrowerInfo(t *testing.T) {
-	bir := NewBorrowerInfoRequestStruct("可可")
+	bir := NewBorrowerInfoRequestStruct("xiezhenyuan")
 	bs := &borrowerservice{}
 	res, err := bs.GetBorrowerInfo(bir)
 	if err != nil {

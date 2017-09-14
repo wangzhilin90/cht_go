@@ -29,29 +29,42 @@ func (bs *borrowerservice) GetBorrowerInfo(requestObj *BorrowerInfoRequestStruct
 	bir := new(borrower.BorrowerInfoRequest)
 	bir.Name = requestObj.GetName()
 	bir.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
-	borrowInfo, err := borrower.GetBorrowerInfo(bir)
+
+	borrowInfo, err := borrower.GetBorrowerUID(bir)
 	if err != nil {
-		Logger.Errorf("GetBorrowerInfo failed %v", err)
+		Logger.Errorf("GetBorrowerInfo query failed", err)
 		return &BorrowerInfoResponseStruct{
 			Status: QUERY_USER_ID_FAILED,
 			Msg:    Status[QUERY_USER_ID_FAILED],
 		}, nil
 	}
 
-	bi := new(BorrowerInfoStruct)
-	bi.ID = borrowInfo.ID
-	bi.Realname = borrowInfo.Realname
-	bi.IsBorrower = borrowInfo.IsBorrower
-	bi.Credit = borrowInfo.Credit
-	bi.Guarantor = borrowInfo.Guarantor
+	card_id, _ := borrower.GetCardID(borrowInfo.ID)
+	credit_use, _ := borrower.GetCreditUse(borrowInfo.ID)
+	guarantor, _ := borrower.GetGuarantor(borrowInfo.ID)
+	material, _ := borrower.GetMaterialInfo(borrowInfo.ID)
 
-	mi := new(MaterialInfoStruct)
-	mi.ID = borrowInfo.MaterialInfo.ID
-	mi.Name = borrowInfo.MaterialInfo.Name
+	bis := new(BorrowerInfoStruct)
+	bis.ID = borrowInfo.ID
+	bis.Realname = borrowInfo.Realname
+	bis.IsBorrower = borrowInfo.IsBorrower
+	bis.CardID = card_id
+	bis.Credit = credit_use
+	bis.Guarantor = guarantor
 
-	bi.MaterialInfo = mi
+	for _, v := range material {
+		Logger.Debugf("GetBorrowerInfo material %v", v)
+		m := new(MaterialInfoStruct)
+		m.ID = v.ID
+		m.Name = v.Name
+		bis.MaterialList = append(bis.MaterialList, m)
+	}
+
+	Logger.Debugf("GetBorrowerInfo res:%v", bis)
+	Logger.Debugf("GetBorrowerInfo res:%v", bis.MaterialList)
+
 	response := new(BorrowerInfoResponseStruct)
-	response.BorrowerInfo = bi
+	response.BorrowerInfo = bis
 	response.Status = QUERY_BORROW_INFO_SUCCESS
 	response.Msg = Status[QUERY_BORROW_INFO_SUCCESS]
 	Logger.Debugf("GetBorrowerInfo res:%v", response)

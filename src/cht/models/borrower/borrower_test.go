@@ -13,7 +13,7 @@ func NewBorrowerInfoRequest(username string) *BorrowerInfoRequest {
 
 func TestGetBorrowerUID(t *testing.T) {
 	birs := NewBorrowerInfoRequest("Jerry114")
-	res, err := getBorrowerUID(birs)
+	res, err := GetBorrowerUID(birs)
 	if err != nil {
 		t.Fatalf("TestGetBorrowerUID failed %v", err)
 	}
@@ -21,7 +21,7 @@ func TestGetBorrowerUID(t *testing.T) {
 }
 
 func TestGetCardID(t *testing.T) {
-	res, err := getCardID(2)
+	res, err := GetCardID(2)
 	if err != nil {
 		t.Fatalf("TestGetCardID failed %v", err)
 	}
@@ -29,7 +29,7 @@ func TestGetCardID(t *testing.T) {
 }
 
 func TestGetCreditUse(t *testing.T) {
-	res, err := getCreditUse(29)
+	res, err := GetCreditUse(29)
 	if err != nil {
 		t.Fatalf("TestGetCreditUse failed %v", err)
 	}
@@ -37,7 +37,7 @@ func TestGetCreditUse(t *testing.T) {
 }
 
 func TestGetGuarantor(t *testing.T) {
-	res, err := getGuarantor(29)
+	res, err := GetGuarantor(29)
 	if err != nil {
 		t.Fatalf("TestGetGuarantor failed %v", err)
 	}
@@ -45,18 +45,9 @@ func TestGetGuarantor(t *testing.T) {
 }
 
 func TestGetMaterialInfo(t *testing.T) {
-	res, err := getMaterialInfo(29)
+	res, err := GetMaterialInfo(1066)
 	if err != nil {
 		t.Fatalf("TestGetMaterialInfo failed %v", err)
 	}
 	t.Logf("TestGetMaterialInfo res:%v", res)
-}
-
-func TestGetBorrowerInfo(t *testing.T) {
-	birs := NewBorrowerInfoRequest("可可")
-	res, err := GetBorrowerInfo(birs)
-	if err != nil {
-		t.Fatalf("TestGetBorrowerInfo failed %v", err)
-	}
-	t.Logf("TestGetBorrowerInfo res:%v %v", res, res.MaterialInfo)
 }

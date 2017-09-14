@@ -251,7 +251,7 @@ func (p *MaterialInfoStruct) String() string {
 //  - CardID
 //  - Credit
 //  - Guarantor
-//  - MaterialInfo
+//  - MaterialList
 type BorrowerInfoStruct struct {
   ID int32 `thrift:"id,1" db:"id" json:"id"`
   Realname string `thrift:"realname,2" db:"realname" json:"realname"`
@@ -259,7 +259,7 @@ type BorrowerInfoStruct struct {
   CardID string `thrift:"card_id,4" db:"card_id" json:"card_id"`
   Credit string `thrift:"credit,5" db:"credit" json:"credit"`
   Guarantor string `thrift:"guarantor,6" db:"guarantor" json:"guarantor"`
-  MaterialInfo *MaterialInfoStruct `thrift:"materialInfo,7" db:"materialInfo" json:"materialInfo"`
+  MaterialList []*MaterialInfoStruct `thrift:"materialList,7" db:"materialList" json:"materialList"`
 }
 
 func NewBorrowerInfoStruct() *BorrowerInfoStruct {
@@ -290,17 +290,10 @@ func (p *BorrowerInfoStruct) GetCredit() string {
 func (p *BorrowerInfoStruct) GetGuarantor() string {
   return p.Guarantor
 }
-var BorrowerInfoStruct_MaterialInfo_DEFAULT *MaterialInfoStruct
-func (p *BorrowerInfoStruct) GetMaterialInfo() *MaterialInfoStruct {
-  if !p.IsSetMaterialInfo() {
-    return BorrowerInfoStruct_MaterialInfo_DEFAULT
-  }
-return p.MaterialInfo
-}
-func (p *BorrowerInfoStruct) IsSetMaterialInfo() bool {
-  return p.MaterialInfo != nil
-}
 
+func (p *BorrowerInfoStruct) GetMaterialList() []*MaterialInfoStruct {
+  return p.MaterialList
+}
 func (p *BorrowerInfoStruct) Read(iprot thrift.TProtocol) error {
   if _, err := iprot.ReadStructBegin(); err != nil {
     return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
@@ -412,9 +405,21 @@ func (p *BorrowerInfoStruct)  ReadField6(iprot thrift.TProtocol) error {
 }
 
 func (p *BorrowerInfoStruct)  ReadField7(iprot thrift.TProtocol) error {
-  p.MaterialInfo = &MaterialInfoStruct{}
-  if err := p.MaterialInfo.Read(iprot); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.MaterialInfo), err)
+  _, size, err := iprot.ReadListBegin()
+  if err != nil {
+    return thrift.PrependError("error reading list begin: ", err)
+  }
+  tSlice := make([]*MaterialInfoStruct, 0, size)
+  p.MaterialList =  tSlice
+  for i := 0; i < size; i ++ {
+    _elem0 := &MaterialInfoStruct{}
+    if err := _elem0.Read(iprot); err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _elem0), err)
+    }
+    p.MaterialList = append(p.MaterialList, _elem0)
+  }
+  if err := iprot.ReadListEnd(); err != nil {
+    return thrift.PrependError("error reading list end: ", err)
   }
   return nil
 }
@@ -499,13 +504,21 @@ func (p *BorrowerInfoStruct) writeField6(oprot thrift.TProtocol) (err error) {
 }
 
 func (p *BorrowerInfoStruct) writeField7(oprot thrift.TProtocol) (err error) {
-  if err := oprot.WriteFieldBegin("materialInfo", thrift.STRUCT, 7); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field begin error 7:materialInfo: ", p), err) }
-  if err := p.MaterialInfo.Write(oprot); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", p.MaterialInfo), err)
+  if err := oprot.WriteFieldBegin("materialList", thrift.LIST, 7); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T write field begin error 7:materialList: ", p), err) }
+  if err := oprot.WriteListBegin(thrift.STRUCT, len(p.MaterialList)); err != nil {
+    return thrift.PrependError("error writing list begin: ", err)
+  }
+  for _, v := range p.MaterialList {
+    if err := v.Write(oprot); err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", v), err)
+    }
+  }
+  if err := oprot.WriteListEnd(); err != nil {
+    return thrift.PrependError("error writing list end: ", err)
   }
   if err := oprot.WriteFieldEnd(); err != nil {
-    return thrift.PrependError(fmt.Sprintf("%T write field end error 7:materialInfo: ", p), err) }
+    return thrift.PrependError(fmt.Sprintf("%T write field end error 7:materialList: ", p), err) }
   return err
 }
 
@@ -749,16 +762,16 @@ func (p *BorrowerThriftServiceClient) recvGetBorrowerInfo() (value *BorrowerInfo
     return
   }
   if mTypeId == thrift.EXCEPTION {
-    error0 := thrift.NewTApplicationException(thrift.UNKNOWN_APPLICATION_EXCEPTION, "Unknown Exception")
-    var error1 error
-    error1, err = error0.Read(iprot)
+    error1 := thrift.NewTApplicationException(thrift.UNKNOWN_APPLICATION_EXCEPTION, "Unknown Exception")
+    var error2 error
+    error2, err = error1.Read(iprot)
     if err != nil {
       return
     }
     if err = iprot.ReadMessageEnd(); err != nil {
       return
     }
-    err = error1
+    err = error2
     return
   }
   if mTypeId != thrift.REPLY {
@@ -797,9 +810,9 @@ func (p *BorrowerThriftServiceProcessor) ProcessorMap() map[string]thrift.TProce
 
 func NewBorrowerThriftServiceProcessor(handler BorrowerThriftService) *BorrowerThriftServiceProcessor {
 
-  self2 := &BorrowerThriftServiceProcessor{handler:handler, processorMap:make(map[string]thrift.TProcessorFunction)}
-  self2.processorMap["getBorrowerInfo"] = &borrowerThriftServiceProcessorGetBorrowerInfo{handler:handler}
-return self2
+  self3 := &BorrowerThriftServiceProcessor{handler:handler, processorMap:make(map[string]thrift.TProcessorFunction)}
+  self3.processorMap["getBorrowerInfo"] = &borrowerThriftServiceProcessorGetBorrowerInfo{handler:handler}
+return self3
 }
 
 func (p *BorrowerThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
@@ -810,12 +823,12 @@ func (p *BorrowerThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol) 
   }
   iprot.Skip(thrift.STRUCT)
   iprot.ReadMessageEnd()
-  x3 := thrift.NewTApplicationException(thrift.UNKNOWN_METHOD, "Unknown function " + name)
+  x4 := thrift.NewTApplicationException(thrift.UNKNOWN_METHOD, "Unknown function " + name)
   oprot.WriteMessageBegin(name, thrift.EXCEPTION, seqId)
-  x3.Write(oprot)
+  x4.Write(oprot)
   oprot.WriteMessageEnd()
   oprot.Flush()
-  return false, x3
+  return false, x4
 
 }
 

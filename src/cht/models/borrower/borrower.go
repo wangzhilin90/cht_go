@@ -20,13 +20,13 @@ type MaterialInfoStruct struct {
 }
 
 type BorrowerInfoStruct struct {
-	ID           int32               `orm:"column(id)"`
-	Realname     string              `orm:"column(realname)"`
-	IsBorrower   int32               `orm:"column(is_borrower)"`
-	CardID       string              `orm:"column(card_id)"`
-	Credit       string              `orm:"column(credit)"`
-	Guarantor    string              `orm:"column(guarantor)"`
-	MaterialInfo *MaterialInfoStruct `orm:"column(materialInfo)"`
+	ID           int32  `orm:"column(id)"`
+	Realname     string `orm:"column(realname)"`
+	IsBorrower   int32  `orm:"column(is_borrower)"`
+	CardID       string `orm:"column(card_id)"`
+	Credit       string `orm:"column(credit)"`
+	Guarantor    string `orm:"column(guarantor)"`
+	MaterialList []*MaterialInfoStruct
 }
 
 type BorrowerUID struct {
@@ -41,7 +41,7 @@ type BorrowerUID struct {
  * @return   {[type]}                      [description]
  * @DateTime 2017-09-13T16:30:19+0800
  */
-func getBorrowerUID(birs *BorrowerInfoRequest) (*BorrowerUID, error) {
+func GetBorrowerUID(birs *BorrowerInfoRequest) (*BorrowerUID, error) {
 	o := orm.NewOrm()
 	o.Using("default")
 	Logger.Debug("getBorrowerUID input param:", birs)
@@ -69,7 +69,7 @@ func getBorrowerUID(birs *BorrowerInfoRequest) (*BorrowerUID, error) {
  * @return   string 用户身份证号
  * @DateTime 2017-09-13T16:20:24+0800
  */
-func getCardID(user_id int32) (string, error) {
+func GetCardID(user_id int32) (string, error) {
 	o := orm.NewOrm()
 	o.Using("default")
 	Logger.Debug("getCardID input param:", user_id)
@@ -95,7 +95,7 @@ func getCardID(user_id int32) (string, error) {
  * @return   string  用户信用额度
  * @DateTime 2017-09-13T16:34:41+0800
  */
-func getCreditUse(user_id int32) (string, error) {
+func GetCreditUse(user_id int32) (string, error) {
 	o := orm.NewOrm()
 	o.Using("default")
 	Logger.Debug("getCardID input param:", user_id)
@@ -119,7 +119,7 @@ func getCreditUse(user_id int32) (string, error) {
  * @return   string 担保人
  * @DateTime 2017-09-13T16:40:44+0800
  */
-func getGuarantor(user_id int32) (string, error) {
+func GetGuarantor(user_id int32) (string, error) {
 	o := orm.NewOrm()
 	o.Using("default")
 	Logger.Debug("getGuarantor input param:", user_id)
@@ -138,51 +138,19 @@ func getGuarantor(user_id int32) (string, error) {
 	return guarantor, nil
 }
 
-func getMaterialInfo(user_id int32) (*MaterialInfoStruct, error) {
+func GetMaterialInfo(user_id int32) ([]MaterialInfoStruct, error) {
 	o := orm.NewOrm()
 	o.Using("default")
 	Logger.Debug("getMaterialInfo input param:", user_id)
 	qb, _ := orm.NewQueryBuilder("mysql")
 	qb.Select("id,name").
 		From("jl_material_class").
-		Where(fmt.Sprintf("user_id=%d", user_id)).
-		Limit(1)
+		Where(fmt.Sprintf("user_id=%d", user_id))
 
 	sql := qb.String()
 	Logger.Debug("getMaterialInfo sql:", sql)
-	var materialInfo MaterialInfoStruct
-	o.Raw(sql).QueryRow(&materialInfo)
+	var materialInfo []MaterialInfoStruct
+	o.Raw(sql).QueryRows(&materialInfo)
 	Logger.Debugf("getMaterialInfo res :%v", materialInfo)
-	return &materialInfo, nil
-}
-
-/**
- * [GetBorrowerInfo ]
- * @param    {[type]}                 bir *BorrowerInfoRequestStruct)(*MaterialInfoStruct,error [description]
- * @DateTime 2017-09-13T15:22:46+0800
- */
-func GetBorrowerInfo(birs *BorrowerInfoRequest) (*BorrowerInfoStruct, error) {
-	borrowInfo, err := getBorrowerUID(birs)
-	if err != nil {
-		Logger.Errorf("GetBorrowerInfo query failed", err)
-		return nil, err
-	}
-
-	card_id, _ := getCardID(borrowInfo.ID)
-	credit_use, _ := getCreditUse(borrowInfo.ID)
-	guarantor, _ := getGuarantor(borrowInfo.ID)
-	material, _ := getMaterialInfo(borrowInfo.ID)
-
-	bis := new(BorrowerInfoStruct)
-	bis.ID = borrowInfo.ID
-	bis.Realname = borrowInfo.Realname
-	bis.IsBorrower = borrowInfo.IsBorrower
-	bis.CardID = card_id
-	bis.Credit = credit_use
-	bis.Guarantor = guarantor
-	bis.MaterialInfo = material
-
-	Logger.Debugf("GetBorrowerInfo res:%v", bis)
-	Logger.Debugf("GetBorrowerInfo res:%v", bis.MaterialInfo)
-	return bis, nil
+	return materialInfo, nil
 }

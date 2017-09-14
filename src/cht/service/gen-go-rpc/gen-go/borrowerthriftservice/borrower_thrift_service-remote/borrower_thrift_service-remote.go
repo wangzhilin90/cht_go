@@ -121,19 +121,19 @@ func main() {
       fmt.Fprintln(os.Stderr, "GetBorrowerInfo requires 1 args")
       flag.Usage()
     }
-    arg4 := flag.Arg(1)
-    mbTrans5 := thrift.NewTMemoryBufferLen(len(arg4))
-    defer mbTrans5.Close()
-    _, err6 := mbTrans5.WriteString(arg4)
-    if err6 != nil {
+    arg5 := flag.Arg(1)
+    mbTrans6 := thrift.NewTMemoryBufferLen(len(arg5))
+    defer mbTrans6.Close()
+    _, err7 := mbTrans6.WriteString(arg5)
+    if err7 != nil {
       Usage()
       return
     }
-    factory7 := thrift.NewTSimpleJSONProtocolFactory()
-    jsProt8 := factory7.GetProtocol(mbTrans5)
+    factory8 := thrift.NewTSimpleJSONProtocolFactory()
+    jsProt9 := factory8.GetProtocol(mbTrans6)
     argvalue0 := borrowerthriftservice.NewBorrowerInfoRequestStruct()
-    err9 := argvalue0.Read(jsProt8)
-    if err9 != nil {
+    err10 := argvalue0.Read(jsProt9)
+    if err10 != nil {
       Usage()
       return
     }

@@ -1,28 +1,31 @@
-namespace go phoneattestationthriftservice
+namespace go borrowerthriftservice
 
-struct CheckPhoneUseRequestStruct {
-    1:string phone,
-    2:string chengHuiTongTraceLog
+struct BorrowerInfoRequestStruct {
+	1:string name,
+	2:string chengHuiTongTraceLog
 }
 
-struct GetUserIdByhsidRequestStruct {
-    1:string hsid,
-    2:string chengHuiTongTraceLog
+struct materialInfoStruct {
+	1:i32 id,
+	2:string name
 }
 
-struct UpdatePhoneRequestStruct {
-    1:string phone,
-    2:i32 user_id,
-    3:string chengHuiTongTraceLog
+struct BorrowerInfoStruct {
+	1:i32 id,
+	2:string realname,
+	3:i32 is_borrower,
+	4:string card_id,
+	5:string credit,
+	6:string guarantor,
+	7:list < materialInfoStruct > materialList
 }
 
-service PhoneAttestationThriftService {
-    //sql = 'select count(1) from jl_user where phone=$phone'
-    string checkPhoneUse(1:CheckPhoneUseRequestStruct requestObj), //根据手机号查询jl_user表，如果查到记录返回1001，否则返回1000
-	
-	//sql = 'select id from jl_user where hsid=$hsid'
-    i32 getUserIdByhsid(1:GetUserIdByhsidRequestStruct requestObj), //根据hsid查询jl_user表获取该用户的ID，返回ID
-   
-	//sql = 'update jl_user set phone=$phone where id=$user_id'
-    string updatePhone(1:UpdatePhoneRequestStruct requestObj), //更新jl_user表修改该用户的手机号
+struct BorrowerInfoResponseStruct {
+	1:i32 status, //1000:"查询借款人信息成功" 1001:"无此借款人!"
+	2:string msg,
+	3:BorrowerInfoStruct borrowerInfo
+}
+
+service BorrowerThriftService {
+    BorrowerInfoResponseStruct getBorrowerInfo(1: BorrowerInfoRequestStruct requestObj)
 }

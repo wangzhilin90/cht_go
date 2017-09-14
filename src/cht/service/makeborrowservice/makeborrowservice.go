@@ -251,7 +251,7 @@ func (bs *borrowservice) makeBorrow(requestObj *MakeBorrowRequestStruct) (r *Mak
 			Msg:    Status[ISSURE_FAILD],
 		}, err
 	}
-	Logger.Debug("InsertBorrowTbl success")
+	Logger.Debugf("InsertBorrowTbl success status: %v msg:%v", ISSURE_SUCCESS, Status[ISSURE_SUCCESS])
 	return &MakeBorrowResponseStruct{
 		Status: ISSURE_SUCCESS,
 		Msg:    Status[ISSURE_SUCCESS],

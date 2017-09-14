@@ -11,6 +11,7 @@ import (
 	"cht/service/loguserloginservice"
 	"cht/service/makeborrowservice"
 	"cht/service/messagethriftservice"
+	"cht/service/phoneattestationthriftservice"
 	"cht/service/rechargerecordthriftservice"
 	"cht/service/securedthriftservice"
 	"cht/service/subledgerthriftservice"
@@ -89,6 +90,11 @@ func main() {
 	go func() {
 		/*开启做标服务---借款人服务*/
 		borrowerthriftservice.StartCashRecordServer()
+	}()
+
+	go func() {
+		/*开启手机密码重置服务*/
+		phoneattestationthriftservice.StartPhoneAttestationServer()
 	}()
 
 	<-ch

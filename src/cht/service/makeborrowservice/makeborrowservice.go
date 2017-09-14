@@ -18,7 +18,7 @@ const (
 	GET_BORROW_MONEY_FAILED = 1004
 	GET_FEE_RATE_FAILED     = 1005
 	ISSURE_FAILD            = 1006
-	ISSURE_SUCCESS          = 0
+	ISSURE_SUCCESS          = 1000
 )
 
 var Status = map[int]string{

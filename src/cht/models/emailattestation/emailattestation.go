@@ -7,6 +7,7 @@ import (
 	"github.com/astaxie/beego/orm"
 	"github.com/go-gomail/gomail"
 	_ "github.com/go-sql-driver/mysql"
+	"strings"
 	"time"
 )
 
@@ -175,11 +176,12 @@ func InsertEmailLog(sers *SendEmailRequestStruct) (int32, error) {
 	sql := buf.String()
 	Logger.Debugf("InsertEmailLog sql: %v", sql)
 
+	newContent := strings.Replace(sers.Content, "?", ",", -1)
 	res, err := o.Raw(sql,
 		sers.UserID,
 		sers.SendTo,
 		sers.Subject,
-		sers.Content,
+		newContent,
 		time.Now().Unix(),
 		sers.IP,
 	).Exec()
@@ -230,11 +232,19 @@ func SendSmtpMail(sers *SendEmailRequestStruct) error {
 }
 
 func SendEmail(sers *SendEmailRequestStruct) int32 {
-	num, _ := InsertEmailLog(sers)
-	err := SendSmtpMail(sers)
+	num, err := InsertEmailLog(sers)
+	if err != nil {
+		Logger.Errorf("SendEmail InsertEmailLog failed %v", err)
+		return 0
+	}
+	err = SendSmtpMail(sers)
 	if err != nil {
 		return 0
 	}
-	UpdateEmailLog(num)
+	err = UpdateEmailLog(num)
+	if err != nil {
+		Logger.Errorf("SendEmail UpdateEmailLog failed %v", err)
+		return 0
+	}
 	return 1
 }

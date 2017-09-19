@@ -78,7 +78,7 @@ func StartRechargeRecordServer() {
 	ip, _ := zkclient.GetLocalIP()
 	listenAddr := fmt.Sprintf("%s:%s", ip, port)
 
-	servicename := "/cht/RechargeRecordThriftService/providers"
+	servicename := "/cht/rechargeRecordThriftService/providers"
 	err = zkclient.RegisterNode(conn, servicename, listenAddr)
 	if err != nil {
 		Logger.Fatalf("RegisterNode failed", err)

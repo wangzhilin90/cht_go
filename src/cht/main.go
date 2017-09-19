@@ -90,7 +90,7 @@ func main() {
 
 	go func() {
 		/*开启做标服务---借款人服务*/
-		borrowerthriftservice.StartCashRecordServer()
+		borrowerthriftservice.StartBorrowerServer()
 	}()
 
 	go func() {

@@ -75,7 +75,7 @@ func (bs *borrowerservice) GetBorrowerInfo(requestObj *BorrowerInfoRequestStruct
  * [StartCashRecordServer 开启做标服务---借款人服务]
  * @DateTime 2017-08-24T15:19:45+0800
  */
-func StartCashRecordServer() {
+func StartBorrowerServer() {
 	zkServers := []string{"192.168.8.208:2181"}
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
@@ -87,7 +87,7 @@ func StartCashRecordServer() {
 	ip, _ := zkclient.GetLocalIP()
 	listenAddr := fmt.Sprintf("%s:%s", ip, port)
 
-	servicename := "/cht/BorrowerThriftService/providers"
+	servicename := "/cht/borrowerThriftService/providers"
 	err = zkclient.RegisterNode(conn, servicename, listenAddr)
 	if err != nil {
 		Logger.Fatalf("RegisterNode failed", err)

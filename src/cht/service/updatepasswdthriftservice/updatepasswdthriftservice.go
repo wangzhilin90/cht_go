@@ -54,7 +54,7 @@ func StartUpdatePasswdsServer() {
 	ip, _ := zkclient.GetLocalIP()
 	listenAddr := fmt.Sprintf("%s:%s", ip, port)
 
-	servicename := "/cht/UpdatePasswdThriftService/providers"
+	servicename := "/cht/updatePasswdThriftService/providers"
 	err = zkclient.RegisterNode(conn, servicename, listenAddr)
 	if err != nil {
 		Logger.Fatalf("RegisterNode failed", err)

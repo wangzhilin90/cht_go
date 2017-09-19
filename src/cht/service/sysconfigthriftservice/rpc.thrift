@@ -12,7 +12,7 @@ struct SysConfigRequestStruct {
 }
 
 struct SysConfigResponseStruct {
-    1:i32 status  //1000:查询系统配置成功 ,1001:查询系统配置失败
+    1:i32 status
     2:string msg 
     3:list<SysConfigStruct> sysConfigList
 }

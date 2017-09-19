@@ -16,6 +16,7 @@ import (
 	"cht/service/rechargerecordthriftservice"
 	"cht/service/securedthriftservice"
 	"cht/service/subledgerthriftservice"
+	"cht/service/sysconfigthriftservice"
 	"cht/service/updatepasswdthriftservice"
 	"cht/service/userloginservice"
 )
@@ -102,5 +103,11 @@ func main() {
 		/*开启邮箱认证服务*/
 		emailattestationthriftservice.StartEmailAttestationServer()
 	}()
+
+	go func() {
+		/*开启查询系统配置服务*/
+		sysconfigthriftservice.StartSysConfigServer()
+	}()
+
 	<-ch
 }

@@ -41,7 +41,7 @@ func TestGetUserIdByhsid(t *testing.T) {
 }
 
 func TestUpdatePhone(t *testing.T) {
-	upr := NewUpdatePhoneRequest(204742, "1371405791")
+	upr := NewUpdatePhoneRequest(204742, "1371405795")
 	b := UpdatePhone(upr)
 	if b != "1000" {
 		t.Fatalf("TestUpdatePhone failed")

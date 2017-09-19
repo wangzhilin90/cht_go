@@ -6,6 +6,7 @@ import (
 	"cht/service/cashrecordthriftservice"
 	"cht/service/collectionthriftservice"
 	"cht/service/couponlistthriftservice"
+	"cht/service/emailattestationthriftservice"
 	"cht/service/gettendercouponthriftservice"
 	"cht/service/gettenderredbagthriftservice"
 	"cht/service/loguserloginservice"
@@ -97,5 +98,9 @@ func main() {
 		phoneattestationthriftservice.StartPhoneAttestationServer()
 	}()
 
+	go func() {
+		/*开启邮箱认证服务*/
+		emailattestationthriftservice.StartEmailAttestationServer()
+	}()
 	<-ch
 }

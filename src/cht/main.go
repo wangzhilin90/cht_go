@@ -10,6 +10,7 @@ import (
 	"cht/service/emailattestationthriftservice"
 	"cht/service/gettendercouponthriftservice"
 	"cht/service/gettenderredbagthriftservice"
+	"cht/service/juanzengthriftservice"
 	"cht/service/loguserloginservice"
 	"cht/service/makeborrowservice"
 	"cht/service/messagethriftservice"
@@ -113,6 +114,11 @@ func main() {
 	go func() {
 		/*开启广告管理服务*/
 		advertmanagethriftservice.StartAdvertManageServer()
+	}()
+
+	go func() {
+		/*开启捐赠服务*/
+		juanzengthriftservice.StartJuanzengServer()
 	}()
 
 	<-ch

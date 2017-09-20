@@ -2,6 +2,7 @@ package main
 
 import (
 	_ "cht/initial"
+	"cht/service/advertmanagethriftservice"
 	"cht/service/borrowerthriftservice"
 	"cht/service/cashrecordthriftservice"
 	"cht/service/collectionthriftservice"
@@ -107,6 +108,11 @@ func main() {
 	go func() {
 		/*开启查询系统配置服务*/
 		sysconfigthriftservice.StartSysConfigServer()
+	}()
+
+	go func() {
+		/*开启广告管理服务*/
+		advertmanagethriftservice.StartAdvertManageServer()
 	}()
 
 	<-ch

@@ -2,6 +2,7 @@ package main
 
 import (
 	_ "cht/initial"
+	"cht/service/UpdateUserLoginLogDetails"
 	"cht/service/UserLogin"
 	"cht/service/advertmanagethriftservice"
 	"cht/service/borrowerthriftservice"
@@ -12,7 +13,6 @@ import (
 	"cht/service/gettendercouponthriftservice"
 	"cht/service/gettenderredbagthriftservice"
 	"cht/service/juanzengthriftservice"
-	"cht/service/loguserloginservice"
 	"cht/service/makeborrowservice"
 	"cht/service/messagethriftservice"
 	"cht/service/phoneattestationthriftservice"
@@ -37,8 +37,8 @@ func main() {
 	}()
 
 	go func() {
-		/*开启登录日志服务*/
-		loguserloginservice.StartLogUserLoginServer()
+		/*更新用户登录日志服务*/
+		UpdateUserLoginLogDetails.StartLogUserLoginServer()
 	}()
 
 	go func() {

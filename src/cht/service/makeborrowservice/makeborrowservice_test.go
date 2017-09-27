@@ -45,8 +45,8 @@ func TestMakeBorrowNotDepositAccount(t *testing.T) {
 	brs := NewMakeBorrowRequestStruct(29, 5, 0)
 	bs := borrowservice{}
 	res, _ := bs.makeBorrow(brs)
-	if res.Status != NOT_DEPOSIT_ACCOUNT {
-		t.Fatal("TestmakeBorrow failed")
+	if res.Status != ISSURE_SUCCESS {
+		t.Fatal("TestMakeBorrowNotDepositAccount failed")
 	}
 }
 

@@ -2,8 +2,6 @@ package main
 
 import (
 	_ "cht/initial"
-	"cht/service/UpdateUserLoginLogDetails"
-	"cht/service/UserLogin"
 	"cht/service/advertmanagethriftservice"
 	"cht/service/borrowuserdetails"
 	"cht/service/cashrecordthriftservice"
@@ -35,7 +33,7 @@ func main() {
 
 	go func() {
 		/*开启用户登录服务*/
-		UserLogin.StartUserLoginServer()
+		userloginservice.StartUserLoginServer()
 	}()
 
 	go func() {

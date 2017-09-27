@@ -20,7 +20,7 @@ var Status = map[int]string{
 	QUERY_CASHRECORD_SUCCESS: "查询提现记录成功",
 }
 
-func (cs *cashrecordservice) GetCashRecord(requestObj *CashRecordRequestStruct) (r *CashRecordResponseStruct, err error) {
+func (cs *cashrecordservice) getUserCashRecordList(requestObj *CashRecordRequestStruct) (r *CashRecordResponseStruct, err error) {
 	crrs := new(cashrecord.CashRecordRequestStruct)
 	crrs.UserID = requestObj.GetUserID()
 	crrs.StartTime = requestObj.GetStartTime()
@@ -66,7 +66,7 @@ func (cs *cashrecordservice) GetCashRecord(requestObj *CashRecordRequestStruct) 
 	response.Totalnum = num
 	response.CashStat = css
 
-	Logger.Debug("GetCashRecord res:", response)
+	Logger.Debug("getUserCashRecordList res:", response)
 	return &response, nil
 }
 
@@ -86,7 +86,7 @@ func StartCashRecordServer() {
 	ip, _ := zkclient.GetLocalIP()
 	listenAddr := fmt.Sprintf("%s:%s", ip, port)
 
-	servicename := "/cht/cashRecordThriftService/providers"
+	servicename := "/cht/UserCashRecordListThriftService/providers"
 	err = zkclient.RegisterNode(conn, servicename, listenAddr)
 	if err != nil {
 		Logger.Fatalf("RegisterNode failed", err)

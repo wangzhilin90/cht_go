@@ -15,16 +15,16 @@ const (
 	PHONE_UNUSED = "1000"
 )
 
-func (pts *phoneattestationservice) CheckPhoneUse(requestObj *CheckPhoneUseRequestStruct) (string, error) {
+func (pts *phoneattestationservice) CheckPhoneByPhone(requestObj *CheckPhoneUseRequestStruct) (string, error) {
 	cpur := new(phoneattestation.CheckPhoneUseRequest)
 	cpur.Phone = requestObj.GetPhone()
 	cpur.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	b := phoneattestation.CheckPhoneUse(cpur)
 	if b {
-		Logger.Debugf("CheckPhoneUse phone %v is used status :%v", cpur.Phone, PHONE_USED)
+		Logger.Debugf("CheckPhoneByPhone phone %v is used status :%v", cpur.Phone, PHONE_USED)
 		return PHONE_USED, nil
 	} else {
-		Logger.Debugf("CheckPhoneUse phone %v is not used status :%v", cpur.Phone, PHONE_UNUSED)
+		Logger.Debugf("CheckPhoneByPhone phone %v is not used status :%v", cpur.Phone, PHONE_UNUSED)
 		return PHONE_UNUSED, nil
 	}
 }
@@ -41,13 +41,13 @@ func (pts *phoneattestationservice) GetUserIdByhsid(requestObj *GetUserIdByhsidR
 	return user_id, nil
 }
 
-func (pts *phoneattestationservice) UpdatePhone(requestObj *UpdatePhoneRequestStruct) (string, error) {
+func (pts *phoneattestationservice) UpdatePhoneByTransaction(requestObj *UpdatePhoneRequestStruct) (string, error) {
 	upr := new(phoneattestation.UpdatePhoneRequest)
 	upr.Phone = requestObj.GetPhone()
 	upr.UserID = requestObj.GetUserID()
 	status := phoneattestation.UpdatePhone(upr)
 
-	Logger.Debugf("UpdatePhone success status:%v", status)
+	Logger.Debugf("UpdatePhoneByTransaction success status:%v", status)
 	return status, nil
 }
 
@@ -67,7 +67,7 @@ func StartPhoneAttestationServer() {
 	ip, _ := zkclient.GetLocalIP()
 	listenAddr := fmt.Sprintf("%s:%s", ip, port)
 
-	servicename := "/cht/phoneAttestationThriftService/providers"
+	servicename := "/cht/PhoneAttestationThriftService/providers"
 	err = zkclient.RegisterNode(conn, servicename, listenAddr)
 	if err != nil {
 		Logger.Fatalf("RegisterNode failed", err)

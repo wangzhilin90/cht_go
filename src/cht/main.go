@@ -3,24 +3,24 @@ package main
 import (
 	_ "cht/initial"
 	"cht/service/advertmanagethriftservice"
-	"cht/service/borrowerthriftservice"
+	"cht/service/borrowuserdetails"
 	"cht/service/cashrecordthriftservice"
-	"cht/service/collectionthriftservice"
-	"cht/service/couponlistthriftservice"
 	"cht/service/emailattestationthriftservice"
-	"cht/service/gettendercouponthriftservice"
-	"cht/service/gettenderredbagthriftservice"
 	"cht/service/juanzengthriftservice"
-	"cht/service/loguserloginservice"
 	"cht/service/makeborrowservice"
 	"cht/service/messagethriftservice"
 	"cht/service/phoneattestationthriftservice"
-	"cht/service/rechargerecordthriftservice"
-	"cht/service/securedthriftservice"
-	"cht/service/subledgerthriftservice"
+	"cht/service/securedlist"
+	"cht/service/subledgerlist"
 	"cht/service/sysconfigthriftservice"
-	"cht/service/updatepasswdthriftservice"
+	"cht/service/updateuserloginlogdetails"
+	"cht/service/updateuserpasswword"
+	"cht/service/usercollectionlist"
+	"cht/service/usercouponlist"
 	"cht/service/userloginservice"
+	"cht/service/userrechargerecordlist"
+	"cht/service/usertendercoupondetails"
+	"cht/service/usertenderredbagdestails"
 )
 
 func main() {
@@ -28,7 +28,7 @@ func main() {
 
 	go func() {
 		/*开启加息券服务API*/
-		couponlistthriftservice.StartCouponServer()
+		usercouponlist.StartCouponServer()
 	}()
 
 	go func() {
@@ -37,18 +37,18 @@ func main() {
 	}()
 
 	go func() {
-		/*开启登录日志服务*/
-		loguserloginservice.StartLogUserLoginServer()
+		/*用户登录记录日志服务*/
+		updateuserloginlogdetails.StartLogUserLoginServer()
 	}()
 
 	go func() {
-		/*开启忘记密码重置密码服务*/
-		updatepasswdthriftservice.StartUpdatePasswdsServer()
+		/*修改用户密码服务*/
+		updateuserpasswword.StartUpdatePasswdsServer()
 	}()
 
 	go func() {
 		/*开启查询充值记录服务*/
-		rechargerecordthriftservice.StartRechargeRecordServer()
+		userrechargerecordlist.StartRechargeRecordServer()
 	}()
 
 	go func() {
@@ -57,13 +57,13 @@ func main() {
 	}()
 
 	go func() {
-		/*开启立即投资，获取红包金额服务*/
-		gettenderredbagthriftservice.StartGetTenderRedBagServer()
+		/*获取用户投资红包服务*/
+		usertenderredbagdestails.StartGetTenderRedBagServer()
 	}()
 
 	go func() {
-		/*开启立即投资，获取投标加息值服务*/
-		gettendercouponthriftservice.StartGetCouponServer()
+		/*获取用户投资加息值服务*/
+		usertendercoupondetails.StartGetCouponServer()
 	}()
 
 	go func() {
@@ -72,8 +72,8 @@ func main() {
 	}()
 
 	go func() {
-		/*获取我的账户回款明细信息*/
-		collectionthriftservice.StartGetCollectionListServer()
+		/*用户回款列表服务*/
+		usercollectionlist.StartGetCollectionListServer()
 	}()
 
 	go func() {
@@ -82,18 +82,18 @@ func main() {
 	}()
 
 	go func() {
-		/*开启做标服务---分账人服务*/
-		subledgerthriftservice.StartsubledgerServer()
+		/*做标服务---分账人列表服务*/
+		subledgerlist.StartsubledgerServer()
 	}()
 
 	go func() {
-		/*开启做标服务---担保人服务*/
-		securedthriftservice.StartSecuredServer()
+		/*做标服务---担保人列表服务*/
+		securedlist.StartSecuredServer()
 	}()
 
 	go func() {
-		/*开启做标服务---借款人服务*/
-		borrowerthriftservice.StartBorrowerServer()
+		/*做标服务---借款人详情*/
+		borrowuserdetails.StartBorrowerServer()
 	}()
 
 	go func() {

@@ -714,7 +714,7 @@ func (p *MessageInfoResponseStruct) GetMsg() string {
 
 var MessageInfoResponseStruct_MessageInfo_DEFAULT *MessageInfoStruct
 
-func (p *MessageInfoResponseStruct) GetMessageInfo() *MessageInfoStruct {
+func (p *MessageInfoResponseStruct) GetMessageDetails() *MessageInfoStruct {
 	if !p.IsSetMessageInfo() {
 		return MessageInfoResponseStruct_MessageInfo_DEFAULT
 	}
@@ -1326,7 +1326,7 @@ func (p *UserInfoResponseStruct) String() string {
 type MessageThriftService interface {
 	// Parameters:
 	//  - RequestObj
-	GetMessageInfo(requestObj *MessageRequestStruct) (r *MessageInfoResponseStruct, err error)
+	GetMessageDetails(requestObj *MessageRequestStruct) (r *MessageInfoResponseStruct, err error)
 	// Parameters:
 	//  - RequestObj
 	GetMessageCount(requestObj *MessageRequestStruct) (r *MessageCountResponseStruct, err error)
@@ -1363,7 +1363,7 @@ func NewMessageThriftServiceClientProtocol(t thrift.TTransport, iprot thrift.TPr
 
 // Parameters:
 //  - RequestObj
-func (p *MessageThriftServiceClient) GetMessageInfo(requestObj *MessageRequestStruct) (r *MessageInfoResponseStruct, err error) {
+func (p *MessageThriftServiceClient) GetMessageDetails(requestObj *MessageRequestStruct) (r *MessageInfoResponseStruct, err error) {
 	if err = p.sendGetMessageInfo(requestObj); err != nil {
 		return
 	}
@@ -1658,7 +1658,7 @@ func (p *messageThriftServiceProcessorGetMessageInfo) Process(seqId int32, iprot
 	result := MessageThriftServiceGetMessageInfoResult{}
 	var retval *MessageInfoResponseStruct
 	var err2 error
-	if retval, err2 = p.handler.GetMessageInfo(args.RequestObj); err2 != nil {
+	if retval, err2 = p.handler.GetMessageDetails(args.RequestObj); err2 != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing getMessageInfo: "+err2.Error())
 		oprot.WriteMessageBegin("getMessageInfo", thrift.EXCEPTION, seqId)
 		x.Write(oprot)

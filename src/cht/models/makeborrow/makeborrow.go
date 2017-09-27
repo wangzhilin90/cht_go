@@ -9,18 +9,20 @@ import (
 )
 
 type MakeBorrowRequest struct {
-	ID              int32  `orm:"column(id)`
-	BorrowType      int32  `orm:"column(borrow_type)`
-	UserID          int32  `orm:"column(user_id)`
-	Title           string `orm:"column(title)`
-	Content         string `orm:"column(content)`
-	Litpic          string `orm:"column(litpic)`
-	BorrowUse       int32  `orm:"column(borrow_use)`
-	IsDatetype      int32  `orm:"column(is_datetype)`
-	TimeLimit       int32  `orm:"column(time_limit)`
-	Style           int32  `orm:"column(style)`
-	Account         string `orm:"column(account)`
-	AccountTender   string `orm:"column(account_tender)`
+	ID         int32  `orm:"column(id)`
+	BorrowType int32  `orm:"column(borrow_type)`
+	UserID     int32  `orm:"column(user_id)`
+	Title      string `orm:"column(title)`
+	Content    string `orm:"column(content)`
+	Litpic     string `orm:"-;column(litpic)"`
+	// Litpic     string `orm:"-"`
+	BorrowUse  int32  `orm:"column(borrow_use)`
+	IsDatetype int32  `orm:"column(is_datetype)`
+	TimeLimit  int32  `orm:"column(time_limit)`
+	Style      int32  `orm:"column(style)`
+	Account    string `orm:"column(account)`
+	// AccountTender   string `orm:"column(account_tender)`
+	AccountTender   string `orm:"-;column(account_tender)"`
 	Apr             string `orm:"column(apr)`
 	AprAdd          string `orm:"column(apr_add)`
 	MortgageFile    string `orm:"column(mortgage_file)`
@@ -60,8 +62,69 @@ type MakeBorrowRequest struct {
 	IsAuto         int32  `orm:"column(is_auto)`
 	IsCheck        int32  `orm:"column(is_check)`
 	ReviewLock     int32  `orm:"column(review_lock)`
-	FeeRate        string `orm:"column(fee_rate)`
+	FeeRate        string `orm:"column(fee_rate);`
 	BorrowName     string `orm:"column(borrow_name)`
+}
+
+type Borrow struct {
+	Id         int32  `orm:"column(id)`
+	BorrowType int32  `orm:"column(borrow_type)`
+	UserId     int32  `orm:"column(user_id)`
+	Title      string `orm:"column(title)`
+	Content    string `orm:"column(content)`
+	// Litpic     string `orm:"column(litpic);"`
+	Litpic          string `orm:"-"`
+	BorrowUse       int32  `orm:"column(borrow_use)`
+	IsDatetype      int32  `orm:"column(is_datetype)`
+	TimeLimit       int32  `orm:"column(time_limit)`
+	Style           int32  `orm:"column(style)`
+	Account         string `orm:"column(account)`
+	AccountTender   string `orm:"-"`
+	Apr             string `orm:"column(apr)`
+	AprAdd          string `orm:"column(apr_add)`
+	MortgageFile    string `orm:"column(mortgage_file)`
+	IsDxb           int32  `orm:"column(is_dxb)`
+	Pwd             string `orm:"column(pwd);default("")`
+	LowestAccount   string `orm:"column(lowest_account)`
+	MostAccount     string `orm:"column(most_account)`
+	ValidTime       int32  `orm:"column(valid_time)`
+	Award           int32  `orm:"column(award)`
+	Bonus           string `orm:"column(bonus)`
+	IsFalse         int32  `orm:"column(is_false)`
+	OpenAccount     int32  `orm:"column(open_account)`
+	OpenBorrow      int32  `orm:"column(open_borrow)`
+	OpenTender      int32  `orm:"column(open_tender)`
+	OpenCredit      int32  `orm:"column(open_credit)`
+	OpenZiliao      int32  `orm:"column(open_ziliao)`
+	Material        int32  `orm:"column(material)`
+	Addtime         int32  `orm:"column(addtime)`
+	Addip           string `orm:"column(addip);`
+	Status          int32  `orm:"column(status)`
+	RutenAllnumber  int32  `orm:"column(ruten_allnumber)`
+	RutenNumber     int32  `orm:"column(ruten_number)`
+	VerifyUser      int32  `orm:"column(verify_user)`
+	VerifyTime      int32  `orm:"column(verify_time)`
+	VerifyRemark    string `orm:"column(verify_remark)`
+	ReviewUser      int32  `orm:"column(review_user)`
+	ReviewTimeLocal int32  `orm:"column(review_time_local)`
+	ReviewTime      int32  `orm:"column(review_time)`
+	// Secured         string `orm:"column(secured)"`
+	Secured        string `"column(secured);"-""`
+	Zhuanrangren   string `orm:"column(zhuanrangren)`
+	Huodong        int32  `orm:"column(huodong)`
+	SignDate       string `orm:"column(sign_date)`
+	Subledger      int32  `orm:"column(subledger)`
+	RepaySign      int32  `orm:"column(repay_sign)`
+	AutoTenderLock int32  `orm:"column(auto_tender_lock)`
+	IsAuto         int32  `orm:"column(is_auto)`
+	IsCheck        int32  `orm:"column(is_check)`
+	ReviewLock     int32  `orm:"column(review_lock)`
+	FeeRate        string `orm:"-;size(64)"`
+	BorrowName     string `orm:"column(borrow_name)`
+}
+
+func init() {
+	orm.RegisterModelWithPrefix("jl_", new(Borrow))
 }
 
 /**
@@ -143,11 +206,10 @@ func InsertBorrowTbl(mbr *MakeBorrowRequest) error {
 	sql.WriteString("verify_user,verify_time,verify_remark,review_user,review_time_local,review_time,secured,")
 	sql.WriteString("zhuanrangren,huodong,sign_date,subledger,repay_sign,auto_tender_lock,")
 	sql.WriteString("is_auto,is_check,review_lock,fee_rate,borrow_name) ")
-	sql.WriteString(" values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
+	sql.WriteString(" values (next VALUE FOR MYCATSEQ_BORROW,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
 	Logger.Debug("InsertBorrowTbl sql:", sql.String())
 
 	_, err := o.Raw(sql.String(),
-		mbr.ID,
 		mbr.BorrowType,
 		mbr.UserID,
 		mbr.Title,
@@ -188,7 +250,6 @@ func InsertBorrowTbl(mbr *MakeBorrowRequest) error {
 		mbr.ReviewTimeLocal,
 		mbr.ReviewTime,
 		mbr.Secured,
-		// "",
 		mbr.Zhuanrangren,
 		mbr.Huodong,
 		mbr.SignDate,
@@ -204,5 +265,55 @@ func InsertBorrowTbl(mbr *MakeBorrowRequest) error {
 		Logger.Error("InsertBorrowTbl insert failed", err)
 		return err
 	}
+	return nil
+}
+
+func NewTMakeBorrowRequest(userID int32, borrowtype int32, borrowUse int32) *Borrow {
+	return &Borrow{
+		// Id:         next VALUE FOR MYCATSEQ_BORROR
+		BorrowType: borrowtype,
+		UserId:     userID,
+		BorrowUse:  borrowUse,
+		Title:      "biaoti",
+		// Title:         ",",
+		Content:       ",",
+		Litpic:        "",
+		TimeLimit:     1,
+		Account:       "1000000.00",
+		AccountTender: "0.00",
+		Apr:           "0.0000",
+		AprAdd:        "0.0000",
+		MortgageFile:  ",",
+		VerifyRemark:  ",",
+		Pwd:           ",",
+		LowestAccount: "50.00",
+		MostAccount:   "0.00",
+		ValidTime:     1,
+		Bonus:         "0.00",
+		OpenAccount:   1,
+		OpenBorrow:    1,
+		OpenTender:    1,
+		OpenCredit:    1,
+		OpenZiliao:    1,
+		Addip:         ",",
+		Secured:       "241234",
+		Zhuanrangren:  ",",
+		SignDate:      ",",
+		FeeRate:       "20.00",
+		BorrowName:    ",",
+	}
+}
+
+func TInsertBorrowTbl() error {
+	o := orm.NewOrm()
+	o.Using("default")
+
+	mbr := NewTMakeBorrowRequest(30, 5, 0)
+	num, err := o.Insert(mbr)
+	if err != nil {
+		Logger.Errorf("TInsertBorrowTbl failed", err)
+		return err
+	}
+	Logger.Debugf("TInsertBorrowTbl res %v", num)
 	return nil
 }

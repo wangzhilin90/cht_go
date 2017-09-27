@@ -62,7 +62,6 @@ func (uls *UserLoginService) GetUserLoginInfo(requestObj *UserlLoginRequestStruc
 		}
 		return &v, nil
 	}
-
 	bl := userlogin.Checkpassword(ulr)
 	if bl == false {
 		b2, _ := userlogin.CheckUserTimesTbExist(ulr)
@@ -107,7 +106,7 @@ func StartUserLoginServer() {
 	ip, _ := zkclient.GetLocalIP()
 	listenAddr := fmt.Sprintf("%s:%s", ip, port)
 
-	servicename := "/cht/userLoginThriftService/providers"
+	servicename := "/cht/UserLoginThriftService/providers"
 	err = zkclient.RegisterNode(conn, servicename, listenAddr)
 	if err != nil {
 		Logger.Fatalf("RegisterNode failed", err)

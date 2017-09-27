@@ -436,13 +436,13 @@ func (p *UpdatePhoneRequestStruct) String() string {
 type PhoneAttestationThriftService interface {
 	// Parameters:
 	//  - RequestObj
-	CheckPhoneUse(requestObj *CheckPhoneUseRequestStruct) (r string, err error)
+	CheckPhoneByPhone(requestObj *CheckPhoneUseRequestStruct) (r string, err error)
 	// Parameters:
 	//  - RequestObj
 	GetUserIdByhsid(requestObj *GetUserIdByhsidRequestStruct) (r int32, err error)
 	// Parameters:
 	//  - RequestObj
-	UpdatePhone(requestObj *UpdatePhoneRequestStruct) (r string, err error)
+	UpdatePhoneByTransaction(requestObj *UpdatePhoneRequestStruct) (r string, err error)
 }
 
 type PhoneAttestationThriftServiceClient struct {
@@ -473,7 +473,7 @@ func NewPhoneAttestationThriftServiceClientProtocol(t thrift.TTransport, iprot t
 
 // Parameters:
 //  - RequestObj
-func (p *PhoneAttestationThriftServiceClient) CheckPhoneUse(requestObj *CheckPhoneUseRequestStruct) (r string, err error) {
+func (p *PhoneAttestationThriftServiceClient) CheckPhoneByPhone(requestObj *CheckPhoneUseRequestStruct) (r string, err error) {
 	if err = p.sendCheckPhoneUse(requestObj); err != nil {
 		return
 	}
@@ -627,7 +627,7 @@ func (p *PhoneAttestationThriftServiceClient) recvGetUserIdByhsid() (value int32
 
 // Parameters:
 //  - RequestObj
-func (p *PhoneAttestationThriftServiceClient) UpdatePhone(requestObj *UpdatePhoneRequestStruct) (r string, err error) {
+func (p *PhoneAttestationThriftServiceClient) UpdatePhoneByTransaction(requestObj *UpdatePhoneRequestStruct) (r string, err error) {
 	if err = p.sendUpdatePhone(requestObj); err != nil {
 		return
 	}
@@ -768,7 +768,7 @@ func (p *phoneAttestationThriftServiceProcessorCheckPhoneUse) Process(seqId int3
 	result := PhoneAttestationThriftServiceCheckPhoneUseResult{}
 	var retval string
 	var err2 error
-	if retval, err2 = p.handler.CheckPhoneUse(args.RequestObj); err2 != nil {
+	if retval, err2 = p.handler.CheckPhoneByPhone(args.RequestObj); err2 != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing checkPhoneUse: "+err2.Error())
 		oprot.WriteMessageBegin("checkPhoneUse", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
@@ -864,7 +864,7 @@ func (p *phoneAttestationThriftServiceProcessorUpdatePhone) Process(seqId int32,
 	result := PhoneAttestationThriftServiceUpdatePhoneResult{}
 	var retval string
 	var err2 error
-	if retval, err2 = p.handler.UpdatePhone(args.RequestObj); err2 != nil {
+	if retval, err2 = p.handler.UpdatePhoneByTransaction(args.RequestObj); err2 != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing updatePhone: "+err2.Error())
 		oprot.WriteMessageBegin("updatePhone", thrift.EXCEPTION, seqId)
 		x.Write(oprot)

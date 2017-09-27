@@ -45,7 +45,7 @@ var UserInfoStatus = map[int]string{
 }
 
 /*获取短信详情*/
-func (ms *messageservice) GetMessageInfo(requestObj *MessageRequestStruct) (r *MessageInfoResponseStruct, err error) {
+func (ms *messageservice) GetMessageDetails(requestObj *MessageRequestStruct) (r *MessageInfoResponseStruct, err error) {
 	mr := new(message.MessageRequest)
 	mr.Smsid = requestObj.GetSmsid()
 	mr.Phone = requestObj.GetPhone()
@@ -53,7 +53,7 @@ func (ms *messageservice) GetMessageInfo(requestObj *MessageRequestStruct) (r *M
 	mr.Type = requestObj.GetType()
 	mes, err := message.GetMessageInfo(mr)
 	if err != nil {
-		Logger.Debugf("GetMessageInfo query failed", err)
+		Logger.Debugf("GetMessageDetails query failed", err)
 		return &MessageInfoResponseStruct{
 			Status: QUERY_MES_INFO_FAILED,
 			Msg:    MesInfoStatus[QUERY_MES_INFO_FAILED],
@@ -77,7 +77,7 @@ func (ms *messageservice) GetMessageInfo(requestObj *MessageRequestStruct) (r *M
 	response.MessageInfo = mis
 	response.Status = QUERY_MES_INFO_SUCCESS
 	response.Msg = MesInfoStatus[QUERY_MES_INFO_SUCCESS]
-	Logger.Debugf("GetMessageInfo res %v", response)
+	Logger.Debugf("GetMessageDetails res %v", response)
 	return response, nil
 }
 
@@ -147,7 +147,7 @@ func StartMessageServer() {
 	ip, _ := zkclient.GetLocalIP()
 	listenAddr := fmt.Sprintf("%s:%s", ip, port)
 
-	servicename := "/cht/messageThriftService/providers"
+	servicename := "/cht/MessageThriftService/providers"
 	err = zkclient.RegisterNode(conn, servicename, listenAddr)
 	if err != nil {
 		Logger.Fatalf("RegisterNode failed", err)

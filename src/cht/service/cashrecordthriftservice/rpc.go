@@ -1253,10 +1253,10 @@ func (p *CashRecordResponseStruct) String() string {
 	return fmt.Sprintf("CashRecordResponseStruct(%+v)", *p)
 }
 
-type CashRecordThriftService interface {
+type UserCashRecordListThriftService interface {
 	// Parameters:
 	//  - RequestObj
-	GetCashRecord(requestObj *CashRecordRequestStruct) (r *CashRecordResponseStruct, err error)
+	getUserCashRecordList(requestObj *CashRecordRequestStruct) (r *CashRecordResponseStruct, err error)
 }
 
 type CashRecordThriftServiceClient struct {
@@ -1287,7 +1287,7 @@ func NewCashRecordThriftServiceClientProtocol(t thrift.TTransport, iprot thrift.
 
 // Parameters:
 //  - RequestObj
-func (p *CashRecordThriftServiceClient) GetCashRecord(requestObj *CashRecordRequestStruct) (r *CashRecordResponseStruct, err error) {
+func (p *CashRecordThriftServiceClient) getUserCashRecordList(requestObj *CashRecordRequestStruct) (r *CashRecordResponseStruct, err error) {
 	if err = p.sendGetCashRecord(requestObj); err != nil {
 		return
 	}
@@ -1364,7 +1364,7 @@ func (p *CashRecordThriftServiceClient) recvGetCashRecord() (value *CashRecordRe
 
 type CashRecordThriftServiceProcessor struct {
 	processorMap map[string]thrift.TProcessorFunction
-	handler      CashRecordThriftService
+	handler      UserCashRecordListThriftService
 }
 
 func (p *CashRecordThriftServiceProcessor) AddToProcessorMap(key string, processor thrift.TProcessorFunction) {
@@ -1380,7 +1380,7 @@ func (p *CashRecordThriftServiceProcessor) ProcessorMap() map[string]thrift.TPro
 	return p.processorMap
 }
 
-func NewCashRecordThriftServiceProcessor(handler CashRecordThriftService) *CashRecordThriftServiceProcessor {
+func NewCashRecordThriftServiceProcessor(handler UserCashRecordListThriftService) *CashRecordThriftServiceProcessor {
 
 	self3 := &CashRecordThriftServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
 	self3.processorMap["getCashRecord"] = &cashRecordThriftServiceProcessorGetCashRecord{handler: handler}
@@ -1407,7 +1407,7 @@ func (p *CashRecordThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol
 }
 
 type cashRecordThriftServiceProcessorGetCashRecord struct {
-	handler CashRecordThriftService
+	handler UserCashRecordListThriftService
 }
 
 func (p *cashRecordThriftServiceProcessorGetCashRecord) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
@@ -1426,7 +1426,7 @@ func (p *cashRecordThriftServiceProcessorGetCashRecord) Process(seqId int32, ipr
 	result := CashRecordThriftServiceGetCashRecordResult{}
 	var retval *CashRecordResponseStruct
 	var err2 error
-	if retval, err2 = p.handler.GetCashRecord(args.RequestObj); err2 != nil {
+	if retval, err2 = p.handler.getUserCashRecordList(args.RequestObj); err2 != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing getCashRecord: "+err2.Error())
 		oprot.WriteMessageBegin("getCashRecord", thrift.EXCEPTION, seqId)
 		x.Write(oprot)

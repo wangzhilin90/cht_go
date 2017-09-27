@@ -21,7 +21,7 @@ func NewCashRecordRequestStruct(user_id, start_time, end_time, query_time, statu
 func TestGetCashRecord(t *testing.T) {
 	rrr := NewCashRecordRequestStruct(221889, 1376279359, 1376299359, 0, 0, 1, 1, "")
 	rrs := &cashrecordservice{}
-	res, err := rrs.GetCashRecord(rrr)
+	res, err := rrs.getUserCashRecordList(rrr)
 	if err != nil {
 		t.Fatal("TestGetCashRecord failed:", err)
 	}

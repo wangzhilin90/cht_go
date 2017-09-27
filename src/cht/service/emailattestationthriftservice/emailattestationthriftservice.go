@@ -63,7 +63,7 @@ func StartEmailAttestationServer() {
 	ip, _ := zkclient.GetLocalIP()
 	listenAddr := fmt.Sprintf("%s:%s", ip, port)
 
-	servicename := "/cht/emailAttestationThriftService/providers"
+	servicename := "/cht/EmailAttestationThriftService/providers"
 	err = zkclient.RegisterNode(conn, servicename, listenAddr)
 	if err != nil {
 		Logger.Fatalf("RegisterNode failed", err)

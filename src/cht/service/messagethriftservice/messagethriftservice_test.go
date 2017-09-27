@@ -14,10 +14,10 @@ func NewMessageRequestStruct(smsid int32, phone string, addtime string, mesType 
 	}
 }
 
-func TestGetMessageInfo(t *testing.T) {
+func TestGetMessageDetails(t *testing.T) {
 	mirs := NewMessageRequestStruct(2332084, "13066008147", "1497542521", 0)
 	ms := &messageservice{}
-	res, err := ms.GetMessageInfo(mirs)
+	res, err := ms.GetMessageDetails(mirs)
 	if err != nil {
 		t.Fatalf("TestGetMessageInfo failed %v", err)
 	}

@@ -40,6 +40,6 @@ struct CashRecordResponseStruct {
 	5:list<CashRecordStruct> cashRecordList	
 }
 
-service CashRecordThriftService {
+service UserCashRecordListThriftService {
 	CashRecordResponseStruct getCashRecord(1:CashRecordRequestStruct requestObj)
 }

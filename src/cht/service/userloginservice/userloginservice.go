@@ -13,7 +13,7 @@ const (
 	ACCOUNT_NOT_EXIST = 1002
 	ACCOUNT_LOCKED    = 1003
 	VERIFY_FAILED     = 1004
-	VERIFY_PASS       = 1005
+	VERIFY_PASS       = 1000
 )
 
 var Status = map[int]string{

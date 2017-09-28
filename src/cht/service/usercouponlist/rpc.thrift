@@ -4,10 +4,10 @@ namespace java net.cht.um.app.thrift.model.regist
 
 struct UserCouponListRequestStruct {
     1: i32 user_id, 
-	2: i32 status,
-	3: i32 limit,
-    4: string chengHuiTongTraceLog，
-	5: string order_by  
+    2: i32 status,
+    3: i32 limit,
+    4: string chengHuiTongTraceLog,
+    5: string order_by  
 }
 
 struct UserCouponDetailsStruct {

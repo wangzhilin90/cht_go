@@ -28,16 +28,9 @@ type UserCouponListRequestStruct struct {
 	OrderBy              string `thrift:"order_by,5" db:"order_by" json:"order_by"`
 }
 
-// func NewCouponRequestStruct(userId int32, status int32, limit int32, log string, orderby string) *UserCouponListRequestStruct {
-// 	crs := UserCouponListRequestStruct{
-// 		UserID:               userId,
-// 		Status:               status,
-// 		Limit:                limit,
-// 		ChengHuiTongTraceLog: log,
-// 		OrderBy:              orderby,
-// 	}
-// 	return &crs
-// }
+func NewUserCouponListRequestStruct() *UserCouponListRequestStruct {
+	return &UserCouponListRequestStruct{}
+}
 
 func (p *UserCouponListRequestStruct) GetUserID() int32 {
 	return p.UserID
@@ -292,7 +285,7 @@ type UserCouponDetailsStruct struct {
 	ActivityName string `thrift:"activity_name,17" db:"activity_name" json:"activity_name"`
 }
 
-func NewCouponStruct() *UserCouponDetailsStruct {
+func NewUserCouponDetailsStruct() *UserCouponDetailsStruct {
 	return &UserCouponDetailsStruct{}
 }
 
@@ -910,17 +903,16 @@ func (p *UserCouponDetailsStruct) String() string {
 // Attributes:
 //  - UserCouponList
 type UserCouponListResponseStruct struct {
-	UserCouponList []*UserCouponDetailsStruct `thrift:"couponList,1" db:"couponList" json:"couponList"`
+	UserCouponList []*UserCouponDetailsStruct `thrift:"UserCouponList,1" db:"UserCouponList" json:"UserCouponList"`
 }
 
-func NewCouponResponseStruct() *UserCouponListResponseStruct {
+func NewUserCouponListResponseStruct() *UserCouponListResponseStruct {
 	return &UserCouponListResponseStruct{}
 }
 
-func (p *UserCouponListResponseStruct) getUserCouponListList() []*UserCouponDetailsStruct {
+func (p *UserCouponListResponseStruct) GetUserCouponList() []*UserCouponDetailsStruct {
 	return p.UserCouponList
 }
-
 func (p *UserCouponListResponseStruct) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
@@ -993,8 +985,8 @@ func (p *UserCouponListResponseStruct) Write(oprot thrift.TProtocol) error {
 }
 
 func (p *UserCouponListResponseStruct) writeField1(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("couponList", thrift.LIST, 1); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:couponList: ", p), err)
+	if err := oprot.WriteFieldBegin("UserCouponList", thrift.LIST, 1); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:UserCouponList: ", p), err)
 	}
 	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.UserCouponList)); err != nil {
 		return thrift.PrependError("error writing list begin: ", err)
@@ -1008,7 +1000,7 @@ func (p *UserCouponListResponseStruct) writeField1(oprot thrift.TProtocol) (err 
 		return thrift.PrependError("error writing list end: ", err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 1:couponList: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 1:UserCouponList: ", p), err)
 	}
 	return err
 }
@@ -1055,13 +1047,13 @@ func NewUserCouponListThriftServiceClientProtocol(t thrift.TTransport, iprot thr
 // Parameters:
 //  - RequestObj
 func (p *UserCouponListThriftServiceClient) GetUserCouponList(requestObj *UserCouponListRequestStruct) (r *UserCouponListResponseStruct, err error) {
-	if err = p.sendgetUserCouponList(requestObj); err != nil {
+	if err = p.sendGetUserCouponList(requestObj); err != nil {
 		return
 	}
-	return p.recvgetUserCouponList()
+	return p.recvGetUserCouponList()
 }
 
-func (p *UserCouponListThriftServiceClient) sendgetUserCouponList(requestObj *UserCouponListRequestStruct) (err error) {
+func (p *UserCouponListThriftServiceClient) sendGetUserCouponList(requestObj *UserCouponListRequestStruct) (err error) {
 	oprot := p.OutputProtocol
 	if oprot == nil {
 		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -1071,7 +1063,7 @@ func (p *UserCouponListThriftServiceClient) sendgetUserCouponList(requestObj *Us
 	if err = oprot.WriteMessageBegin("getUserCouponList", thrift.CALL, p.SeqId); err != nil {
 		return
 	}
-	args := UserCouponListThriftServicegetUserCouponListArgs{
+	args := UserCouponListThriftServiceGetUserCouponListArgs{
 		RequestObj: requestObj,
 	}
 	if err = args.Write(oprot); err != nil {
@@ -1083,7 +1075,7 @@ func (p *UserCouponListThriftServiceClient) sendgetUserCouponList(requestObj *Us
 	return oprot.Flush()
 }
 
-func (p *UserCouponListThriftServiceClient) recvgetUserCouponList() (value *UserCouponListResponseStruct, err error) {
+func (p *UserCouponListThriftServiceClient) recvGetUserCouponList() (value *UserCouponListResponseStruct, err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -1118,7 +1110,7 @@ func (p *UserCouponListThriftServiceClient) recvgetUserCouponList() (value *User
 		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "getUserCouponList failed: invalid message type")
 		return
 	}
-	result := UserCouponListThriftServicegetUserCouponListResult{}
+	result := UserCouponListThriftServiceGetUserCouponListResult{}
 	if err = result.Read(iprot); err != nil {
 		return
 	}
@@ -1150,7 +1142,7 @@ func (p *UserCouponListThriftServiceProcessor) ProcessorMap() map[string]thrift.
 func NewUserCouponListThriftServiceProcessor(handler UserCouponListThriftService) *UserCouponListThriftServiceProcessor {
 
 	self3 := &UserCouponListThriftServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
-	self3.processorMap["getUserCouponList"] = &couponListThriftServiceProcessorgetUserCouponList{handler: handler}
+	self3.processorMap["getUserCouponList"] = &userCouponListThriftServiceProcessorGetUserCouponList{handler: handler}
 	return self3
 }
 
@@ -1173,12 +1165,12 @@ func (p *UserCouponListThriftServiceProcessor) Process(iprot, oprot thrift.TProt
 
 }
 
-type couponListThriftServiceProcessorgetUserCouponList struct {
+type userCouponListThriftServiceProcessorGetUserCouponList struct {
 	handler UserCouponListThriftService
 }
 
-func (p *couponListThriftServiceProcessorgetUserCouponList) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := UserCouponListThriftServicegetUserCouponListArgs{}
+func (p *userCouponListThriftServiceProcessorGetUserCouponList) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := UserCouponListThriftServiceGetUserCouponListArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
@@ -1190,7 +1182,7 @@ func (p *couponListThriftServiceProcessorgetUserCouponList) Process(seqId int32,
 	}
 
 	iprot.ReadMessageEnd()
-	result := UserCouponListThriftServicegetUserCouponListResult{}
+	result := UserCouponListThriftServiceGetUserCouponListResult{}
 	var retval *UserCouponListResponseStruct
 	var err2 error
 	if retval, err2 = p.handler.GetUserCouponList(args.RequestObj); err2 != nil {
@@ -1225,27 +1217,27 @@ func (p *couponListThriftServiceProcessorgetUserCouponList) Process(seqId int32,
 
 // Attributes:
 //  - RequestObj
-type UserCouponListThriftServicegetUserCouponListArgs struct {
+type UserCouponListThriftServiceGetUserCouponListArgs struct {
 	RequestObj *UserCouponListRequestStruct `thrift:"requestObj,1" db:"requestObj" json:"requestObj"`
 }
 
-func NewUserCouponListThriftServicegetUserCouponListArgs() *UserCouponListThriftServicegetUserCouponListArgs {
-	return &UserCouponListThriftServicegetUserCouponListArgs{}
+func NewUserCouponListThriftServiceGetUserCouponListArgs() *UserCouponListThriftServiceGetUserCouponListArgs {
+	return &UserCouponListThriftServiceGetUserCouponListArgs{}
 }
 
-var UserCouponListThriftServicegetUserCouponListArgs_RequestObj_DEFAULT *UserCouponListRequestStruct
+var UserCouponListThriftServiceGetUserCouponListArgs_RequestObj_DEFAULT *UserCouponListRequestStruct
 
-func (p *UserCouponListThriftServicegetUserCouponListArgs) GetRequestObj() *UserCouponListRequestStruct {
+func (p *UserCouponListThriftServiceGetUserCouponListArgs) GetRequestObj() *UserCouponListRequestStruct {
 	if !p.IsSetRequestObj() {
-		return UserCouponListThriftServicegetUserCouponListArgs_RequestObj_DEFAULT
+		return UserCouponListThriftServiceGetUserCouponListArgs_RequestObj_DEFAULT
 	}
 	return p.RequestObj
 }
-func (p *UserCouponListThriftServicegetUserCouponListArgs) IsSetRequestObj() bool {
+func (p *UserCouponListThriftServiceGetUserCouponListArgs) IsSetRequestObj() bool {
 	return p.RequestObj != nil
 }
 
-func (p *UserCouponListThriftServicegetUserCouponListArgs) Read(iprot thrift.TProtocol) error {
+func (p *UserCouponListThriftServiceGetUserCouponListArgs) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -1278,7 +1270,7 @@ func (p *UserCouponListThriftServicegetUserCouponListArgs) Read(iprot thrift.TPr
 	return nil
 }
 
-func (p *UserCouponListThriftServicegetUserCouponListArgs) ReadField1(iprot thrift.TProtocol) error {
+func (p *UserCouponListThriftServiceGetUserCouponListArgs) ReadField1(iprot thrift.TProtocol) error {
 	p.RequestObj = &UserCouponListRequestStruct{}
 	if err := p.RequestObj.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.RequestObj), err)
@@ -1286,7 +1278,7 @@ func (p *UserCouponListThriftServicegetUserCouponListArgs) ReadField1(iprot thri
 	return nil
 }
 
-func (p *UserCouponListThriftServicegetUserCouponListArgs) Write(oprot thrift.TProtocol) error {
+func (p *UserCouponListThriftServiceGetUserCouponListArgs) Write(oprot thrift.TProtocol) error {
 	if err := oprot.WriteStructBegin("getUserCouponList_args"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
@@ -1304,7 +1296,7 @@ func (p *UserCouponListThriftServicegetUserCouponListArgs) Write(oprot thrift.TP
 	return nil
 }
 
-func (p *UserCouponListThriftServicegetUserCouponListArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *UserCouponListThriftServiceGetUserCouponListArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("requestObj", thrift.STRUCT, 1); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:requestObj: ", p), err)
 	}
@@ -1317,36 +1309,36 @@ func (p *UserCouponListThriftServicegetUserCouponListArgs) writeField1(oprot thr
 	return err
 }
 
-func (p *UserCouponListThriftServicegetUserCouponListArgs) String() string {
+func (p *UserCouponListThriftServiceGetUserCouponListArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("UserCouponListThriftServicegetUserCouponListArgs(%+v)", *p)
+	return fmt.Sprintf("UserCouponListThriftServiceGetUserCouponListArgs(%+v)", *p)
 }
 
 // Attributes:
 //  - Success
-type UserCouponListThriftServicegetUserCouponListResult struct {
+type UserCouponListThriftServiceGetUserCouponListResult struct {
 	Success *UserCouponListResponseStruct `thrift:"success,0" db:"success" json:"success,omitempty"`
 }
 
-func NewUserCouponListThriftServicegetUserCouponListResult() *UserCouponListThriftServicegetUserCouponListResult {
-	return &UserCouponListThriftServicegetUserCouponListResult{}
+func NewUserCouponListThriftServiceGetUserCouponListResult() *UserCouponListThriftServiceGetUserCouponListResult {
+	return &UserCouponListThriftServiceGetUserCouponListResult{}
 }
 
-var UserCouponListThriftServicegetUserCouponListResult_Success_DEFAULT *UserCouponListResponseStruct
+var UserCouponListThriftServiceGetUserCouponListResult_Success_DEFAULT *UserCouponListResponseStruct
 
-func (p *UserCouponListThriftServicegetUserCouponListResult) GetSuccess() *UserCouponListResponseStruct {
+func (p *UserCouponListThriftServiceGetUserCouponListResult) GetSuccess() *UserCouponListResponseStruct {
 	if !p.IsSetSuccess() {
-		return UserCouponListThriftServicegetUserCouponListResult_Success_DEFAULT
+		return UserCouponListThriftServiceGetUserCouponListResult_Success_DEFAULT
 	}
 	return p.Success
 }
-func (p *UserCouponListThriftServicegetUserCouponListResult) IsSetSuccess() bool {
+func (p *UserCouponListThriftServiceGetUserCouponListResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *UserCouponListThriftServicegetUserCouponListResult) Read(iprot thrift.TProtocol) error {
+func (p *UserCouponListThriftServiceGetUserCouponListResult) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -1379,7 +1371,7 @@ func (p *UserCouponListThriftServicegetUserCouponListResult) Read(iprot thrift.T
 	return nil
 }
 
-func (p *UserCouponListThriftServicegetUserCouponListResult) ReadField0(iprot thrift.TProtocol) error {
+func (p *UserCouponListThriftServiceGetUserCouponListResult) ReadField0(iprot thrift.TProtocol) error {
 	p.Success = &UserCouponListResponseStruct{}
 	if err := p.Success.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Success), err)
@@ -1387,7 +1379,7 @@ func (p *UserCouponListThriftServicegetUserCouponListResult) ReadField0(iprot th
 	return nil
 }
 
-func (p *UserCouponListThriftServicegetUserCouponListResult) Write(oprot thrift.TProtocol) error {
+func (p *UserCouponListThriftServiceGetUserCouponListResult) Write(oprot thrift.TProtocol) error {
 	if err := oprot.WriteStructBegin("getUserCouponList_result"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
@@ -1405,7 +1397,7 @@ func (p *UserCouponListThriftServicegetUserCouponListResult) Write(oprot thrift.
 	return nil
 }
 
-func (p *UserCouponListThriftServicegetUserCouponListResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *UserCouponListThriftServiceGetUserCouponListResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err := oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T write field begin error 0:success: ", p), err)
@@ -1420,9 +1412,9 @@ func (p *UserCouponListThriftServicegetUserCouponListResult) writeField0(oprot t
 	return err
 }
 
-func (p *UserCouponListThriftServicegetUserCouponListResult) String() string {
+func (p *UserCouponListThriftServiceGetUserCouponListResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("UserCouponListThriftServicegetUserCouponListResult(%+v)", *p)
+	return fmt.Sprintf("UserCouponListThriftServiceGetUserCouponListResult(%+v)", *p)
 }

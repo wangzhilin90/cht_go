@@ -34,9 +34,9 @@ type UserRechargeRecordListRequestStruct struct {
 	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,8" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
 }
 
-// func NewRechargeRecordRequestStruct() *UserRechargeRecordListRequestStruct {
-// 	return &UserRechargeRecordListRequestStruct{}
-// }
+func NewUserRechargeRecordListRequestStruct() *UserRechargeRecordListRequestStruct {
+	return &UserRechargeRecordListRequestStruct{}
+}
 
 func (p *UserRechargeRecordListRequestStruct) GetUserID() int32 {
 	return p.UserID
@@ -376,7 +376,7 @@ type UserRechargeRecordDetailsStruct struct {
 	FailResult string `thrift:"fail_result,10" db:"fail_result" json:"fail_result"`
 }
 
-func NewRechargeRecordStruct() *UserRechargeRecordDetailsStruct {
+func NewUserRechargeRecordDetailsStruct() *UserRechargeRecordDetailsStruct {
 	return &UserRechargeRecordDetailsStruct{}
 }
 
@@ -416,7 +416,7 @@ func (p *UserRechargeRecordDetailsStruct) GetPayWay() int32 {
 	return p.PayWay
 }
 
-func (p *UserRechargeRecordDetailsStruct) GetFailResult() string {
+func (p *UserRechargeRecordDetailsStruct) GetFailResult_() string {
 	return p.FailResult
 }
 func (p *UserRechargeRecordDetailsStruct) Read(iprot thrift.TProtocol) error {
@@ -771,10 +771,10 @@ type UserRechargeRecordListResponseStruct struct {
 	Msg                    string                             `thrift:"Msg,2" db:"Msg" json:"Msg"`
 	Totalnum               int32                              `thrift:"totalnum,3" db:"totalnum" json:"totalnum"`
 	TotalHsRechargeMoney   string                             `thrift:"totalHsRechargeMoney,4" db:"totalHsRechargeMoney" json:"totalHsRechargeMoney"`
-	UserRechargeRecordList []*UserRechargeRecordDetailsStruct `thrift:"rechargeRecordList,5" db:"rechargeRecordList" json:"rechargeRecordList"`
+	UserRechargeRecordList []*UserRechargeRecordDetailsStruct `thrift:"UserRechargeRecordList,5" db:"UserRechargeRecordList" json:"UserRechargeRecordList"`
 }
 
-func NewRechargeRecordResponseStruct() *UserRechargeRecordListResponseStruct {
+func NewUserRechargeRecordListResponseStruct() *UserRechargeRecordListResponseStruct {
 	return &UserRechargeRecordListResponseStruct{}
 }
 
@@ -794,7 +794,7 @@ func (p *UserRechargeRecordListResponseStruct) GetTotalHsRechargeMoney() string 
 	return p.TotalHsRechargeMoney
 }
 
-func (p *UserRechargeRecordListResponseStruct) getUserRechargeRecordListList() []*UserRechargeRecordDetailsStruct {
+func (p *UserRechargeRecordListResponseStruct) GetUserRechargeRecordList() []*UserRechargeRecordDetailsStruct {
 	return p.UserRechargeRecordList
 }
 func (p *UserRechargeRecordListResponseStruct) Read(iprot thrift.TProtocol) error {
@@ -985,8 +985,8 @@ func (p *UserRechargeRecordListResponseStruct) writeField4(oprot thrift.TProtoco
 }
 
 func (p *UserRechargeRecordListResponseStruct) writeField5(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("rechargeRecordList", thrift.LIST, 5); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 5:rechargeRecordList: ", p), err)
+	if err := oprot.WriteFieldBegin("UserRechargeRecordList", thrift.LIST, 5); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 5:UserRechargeRecordList: ", p), err)
 	}
 	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.UserRechargeRecordList)); err != nil {
 		return thrift.PrependError("error writing list begin: ", err)
@@ -1000,7 +1000,7 @@ func (p *UserRechargeRecordListResponseStruct) writeField5(oprot thrift.TProtoco
 		return thrift.PrependError("error writing list end: ", err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 5:rechargeRecordList: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 5:UserRechargeRecordList: ", p), err)
 	}
 	return err
 }
@@ -1047,23 +1047,23 @@ func NewUserRechargeRecordListThriftServiceClientProtocol(t thrift.TTransport, i
 // Parameters:
 //  - RequestObj
 func (p *UserRechargeRecordListThriftServiceClient) GetUserRechargeRecordList(requestObj *UserRechargeRecordListRequestStruct) (r *UserRechargeRecordListResponseStruct, err error) {
-	if err = p.sendgetUserRechargeRecordList(requestObj); err != nil {
+	if err = p.sendGetUserRechargeRecordList(requestObj); err != nil {
 		return
 	}
-	return p.recvgetUserRechargeRecordList()
+	return p.recvGetUserRechargeRecordList()
 }
 
-func (p *UserRechargeRecordListThriftServiceClient) sendgetUserRechargeRecordList(requestObj *UserRechargeRecordListRequestStruct) (err error) {
+func (p *UserRechargeRecordListThriftServiceClient) sendGetUserRechargeRecordList(requestObj *UserRechargeRecordListRequestStruct) (err error) {
 	oprot := p.OutputProtocol
 	if oprot == nil {
 		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
 		p.OutputProtocol = oprot
 	}
 	p.SeqId++
-	if err = oprot.WriteMessageBegin("GetUserRechargeRecordList", thrift.CALL, p.SeqId); err != nil {
+	if err = oprot.WriteMessageBegin("getUserRechargeRecordList", thrift.CALL, p.SeqId); err != nil {
 		return
 	}
-	args := UserRechargeRecordListThriftServicegetUserRechargeRecordListArgs{
+	args := UserRechargeRecordListThriftServiceGetUserRechargeRecordListArgs{
 		RequestObj: requestObj,
 	}
 	if err = args.Write(oprot); err != nil {
@@ -1075,7 +1075,7 @@ func (p *UserRechargeRecordListThriftServiceClient) sendgetUserRechargeRecordLis
 	return oprot.Flush()
 }
 
-func (p *UserRechargeRecordListThriftServiceClient) recvgetUserRechargeRecordList() (value *UserRechargeRecordListResponseStruct, err error) {
+func (p *UserRechargeRecordListThriftServiceClient) recvGetUserRechargeRecordList() (value *UserRechargeRecordListResponseStruct, err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -1085,12 +1085,12 @@ func (p *UserRechargeRecordListThriftServiceClient) recvgetUserRechargeRecordLis
 	if err != nil {
 		return
 	}
-	if method != "GetUserRechargeRecordList" {
-		err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "GetUserRechargeRecordList failed: wrong method name")
+	if method != "getUserRechargeRecordList" {
+		err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "getUserRechargeRecordList failed: wrong method name")
 		return
 	}
 	if p.SeqId != seqId {
-		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "GetUserRechargeRecordList failed: out of sequence response")
+		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "getUserRechargeRecordList failed: out of sequence response")
 		return
 	}
 	if mTypeId == thrift.EXCEPTION {
@@ -1107,10 +1107,10 @@ func (p *UserRechargeRecordListThriftServiceClient) recvgetUserRechargeRecordLis
 		return
 	}
 	if mTypeId != thrift.REPLY {
-		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "GetUserRechargeRecordList failed: invalid message type")
+		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "getUserRechargeRecordList failed: invalid message type")
 		return
 	}
-	result := UserRechargeRecordListThriftServicegetUserRechargeRecordListResult{}
+	result := UserRechargeRecordListThriftServiceGetUserRechargeRecordListResult{}
 	if err = result.Read(iprot); err != nil {
 		return
 	}
@@ -1142,7 +1142,7 @@ func (p *UserRechargeRecordListThriftServiceProcessor) ProcessorMap() map[string
 func NewUserRechargeRecordListThriftServiceProcessor(handler UserRechargeRecordListThriftService) *UserRechargeRecordListThriftServiceProcessor {
 
 	self3 := &UserRechargeRecordListThriftServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
-	self3.processorMap["GetUserRechargeRecordList"] = &rechargeRecordThriftServiceProcessorgetUserRechargeRecordList{handler: handler}
+	self3.processorMap["getUserRechargeRecordList"] = &userRechargeRecordListThriftServiceProcessorGetUserRechargeRecordList{handler: handler}
 	return self3
 }
 
@@ -1165,16 +1165,16 @@ func (p *UserRechargeRecordListThriftServiceProcessor) Process(iprot, oprot thri
 
 }
 
-type rechargeRecordThriftServiceProcessorgetUserRechargeRecordList struct {
+type userRechargeRecordListThriftServiceProcessorGetUserRechargeRecordList struct {
 	handler UserRechargeRecordListThriftService
 }
 
-func (p *rechargeRecordThriftServiceProcessorgetUserRechargeRecordList) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := UserRechargeRecordListThriftServicegetUserRechargeRecordListArgs{}
+func (p *userRechargeRecordListThriftServiceProcessorGetUserRechargeRecordList) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := UserRechargeRecordListThriftServiceGetUserRechargeRecordListArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("GetUserRechargeRecordList", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("getUserRechargeRecordList", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush()
@@ -1182,12 +1182,12 @@ func (p *rechargeRecordThriftServiceProcessorgetUserRechargeRecordList) Process(
 	}
 
 	iprot.ReadMessageEnd()
-	result := UserRechargeRecordListThriftServicegetUserRechargeRecordListResult{}
+	result := UserRechargeRecordListThriftServiceGetUserRechargeRecordListResult{}
 	var retval *UserRechargeRecordListResponseStruct
 	var err2 error
 	if retval, err2 = p.handler.GetUserRechargeRecordList(args.RequestObj); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing GetUserRechargeRecordList: "+err2.Error())
-		oprot.WriteMessageBegin("GetUserRechargeRecordList", thrift.EXCEPTION, seqId)
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing getUserRechargeRecordList: "+err2.Error())
+		oprot.WriteMessageBegin("getUserRechargeRecordList", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush()
@@ -1195,7 +1195,7 @@ func (p *rechargeRecordThriftServiceProcessorgetUserRechargeRecordList) Process(
 	} else {
 		result.Success = retval
 	}
-	if err2 = oprot.WriteMessageBegin("GetUserRechargeRecordList", thrift.REPLY, seqId); err2 != nil {
+	if err2 = oprot.WriteMessageBegin("getUserRechargeRecordList", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -1217,27 +1217,27 @@ func (p *rechargeRecordThriftServiceProcessorgetUserRechargeRecordList) Process(
 
 // Attributes:
 //  - RequestObj
-type UserRechargeRecordListThriftServicegetUserRechargeRecordListArgs struct {
+type UserRechargeRecordListThriftServiceGetUserRechargeRecordListArgs struct {
 	RequestObj *UserRechargeRecordListRequestStruct `thrift:"requestObj,1" db:"requestObj" json:"requestObj"`
 }
 
-func NewUserRechargeRecordListThriftServicegetUserRechargeRecordListArgs() *UserRechargeRecordListThriftServicegetUserRechargeRecordListArgs {
-	return &UserRechargeRecordListThriftServicegetUserRechargeRecordListArgs{}
+func NewUserRechargeRecordListThriftServiceGetUserRechargeRecordListArgs() *UserRechargeRecordListThriftServiceGetUserRechargeRecordListArgs {
+	return &UserRechargeRecordListThriftServiceGetUserRechargeRecordListArgs{}
 }
 
-var UserRechargeRecordListThriftServicegetUserRechargeRecordListArgs_RequestObj_DEFAULT *UserRechargeRecordListRequestStruct
+var UserRechargeRecordListThriftServiceGetUserRechargeRecordListArgs_RequestObj_DEFAULT *UserRechargeRecordListRequestStruct
 
-func (p *UserRechargeRecordListThriftServicegetUserRechargeRecordListArgs) GetRequestObj() *UserRechargeRecordListRequestStruct {
+func (p *UserRechargeRecordListThriftServiceGetUserRechargeRecordListArgs) GetRequestObj() *UserRechargeRecordListRequestStruct {
 	if !p.IsSetRequestObj() {
-		return UserRechargeRecordListThriftServicegetUserRechargeRecordListArgs_RequestObj_DEFAULT
+		return UserRechargeRecordListThriftServiceGetUserRechargeRecordListArgs_RequestObj_DEFAULT
 	}
 	return p.RequestObj
 }
-func (p *UserRechargeRecordListThriftServicegetUserRechargeRecordListArgs) IsSetRequestObj() bool {
+func (p *UserRechargeRecordListThriftServiceGetUserRechargeRecordListArgs) IsSetRequestObj() bool {
 	return p.RequestObj != nil
 }
 
-func (p *UserRechargeRecordListThriftServicegetUserRechargeRecordListArgs) Read(iprot thrift.TProtocol) error {
+func (p *UserRechargeRecordListThriftServiceGetUserRechargeRecordListArgs) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -1270,7 +1270,7 @@ func (p *UserRechargeRecordListThriftServicegetUserRechargeRecordListArgs) Read(
 	return nil
 }
 
-func (p *UserRechargeRecordListThriftServicegetUserRechargeRecordListArgs) ReadField1(iprot thrift.TProtocol) error {
+func (p *UserRechargeRecordListThriftServiceGetUserRechargeRecordListArgs) ReadField1(iprot thrift.TProtocol) error {
 	p.RequestObj = &UserRechargeRecordListRequestStruct{}
 	if err := p.RequestObj.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.RequestObj), err)
@@ -1278,7 +1278,7 @@ func (p *UserRechargeRecordListThriftServicegetUserRechargeRecordListArgs) ReadF
 	return nil
 }
 
-func (p *UserRechargeRecordListThriftServicegetUserRechargeRecordListArgs) Write(oprot thrift.TProtocol) error {
+func (p *UserRechargeRecordListThriftServiceGetUserRechargeRecordListArgs) Write(oprot thrift.TProtocol) error {
 	if err := oprot.WriteStructBegin("getUserRechargeRecordList_args"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
@@ -1296,7 +1296,7 @@ func (p *UserRechargeRecordListThriftServicegetUserRechargeRecordListArgs) Write
 	return nil
 }
 
-func (p *UserRechargeRecordListThriftServicegetUserRechargeRecordListArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *UserRechargeRecordListThriftServiceGetUserRechargeRecordListArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("requestObj", thrift.STRUCT, 1); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:requestObj: ", p), err)
 	}
@@ -1309,36 +1309,36 @@ func (p *UserRechargeRecordListThriftServicegetUserRechargeRecordListArgs) write
 	return err
 }
 
-func (p *UserRechargeRecordListThriftServicegetUserRechargeRecordListArgs) String() string {
+func (p *UserRechargeRecordListThriftServiceGetUserRechargeRecordListArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("UserRechargeRecordListThriftServicegetUserRechargeRecordListArgs(%+v)", *p)
+	return fmt.Sprintf("UserRechargeRecordListThriftServiceGetUserRechargeRecordListArgs(%+v)", *p)
 }
 
 // Attributes:
 //  - Success
-type UserRechargeRecordListThriftServicegetUserRechargeRecordListResult struct {
+type UserRechargeRecordListThriftServiceGetUserRechargeRecordListResult struct {
 	Success *UserRechargeRecordListResponseStruct `thrift:"success,0" db:"success" json:"success,omitempty"`
 }
 
-func NewUserRechargeRecordListThriftServicegetUserRechargeRecordListResult() *UserRechargeRecordListThriftServicegetUserRechargeRecordListResult {
-	return &UserRechargeRecordListThriftServicegetUserRechargeRecordListResult{}
+func NewUserRechargeRecordListThriftServiceGetUserRechargeRecordListResult() *UserRechargeRecordListThriftServiceGetUserRechargeRecordListResult {
+	return &UserRechargeRecordListThriftServiceGetUserRechargeRecordListResult{}
 }
 
-var UserRechargeRecordListThriftServicegetUserRechargeRecordListResult_Success_DEFAULT *UserRechargeRecordListResponseStruct
+var UserRechargeRecordListThriftServiceGetUserRechargeRecordListResult_Success_DEFAULT *UserRechargeRecordListResponseStruct
 
-func (p *UserRechargeRecordListThriftServicegetUserRechargeRecordListResult) GetSuccess() *UserRechargeRecordListResponseStruct {
+func (p *UserRechargeRecordListThriftServiceGetUserRechargeRecordListResult) GetSuccess() *UserRechargeRecordListResponseStruct {
 	if !p.IsSetSuccess() {
-		return UserRechargeRecordListThriftServicegetUserRechargeRecordListResult_Success_DEFAULT
+		return UserRechargeRecordListThriftServiceGetUserRechargeRecordListResult_Success_DEFAULT
 	}
 	return p.Success
 }
-func (p *UserRechargeRecordListThriftServicegetUserRechargeRecordListResult) IsSetSuccess() bool {
+func (p *UserRechargeRecordListThriftServiceGetUserRechargeRecordListResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *UserRechargeRecordListThriftServicegetUserRechargeRecordListResult) Read(iprot thrift.TProtocol) error {
+func (p *UserRechargeRecordListThriftServiceGetUserRechargeRecordListResult) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -1371,7 +1371,7 @@ func (p *UserRechargeRecordListThriftServicegetUserRechargeRecordListResult) Rea
 	return nil
 }
 
-func (p *UserRechargeRecordListThriftServicegetUserRechargeRecordListResult) ReadField0(iprot thrift.TProtocol) error {
+func (p *UserRechargeRecordListThriftServiceGetUserRechargeRecordListResult) ReadField0(iprot thrift.TProtocol) error {
 	p.Success = &UserRechargeRecordListResponseStruct{}
 	if err := p.Success.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Success), err)
@@ -1379,7 +1379,7 @@ func (p *UserRechargeRecordListThriftServicegetUserRechargeRecordListResult) Rea
 	return nil
 }
 
-func (p *UserRechargeRecordListThriftServicegetUserRechargeRecordListResult) Write(oprot thrift.TProtocol) error {
+func (p *UserRechargeRecordListThriftServiceGetUserRechargeRecordListResult) Write(oprot thrift.TProtocol) error {
 	if err := oprot.WriteStructBegin("getUserRechargeRecordList_result"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
@@ -1397,7 +1397,7 @@ func (p *UserRechargeRecordListThriftServicegetUserRechargeRecordListResult) Wri
 	return nil
 }
 
-func (p *UserRechargeRecordListThriftServicegetUserRechargeRecordListResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *UserRechargeRecordListThriftServiceGetUserRechargeRecordListResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err := oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T write field begin error 0:success: ", p), err)
@@ -1412,9 +1412,9 @@ func (p *UserRechargeRecordListThriftServicegetUserRechargeRecordListResult) wri
 	return err
 }
 
-func (p *UserRechargeRecordListThriftServicegetUserRechargeRecordListResult) String() string {
+func (p *UserRechargeRecordListThriftServiceGetUserRechargeRecordListResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("UserRechargeRecordListThriftServicegetUserRechargeRecordListResult(%+v)", *p)
+	return fmt.Sprintf("UserRechargeRecordListThriftServiceGetUserRechargeRecordListResult(%+v)", *p)
 }

@@ -22,9 +22,9 @@ type BorrowUserDetailsRequestStruct struct {
 	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,2" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
 }
 
-// func NewBorrowerInfoRequestStruct() *BorrowUserDetailsRequestStruct {
-//   return &BorrowUserDetailsRequestStruct{}
-// }
+func NewBorrowUserDetailsRequestStruct() *BorrowUserDetailsRequestStruct {
+	return &BorrowUserDetailsRequestStruct{}
+}
 
 func (p *BorrowUserDetailsRequestStruct) GetName() string {
 	return p.Name
@@ -150,9 +150,9 @@ type MaterialInfoStruct struct {
 	Name string `thrift:"name,2" db:"name" json:"name"`
 }
 
-// func NewMaterialInfoStruct() *MaterialInfoStruct {
-//   return &MaterialInfoStruct{}
-// }
+func NewMaterialInfoStruct() *MaterialInfoStruct {
+	return &MaterialInfoStruct{}
+}
 
 func (p *MaterialInfoStruct) GetID() int32 {
 	return p.ID
@@ -278,7 +278,7 @@ func (p *MaterialInfoStruct) String() string {
 //  - Credit
 //  - Guarantor
 //  - MaterialList
-type BorrowerInfoStruct struct {
+type BorrowUserDetailsStruct struct {
 	ID           int32                 `thrift:"id,1" db:"id" json:"id"`
 	Realname     string                `thrift:"realname,2" db:"realname" json:"realname"`
 	IsBorrower   int32                 `thrift:"is_borrower,3" db:"is_borrower" json:"is_borrower"`
@@ -288,38 +288,38 @@ type BorrowerInfoStruct struct {
 	MaterialList []*MaterialInfoStruct `thrift:"materialList,7" db:"materialList" json:"materialList"`
 }
 
-// func NewBorrowerInfoStruct() *BorrowerInfoStruct {
-//   return &BorrowerInfoStruct{}
-// }
+func NewBorrowUserDetailsStruct() *BorrowUserDetailsStruct {
+	return &BorrowUserDetailsStruct{}
+}
 
-func (p *BorrowerInfoStruct) GetID() int32 {
+func (p *BorrowUserDetailsStruct) GetID() int32 {
 	return p.ID
 }
 
-func (p *BorrowerInfoStruct) GetRealname() string {
+func (p *BorrowUserDetailsStruct) GetRealname() string {
 	return p.Realname
 }
 
-func (p *BorrowerInfoStruct) GetIsBorrower() int32 {
+func (p *BorrowUserDetailsStruct) GetIsBorrower() int32 {
 	return p.IsBorrower
 }
 
-func (p *BorrowerInfoStruct) GetCardID() string {
+func (p *BorrowUserDetailsStruct) GetCardID() string {
 	return p.CardID
 }
 
-func (p *BorrowerInfoStruct) GetCredit() string {
+func (p *BorrowUserDetailsStruct) GetCredit() string {
 	return p.Credit
 }
 
-func (p *BorrowerInfoStruct) GetGuarantor() string {
+func (p *BorrowUserDetailsStruct) GetGuarantor() string {
 	return p.Guarantor
 }
 
-func (p *BorrowerInfoStruct) GetMaterialList() []*MaterialInfoStruct {
+func (p *BorrowUserDetailsStruct) GetMaterialList() []*MaterialInfoStruct {
 	return p.MaterialList
 }
-func (p *BorrowerInfoStruct) Read(iprot thrift.TProtocol) error {
+func (p *BorrowUserDetailsStruct) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -376,7 +376,7 @@ func (p *BorrowerInfoStruct) Read(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *BorrowerInfoStruct) ReadField1(iprot thrift.TProtocol) error {
+func (p *BorrowUserDetailsStruct) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI32(); err != nil {
 		return thrift.PrependError("error reading field 1: ", err)
 	} else {
@@ -385,7 +385,7 @@ func (p *BorrowerInfoStruct) ReadField1(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *BorrowerInfoStruct) ReadField2(iprot thrift.TProtocol) error {
+func (p *BorrowUserDetailsStruct) ReadField2(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return thrift.PrependError("error reading field 2: ", err)
 	} else {
@@ -394,7 +394,7 @@ func (p *BorrowerInfoStruct) ReadField2(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *BorrowerInfoStruct) ReadField3(iprot thrift.TProtocol) error {
+func (p *BorrowUserDetailsStruct) ReadField3(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI32(); err != nil {
 		return thrift.PrependError("error reading field 3: ", err)
 	} else {
@@ -403,7 +403,7 @@ func (p *BorrowerInfoStruct) ReadField3(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *BorrowerInfoStruct) ReadField4(iprot thrift.TProtocol) error {
+func (p *BorrowUserDetailsStruct) ReadField4(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return thrift.PrependError("error reading field 4: ", err)
 	} else {
@@ -412,7 +412,7 @@ func (p *BorrowerInfoStruct) ReadField4(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *BorrowerInfoStruct) ReadField5(iprot thrift.TProtocol) error {
+func (p *BorrowUserDetailsStruct) ReadField5(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return thrift.PrependError("error reading field 5: ", err)
 	} else {
@@ -421,7 +421,7 @@ func (p *BorrowerInfoStruct) ReadField5(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *BorrowerInfoStruct) ReadField6(iprot thrift.TProtocol) error {
+func (p *BorrowUserDetailsStruct) ReadField6(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return thrift.PrependError("error reading field 6: ", err)
 	} else {
@@ -430,7 +430,7 @@ func (p *BorrowerInfoStruct) ReadField6(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *BorrowerInfoStruct) ReadField7(iprot thrift.TProtocol) error {
+func (p *BorrowUserDetailsStruct) ReadField7(iprot thrift.TProtocol) error {
 	_, size, err := iprot.ReadListBegin()
 	if err != nil {
 		return thrift.PrependError("error reading list begin: ", err)
@@ -450,8 +450,8 @@ func (p *BorrowerInfoStruct) ReadField7(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *BorrowerInfoStruct) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("BorrowerInfoStruct"); err != nil {
+func (p *BorrowUserDetailsStruct) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("BorrowUserDetailsStruct"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
 	if p != nil {
@@ -486,7 +486,7 @@ func (p *BorrowerInfoStruct) Write(oprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *BorrowerInfoStruct) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *BorrowUserDetailsStruct) writeField1(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("id", thrift.I32, 1); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:id: ", p), err)
 	}
@@ -499,7 +499,7 @@ func (p *BorrowerInfoStruct) writeField1(oprot thrift.TProtocol) (err error) {
 	return err
 }
 
-func (p *BorrowerInfoStruct) writeField2(oprot thrift.TProtocol) (err error) {
+func (p *BorrowUserDetailsStruct) writeField2(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("realname", thrift.STRING, 2); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:realname: ", p), err)
 	}
@@ -512,7 +512,7 @@ func (p *BorrowerInfoStruct) writeField2(oprot thrift.TProtocol) (err error) {
 	return err
 }
 
-func (p *BorrowerInfoStruct) writeField3(oprot thrift.TProtocol) (err error) {
+func (p *BorrowUserDetailsStruct) writeField3(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("is_borrower", thrift.I32, 3); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:is_borrower: ", p), err)
 	}
@@ -525,7 +525,7 @@ func (p *BorrowerInfoStruct) writeField3(oprot thrift.TProtocol) (err error) {
 	return err
 }
 
-func (p *BorrowerInfoStruct) writeField4(oprot thrift.TProtocol) (err error) {
+func (p *BorrowUserDetailsStruct) writeField4(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("card_id", thrift.STRING, 4); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 4:card_id: ", p), err)
 	}
@@ -538,7 +538,7 @@ func (p *BorrowerInfoStruct) writeField4(oprot thrift.TProtocol) (err error) {
 	return err
 }
 
-func (p *BorrowerInfoStruct) writeField5(oprot thrift.TProtocol) (err error) {
+func (p *BorrowUserDetailsStruct) writeField5(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("credit", thrift.STRING, 5); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 5:credit: ", p), err)
 	}
@@ -551,7 +551,7 @@ func (p *BorrowerInfoStruct) writeField5(oprot thrift.TProtocol) (err error) {
 	return err
 }
 
-func (p *BorrowerInfoStruct) writeField6(oprot thrift.TProtocol) (err error) {
+func (p *BorrowUserDetailsStruct) writeField6(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("guarantor", thrift.STRING, 6); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 6:guarantor: ", p), err)
 	}
@@ -564,7 +564,7 @@ func (p *BorrowerInfoStruct) writeField6(oprot thrift.TProtocol) (err error) {
 	return err
 }
 
-func (p *BorrowerInfoStruct) writeField7(oprot thrift.TProtocol) (err error) {
+func (p *BorrowUserDetailsStruct) writeField7(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("materialList", thrift.LIST, 7); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 7:materialList: ", p), err)
 	}
@@ -585,24 +585,24 @@ func (p *BorrowerInfoStruct) writeField7(oprot thrift.TProtocol) (err error) {
 	return err
 }
 
-func (p *BorrowerInfoStruct) String() string {
+func (p *BorrowUserDetailsStruct) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("BorrowerInfoStruct(%+v)", *p)
+	return fmt.Sprintf("BorrowUserDetailsStruct(%+v)", *p)
 }
 
 // Attributes:
 //  - Status
 //  - Msg
-//  - BorrowerInfo
+//  - BorrowUserDetails
 type BorrowUserDetailsResponseStruct struct {
-	Status       int32               `thrift:"status,1" db:"status" json:"status"`
-	Msg          string              `thrift:"msg,2" db:"msg" json:"msg"`
-	BorrowerInfo *BorrowerInfoStruct `thrift:"borrowerInfo,3" db:"borrowerInfo" json:"borrowerInfo"`
+	Status            int32                    `thrift:"status,1" db:"status" json:"status"`
+	Msg               string                   `thrift:"msg,2" db:"msg" json:"msg"`
+	BorrowUserDetails *BorrowUserDetailsStruct `thrift:"BorrowUserDetails,3" db:"BorrowUserDetails" json:"BorrowUserDetails"`
 }
 
-func NewBorrowerInfoResponseStruct() *BorrowUserDetailsResponseStruct {
+func NewBorrowUserDetailsResponseStruct() *BorrowUserDetailsResponseStruct {
 	return &BorrowUserDetailsResponseStruct{}
 }
 
@@ -614,16 +614,16 @@ func (p *BorrowUserDetailsResponseStruct) GetMsg() string {
 	return p.Msg
 }
 
-var BorrowerInfoResponseStruct_BorrowerInfo_DEFAULT *BorrowerInfoStruct
+var BorrowUserDetailsResponseStruct_BorrowUserDetails_DEFAULT *BorrowUserDetailsStruct
 
-func (p *BorrowUserDetailsResponseStruct) GetBorrowUserDetails() *BorrowerInfoStruct {
-	if !p.IsSetBorrowerInfo() {
-		return BorrowerInfoResponseStruct_BorrowerInfo_DEFAULT
+func (p *BorrowUserDetailsResponseStruct) GetBorrowUserDetails() *BorrowUserDetailsStruct {
+	if !p.IsSetBorrowUserDetails() {
+		return BorrowUserDetailsResponseStruct_BorrowUserDetails_DEFAULT
 	}
-	return p.BorrowerInfo
+	return p.BorrowUserDetails
 }
-func (p *BorrowUserDetailsResponseStruct) IsSetBorrowerInfo() bool {
-	return p.BorrowerInfo != nil
+func (p *BorrowUserDetailsResponseStruct) IsSetBorrowUserDetails() bool {
+	return p.BorrowUserDetails != nil
 }
 
 func (p *BorrowUserDetailsResponseStruct) Read(iprot thrift.TProtocol) error {
@@ -686,9 +686,9 @@ func (p *BorrowUserDetailsResponseStruct) ReadField2(iprot thrift.TProtocol) err
 }
 
 func (p *BorrowUserDetailsResponseStruct) ReadField3(iprot thrift.TProtocol) error {
-	p.BorrowerInfo = &BorrowerInfoStruct{}
-	if err := p.BorrowerInfo.Read(iprot); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.BorrowerInfo), err)
+	p.BorrowUserDetails = &BorrowUserDetailsStruct{}
+	if err := p.BorrowUserDetails.Read(iprot); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.BorrowUserDetails), err)
 	}
 	return nil
 }
@@ -744,14 +744,14 @@ func (p *BorrowUserDetailsResponseStruct) writeField2(oprot thrift.TProtocol) (e
 }
 
 func (p *BorrowUserDetailsResponseStruct) writeField3(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("borrowerInfo", thrift.STRUCT, 3); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:borrowerInfo: ", p), err)
+	if err := oprot.WriteFieldBegin("BorrowUserDetails", thrift.STRUCT, 3); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:BorrowUserDetails: ", p), err)
 	}
-	if err := p.BorrowerInfo.Write(oprot); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", p.BorrowerInfo), err)
+	if err := p.BorrowUserDetails.Write(oprot); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", p.BorrowUserDetails), err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:borrowerInfo: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:BorrowUserDetails: ", p), err)
 	}
 	return err
 }
@@ -769,7 +769,7 @@ type BorrowUserDetailsThriftService interface {
 	GetBorrowUserDetails(requestObj *BorrowUserDetailsRequestStruct) (r *BorrowUserDetailsResponseStruct, err error)
 }
 
-type BorrowerThriftServiceClient struct {
+type BorrowUserDetailsThriftServiceClient struct {
 	Transport       thrift.TTransport
 	ProtocolFactory thrift.TProtocolFactory
 	InputProtocol   thrift.TProtocol
@@ -777,8 +777,8 @@ type BorrowerThriftServiceClient struct {
 	SeqId           int32
 }
 
-func NewBorrowerThriftServiceClientFactory(t thrift.TTransport, f thrift.TProtocolFactory) *BorrowerThriftServiceClient {
-	return &BorrowerThriftServiceClient{Transport: t,
+func NewBorrowUserDetailsThriftServiceClientFactory(t thrift.TTransport, f thrift.TProtocolFactory) *BorrowUserDetailsThriftServiceClient {
+	return &BorrowUserDetailsThriftServiceClient{Transport: t,
 		ProtocolFactory: f,
 		InputProtocol:   f.GetProtocol(t),
 		OutputProtocol:  f.GetProtocol(t),
@@ -786,8 +786,8 @@ func NewBorrowerThriftServiceClientFactory(t thrift.TTransport, f thrift.TProtoc
 	}
 }
 
-func NewBorrowerThriftServiceClientProtocol(t thrift.TTransport, iprot thrift.TProtocol, oprot thrift.TProtocol) *BorrowerThriftServiceClient {
-	return &BorrowerThriftServiceClient{Transport: t,
+func NewBorrowUserDetailsThriftServiceClientProtocol(t thrift.TTransport, iprot thrift.TProtocol, oprot thrift.TProtocol) *BorrowUserDetailsThriftServiceClient {
+	return &BorrowUserDetailsThriftServiceClient{Transport: t,
 		ProtocolFactory: nil,
 		InputProtocol:   iprot,
 		OutputProtocol:  oprot,
@@ -797,24 +797,24 @@ func NewBorrowerThriftServiceClientProtocol(t thrift.TTransport, iprot thrift.TP
 
 // Parameters:
 //  - RequestObj
-func (p *BorrowerThriftServiceClient) GetBorrowUserDetails(requestObj *BorrowUserDetailsRequestStruct) (r *BorrowUserDetailsResponseStruct, err error) {
-	if err = p.sendGetBorrowerInfo(requestObj); err != nil {
+func (p *BorrowUserDetailsThriftServiceClient) GetBorrowUserDetails(requestObj *BorrowUserDetailsRequestStruct) (r *BorrowUserDetailsResponseStruct, err error) {
+	if err = p.sendGetBorrowUserDetails(requestObj); err != nil {
 		return
 	}
-	return p.recvGetBorrowerInfo()
+	return p.recvGetBorrowUserDetails()
 }
 
-func (p *BorrowerThriftServiceClient) sendGetBorrowerInfo(requestObj *BorrowUserDetailsRequestStruct) (err error) {
+func (p *BorrowUserDetailsThriftServiceClient) sendGetBorrowUserDetails(requestObj *BorrowUserDetailsRequestStruct) (err error) {
 	oprot := p.OutputProtocol
 	if oprot == nil {
 		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
 		p.OutputProtocol = oprot
 	}
 	p.SeqId++
-	if err = oprot.WriteMessageBegin("getBorrowerInfo", thrift.CALL, p.SeqId); err != nil {
+	if err = oprot.WriteMessageBegin("getBorrowUserDetails", thrift.CALL, p.SeqId); err != nil {
 		return
 	}
-	args := BorrowerThriftServiceGetBorrowerInfoArgs{
+	args := BorrowUserDetailsThriftServiceGetBorrowUserDetailsArgs{
 		RequestObj: requestObj,
 	}
 	if err = args.Write(oprot); err != nil {
@@ -826,7 +826,7 @@ func (p *BorrowerThriftServiceClient) sendGetBorrowerInfo(requestObj *BorrowUser
 	return oprot.Flush()
 }
 
-func (p *BorrowerThriftServiceClient) recvGetBorrowerInfo() (value *BorrowUserDetailsResponseStruct, err error) {
+func (p *BorrowUserDetailsThriftServiceClient) recvGetBorrowUserDetails() (value *BorrowUserDetailsResponseStruct, err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -836,12 +836,12 @@ func (p *BorrowerThriftServiceClient) recvGetBorrowerInfo() (value *BorrowUserDe
 	if err != nil {
 		return
 	}
-	if method != "getBorrowerInfo" {
-		err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "getBorrowerInfo failed: wrong method name")
+	if method != "getBorrowUserDetails" {
+		err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "getBorrowUserDetails failed: wrong method name")
 		return
 	}
 	if p.SeqId != seqId {
-		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "getBorrowerInfo failed: out of sequence response")
+		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "getBorrowUserDetails failed: out of sequence response")
 		return
 	}
 	if mTypeId == thrift.EXCEPTION {
@@ -858,10 +858,10 @@ func (p *BorrowerThriftServiceClient) recvGetBorrowerInfo() (value *BorrowUserDe
 		return
 	}
 	if mTypeId != thrift.REPLY {
-		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "getBorrowerInfo failed: invalid message type")
+		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "getBorrowUserDetails failed: invalid message type")
 		return
 	}
-	result := BorrowerThriftServiceGetBorrowerInfoResult{}
+	result := BorrowUserDetailsThriftServiceGetBorrowUserDetailsResult{}
 	if err = result.Read(iprot); err != nil {
 		return
 	}
@@ -872,32 +872,32 @@ func (p *BorrowerThriftServiceClient) recvGetBorrowerInfo() (value *BorrowUserDe
 	return
 }
 
-type BorrowerThriftServiceProcessor struct {
+type BorrowUserDetailsThriftServiceProcessor struct {
 	processorMap map[string]thrift.TProcessorFunction
 	handler      BorrowUserDetailsThriftService
 }
 
-func (p *BorrowerThriftServiceProcessor) AddToProcessorMap(key string, processor thrift.TProcessorFunction) {
+func (p *BorrowUserDetailsThriftServiceProcessor) AddToProcessorMap(key string, processor thrift.TProcessorFunction) {
 	p.processorMap[key] = processor
 }
 
-func (p *BorrowerThriftServiceProcessor) GetProcessorFunction(key string) (processor thrift.TProcessorFunction, ok bool) {
+func (p *BorrowUserDetailsThriftServiceProcessor) GetProcessorFunction(key string) (processor thrift.TProcessorFunction, ok bool) {
 	processor, ok = p.processorMap[key]
 	return processor, ok
 }
 
-func (p *BorrowerThriftServiceProcessor) ProcessorMap() map[string]thrift.TProcessorFunction {
+func (p *BorrowUserDetailsThriftServiceProcessor) ProcessorMap() map[string]thrift.TProcessorFunction {
 	return p.processorMap
 }
 
-func NewBorrowerThriftServiceProcessor(handler BorrowUserDetailsThriftService) *BorrowerThriftServiceProcessor {
+func NewBorrowUserDetailsThriftServiceProcessor(handler BorrowUserDetailsThriftService) *BorrowUserDetailsThriftServiceProcessor {
 
-	self3 := &BorrowerThriftServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
-	self3.processorMap["getBorrowerInfo"] = &borrowerThriftServiceProcessorGetBorrowerInfo{handler: handler}
+	self3 := &BorrowUserDetailsThriftServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
+	self3.processorMap["getBorrowUserDetails"] = &borrowUserDetailsThriftServiceProcessorGetBorrowUserDetails{handler: handler}
 	return self3
 }
 
-func (p *BorrowerThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+func (p *BorrowUserDetailsThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
 	name, _, seqId, err := iprot.ReadMessageBegin()
 	if err != nil {
 		return false, err
@@ -916,16 +916,16 @@ func (p *BorrowerThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol) 
 
 }
 
-type borrowerThriftServiceProcessorGetBorrowerInfo struct {
+type borrowUserDetailsThriftServiceProcessorGetBorrowUserDetails struct {
 	handler BorrowUserDetailsThriftService
 }
 
-func (p *borrowerThriftServiceProcessorGetBorrowerInfo) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := BorrowerThriftServiceGetBorrowerInfoArgs{}
+func (p *borrowUserDetailsThriftServiceProcessorGetBorrowUserDetails) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := BorrowUserDetailsThriftServiceGetBorrowUserDetailsArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("getBorrowerInfo", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("getBorrowUserDetails", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush()
@@ -933,12 +933,12 @@ func (p *borrowerThriftServiceProcessorGetBorrowerInfo) Process(seqId int32, ipr
 	}
 
 	iprot.ReadMessageEnd()
-	result := BorrowerThriftServiceGetBorrowerInfoResult{}
+	result := BorrowUserDetailsThriftServiceGetBorrowUserDetailsResult{}
 	var retval *BorrowUserDetailsResponseStruct
 	var err2 error
 	if retval, err2 = p.handler.GetBorrowUserDetails(args.RequestObj); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing getBorrowerInfo: "+err2.Error())
-		oprot.WriteMessageBegin("getBorrowerInfo", thrift.EXCEPTION, seqId)
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing getBorrowUserDetails: "+err2.Error())
+		oprot.WriteMessageBegin("getBorrowUserDetails", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush()
@@ -946,7 +946,7 @@ func (p *borrowerThriftServiceProcessorGetBorrowerInfo) Process(seqId int32, ipr
 	} else {
 		result.Success = retval
 	}
-	if err2 = oprot.WriteMessageBegin("getBorrowerInfo", thrift.REPLY, seqId); err2 != nil {
+	if err2 = oprot.WriteMessageBegin("getBorrowUserDetails", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -968,27 +968,27 @@ func (p *borrowerThriftServiceProcessorGetBorrowerInfo) Process(seqId int32, ipr
 
 // Attributes:
 //  - RequestObj
-type BorrowerThriftServiceGetBorrowerInfoArgs struct {
+type BorrowUserDetailsThriftServiceGetBorrowUserDetailsArgs struct {
 	RequestObj *BorrowUserDetailsRequestStruct `thrift:"requestObj,1" db:"requestObj" json:"requestObj"`
 }
 
-func NewBorrowerThriftServiceGetBorrowerInfoArgs() *BorrowerThriftServiceGetBorrowerInfoArgs {
-	return &BorrowerThriftServiceGetBorrowerInfoArgs{}
+func NewBorrowUserDetailsThriftServiceGetBorrowUserDetailsArgs() *BorrowUserDetailsThriftServiceGetBorrowUserDetailsArgs {
+	return &BorrowUserDetailsThriftServiceGetBorrowUserDetailsArgs{}
 }
 
-var BorrowerThriftServiceGetBorrowerInfoArgs_RequestObj_DEFAULT *BorrowUserDetailsRequestStruct
+var BorrowUserDetailsThriftServiceGetBorrowUserDetailsArgs_RequestObj_DEFAULT *BorrowUserDetailsRequestStruct
 
-func (p *BorrowerThriftServiceGetBorrowerInfoArgs) GetRequestObj() *BorrowUserDetailsRequestStruct {
+func (p *BorrowUserDetailsThriftServiceGetBorrowUserDetailsArgs) GetRequestObj() *BorrowUserDetailsRequestStruct {
 	if !p.IsSetRequestObj() {
-		return BorrowerThriftServiceGetBorrowerInfoArgs_RequestObj_DEFAULT
+		return BorrowUserDetailsThriftServiceGetBorrowUserDetailsArgs_RequestObj_DEFAULT
 	}
 	return p.RequestObj
 }
-func (p *BorrowerThriftServiceGetBorrowerInfoArgs) IsSetRequestObj() bool {
+func (p *BorrowUserDetailsThriftServiceGetBorrowUserDetailsArgs) IsSetRequestObj() bool {
 	return p.RequestObj != nil
 }
 
-func (p *BorrowerThriftServiceGetBorrowerInfoArgs) Read(iprot thrift.TProtocol) error {
+func (p *BorrowUserDetailsThriftServiceGetBorrowUserDetailsArgs) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -1021,7 +1021,7 @@ func (p *BorrowerThriftServiceGetBorrowerInfoArgs) Read(iprot thrift.TProtocol) 
 	return nil
 }
 
-func (p *BorrowerThriftServiceGetBorrowerInfoArgs) ReadField1(iprot thrift.TProtocol) error {
+func (p *BorrowUserDetailsThriftServiceGetBorrowUserDetailsArgs) ReadField1(iprot thrift.TProtocol) error {
 	p.RequestObj = &BorrowUserDetailsRequestStruct{}
 	if err := p.RequestObj.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.RequestObj), err)
@@ -1029,8 +1029,8 @@ func (p *BorrowerThriftServiceGetBorrowerInfoArgs) ReadField1(iprot thrift.TProt
 	return nil
 }
 
-func (p *BorrowerThriftServiceGetBorrowerInfoArgs) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("getBorrowerInfo_args"); err != nil {
+func (p *BorrowUserDetailsThriftServiceGetBorrowUserDetailsArgs) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("getBorrowUserDetails_args"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
 	if p != nil {
@@ -1047,7 +1047,7 @@ func (p *BorrowerThriftServiceGetBorrowerInfoArgs) Write(oprot thrift.TProtocol)
 	return nil
 }
 
-func (p *BorrowerThriftServiceGetBorrowerInfoArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *BorrowUserDetailsThriftServiceGetBorrowUserDetailsArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("requestObj", thrift.STRUCT, 1); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:requestObj: ", p), err)
 	}
@@ -1060,36 +1060,36 @@ func (p *BorrowerThriftServiceGetBorrowerInfoArgs) writeField1(oprot thrift.TPro
 	return err
 }
 
-func (p *BorrowerThriftServiceGetBorrowerInfoArgs) String() string {
+func (p *BorrowUserDetailsThriftServiceGetBorrowUserDetailsArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("BorrowerThriftServiceGetBorrowerInfoArgs(%+v)", *p)
+	return fmt.Sprintf("BorrowUserDetailsThriftServiceGetBorrowUserDetailsArgs(%+v)", *p)
 }
 
 // Attributes:
 //  - Success
-type BorrowerThriftServiceGetBorrowerInfoResult struct {
+type BorrowUserDetailsThriftServiceGetBorrowUserDetailsResult struct {
 	Success *BorrowUserDetailsResponseStruct `thrift:"success,0" db:"success" json:"success,omitempty"`
 }
 
-func NewBorrowerThriftServiceGetBorrowerInfoResult() *BorrowerThriftServiceGetBorrowerInfoResult {
-	return &BorrowerThriftServiceGetBorrowerInfoResult{}
+func NewBorrowUserDetailsThriftServiceGetBorrowUserDetailsResult() *BorrowUserDetailsThriftServiceGetBorrowUserDetailsResult {
+	return &BorrowUserDetailsThriftServiceGetBorrowUserDetailsResult{}
 }
 
-var BorrowerThriftServiceGetBorrowerInfoResult_Success_DEFAULT *BorrowUserDetailsResponseStruct
+var BorrowUserDetailsThriftServiceGetBorrowUserDetailsResult_Success_DEFAULT *BorrowUserDetailsResponseStruct
 
-func (p *BorrowerThriftServiceGetBorrowerInfoResult) GetSuccess() *BorrowUserDetailsResponseStruct {
+func (p *BorrowUserDetailsThriftServiceGetBorrowUserDetailsResult) GetSuccess() *BorrowUserDetailsResponseStruct {
 	if !p.IsSetSuccess() {
-		return BorrowerThriftServiceGetBorrowerInfoResult_Success_DEFAULT
+		return BorrowUserDetailsThriftServiceGetBorrowUserDetailsResult_Success_DEFAULT
 	}
 	return p.Success
 }
-func (p *BorrowerThriftServiceGetBorrowerInfoResult) IsSetSuccess() bool {
+func (p *BorrowUserDetailsThriftServiceGetBorrowUserDetailsResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *BorrowerThriftServiceGetBorrowerInfoResult) Read(iprot thrift.TProtocol) error {
+func (p *BorrowUserDetailsThriftServiceGetBorrowUserDetailsResult) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -1122,7 +1122,7 @@ func (p *BorrowerThriftServiceGetBorrowerInfoResult) Read(iprot thrift.TProtocol
 	return nil
 }
 
-func (p *BorrowerThriftServiceGetBorrowerInfoResult) ReadField0(iprot thrift.TProtocol) error {
+func (p *BorrowUserDetailsThriftServiceGetBorrowUserDetailsResult) ReadField0(iprot thrift.TProtocol) error {
 	p.Success = &BorrowUserDetailsResponseStruct{}
 	if err := p.Success.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Success), err)
@@ -1130,8 +1130,8 @@ func (p *BorrowerThriftServiceGetBorrowerInfoResult) ReadField0(iprot thrift.TPr
 	return nil
 }
 
-func (p *BorrowerThriftServiceGetBorrowerInfoResult) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("getBorrowerInfo_result"); err != nil {
+func (p *BorrowUserDetailsThriftServiceGetBorrowUserDetailsResult) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("getBorrowUserDetails_result"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
 	if p != nil {
@@ -1148,7 +1148,7 @@ func (p *BorrowerThriftServiceGetBorrowerInfoResult) Write(oprot thrift.TProtoco
 	return nil
 }
 
-func (p *BorrowerThriftServiceGetBorrowerInfoResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *BorrowUserDetailsThriftServiceGetBorrowUserDetailsResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err := oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T write field begin error 0:success: ", p), err)
@@ -1163,9 +1163,9 @@ func (p *BorrowerThriftServiceGetBorrowerInfoResult) writeField0(oprot thrift.TP
 	return err
 }
 
-func (p *BorrowerThriftServiceGetBorrowerInfoResult) String() string {
+func (p *BorrowUserDetailsThriftServiceGetBorrowUserDetailsResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("BorrowerThriftServiceGetBorrowerInfoResult(%+v)", *p)
+	return fmt.Sprintf("BorrowUserDetailsThriftServiceGetBorrowUserDetailsResult(%+v)", *p)
 }

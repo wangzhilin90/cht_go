@@ -44,7 +44,7 @@ func (bs *borrowerservice) GetBorrowUserDetails(requestObj *BorrowUserDetailsReq
 	guarantor, _ := borrower.GetGuarantor(borrowInfo.ID)
 	material, _ := borrower.GetMaterialInfo(borrowInfo.ID)
 
-	bis := new(BorrowerInfoStruct)
+	bis := new(BorrowUserDetailsStruct)
 	bis.ID = borrowInfo.ID
 	bis.Realname = borrowInfo.Realname
 	bis.IsBorrower = borrowInfo.IsBorrower
@@ -64,7 +64,7 @@ func (bs *borrowerservice) GetBorrowUserDetails(requestObj *BorrowUserDetailsReq
 	Logger.Debugf("GetBorrowUserDetails res:%v", bis.MaterialList)
 
 	response := new(BorrowUserDetailsResponseStruct)
-	response.BorrowerInfo = bis
+	response.BorrowUserDetails = bis
 	response.Status = QUERY_BORROW_INFO_SUCCESS
 	response.Msg = Status[QUERY_BORROW_INFO_SUCCESS]
 	Logger.Debugf("GetBorrowUserDetails res:%v", response)
@@ -99,7 +99,7 @@ func StartBorrowerServer() {
 	}
 
 	handler := &borrowerservice{}
-	processor := NewBorrowerThriftServiceProcessor(handler)
+	processor := NewBorrowUserDetailsThriftServiceProcessor(handler)
 	server := thrift.NewTSimpleServer2(processor, serverTransport)
 	server.Serve()
 }

@@ -48,9 +48,9 @@ func (cps *CouponService) GetUserCouponList(requestObj *UserCouponListRequestStr
 		cs.Name = v.Name
 		cs.Remark = v.Remark
 		cs.ActivityName = v.ActivityName
-		crs.userUouponList = append(crs.userUouponList, cs)
+		crs.UserCouponList = append(crs.UserCouponList, cs)
 	}
-	Logger.Debug(crs.userUouponList)
+	Logger.Debug(crs.UserCouponList)
 	return &crs, nil
 }
 

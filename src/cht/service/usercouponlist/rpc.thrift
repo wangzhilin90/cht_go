@@ -4,8 +4,8 @@ namespace java net.cht.um.app.thrift.model.regist
 
 struct UserCouponListRequestStruct {
     1: i32 user_id, 
-	2: i16 status,
-	3: i16 limit,
+	2: i32 status,
+	3: i32 limit,
     4: string chengHuiTongTraceLog，
 	5: string order_by  
 }
@@ -17,7 +17,7 @@ struct UserCouponDetailsStruct {
     4: i32 start_time,
     5: i32 end_time,
     6: i32 use_time,
-    7: i16 status,
+    7: i32 status,
     8: i32 tender_id,
     9: string apr,
     10: string app_add,
@@ -31,9 +31,9 @@ struct UserCouponDetailsStruct {
 }
 
 struct UserCouponListResponseStruct {
-     1: list<UserCouponDetailsStruct> couponList
+     1: list<UserCouponDetailsStruct> UserCouponList
 }
 
 service UserCouponListThriftService{
-    UserCouponListResponseStructGetUserCouponList(1:UserCouponListRequestStruct requestObj)
+    UserCouponListResponseStruct getUserCouponList(1:UserCouponListRequestStruct requestObj)
 }

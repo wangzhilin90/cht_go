@@ -8,7 +8,7 @@ struct UpdateUserLoginLogDetailsRequestStruct {
 }
 
 struct UpdateUserLoginLogDetailsResponseStruct  {
-     1:i32 status  //返回状态 1001 "更新登录日志失败"  1002 "更新登录日志成功" 
+     1:i32 status  //返回状态 1001 "更新登录日志失败"  1000 "更新登录日志成功" 
      2:string msg
 }
 

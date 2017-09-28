@@ -36,9 +36,9 @@ type UserCollectionListRequestStruct struct {
 	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,9" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
 }
 
-// func NewCollectionRequestStruct() *UserCollectionListRequestStruct {
-// 	return &UserCollectionListRequestStruct{}
-// }
+func NewUserCollectionListRequestStruct() *UserCollectionListRequestStruct {
+	return &UserCollectionListRequestStruct{}
+}
 
 func (p *UserCollectionListRequestStruct) GetUserID() int32 {
 	return p.UserID
@@ -429,7 +429,7 @@ type UserCollectionDetailsStruct struct {
 	Style           int32  `thrift:"style,19" db:"style" json:"style"`
 }
 
-func NewCollectionInfoStruct() *UserCollectionDetailsStruct {
+func NewUserCollectionDetailsStruct() *UserCollectionDetailsStruct {
 	return &UserCollectionDetailsStruct{}
 }
 
@@ -1119,10 +1119,10 @@ type UserCollectionListResponseStruct struct {
 	Status             int32                          `thrift:"status,1" db:"status" json:"status"`
 	Msg                string                         `thrift:"msg,2" db:"msg" json:"msg"`
 	TotalNum           int32                          `thrift:"totalNum,3" db:"totalNum" json:"totalNum"`
-	UserCollectionList []*UserCollectionDetailsStruct `thrift:"collectionInfo,4" db:"collectionInfo" json:"collectionInfo"`
+	UserCollectionList []*UserCollectionDetailsStruct `thrift:"UserCollectionList,4" db:"UserCollectionList" json:"UserCollectionList"`
 }
 
-func NewCollectionListResponseStruct() *UserCollectionListResponseStruct {
+func NewUserCollectionListResponseStruct() *UserCollectionListResponseStruct {
 	return &UserCollectionListResponseStruct{}
 }
 
@@ -1138,7 +1138,7 @@ func (p *UserCollectionListResponseStruct) GetTotalNum() int32 {
 	return p.TotalNum
 }
 
-func (p *UserCollectionListResponseStruct) GetCollectionInfo() []*UserCollectionDetailsStruct {
+func (p *UserCollectionListResponseStruct) GetUserCollectionList() []*UserCollectionDetailsStruct {
 	return p.UserCollectionList
 }
 func (p *UserCollectionListResponseStruct) Read(iprot thrift.TProtocol) error {
@@ -1300,8 +1300,8 @@ func (p *UserCollectionListResponseStruct) writeField3(oprot thrift.TProtocol) (
 }
 
 func (p *UserCollectionListResponseStruct) writeField4(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("collectionInfo", thrift.LIST, 4); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 4:collectionInfo: ", p), err)
+	if err := oprot.WriteFieldBegin("UserCollectionList", thrift.LIST, 4); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 4:UserCollectionList: ", p), err)
 	}
 	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.UserCollectionList)); err != nil {
 		return thrift.PrependError("error writing list begin: ", err)
@@ -1315,7 +1315,7 @@ func (p *UserCollectionListResponseStruct) writeField4(oprot thrift.TProtocol) (
 		return thrift.PrependError("error writing list end: ", err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 4:collectionInfo: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 4:UserCollectionList: ", p), err)
 	}
 	return err
 }
@@ -1333,7 +1333,7 @@ type UserCollectionListThriftService interface {
 	GetUserCollectionList(requestObj *UserCollectionListRequestStruct) (r *UserCollectionListResponseStruct, err error)
 }
 
-type CollectionThriftServiceClient struct {
+type UserCollectionListThriftServiceClient struct {
 	Transport       thrift.TTransport
 	ProtocolFactory thrift.TProtocolFactory
 	InputProtocol   thrift.TProtocol
@@ -1341,8 +1341,8 @@ type CollectionThriftServiceClient struct {
 	SeqId           int32
 }
 
-func NewCollectionThriftServiceClientFactory(t thrift.TTransport, f thrift.TProtocolFactory) *CollectionThriftServiceClient {
-	return &CollectionThriftServiceClient{Transport: t,
+func NewUserCollectionListThriftServiceClientFactory(t thrift.TTransport, f thrift.TProtocolFactory) *UserCollectionListThriftServiceClient {
+	return &UserCollectionListThriftServiceClient{Transport: t,
 		ProtocolFactory: f,
 		InputProtocol:   f.GetProtocol(t),
 		OutputProtocol:  f.GetProtocol(t),
@@ -1350,8 +1350,8 @@ func NewCollectionThriftServiceClientFactory(t thrift.TTransport, f thrift.TProt
 	}
 }
 
-func NewCollectionThriftServiceClientProtocol(t thrift.TTransport, iprot thrift.TProtocol, oprot thrift.TProtocol) *CollectionThriftServiceClient {
-	return &CollectionThriftServiceClient{Transport: t,
+func NewUserCollectionListThriftServiceClientProtocol(t thrift.TTransport, iprot thrift.TProtocol, oprot thrift.TProtocol) *UserCollectionListThriftServiceClient {
+	return &UserCollectionListThriftServiceClient{Transport: t,
 		ProtocolFactory: nil,
 		InputProtocol:   iprot,
 		OutputProtocol:  oprot,
@@ -1361,24 +1361,24 @@ func NewCollectionThriftServiceClientProtocol(t thrift.TTransport, iprot thrift.
 
 // Parameters:
 //  - RequestObj
-func (p *CollectionThriftServiceClient) GetUserCollectionList(requestObj *UserCollectionListRequestStruct) (r *UserCollectionListResponseStruct, err error) {
-	if err = p.sendGetCollectionList(requestObj); err != nil {
+func (p *UserCollectionListThriftServiceClient) GetUserCollectionList(requestObj *UserCollectionListRequestStruct) (r *UserCollectionListResponseStruct, err error) {
+	if err = p.sendGetUserCollectionList(requestObj); err != nil {
 		return
 	}
-	return p.recvGetCollectionList()
+	return p.recvGetUserCollectionList()
 }
 
-func (p *CollectionThriftServiceClient) sendGetCollectionList(requestObj *UserCollectionListRequestStruct) (err error) {
+func (p *UserCollectionListThriftServiceClient) sendGetUserCollectionList(requestObj *UserCollectionListRequestStruct) (err error) {
 	oprot := p.OutputProtocol
 	if oprot == nil {
 		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
 		p.OutputProtocol = oprot
 	}
 	p.SeqId++
-	if err = oprot.WriteMessageBegin("getCollectionList", thrift.CALL, p.SeqId); err != nil {
+	if err = oprot.WriteMessageBegin("getUserCollectionList", thrift.CALL, p.SeqId); err != nil {
 		return
 	}
-	args := CollectionThriftServiceGetCollectionListArgs{
+	args := UserCollectionListThriftServiceGetUserCollectionListArgs{
 		RequestObj: requestObj,
 	}
 	if err = args.Write(oprot); err != nil {
@@ -1390,7 +1390,7 @@ func (p *CollectionThriftServiceClient) sendGetCollectionList(requestObj *UserCo
 	return oprot.Flush()
 }
 
-func (p *CollectionThriftServiceClient) recvGetCollectionList() (value *UserCollectionListResponseStruct, err error) {
+func (p *UserCollectionListThriftServiceClient) recvGetUserCollectionList() (value *UserCollectionListResponseStruct, err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -1400,12 +1400,12 @@ func (p *CollectionThriftServiceClient) recvGetCollectionList() (value *UserColl
 	if err != nil {
 		return
 	}
-	if method != "getCollectionList" {
-		err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "getCollectionList failed: wrong method name")
+	if method != "getUserCollectionList" {
+		err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "getUserCollectionList failed: wrong method name")
 		return
 	}
 	if p.SeqId != seqId {
-		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "getCollectionList failed: out of sequence response")
+		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "getUserCollectionList failed: out of sequence response")
 		return
 	}
 	if mTypeId == thrift.EXCEPTION {
@@ -1422,10 +1422,10 @@ func (p *CollectionThriftServiceClient) recvGetCollectionList() (value *UserColl
 		return
 	}
 	if mTypeId != thrift.REPLY {
-		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "getCollectionList failed: invalid message type")
+		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "getUserCollectionList failed: invalid message type")
 		return
 	}
-	result := CollectionThriftServiceGetCollectionListResult{}
+	result := UserCollectionListThriftServiceGetUserCollectionListResult{}
 	if err = result.Read(iprot); err != nil {
 		return
 	}
@@ -1436,32 +1436,32 @@ func (p *CollectionThriftServiceClient) recvGetCollectionList() (value *UserColl
 	return
 }
 
-type CollectionThriftServiceProcessor struct {
+type UserCollectionListThriftServiceProcessor struct {
 	processorMap map[string]thrift.TProcessorFunction
 	handler      UserCollectionListThriftService
 }
 
-func (p *CollectionThriftServiceProcessor) AddToProcessorMap(key string, processor thrift.TProcessorFunction) {
+func (p *UserCollectionListThriftServiceProcessor) AddToProcessorMap(key string, processor thrift.TProcessorFunction) {
 	p.processorMap[key] = processor
 }
 
-func (p *CollectionThriftServiceProcessor) GetProcessorFunction(key string) (processor thrift.TProcessorFunction, ok bool) {
+func (p *UserCollectionListThriftServiceProcessor) GetProcessorFunction(key string) (processor thrift.TProcessorFunction, ok bool) {
 	processor, ok = p.processorMap[key]
 	return processor, ok
 }
 
-func (p *CollectionThriftServiceProcessor) ProcessorMap() map[string]thrift.TProcessorFunction {
+func (p *UserCollectionListThriftServiceProcessor) ProcessorMap() map[string]thrift.TProcessorFunction {
 	return p.processorMap
 }
 
-func NewCollectionThriftServiceProcessor(handler UserCollectionListThriftService) *CollectionThriftServiceProcessor {
+func NewUserCollectionListThriftServiceProcessor(handler UserCollectionListThriftService) *UserCollectionListThriftServiceProcessor {
 
-	self3 := &CollectionThriftServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
-	self3.processorMap["getCollectionList"] = &collectionThriftServiceProcessorGetCollectionList{handler: handler}
+	self3 := &UserCollectionListThriftServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
+	self3.processorMap["getUserCollectionList"] = &userCollectionListThriftServiceProcessorGetUserCollectionList{handler: handler}
 	return self3
 }
 
-func (p *CollectionThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+func (p *UserCollectionListThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
 	name, _, seqId, err := iprot.ReadMessageBegin()
 	if err != nil {
 		return false, err
@@ -1480,16 +1480,16 @@ func (p *CollectionThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol
 
 }
 
-type collectionThriftServiceProcessorGetCollectionList struct {
+type userCollectionListThriftServiceProcessorGetUserCollectionList struct {
 	handler UserCollectionListThriftService
 }
 
-func (p *collectionThriftServiceProcessorGetCollectionList) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := CollectionThriftServiceGetCollectionListArgs{}
+func (p *userCollectionListThriftServiceProcessorGetUserCollectionList) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := UserCollectionListThriftServiceGetUserCollectionListArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("getCollectionList", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("getUserCollectionList", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush()
@@ -1497,12 +1497,12 @@ func (p *collectionThriftServiceProcessorGetCollectionList) Process(seqId int32,
 	}
 
 	iprot.ReadMessageEnd()
-	result := CollectionThriftServiceGetCollectionListResult{}
+	result := UserCollectionListThriftServiceGetUserCollectionListResult{}
 	var retval *UserCollectionListResponseStruct
 	var err2 error
 	if retval, err2 = p.handler.GetUserCollectionList(args.RequestObj); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing getCollectionList: "+err2.Error())
-		oprot.WriteMessageBegin("getCollectionList", thrift.EXCEPTION, seqId)
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing getUserCollectionList: "+err2.Error())
+		oprot.WriteMessageBegin("getUserCollectionList", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush()
@@ -1510,7 +1510,7 @@ func (p *collectionThriftServiceProcessorGetCollectionList) Process(seqId int32,
 	} else {
 		result.Success = retval
 	}
-	if err2 = oprot.WriteMessageBegin("getCollectionList", thrift.REPLY, seqId); err2 != nil {
+	if err2 = oprot.WriteMessageBegin("getUserCollectionList", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -1532,27 +1532,27 @@ func (p *collectionThriftServiceProcessorGetCollectionList) Process(seqId int32,
 
 // Attributes:
 //  - RequestObj
-type CollectionThriftServiceGetCollectionListArgs struct {
+type UserCollectionListThriftServiceGetUserCollectionListArgs struct {
 	RequestObj *UserCollectionListRequestStruct `thrift:"requestObj,1" db:"requestObj" json:"requestObj"`
 }
 
-func NewCollectionThriftServiceGetCollectionListArgs() *CollectionThriftServiceGetCollectionListArgs {
-	return &CollectionThriftServiceGetCollectionListArgs{}
+func NewUserCollectionListThriftServiceGetUserCollectionListArgs() *UserCollectionListThriftServiceGetUserCollectionListArgs {
+	return &UserCollectionListThriftServiceGetUserCollectionListArgs{}
 }
 
-var CollectionThriftServiceGetCollectionListArgs_RequestObj_DEFAULT *UserCollectionListRequestStruct
+var UserCollectionListThriftServiceGetUserCollectionListArgs_RequestObj_DEFAULT *UserCollectionListRequestStruct
 
-func (p *CollectionThriftServiceGetCollectionListArgs) GetRequestObj() *UserCollectionListRequestStruct {
+func (p *UserCollectionListThriftServiceGetUserCollectionListArgs) GetRequestObj() *UserCollectionListRequestStruct {
 	if !p.IsSetRequestObj() {
-		return CollectionThriftServiceGetCollectionListArgs_RequestObj_DEFAULT
+		return UserCollectionListThriftServiceGetUserCollectionListArgs_RequestObj_DEFAULT
 	}
 	return p.RequestObj
 }
-func (p *CollectionThriftServiceGetCollectionListArgs) IsSetRequestObj() bool {
+func (p *UserCollectionListThriftServiceGetUserCollectionListArgs) IsSetRequestObj() bool {
 	return p.RequestObj != nil
 }
 
-func (p *CollectionThriftServiceGetCollectionListArgs) Read(iprot thrift.TProtocol) error {
+func (p *UserCollectionListThriftServiceGetUserCollectionListArgs) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -1585,7 +1585,7 @@ func (p *CollectionThriftServiceGetCollectionListArgs) Read(iprot thrift.TProtoc
 	return nil
 }
 
-func (p *CollectionThriftServiceGetCollectionListArgs) ReadField1(iprot thrift.TProtocol) error {
+func (p *UserCollectionListThriftServiceGetUserCollectionListArgs) ReadField1(iprot thrift.TProtocol) error {
 	p.RequestObj = &UserCollectionListRequestStruct{}
 	if err := p.RequestObj.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.RequestObj), err)
@@ -1593,8 +1593,8 @@ func (p *CollectionThriftServiceGetCollectionListArgs) ReadField1(iprot thrift.T
 	return nil
 }
 
-func (p *CollectionThriftServiceGetCollectionListArgs) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("getCollectionList_args"); err != nil {
+func (p *UserCollectionListThriftServiceGetUserCollectionListArgs) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("getUserCollectionList_args"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
 	if p != nil {
@@ -1611,7 +1611,7 @@ func (p *CollectionThriftServiceGetCollectionListArgs) Write(oprot thrift.TProto
 	return nil
 }
 
-func (p *CollectionThriftServiceGetCollectionListArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *UserCollectionListThriftServiceGetUserCollectionListArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("requestObj", thrift.STRUCT, 1); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:requestObj: ", p), err)
 	}
@@ -1624,36 +1624,36 @@ func (p *CollectionThriftServiceGetCollectionListArgs) writeField1(oprot thrift.
 	return err
 }
 
-func (p *CollectionThriftServiceGetCollectionListArgs) String() string {
+func (p *UserCollectionListThriftServiceGetUserCollectionListArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("CollectionThriftServiceGetCollectionListArgs(%+v)", *p)
+	return fmt.Sprintf("UserCollectionListThriftServiceGetUserCollectionListArgs(%+v)", *p)
 }
 
 // Attributes:
 //  - Success
-type CollectionThriftServiceGetCollectionListResult struct {
+type UserCollectionListThriftServiceGetUserCollectionListResult struct {
 	Success *UserCollectionListResponseStruct `thrift:"success,0" db:"success" json:"success,omitempty"`
 }
 
-func NewCollectionThriftServiceGetCollectionListResult() *CollectionThriftServiceGetCollectionListResult {
-	return &CollectionThriftServiceGetCollectionListResult{}
+func NewUserCollectionListThriftServiceGetUserCollectionListResult() *UserCollectionListThriftServiceGetUserCollectionListResult {
+	return &UserCollectionListThriftServiceGetUserCollectionListResult{}
 }
 
-var CollectionThriftServiceGetCollectionListResult_Success_DEFAULT *UserCollectionListResponseStruct
+var UserCollectionListThriftServiceGetUserCollectionListResult_Success_DEFAULT *UserCollectionListResponseStruct
 
-func (p *CollectionThriftServiceGetCollectionListResult) GetSuccess() *UserCollectionListResponseStruct {
+func (p *UserCollectionListThriftServiceGetUserCollectionListResult) GetSuccess() *UserCollectionListResponseStruct {
 	if !p.IsSetSuccess() {
-		return CollectionThriftServiceGetCollectionListResult_Success_DEFAULT
+		return UserCollectionListThriftServiceGetUserCollectionListResult_Success_DEFAULT
 	}
 	return p.Success
 }
-func (p *CollectionThriftServiceGetCollectionListResult) IsSetSuccess() bool {
+func (p *UserCollectionListThriftServiceGetUserCollectionListResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *CollectionThriftServiceGetCollectionListResult) Read(iprot thrift.TProtocol) error {
+func (p *UserCollectionListThriftServiceGetUserCollectionListResult) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -1686,7 +1686,7 @@ func (p *CollectionThriftServiceGetCollectionListResult) Read(iprot thrift.TProt
 	return nil
 }
 
-func (p *CollectionThriftServiceGetCollectionListResult) ReadField0(iprot thrift.TProtocol) error {
+func (p *UserCollectionListThriftServiceGetUserCollectionListResult) ReadField0(iprot thrift.TProtocol) error {
 	p.Success = &UserCollectionListResponseStruct{}
 	if err := p.Success.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Success), err)
@@ -1694,8 +1694,8 @@ func (p *CollectionThriftServiceGetCollectionListResult) ReadField0(iprot thrift
 	return nil
 }
 
-func (p *CollectionThriftServiceGetCollectionListResult) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("getCollectionList_result"); err != nil {
+func (p *UserCollectionListThriftServiceGetUserCollectionListResult) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("getUserCollectionList_result"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
 	if p != nil {
@@ -1712,7 +1712,7 @@ func (p *CollectionThriftServiceGetCollectionListResult) Write(oprot thrift.TPro
 	return nil
 }
 
-func (p *CollectionThriftServiceGetCollectionListResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *UserCollectionListThriftServiceGetUserCollectionListResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err := oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T write field begin error 0:success: ", p), err)
@@ -1727,9 +1727,9 @@ func (p *CollectionThriftServiceGetCollectionListResult) writeField0(oprot thrif
 	return err
 }
 
-func (p *CollectionThriftServiceGetCollectionListResult) String() string {
+func (p *UserCollectionListThriftServiceGetUserCollectionListResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("CollectionThriftServiceGetCollectionListResult(%+v)", *p)
+	return fmt.Sprintf("UserCollectionListThriftServiceGetUserCollectionListResult(%+v)", *p)
 }

@@ -98,7 +98,7 @@ func StartGetCollectionListServer() {
 	}
 
 	handler := &collectionservice{}
-	processor := NewCollectionThriftServiceProcessor(handler)
+	processor := NewUserCollectionListThriftServiceProcessor(handler)
 	server := thrift.NewTSimpleServer2(processor, serverTransport)
 	server.Serve()
 }

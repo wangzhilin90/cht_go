@@ -57,6 +57,7 @@ type CollectionInfoStruct struct {
  * @DateTime 2017-09-08T11:37:23+0800
  */
 func GetCollectionInfo(trr *CollectionRequest) ([]CollectionInfoStruct, int32, error) {
+	Logger.Debugf("GetCollectionInfo input param: %v", trr)
 	o := orm.NewOrm()
 	o.Using("default")
 	qb, _ := orm.NewQueryBuilder("mysql")

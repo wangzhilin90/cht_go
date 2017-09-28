@@ -388,7 +388,7 @@ func (p *UpdateUserLoginLogDetailsThriftServiceClient) sendupdateUserLoginLogDet
 		p.OutputProtocol = oprot
 	}
 	p.SeqId++
-	if err = oprot.WriteMessageBegin("UpdateUserLoginLogDetails", thrift.CALL, p.SeqId); err != nil {
+	if err = oprot.WriteMessageBegin("updateUserLoginLogDetails", thrift.CALL, p.SeqId); err != nil {
 		return
 	}
 	args := UpdateUserLoginLogDetailsThriftServiceupdateUserLoginLogDetailsArgs{
@@ -413,12 +413,12 @@ func (p *UpdateUserLoginLogDetailsThriftServiceClient) recvupdateUserLoginLogDet
 	if err != nil {
 		return
 	}
-	if method != "UpdateUserLoginLogDetails" {
-		err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "UpdateUserLoginLogDetails failed: wrong method name")
+	if method != "updateUserLoginLogDetails" {
+		err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "updateUserLoginLogDetails failed: wrong method name")
 		return
 	}
 	if p.SeqId != seqId {
-		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "UpdateUserLoginLogDetails failed: out of sequence response")
+		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "updateUserLoginLogDetails failed: out of sequence response")
 		return
 	}
 	if mTypeId == thrift.EXCEPTION {
@@ -435,7 +435,7 @@ func (p *UpdateUserLoginLogDetailsThriftServiceClient) recvupdateUserLoginLogDet
 		return
 	}
 	if mTypeId != thrift.REPLY {
-		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "UpdateUserLoginLogDetails failed: invalid message type")
+		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "updateUserLoginLogDetails failed: invalid message type")
 		return
 	}
 	result := UpdateUserLoginLogDetailsThriftServiceupdateUserLoginLogDetailsResult{}
@@ -470,7 +470,7 @@ func (p *UpdateUserLoginLogDetailsThriftServiceProcessor) ProcessorMap() map[str
 func NewUpdateUserLoginLogDetailsThriftServiceProcessor(handler UpdateUserLoginLogDetailsThriftService) *UpdateUserLoginLogDetailsThriftServiceProcessor {
 
 	self2 := &UpdateUserLoginLogDetailsThriftServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
-	self2.processorMap["UpdateUserLoginLogDetails"] = &UpdateUserLoginLogDetailsThriftServiceProcessorupdateUserLoginLogDetails{handler: handler}
+	self2.processorMap["updateUserLoginLogDetails"] = &UpdateUserLoginLogDetailsThriftServiceProcessorupdateUserLoginLogDetails{handler: handler}
 	return self2
 }
 
@@ -502,7 +502,7 @@ func (p *UpdateUserLoginLogDetailsThriftServiceProcessorupdateUserLoginLogDetail
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("UpdateUserLoginLogDetails", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("updateUserLoginLogDetails", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush()
@@ -514,8 +514,8 @@ func (p *UpdateUserLoginLogDetailsThriftServiceProcessorupdateUserLoginLogDetail
 	var retval *UpdateUserLoginLogDetailsResponseStruct
 	var err2 error
 	if retval, err2 = p.handler.UpdateUserLoginLogDetails(args.RequestObj); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing UpdateUserLoginLogDetails: "+err2.Error())
-		oprot.WriteMessageBegin("UpdateUserLoginLogDetails", thrift.EXCEPTION, seqId)
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing updateUserLoginLogDetails: "+err2.Error())
+		oprot.WriteMessageBegin("updateUserLoginLogDetails", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush()
@@ -523,7 +523,7 @@ func (p *UpdateUserLoginLogDetailsThriftServiceProcessorupdateUserLoginLogDetail
 	} else {
 		result.Success = retval
 	}
-	if err2 = oprot.WriteMessageBegin("UpdateUserLoginLogDetails", thrift.REPLY, seqId); err2 != nil {
+	if err2 = oprot.WriteMessageBegin("updateUserLoginLogDetails", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {

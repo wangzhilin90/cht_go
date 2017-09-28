@@ -17,11 +17,11 @@ const (
 )
 
 var Status = map[int]string{
-	1001: "密码重试次数太多",
-	1002: "帐号不存在，请重新输入",
-	1003: "您的帐号被锁定了，请联系我们",
-	1004: "密码错误",
-	1005: "密码验证通过",
+	RETRY_TOO_MUCH:    "密码重试次数太多",
+	ACCOUNT_NOT_EXIST: "帐号不存在，请重新输入",
+	ACCOUNT_LOCKED:    "您的帐号被锁定了，请联系我们",
+	VERIFY_FAILED:     "密码错误",
+	VERIFY_PASS:       "密码验证通过",
 }
 
 type UserLoginService struct{}

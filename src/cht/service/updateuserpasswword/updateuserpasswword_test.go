@@ -15,7 +15,7 @@ func NewUpdatePasswdRequestStruct(id int32, passwd string) *UpdateUserPasswWordR
 func TestUpdatePasswd(t *testing.T) {
 	uprs := NewUpdatePasswdRequestStruct(134234, "mimamamaipi")
 	ups := updatepasswdservice{}
-	res, err := ups.UpdateUserPassword(uprs)
+	res, err := ups.UpdateUserPasswWord(uprs)
 	if err != nil {
 		t.Fatal("TestUpdatePasswd failed")
 	}

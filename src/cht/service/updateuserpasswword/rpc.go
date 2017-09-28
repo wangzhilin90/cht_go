@@ -22,9 +22,9 @@ type UpdateUserPasswWordRequestStruct struct {
 	Password string `thrift:"password,2" db:"password" json:"password"`
 }
 
-// func NewUpdatePasswdRequestStruct() *UpdateUserPasswWordRequestStruct {
-//   return &UpdateUserPasswWordRequestStruct{}
-// }
+func NewUpdateUserPasswWordRequestStruct() *UpdateUserPasswWordRequestStruct {
+	return &UpdateUserPasswWordRequestStruct{}
+}
 
 func (p *UpdateUserPasswWordRequestStruct) GetID() int32 {
 	return p.ID
@@ -150,7 +150,7 @@ type UpdateUserPasswWordResponseStruct struct {
 	Msg    string `thrift:"msg,2" db:"msg" json:"msg"`
 }
 
-func NewUpdatePasswdResponseStruct() *UpdateUserPasswWordResponseStruct {
+func NewUpdateUserPasswWordResponseStruct() *UpdateUserPasswWordResponseStruct {
 	return &UpdateUserPasswWordResponseStruct{}
 }
 
@@ -273,7 +273,7 @@ func (p *UpdateUserPasswWordResponseStruct) String() string {
 type UpdateUserPasswWordThriftService interface {
 	// Parameters:
 	//  - RequestObj
-	UpdateUserPassword(requestObj *UpdateUserPasswWordRequestStruct) (r *UpdateUserPasswWordResponseStruct, err error)
+	UpdateUserPasswWord(requestObj *UpdateUserPasswWordRequestStruct) (r *UpdateUserPasswWordResponseStruct, err error)
 }
 
 type UpdateUserPasswWordThriftServiceClient struct {
@@ -304,24 +304,24 @@ func NewUpdateUserPasswWordThriftServiceClientProtocol(t thrift.TTransport, ipro
 
 // Parameters:
 //  - RequestObj
-func (p *UpdateUserPasswWordThriftServiceClient) UpdateUserPassword(requestObj *UpdateUserPasswWordRequestStruct) (r *UpdateUserPasswWordResponseStruct, err error) {
-	if err = p.sendUpdatePasswd(requestObj); err != nil {
+func (p *UpdateUserPasswWordThriftServiceClient) UpdateUserPasswWord(requestObj *UpdateUserPasswWordRequestStruct) (r *UpdateUserPasswWordResponseStruct, err error) {
+	if err = p.sendUpdateUserPasswWord(requestObj); err != nil {
 		return
 	}
-	return p.recvUpdatePasswd()
+	return p.recvUpdateUserPasswWord()
 }
 
-func (p *UpdateUserPasswWordThriftServiceClient) sendUpdatePasswd(requestObj *UpdateUserPasswWordRequestStruct) (err error) {
+func (p *UpdateUserPasswWordThriftServiceClient) sendUpdateUserPasswWord(requestObj *UpdateUserPasswWordRequestStruct) (err error) {
 	oprot := p.OutputProtocol
 	if oprot == nil {
 		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
 		p.OutputProtocol = oprot
 	}
 	p.SeqId++
-	if err = oprot.WriteMessageBegin("UpdateUserPassword", thrift.CALL, p.SeqId); err != nil {
+	if err = oprot.WriteMessageBegin("updateUserPasswWord", thrift.CALL, p.SeqId); err != nil {
 		return
 	}
-	args := UpdateUserPasswWordThriftServiceUpdatePasswdArgs{
+	args := UpdateUserPasswWordThriftServiceUpdateUserPasswWordArgs{
 		RequestObj: requestObj,
 	}
 	if err = args.Write(oprot); err != nil {
@@ -333,7 +333,7 @@ func (p *UpdateUserPasswWordThriftServiceClient) sendUpdatePasswd(requestObj *Up
 	return oprot.Flush()
 }
 
-func (p *UpdateUserPasswWordThriftServiceClient) recvUpdatePasswd() (value *UpdateUserPasswWordResponseStruct, err error) {
+func (p *UpdateUserPasswWordThriftServiceClient) recvUpdateUserPasswWord() (value *UpdateUserPasswWordResponseStruct, err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -343,12 +343,12 @@ func (p *UpdateUserPasswWordThriftServiceClient) recvUpdatePasswd() (value *Upda
 	if err != nil {
 		return
 	}
-	if method != "UpdateUserPassword" {
-		err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "UpdateUserPassword failed: wrong method name")
+	if method != "updateUserPasswWord" {
+		err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "updateUserPasswWord failed: wrong method name")
 		return
 	}
 	if p.SeqId != seqId {
-		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "UpdateUserPassword failed: out of sequence response")
+		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "updateUserPasswWord failed: out of sequence response")
 		return
 	}
 	if mTypeId == thrift.EXCEPTION {
@@ -365,10 +365,10 @@ func (p *UpdateUserPasswWordThriftServiceClient) recvUpdatePasswd() (value *Upda
 		return
 	}
 	if mTypeId != thrift.REPLY {
-		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "UpdateUserPassword failed: invalid message type")
+		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "updateUserPasswWord failed: invalid message type")
 		return
 	}
-	result := UpdateUserPasswWordThriftServiceUpdatePasswdResult{}
+	result := UpdateUserPasswWordThriftServiceUpdateUserPasswWordResult{}
 	if err = result.Read(iprot); err != nil {
 		return
 	}
@@ -400,7 +400,7 @@ func (p *UpdateUserPasswWordThriftServiceProcessor) ProcessorMap() map[string]th
 func NewUpdateUserPasswWordThriftServiceProcessor(handler UpdateUserPasswWordThriftService) *UpdateUserPasswWordThriftServiceProcessor {
 
 	self2 := &UpdateUserPasswWordThriftServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
-	self2.processorMap["UpdateUserPassword"] = &updateUserPasswordThriftServiceProcessorUpdatePasswd{handler: handler}
+	self2.processorMap["updateUserPasswWord"] = &updateUserPasswWordThriftServiceProcessorUpdateUserPasswWord{handler: handler}
 	return self2
 }
 
@@ -423,16 +423,16 @@ func (p *UpdateUserPasswWordThriftServiceProcessor) Process(iprot, oprot thrift.
 
 }
 
-type updateUserPasswordThriftServiceProcessorUpdatePasswd struct {
+type updateUserPasswWordThriftServiceProcessorUpdateUserPasswWord struct {
 	handler UpdateUserPasswWordThriftService
 }
 
-func (p *updateUserPasswordThriftServiceProcessorUpdatePasswd) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := UpdateUserPasswWordThriftServiceUpdatePasswdArgs{}
+func (p *updateUserPasswWordThriftServiceProcessorUpdateUserPasswWord) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := UpdateUserPasswWordThriftServiceUpdateUserPasswWordArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("UpdateUserPassword", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("updateUserPasswWord", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush()
@@ -440,12 +440,12 @@ func (p *updateUserPasswordThriftServiceProcessorUpdatePasswd) Process(seqId int
 	}
 
 	iprot.ReadMessageEnd()
-	result := UpdateUserPasswWordThriftServiceUpdatePasswdResult{}
+	result := UpdateUserPasswWordThriftServiceUpdateUserPasswWordResult{}
 	var retval *UpdateUserPasswWordResponseStruct
 	var err2 error
-	if retval, err2 = p.handler.UpdateUserPassword(args.RequestObj); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing UpdateUserPassword: "+err2.Error())
-		oprot.WriteMessageBegin("UpdateUserPassword", thrift.EXCEPTION, seqId)
+	if retval, err2 = p.handler.UpdateUserPasswWord(args.RequestObj); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing updateUserPasswWord: "+err2.Error())
+		oprot.WriteMessageBegin("updateUserPasswWord", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush()
@@ -453,7 +453,7 @@ func (p *updateUserPasswordThriftServiceProcessorUpdatePasswd) Process(seqId int
 	} else {
 		result.Success = retval
 	}
-	if err2 = oprot.WriteMessageBegin("UpdateUserPassword", thrift.REPLY, seqId); err2 != nil {
+	if err2 = oprot.WriteMessageBegin("updateUserPasswWord", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -475,27 +475,27 @@ func (p *updateUserPasswordThriftServiceProcessorUpdatePasswd) Process(seqId int
 
 // Attributes:
 //  - RequestObj
-type UpdateUserPasswWordThriftServiceUpdatePasswdArgs struct {
+type UpdateUserPasswWordThriftServiceUpdateUserPasswWordArgs struct {
 	RequestObj *UpdateUserPasswWordRequestStruct `thrift:"requestObj,1" db:"requestObj" json:"requestObj"`
 }
 
-func NewUpdateUserPasswWordThriftServiceUpdatePasswdArgs() *UpdateUserPasswWordThriftServiceUpdatePasswdArgs {
-	return &UpdateUserPasswWordThriftServiceUpdatePasswdArgs{}
+func NewUpdateUserPasswWordThriftServiceUpdateUserPasswWordArgs() *UpdateUserPasswWordThriftServiceUpdateUserPasswWordArgs {
+	return &UpdateUserPasswWordThriftServiceUpdateUserPasswWordArgs{}
 }
 
-var UpdateUserPasswWordThriftServiceUpdatePasswdArgs_RequestObj_DEFAULT *UpdateUserPasswWordRequestStruct
+var UpdateUserPasswWordThriftServiceUpdateUserPasswWordArgs_RequestObj_DEFAULT *UpdateUserPasswWordRequestStruct
 
-func (p *UpdateUserPasswWordThriftServiceUpdatePasswdArgs) GetRequestObj() *UpdateUserPasswWordRequestStruct {
+func (p *UpdateUserPasswWordThriftServiceUpdateUserPasswWordArgs) GetRequestObj() *UpdateUserPasswWordRequestStruct {
 	if !p.IsSetRequestObj() {
-		return UpdateUserPasswWordThriftServiceUpdatePasswdArgs_RequestObj_DEFAULT
+		return UpdateUserPasswWordThriftServiceUpdateUserPasswWordArgs_RequestObj_DEFAULT
 	}
 	return p.RequestObj
 }
-func (p *UpdateUserPasswWordThriftServiceUpdatePasswdArgs) IsSetRequestObj() bool {
+func (p *UpdateUserPasswWordThriftServiceUpdateUserPasswWordArgs) IsSetRequestObj() bool {
 	return p.RequestObj != nil
 }
 
-func (p *UpdateUserPasswWordThriftServiceUpdatePasswdArgs) Read(iprot thrift.TProtocol) error {
+func (p *UpdateUserPasswWordThriftServiceUpdateUserPasswWordArgs) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -528,7 +528,7 @@ func (p *UpdateUserPasswWordThriftServiceUpdatePasswdArgs) Read(iprot thrift.TPr
 	return nil
 }
 
-func (p *UpdateUserPasswWordThriftServiceUpdatePasswdArgs) ReadField1(iprot thrift.TProtocol) error {
+func (p *UpdateUserPasswWordThriftServiceUpdateUserPasswWordArgs) ReadField1(iprot thrift.TProtocol) error {
 	p.RequestObj = &UpdateUserPasswWordRequestStruct{}
 	if err := p.RequestObj.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.RequestObj), err)
@@ -536,8 +536,8 @@ func (p *UpdateUserPasswWordThriftServiceUpdatePasswdArgs) ReadField1(iprot thri
 	return nil
 }
 
-func (p *UpdateUserPasswWordThriftServiceUpdatePasswdArgs) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("updateUserPassword_args"); err != nil {
+func (p *UpdateUserPasswWordThriftServiceUpdateUserPasswWordArgs) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("updateUserPasswWord_args"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
 	if p != nil {
@@ -554,7 +554,7 @@ func (p *UpdateUserPasswWordThriftServiceUpdatePasswdArgs) Write(oprot thrift.TP
 	return nil
 }
 
-func (p *UpdateUserPasswWordThriftServiceUpdatePasswdArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *UpdateUserPasswWordThriftServiceUpdateUserPasswWordArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("requestObj", thrift.STRUCT, 1); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:requestObj: ", p), err)
 	}
@@ -567,36 +567,36 @@ func (p *UpdateUserPasswWordThriftServiceUpdatePasswdArgs) writeField1(oprot thr
 	return err
 }
 
-func (p *UpdateUserPasswWordThriftServiceUpdatePasswdArgs) String() string {
+func (p *UpdateUserPasswWordThriftServiceUpdateUserPasswWordArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("UpdateUserPasswWordThriftServiceUpdatePasswdArgs(%+v)", *p)
+	return fmt.Sprintf("UpdateUserPasswWordThriftServiceUpdateUserPasswWordArgs(%+v)", *p)
 }
 
 // Attributes:
 //  - Success
-type UpdateUserPasswWordThriftServiceUpdatePasswdResult struct {
+type UpdateUserPasswWordThriftServiceUpdateUserPasswWordResult struct {
 	Success *UpdateUserPasswWordResponseStruct `thrift:"success,0" db:"success" json:"success,omitempty"`
 }
 
-func NewUpdateUserPasswWordThriftServiceUpdatePasswdResult() *UpdateUserPasswWordThriftServiceUpdatePasswdResult {
-	return &UpdateUserPasswWordThriftServiceUpdatePasswdResult{}
+func NewUpdateUserPasswWordThriftServiceUpdateUserPasswWordResult() *UpdateUserPasswWordThriftServiceUpdateUserPasswWordResult {
+	return &UpdateUserPasswWordThriftServiceUpdateUserPasswWordResult{}
 }
 
-var UpdateUserPasswWordThriftServiceUpdatePasswdResult_Success_DEFAULT *UpdateUserPasswWordResponseStruct
+var UpdateUserPasswWordThriftServiceUpdateUserPasswWordResult_Success_DEFAULT *UpdateUserPasswWordResponseStruct
 
-func (p *UpdateUserPasswWordThriftServiceUpdatePasswdResult) GetSuccess() *UpdateUserPasswWordResponseStruct {
+func (p *UpdateUserPasswWordThriftServiceUpdateUserPasswWordResult) GetSuccess() *UpdateUserPasswWordResponseStruct {
 	if !p.IsSetSuccess() {
-		return UpdateUserPasswWordThriftServiceUpdatePasswdResult_Success_DEFAULT
+		return UpdateUserPasswWordThriftServiceUpdateUserPasswWordResult_Success_DEFAULT
 	}
 	return p.Success
 }
-func (p *UpdateUserPasswWordThriftServiceUpdatePasswdResult) IsSetSuccess() bool {
+func (p *UpdateUserPasswWordThriftServiceUpdateUserPasswWordResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *UpdateUserPasswWordThriftServiceUpdatePasswdResult) Read(iprot thrift.TProtocol) error {
+func (p *UpdateUserPasswWordThriftServiceUpdateUserPasswWordResult) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -629,7 +629,7 @@ func (p *UpdateUserPasswWordThriftServiceUpdatePasswdResult) Read(iprot thrift.T
 	return nil
 }
 
-func (p *UpdateUserPasswWordThriftServiceUpdatePasswdResult) ReadField0(iprot thrift.TProtocol) error {
+func (p *UpdateUserPasswWordThriftServiceUpdateUserPasswWordResult) ReadField0(iprot thrift.TProtocol) error {
 	p.Success = &UpdateUserPasswWordResponseStruct{}
 	if err := p.Success.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Success), err)
@@ -637,8 +637,8 @@ func (p *UpdateUserPasswWordThriftServiceUpdatePasswdResult) ReadField0(iprot th
 	return nil
 }
 
-func (p *UpdateUserPasswWordThriftServiceUpdatePasswdResult) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("updateUserPassword_result"); err != nil {
+func (p *UpdateUserPasswWordThriftServiceUpdateUserPasswWordResult) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("updateUserPasswWord_result"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
 	if p != nil {
@@ -655,7 +655,7 @@ func (p *UpdateUserPasswWordThriftServiceUpdatePasswdResult) Write(oprot thrift.
 	return nil
 }
 
-func (p *UpdateUserPasswWordThriftServiceUpdatePasswdResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *UpdateUserPasswWordThriftServiceUpdateUserPasswWordResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err := oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T write field begin error 0:success: ", p), err)
@@ -670,9 +670,9 @@ func (p *UpdateUserPasswWordThriftServiceUpdatePasswdResult) writeField0(oprot t
 	return err
 }
 
-func (p *UpdateUserPasswWordThriftServiceUpdatePasswdResult) String() string {
+func (p *UpdateUserPasswWordThriftServiceUpdateUserPasswWordResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("UpdateUserPasswWordThriftServiceUpdatePasswdResult(%+v)", *p)
+	return fmt.Sprintf("UpdateUserPasswWordThriftServiceUpdateUserPasswWordResult(%+v)", *p)
 }

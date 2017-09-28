@@ -20,7 +20,7 @@ var Status = map[int]string{
 	UPDATEPASSWDSUCCESS: "更新密码成功",
 }
 
-func (ups *updatepasswdservice) UpdateUserPassword(requestObj *UpdateUserPasswWordRequestStruct) (r *UpdateUserPasswWordResponseStruct, err error) {
+func (ups *updatepasswdservice) UpdateUserPasswWord(requestObj *UpdateUserPasswWordRequestStruct) (r *UpdateUserPasswWordResponseStruct, err error) {
 	upr := new(updatepasswd.UpdatePasswdRequest)
 	upr.ID = requestObj.GetID()
 	upr.Password = requestObj.GetPassword()

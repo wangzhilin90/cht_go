@@ -34,9 +34,9 @@ func (ss *securedservice) GetSecuredList(requestObj *SecuredListRequestStruct) (
 
 	response := new(SecuredListResponseStruct)
 	for _, v := range securedList {
-		sis := new(SecuredInfoStruct)
+		sis := new(SecuredDetailsStruct)
 		sis.Secured = v.Secured
-		response.SecuredInfo = append(response.SecuredInfo, sis)
+		response.SecuredList = append(response.SecuredList, sis)
 	}
 	response.Status = QUERY_SECURED_SUCCESS
 	response.Msg = Status[QUERY_SECURED_SUCCESS]
@@ -69,7 +69,7 @@ func StartSecuredServer() {
 	}
 
 	handler := &securedservice{}
-	processor := NewSecuredThriftServiceProcessor(handler)
+	processor := NewSecuredListThriftServiceProcessor(handler)
 	server := thrift.NewTSimpleServer2(processor, serverTransport)
 	server.Serve()
 }

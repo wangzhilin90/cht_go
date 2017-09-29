@@ -20,9 +20,9 @@ type SecuredListRequestStruct struct {
 	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,1" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
 }
 
-// func NewSecuredRequestStruct() *SecuredListRequestStruct {
-//   return &SecuredListRequestStruct{}
-// }
+func NewSecuredListRequestStruct() *SecuredListRequestStruct {
+	return &SecuredListRequestStruct{}
+}
 
 func (p *SecuredListRequestStruct) GetChengHuiTongTraceLog() string {
 	return p.ChengHuiTongTraceLog
@@ -109,18 +109,18 @@ func (p *SecuredListRequestStruct) String() string {
 
 // Attributes:
 //  - Secured
-type SecuredInfoStruct struct {
+type SecuredDetailsStruct struct {
 	Secured string `thrift:"secured,1" db:"secured" json:"secured"`
 }
 
-func NewSecuredInfoStruct() *SecuredInfoStruct {
-	return &SecuredInfoStruct{}
+func NewSecuredDetailsStruct() *SecuredDetailsStruct {
+	return &SecuredDetailsStruct{}
 }
 
-func (p *SecuredInfoStruct) GetSecured() string {
+func (p *SecuredDetailsStruct) GetSecured() string {
 	return p.Secured
 }
-func (p *SecuredInfoStruct) Read(iprot thrift.TProtocol) error {
+func (p *SecuredDetailsStruct) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -153,7 +153,7 @@ func (p *SecuredInfoStruct) Read(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *SecuredInfoStruct) ReadField1(iprot thrift.TProtocol) error {
+func (p *SecuredDetailsStruct) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return thrift.PrependError("error reading field 1: ", err)
 	} else {
@@ -162,8 +162,8 @@ func (p *SecuredInfoStruct) ReadField1(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *SecuredInfoStruct) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("SecuredInfoStruct"); err != nil {
+func (p *SecuredDetailsStruct) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("SecuredDetailsStruct"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
 	if p != nil {
@@ -180,7 +180,7 @@ func (p *SecuredInfoStruct) Write(oprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *SecuredInfoStruct) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *SecuredDetailsStruct) writeField1(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("secured", thrift.STRING, 1); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:secured: ", p), err)
 	}
@@ -193,24 +193,24 @@ func (p *SecuredInfoStruct) writeField1(oprot thrift.TProtocol) (err error) {
 	return err
 }
 
-func (p *SecuredInfoStruct) String() string {
+func (p *SecuredDetailsStruct) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("SecuredInfoStruct(%+v)", *p)
+	return fmt.Sprintf("SecuredDetailsStruct(%+v)", *p)
 }
 
 // Attributes:
 //  - Status
 //  - Msg
-//  - SecuredInfo
+//  - SecuredList
 type SecuredListResponseStruct struct {
-	Status      int32                `thrift:"status,1" db:"status" json:"status"`
-	Msg         string               `thrift:"msg,2" db:"msg" json:"msg"`
-	SecuredInfo []*SecuredInfoStruct `thrift:"securedInfo,3" db:"securedInfo" json:"securedInfo"`
+	Status      int32                   `thrift:"status,1" db:"status" json:"status"`
+	Msg         string                  `thrift:"msg,2" db:"msg" json:"msg"`
+	SecuredList []*SecuredDetailsStruct `thrift:"SecuredList,3" db:"SecuredList" json:"SecuredList"`
 }
 
-func NewSecuredResponseStruct() *SecuredListResponseStruct {
+func NewSecuredListResponseStruct() *SecuredListResponseStruct {
 	return &SecuredListResponseStruct{}
 }
 
@@ -222,8 +222,8 @@ func (p *SecuredListResponseStruct) GetMsg() string {
 	return p.Msg
 }
 
-func (p *SecuredListResponseStruct) GetSecuredInfo() []*SecuredInfoStruct {
-	return p.SecuredInfo
+func (p *SecuredListResponseStruct) GetSecuredList() []*SecuredDetailsStruct {
+	return p.SecuredList
 }
 func (p *SecuredListResponseStruct) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
@@ -289,14 +289,14 @@ func (p *SecuredListResponseStruct) ReadField3(iprot thrift.TProtocol) error {
 	if err != nil {
 		return thrift.PrependError("error reading list begin: ", err)
 	}
-	tSlice := make([]*SecuredInfoStruct, 0, size)
-	p.SecuredInfo = tSlice
+	tSlice := make([]*SecuredDetailsStruct, 0, size)
+	p.SecuredList = tSlice
 	for i := 0; i < size; i++ {
-		_elem0 := &SecuredInfoStruct{}
+		_elem0 := &SecuredDetailsStruct{}
 		if err := _elem0.Read(iprot); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _elem0), err)
 		}
-		p.SecuredInfo = append(p.SecuredInfo, _elem0)
+		p.SecuredList = append(p.SecuredList, _elem0)
 	}
 	if err := iprot.ReadListEnd(); err != nil {
 		return thrift.PrependError("error reading list end: ", err)
@@ -355,13 +355,13 @@ func (p *SecuredListResponseStruct) writeField2(oprot thrift.TProtocol) (err err
 }
 
 func (p *SecuredListResponseStruct) writeField3(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("securedInfo", thrift.LIST, 3); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:securedInfo: ", p), err)
+	if err := oprot.WriteFieldBegin("SecuredList", thrift.LIST, 3); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:SecuredList: ", p), err)
 	}
-	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.SecuredInfo)); err != nil {
+	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.SecuredList)); err != nil {
 		return thrift.PrependError("error writing list begin: ", err)
 	}
-	for _, v := range p.SecuredInfo {
+	for _, v := range p.SecuredList {
 		if err := v.Write(oprot); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", v), err)
 		}
@@ -370,7 +370,7 @@ func (p *SecuredListResponseStruct) writeField3(oprot thrift.TProtocol) (err err
 		return thrift.PrependError("error writing list end: ", err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:securedInfo: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:SecuredList: ", p), err)
 	}
 	return err
 }
@@ -388,7 +388,7 @@ type SecuredListThriftService interface {
 	GetSecuredList(requestObj *SecuredListRequestStruct) (r *SecuredListResponseStruct, err error)
 }
 
-type SecuredThriftServiceClient struct {
+type SecuredListThriftServiceClient struct {
 	Transport       thrift.TTransport
 	ProtocolFactory thrift.TProtocolFactory
 	InputProtocol   thrift.TProtocol
@@ -396,8 +396,8 @@ type SecuredThriftServiceClient struct {
 	SeqId           int32
 }
 
-func NewSecuredThriftServiceClientFactory(t thrift.TTransport, f thrift.TProtocolFactory) *SecuredThriftServiceClient {
-	return &SecuredThriftServiceClient{Transport: t,
+func NewSecuredListThriftServiceClientFactory(t thrift.TTransport, f thrift.TProtocolFactory) *SecuredListThriftServiceClient {
+	return &SecuredListThriftServiceClient{Transport: t,
 		ProtocolFactory: f,
 		InputProtocol:   f.GetProtocol(t),
 		OutputProtocol:  f.GetProtocol(t),
@@ -405,8 +405,8 @@ func NewSecuredThriftServiceClientFactory(t thrift.TTransport, f thrift.TProtoco
 	}
 }
 
-func NewSecuredThriftServiceClientProtocol(t thrift.TTransport, iprot thrift.TProtocol, oprot thrift.TProtocol) *SecuredThriftServiceClient {
-	return &SecuredThriftServiceClient{Transport: t,
+func NewSecuredListThriftServiceClientProtocol(t thrift.TTransport, iprot thrift.TProtocol, oprot thrift.TProtocol) *SecuredListThriftServiceClient {
+	return &SecuredListThriftServiceClient{Transport: t,
 		ProtocolFactory: nil,
 		InputProtocol:   iprot,
 		OutputProtocol:  oprot,
@@ -416,14 +416,14 @@ func NewSecuredThriftServiceClientProtocol(t thrift.TTransport, iprot thrift.TPr
 
 // Parameters:
 //  - RequestObj
-func (p *SecuredThriftServiceClient) GetSecuredList(requestObj *SecuredListRequestStruct) (r *SecuredListResponseStruct, err error) {
+func (p *SecuredListThriftServiceClient) GetSecuredList(requestObj *SecuredListRequestStruct) (r *SecuredListResponseStruct, err error) {
 	if err = p.sendGetSecuredList(requestObj); err != nil {
 		return
 	}
 	return p.recvGetSecuredList()
 }
 
-func (p *SecuredThriftServiceClient) sendGetSecuredList(requestObj *SecuredListRequestStruct) (err error) {
+func (p *SecuredListThriftServiceClient) sendGetSecuredList(requestObj *SecuredListRequestStruct) (err error) {
 	oprot := p.OutputProtocol
 	if oprot == nil {
 		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -433,7 +433,7 @@ func (p *SecuredThriftServiceClient) sendGetSecuredList(requestObj *SecuredListR
 	if err = oprot.WriteMessageBegin("getSecuredList", thrift.CALL, p.SeqId); err != nil {
 		return
 	}
-	args := SecuredThriftServiceGetSecuredListArgs{
+	args := SecuredListThriftServiceGetSecuredListArgs{
 		RequestObj: requestObj,
 	}
 	if err = args.Write(oprot); err != nil {
@@ -445,7 +445,7 @@ func (p *SecuredThriftServiceClient) sendGetSecuredList(requestObj *SecuredListR
 	return oprot.Flush()
 }
 
-func (p *SecuredThriftServiceClient) recvGetSecuredList() (value *SecuredListResponseStruct, err error) {
+func (p *SecuredListThriftServiceClient) recvGetSecuredList() (value *SecuredListResponseStruct, err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -480,7 +480,7 @@ func (p *SecuredThriftServiceClient) recvGetSecuredList() (value *SecuredListRes
 		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "getSecuredList failed: invalid message type")
 		return
 	}
-	result := SecuredThriftServiceGetSecuredListResult{}
+	result := SecuredListThriftServiceGetSecuredListResult{}
 	if err = result.Read(iprot); err != nil {
 		return
 	}
@@ -491,32 +491,32 @@ func (p *SecuredThriftServiceClient) recvGetSecuredList() (value *SecuredListRes
 	return
 }
 
-type SecuredThriftServiceProcessor struct {
+type SecuredListThriftServiceProcessor struct {
 	processorMap map[string]thrift.TProcessorFunction
 	handler      SecuredListThriftService
 }
 
-func (p *SecuredThriftServiceProcessor) AddToProcessorMap(key string, processor thrift.TProcessorFunction) {
+func (p *SecuredListThriftServiceProcessor) AddToProcessorMap(key string, processor thrift.TProcessorFunction) {
 	p.processorMap[key] = processor
 }
 
-func (p *SecuredThriftServiceProcessor) GetProcessorFunction(key string) (processor thrift.TProcessorFunction, ok bool) {
+func (p *SecuredListThriftServiceProcessor) GetProcessorFunction(key string) (processor thrift.TProcessorFunction, ok bool) {
 	processor, ok = p.processorMap[key]
 	return processor, ok
 }
 
-func (p *SecuredThriftServiceProcessor) ProcessorMap() map[string]thrift.TProcessorFunction {
+func (p *SecuredListThriftServiceProcessor) ProcessorMap() map[string]thrift.TProcessorFunction {
 	return p.processorMap
 }
 
-func NewSecuredThriftServiceProcessor(handler SecuredListThriftService) *SecuredThriftServiceProcessor {
+func NewSecuredListThriftServiceProcessor(handler SecuredListThriftService) *SecuredListThriftServiceProcessor {
 
-	self3 := &SecuredThriftServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
-	self3.processorMap["getSecuredList"] = &securedThriftServiceProcessorGetSecuredList{handler: handler}
+	self3 := &SecuredListThriftServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
+	self3.processorMap["getSecuredList"] = &securedListThriftServiceProcessorGetSecuredList{handler: handler}
 	return self3
 }
 
-func (p *SecuredThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+func (p *SecuredListThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
 	name, _, seqId, err := iprot.ReadMessageBegin()
 	if err != nil {
 		return false, err
@@ -535,12 +535,12 @@ func (p *SecuredThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol) (
 
 }
 
-type securedThriftServiceProcessorGetSecuredList struct {
+type securedListThriftServiceProcessorGetSecuredList struct {
 	handler SecuredListThriftService
 }
 
-func (p *securedThriftServiceProcessorGetSecuredList) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := SecuredThriftServiceGetSecuredListArgs{}
+func (p *securedListThriftServiceProcessorGetSecuredList) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := SecuredListThriftServiceGetSecuredListArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
@@ -552,7 +552,7 @@ func (p *securedThriftServiceProcessorGetSecuredList) Process(seqId int32, iprot
 	}
 
 	iprot.ReadMessageEnd()
-	result := SecuredThriftServiceGetSecuredListResult{}
+	result := SecuredListThriftServiceGetSecuredListResult{}
 	var retval *SecuredListResponseStruct
 	var err2 error
 	if retval, err2 = p.handler.GetSecuredList(args.RequestObj); err2 != nil {
@@ -587,27 +587,27 @@ func (p *securedThriftServiceProcessorGetSecuredList) Process(seqId int32, iprot
 
 // Attributes:
 //  - RequestObj
-type SecuredThriftServiceGetSecuredListArgs struct {
+type SecuredListThriftServiceGetSecuredListArgs struct {
 	RequestObj *SecuredListRequestStruct `thrift:"requestObj,1" db:"requestObj" json:"requestObj"`
 }
 
-func NewSecuredThriftServiceGetSecuredListArgs() *SecuredThriftServiceGetSecuredListArgs {
-	return &SecuredThriftServiceGetSecuredListArgs{}
+func NewSecuredListThriftServiceGetSecuredListArgs() *SecuredListThriftServiceGetSecuredListArgs {
+	return &SecuredListThriftServiceGetSecuredListArgs{}
 }
 
-var SecuredThriftServiceGetSecuredListArgs_RequestObj_DEFAULT *SecuredListRequestStruct
+var SecuredListThriftServiceGetSecuredListArgs_RequestObj_DEFAULT *SecuredListRequestStruct
 
-func (p *SecuredThriftServiceGetSecuredListArgs) GetRequestObj() *SecuredListRequestStruct {
+func (p *SecuredListThriftServiceGetSecuredListArgs) GetRequestObj() *SecuredListRequestStruct {
 	if !p.IsSetRequestObj() {
-		return SecuredThriftServiceGetSecuredListArgs_RequestObj_DEFAULT
+		return SecuredListThriftServiceGetSecuredListArgs_RequestObj_DEFAULT
 	}
 	return p.RequestObj
 }
-func (p *SecuredThriftServiceGetSecuredListArgs) IsSetRequestObj() bool {
+func (p *SecuredListThriftServiceGetSecuredListArgs) IsSetRequestObj() bool {
 	return p.RequestObj != nil
 }
 
-func (p *SecuredThriftServiceGetSecuredListArgs) Read(iprot thrift.TProtocol) error {
+func (p *SecuredListThriftServiceGetSecuredListArgs) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -640,7 +640,7 @@ func (p *SecuredThriftServiceGetSecuredListArgs) Read(iprot thrift.TProtocol) er
 	return nil
 }
 
-func (p *SecuredThriftServiceGetSecuredListArgs) ReadField1(iprot thrift.TProtocol) error {
+func (p *SecuredListThriftServiceGetSecuredListArgs) ReadField1(iprot thrift.TProtocol) error {
 	p.RequestObj = &SecuredListRequestStruct{}
 	if err := p.RequestObj.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.RequestObj), err)
@@ -648,7 +648,7 @@ func (p *SecuredThriftServiceGetSecuredListArgs) ReadField1(iprot thrift.TProtoc
 	return nil
 }
 
-func (p *SecuredThriftServiceGetSecuredListArgs) Write(oprot thrift.TProtocol) error {
+func (p *SecuredListThriftServiceGetSecuredListArgs) Write(oprot thrift.TProtocol) error {
 	if err := oprot.WriteStructBegin("getSecuredList_args"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
@@ -666,7 +666,7 @@ func (p *SecuredThriftServiceGetSecuredListArgs) Write(oprot thrift.TProtocol) e
 	return nil
 }
 
-func (p *SecuredThriftServiceGetSecuredListArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *SecuredListThriftServiceGetSecuredListArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("requestObj", thrift.STRUCT, 1); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:requestObj: ", p), err)
 	}
@@ -679,36 +679,36 @@ func (p *SecuredThriftServiceGetSecuredListArgs) writeField1(oprot thrift.TProto
 	return err
 }
 
-func (p *SecuredThriftServiceGetSecuredListArgs) String() string {
+func (p *SecuredListThriftServiceGetSecuredListArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("SecuredThriftServiceGetSecuredListArgs(%+v)", *p)
+	return fmt.Sprintf("SecuredListThriftServiceGetSecuredListArgs(%+v)", *p)
 }
 
 // Attributes:
 //  - Success
-type SecuredThriftServiceGetSecuredListResult struct {
+type SecuredListThriftServiceGetSecuredListResult struct {
 	Success *SecuredListResponseStruct `thrift:"success,0" db:"success" json:"success,omitempty"`
 }
 
-func NewSecuredThriftServiceGetSecuredListResult() *SecuredThriftServiceGetSecuredListResult {
-	return &SecuredThriftServiceGetSecuredListResult{}
+func NewSecuredListThriftServiceGetSecuredListResult() *SecuredListThriftServiceGetSecuredListResult {
+	return &SecuredListThriftServiceGetSecuredListResult{}
 }
 
-var SecuredThriftServiceGetSecuredListResult_Success_DEFAULT *SecuredListResponseStruct
+var SecuredListThriftServiceGetSecuredListResult_Success_DEFAULT *SecuredListResponseStruct
 
-func (p *SecuredThriftServiceGetSecuredListResult) GetSuccess() *SecuredListResponseStruct {
+func (p *SecuredListThriftServiceGetSecuredListResult) GetSuccess() *SecuredListResponseStruct {
 	if !p.IsSetSuccess() {
-		return SecuredThriftServiceGetSecuredListResult_Success_DEFAULT
+		return SecuredListThriftServiceGetSecuredListResult_Success_DEFAULT
 	}
 	return p.Success
 }
-func (p *SecuredThriftServiceGetSecuredListResult) IsSetSuccess() bool {
+func (p *SecuredListThriftServiceGetSecuredListResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *SecuredThriftServiceGetSecuredListResult) Read(iprot thrift.TProtocol) error {
+func (p *SecuredListThriftServiceGetSecuredListResult) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -741,7 +741,7 @@ func (p *SecuredThriftServiceGetSecuredListResult) Read(iprot thrift.TProtocol) 
 	return nil
 }
 
-func (p *SecuredThriftServiceGetSecuredListResult) ReadField0(iprot thrift.TProtocol) error {
+func (p *SecuredListThriftServiceGetSecuredListResult) ReadField0(iprot thrift.TProtocol) error {
 	p.Success = &SecuredListResponseStruct{}
 	if err := p.Success.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Success), err)
@@ -749,7 +749,7 @@ func (p *SecuredThriftServiceGetSecuredListResult) ReadField0(iprot thrift.TProt
 	return nil
 }
 
-func (p *SecuredThriftServiceGetSecuredListResult) Write(oprot thrift.TProtocol) error {
+func (p *SecuredListThriftServiceGetSecuredListResult) Write(oprot thrift.TProtocol) error {
 	if err := oprot.WriteStructBegin("getSecuredList_result"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
@@ -767,7 +767,7 @@ func (p *SecuredThriftServiceGetSecuredListResult) Write(oprot thrift.TProtocol)
 	return nil
 }
 
-func (p *SecuredThriftServiceGetSecuredListResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *SecuredListThriftServiceGetSecuredListResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err := oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T write field begin error 0:success: ", p), err)
@@ -782,9 +782,9 @@ func (p *SecuredThriftServiceGetSecuredListResult) writeField0(oprot thrift.TPro
 	return err
 }
 
-func (p *SecuredThriftServiceGetSecuredListResult) String() string {
+func (p *SecuredListThriftServiceGetSecuredListResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("SecuredThriftServiceGetSecuredListResult(%+v)", *p)
+	return fmt.Sprintf("SecuredListThriftServiceGetSecuredListResult(%+v)", *p)
 }

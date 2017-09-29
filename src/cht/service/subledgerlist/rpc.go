@@ -22,9 +22,9 @@ type SubledgerListRequestStruct struct {
 	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,2" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
 }
 
-// func NewSubledgerRequestStruct() *SubledgerListRequestStruct {
-// 	return &SubledgerListRequestStruct{}
-// }
+func NewSubledgerListRequestStruct() *SubledgerListRequestStruct {
+	return &SubledgerListRequestStruct{}
+}
 
 func (p *SubledgerListRequestStruct) GetHsZhuanrangrenStr() string {
 	return p.HsZhuanrangrenStr
@@ -152,7 +152,7 @@ type SubledgerDetailsStruct struct {
 	CardID   int32  `thrift:"card_id,3" db:"card_id" json:"card_id"`
 }
 
-func NewSubledgerInfoStruct() *SubledgerDetailsStruct {
+func NewSubledgerDetailsStruct() *SubledgerDetailsStruct {
 	return &SubledgerDetailsStruct{}
 }
 
@@ -312,10 +312,10 @@ func (p *SubledgerDetailsStruct) String() string {
 type SubledgerListResponseStruct struct {
 	Status        int32                     `thrift:"status,1" db:"status" json:"status"`
 	Msg           string                    `thrift:"msg,2" db:"msg" json:"msg"`
-	SubledgerList []*SubledgerDetailsStruct `thrift:"subledgerInfoList,3" db:"subledgerInfoList" json:"subledgerInfoList"`
+	SubledgerList []*SubledgerDetailsStruct `thrift:"SubledgerList,3" db:"SubledgerList" json:"SubledgerList"`
 }
 
-func NewSubledgerResponseStruct() *SubledgerListResponseStruct {
+func NewSubledgerListResponseStruct() *SubledgerListResponseStruct {
 	return &SubledgerListResponseStruct{}
 }
 
@@ -327,7 +327,7 @@ func (p *SubledgerListResponseStruct) GetMsg() string {
 	return p.Msg
 }
 
-func (p *SubledgerListResponseStruct) GetSubledgerInfoList() []*SubledgerDetailsStruct {
+func (p *SubledgerListResponseStruct) GetSubledgerList() []*SubledgerDetailsStruct {
 	return p.SubledgerList
 }
 func (p *SubledgerListResponseStruct) Read(iprot thrift.TProtocol) error {
@@ -460,8 +460,8 @@ func (p *SubledgerListResponseStruct) writeField2(oprot thrift.TProtocol) (err e
 }
 
 func (p *SubledgerListResponseStruct) writeField3(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("subledgerInfoList", thrift.LIST, 3); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:subledgerInfoList: ", p), err)
+	if err := oprot.WriteFieldBegin("SubledgerList", thrift.LIST, 3); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:SubledgerList: ", p), err)
 	}
 	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.SubledgerList)); err != nil {
 		return thrift.PrependError("error writing list begin: ", err)
@@ -475,7 +475,7 @@ func (p *SubledgerListResponseStruct) writeField3(oprot thrift.TProtocol) (err e
 		return thrift.PrependError("error writing list end: ", err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:subledgerInfoList: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:SubledgerList: ", p), err)
 	}
 	return err
 }
@@ -493,7 +493,7 @@ type SubledgerListThriftService interface {
 	GetSubledgerList(requestObj *SubledgerListRequestStruct) (r *SubledgerListResponseStruct, err error)
 }
 
-type SubledgerThriftServiceClient struct {
+type SubledgerListThriftServiceClient struct {
 	Transport       thrift.TTransport
 	ProtocolFactory thrift.TProtocolFactory
 	InputProtocol   thrift.TProtocol
@@ -501,8 +501,8 @@ type SubledgerThriftServiceClient struct {
 	SeqId           int32
 }
 
-func NewSubledgerThriftServiceClientFactory(t thrift.TTransport, f thrift.TProtocolFactory) *SubledgerThriftServiceClient {
-	return &SubledgerThriftServiceClient{Transport: t,
+func NewSubledgerListThriftServiceClientFactory(t thrift.TTransport, f thrift.TProtocolFactory) *SubledgerListThriftServiceClient {
+	return &SubledgerListThriftServiceClient{Transport: t,
 		ProtocolFactory: f,
 		InputProtocol:   f.GetProtocol(t),
 		OutputProtocol:  f.GetProtocol(t),
@@ -510,8 +510,8 @@ func NewSubledgerThriftServiceClientFactory(t thrift.TTransport, f thrift.TProto
 	}
 }
 
-func NewSubledgerThriftServiceClientProtocol(t thrift.TTransport, iprot thrift.TProtocol, oprot thrift.TProtocol) *SubledgerThriftServiceClient {
-	return &SubledgerThriftServiceClient{Transport: t,
+func NewSubledgerListThriftServiceClientProtocol(t thrift.TTransport, iprot thrift.TProtocol, oprot thrift.TProtocol) *SubledgerListThriftServiceClient {
+	return &SubledgerListThriftServiceClient{Transport: t,
 		ProtocolFactory: nil,
 		InputProtocol:   iprot,
 		OutputProtocol:  oprot,
@@ -521,14 +521,14 @@ func NewSubledgerThriftServiceClientProtocol(t thrift.TTransport, iprot thrift.T
 
 // Parameters:
 //  - RequestObj
-func (p *SubledgerThriftServiceClient) GetSubledgerList(requestObj *SubledgerListRequestStruct) (r *SubledgerListResponseStruct, err error) {
+func (p *SubledgerListThriftServiceClient) GetSubledgerList(requestObj *SubledgerListRequestStruct) (r *SubledgerListResponseStruct, err error) {
 	if err = p.sendGetSubledgerList(requestObj); err != nil {
 		return
 	}
 	return p.recvGetSubledgerList()
 }
 
-func (p *SubledgerThriftServiceClient) sendGetSubledgerList(requestObj *SubledgerListRequestStruct) (err error) {
+func (p *SubledgerListThriftServiceClient) sendGetSubledgerList(requestObj *SubledgerListRequestStruct) (err error) {
 	oprot := p.OutputProtocol
 	if oprot == nil {
 		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -538,7 +538,7 @@ func (p *SubledgerThriftServiceClient) sendGetSubledgerList(requestObj *Subledge
 	if err = oprot.WriteMessageBegin("getSubledgerList", thrift.CALL, p.SeqId); err != nil {
 		return
 	}
-	args := SubledgerThriftServiceGetSubledgerListArgs{
+	args := SubledgerListThriftServiceGetSubledgerListArgs{
 		RequestObj: requestObj,
 	}
 	if err = args.Write(oprot); err != nil {
@@ -550,7 +550,7 @@ func (p *SubledgerThriftServiceClient) sendGetSubledgerList(requestObj *Subledge
 	return oprot.Flush()
 }
 
-func (p *SubledgerThriftServiceClient) recvGetSubledgerList() (value *SubledgerListResponseStruct, err error) {
+func (p *SubledgerListThriftServiceClient) recvGetSubledgerList() (value *SubledgerListResponseStruct, err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -585,7 +585,7 @@ func (p *SubledgerThriftServiceClient) recvGetSubledgerList() (value *SubledgerL
 		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "getSubledgerList failed: invalid message type")
 		return
 	}
-	result := SubledgerThriftServiceGetSubledgerListResult{}
+	result := SubledgerListThriftServiceGetSubledgerListResult{}
 	if err = result.Read(iprot); err != nil {
 		return
 	}
@@ -596,32 +596,32 @@ func (p *SubledgerThriftServiceClient) recvGetSubledgerList() (value *SubledgerL
 	return
 }
 
-type SubledgerThriftServiceProcessor struct {
+type SubledgerListThriftServiceProcessor struct {
 	processorMap map[string]thrift.TProcessorFunction
 	handler      SubledgerListThriftService
 }
 
-func (p *SubledgerThriftServiceProcessor) AddToProcessorMap(key string, processor thrift.TProcessorFunction) {
+func (p *SubledgerListThriftServiceProcessor) AddToProcessorMap(key string, processor thrift.TProcessorFunction) {
 	p.processorMap[key] = processor
 }
 
-func (p *SubledgerThriftServiceProcessor) GetProcessorFunction(key string) (processor thrift.TProcessorFunction, ok bool) {
+func (p *SubledgerListThriftServiceProcessor) GetProcessorFunction(key string) (processor thrift.TProcessorFunction, ok bool) {
 	processor, ok = p.processorMap[key]
 	return processor, ok
 }
 
-func (p *SubledgerThriftServiceProcessor) ProcessorMap() map[string]thrift.TProcessorFunction {
+func (p *SubledgerListThriftServiceProcessor) ProcessorMap() map[string]thrift.TProcessorFunction {
 	return p.processorMap
 }
 
-func NewSubledgerThriftServiceProcessor(handler SubledgerListThriftService) *SubledgerThriftServiceProcessor {
+func NewSubledgerListThriftServiceProcessor(handler SubledgerListThriftService) *SubledgerListThriftServiceProcessor {
 
-	self3 := &SubledgerThriftServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
-	self3.processorMap["getSubledgerList"] = &subledgerThriftServiceProcessorGetSubledgerList{handler: handler}
+	self3 := &SubledgerListThriftServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
+	self3.processorMap["getSubledgerList"] = &subledgerListThriftServiceProcessorGetSubledgerList{handler: handler}
 	return self3
 }
 
-func (p *SubledgerThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+func (p *SubledgerListThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
 	name, _, seqId, err := iprot.ReadMessageBegin()
 	if err != nil {
 		return false, err
@@ -640,12 +640,12 @@ func (p *SubledgerThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol)
 
 }
 
-type subledgerThriftServiceProcessorGetSubledgerList struct {
+type subledgerListThriftServiceProcessorGetSubledgerList struct {
 	handler SubledgerListThriftService
 }
 
-func (p *subledgerThriftServiceProcessorGetSubledgerList) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := SubledgerThriftServiceGetSubledgerListArgs{}
+func (p *subledgerListThriftServiceProcessorGetSubledgerList) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := SubledgerListThriftServiceGetSubledgerListArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
@@ -657,7 +657,7 @@ func (p *subledgerThriftServiceProcessorGetSubledgerList) Process(seqId int32, i
 	}
 
 	iprot.ReadMessageEnd()
-	result := SubledgerThriftServiceGetSubledgerListResult{}
+	result := SubledgerListThriftServiceGetSubledgerListResult{}
 	var retval *SubledgerListResponseStruct
 	var err2 error
 	if retval, err2 = p.handler.GetSubledgerList(args.RequestObj); err2 != nil {
@@ -692,27 +692,27 @@ func (p *subledgerThriftServiceProcessorGetSubledgerList) Process(seqId int32, i
 
 // Attributes:
 //  - RequestObj
-type SubledgerThriftServiceGetSubledgerListArgs struct {
+type SubledgerListThriftServiceGetSubledgerListArgs struct {
 	RequestObj *SubledgerListRequestStruct `thrift:"requestObj,1" db:"requestObj" json:"requestObj"`
 }
 
-func NewSubledgerThriftServiceGetSubledgerListArgs() *SubledgerThriftServiceGetSubledgerListArgs {
-	return &SubledgerThriftServiceGetSubledgerListArgs{}
+func NewSubledgerListThriftServiceGetSubledgerListArgs() *SubledgerListThriftServiceGetSubledgerListArgs {
+	return &SubledgerListThriftServiceGetSubledgerListArgs{}
 }
 
-var SubledgerThriftServiceGetSubledgerListArgs_RequestObj_DEFAULT *SubledgerListRequestStruct
+var SubledgerListThriftServiceGetSubledgerListArgs_RequestObj_DEFAULT *SubledgerListRequestStruct
 
-func (p *SubledgerThriftServiceGetSubledgerListArgs) GetRequestObj() *SubledgerListRequestStruct {
+func (p *SubledgerListThriftServiceGetSubledgerListArgs) GetRequestObj() *SubledgerListRequestStruct {
 	if !p.IsSetRequestObj() {
-		return SubledgerThriftServiceGetSubledgerListArgs_RequestObj_DEFAULT
+		return SubledgerListThriftServiceGetSubledgerListArgs_RequestObj_DEFAULT
 	}
 	return p.RequestObj
 }
-func (p *SubledgerThriftServiceGetSubledgerListArgs) IsSetRequestObj() bool {
+func (p *SubledgerListThriftServiceGetSubledgerListArgs) IsSetRequestObj() bool {
 	return p.RequestObj != nil
 }
 
-func (p *SubledgerThriftServiceGetSubledgerListArgs) Read(iprot thrift.TProtocol) error {
+func (p *SubledgerListThriftServiceGetSubledgerListArgs) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -745,7 +745,7 @@ func (p *SubledgerThriftServiceGetSubledgerListArgs) Read(iprot thrift.TProtocol
 	return nil
 }
 
-func (p *SubledgerThriftServiceGetSubledgerListArgs) ReadField1(iprot thrift.TProtocol) error {
+func (p *SubledgerListThriftServiceGetSubledgerListArgs) ReadField1(iprot thrift.TProtocol) error {
 	p.RequestObj = &SubledgerListRequestStruct{}
 	if err := p.RequestObj.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.RequestObj), err)
@@ -753,7 +753,7 @@ func (p *SubledgerThriftServiceGetSubledgerListArgs) ReadField1(iprot thrift.TPr
 	return nil
 }
 
-func (p *SubledgerThriftServiceGetSubledgerListArgs) Write(oprot thrift.TProtocol) error {
+func (p *SubledgerListThriftServiceGetSubledgerListArgs) Write(oprot thrift.TProtocol) error {
 	if err := oprot.WriteStructBegin("getSubledgerList_args"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
@@ -771,7 +771,7 @@ func (p *SubledgerThriftServiceGetSubledgerListArgs) Write(oprot thrift.TProtoco
 	return nil
 }
 
-func (p *SubledgerThriftServiceGetSubledgerListArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *SubledgerListThriftServiceGetSubledgerListArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("requestObj", thrift.STRUCT, 1); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:requestObj: ", p), err)
 	}
@@ -784,36 +784,36 @@ func (p *SubledgerThriftServiceGetSubledgerListArgs) writeField1(oprot thrift.TP
 	return err
 }
 
-func (p *SubledgerThriftServiceGetSubledgerListArgs) String() string {
+func (p *SubledgerListThriftServiceGetSubledgerListArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("SubledgerThriftServiceGetSubledgerListArgs(%+v)", *p)
+	return fmt.Sprintf("SubledgerListThriftServiceGetSubledgerListArgs(%+v)", *p)
 }
 
 // Attributes:
 //  - Success
-type SubledgerThriftServiceGetSubledgerListResult struct {
+type SubledgerListThriftServiceGetSubledgerListResult struct {
 	Success *SubledgerListResponseStruct `thrift:"success,0" db:"success" json:"success,omitempty"`
 }
 
-func NewSubledgerThriftServiceGetSubledgerListResult() *SubledgerThriftServiceGetSubledgerListResult {
-	return &SubledgerThriftServiceGetSubledgerListResult{}
+func NewSubledgerListThriftServiceGetSubledgerListResult() *SubledgerListThriftServiceGetSubledgerListResult {
+	return &SubledgerListThriftServiceGetSubledgerListResult{}
 }
 
-var SubledgerThriftServiceGetSubledgerListResult_Success_DEFAULT *SubledgerListResponseStruct
+var SubledgerListThriftServiceGetSubledgerListResult_Success_DEFAULT *SubledgerListResponseStruct
 
-func (p *SubledgerThriftServiceGetSubledgerListResult) GetSuccess() *SubledgerListResponseStruct {
+func (p *SubledgerListThriftServiceGetSubledgerListResult) GetSuccess() *SubledgerListResponseStruct {
 	if !p.IsSetSuccess() {
-		return SubledgerThriftServiceGetSubledgerListResult_Success_DEFAULT
+		return SubledgerListThriftServiceGetSubledgerListResult_Success_DEFAULT
 	}
 	return p.Success
 }
-func (p *SubledgerThriftServiceGetSubledgerListResult) IsSetSuccess() bool {
+func (p *SubledgerListThriftServiceGetSubledgerListResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *SubledgerThriftServiceGetSubledgerListResult) Read(iprot thrift.TProtocol) error {
+func (p *SubledgerListThriftServiceGetSubledgerListResult) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -846,7 +846,7 @@ func (p *SubledgerThriftServiceGetSubledgerListResult) Read(iprot thrift.TProtoc
 	return nil
 }
 
-func (p *SubledgerThriftServiceGetSubledgerListResult) ReadField0(iprot thrift.TProtocol) error {
+func (p *SubledgerListThriftServiceGetSubledgerListResult) ReadField0(iprot thrift.TProtocol) error {
 	p.Success = &SubledgerListResponseStruct{}
 	if err := p.Success.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Success), err)
@@ -854,7 +854,7 @@ func (p *SubledgerThriftServiceGetSubledgerListResult) ReadField0(iprot thrift.T
 	return nil
 }
 
-func (p *SubledgerThriftServiceGetSubledgerListResult) Write(oprot thrift.TProtocol) error {
+func (p *SubledgerListThriftServiceGetSubledgerListResult) Write(oprot thrift.TProtocol) error {
 	if err := oprot.WriteStructBegin("getSubledgerList_result"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
@@ -872,7 +872,7 @@ func (p *SubledgerThriftServiceGetSubledgerListResult) Write(oprot thrift.TProto
 	return nil
 }
 
-func (p *SubledgerThriftServiceGetSubledgerListResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *SubledgerListThriftServiceGetSubledgerListResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err := oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T write field begin error 0:success: ", p), err)
@@ -887,9 +887,9 @@ func (p *SubledgerThriftServiceGetSubledgerListResult) writeField0(oprot thrift.
 	return err
 }
 
-func (p *SubledgerThriftServiceGetSubledgerListResult) String() string {
+func (p *SubledgerListThriftServiceGetSubledgerListResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("SubledgerThriftServiceGetSubledgerListResult(%+v)", *p)
+	return fmt.Sprintf("SubledgerListThriftServiceGetSubledgerListResult(%+v)", *p)
 }

@@ -75,7 +75,7 @@ func StartsubledgerServer() {
 	}
 
 	handler := &subledgerservice{}
-	processor := NewSubledgerThriftServiceProcessor(handler)
+	processor := NewSubledgerListThriftServiceProcessor(handler)
 	server := thrift.NewTSimpleServer2(processor, serverTransport)
 	server.Serve()
 }

@@ -4,7 +4,6 @@ import (
 	_ "cht/initial"
 	"cht/service/advertmanagethriftservice"
 	"cht/service/borrowuserdetails"
-	"cht/service/cashrecordthriftservice"
 	"cht/service/emailattestationthriftservice"
 	"cht/service/juanzengthriftservice"
 	"cht/service/makeborrowservice"
@@ -15,6 +14,7 @@ import (
 	"cht/service/sysconfigthriftservice"
 	"cht/service/updateuserloginlogdetails"
 	"cht/service/updateuserpasswword"
+	"cht/service/usercashrecordList"
 	"cht/service/usercollectionlist"
 	"cht/service/usercouponlist"
 	"cht/service/userloginservice"
@@ -68,7 +68,7 @@ func main() {
 
 	go func() {
 		/*开启充值提现，获取提现记录服务*/
-		cashrecordthriftservice.StartCashRecordServer()
+		usercashrecordList.StartCashRecordServer()
 	}()
 
 	go func() {

@@ -30,6 +30,10 @@ type UserTenderCouponDetailsRequestStruct struct {
 	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,6" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
 }
 
+func NewUserTenderCouponDetailsRequestStruct() *UserTenderCouponDetailsRequestStruct {
+	return &UserTenderCouponDetailsRequestStruct{}
+}
+
 func (p *UserTenderCouponDetailsRequestStruct) GetUserId() int32 {
 	return p.UserId
 }
@@ -288,7 +292,7 @@ type UserTenderCouponDetailsResponseStruct struct {
 	Msg    string `thrift:"msg,3" db:"msg" json:"msg"`
 }
 
-func NewTenderCouponResponseStruct() *UserTenderCouponDetailsResponseStruct {
+func NewUserTenderCouponDetailsResponseStruct() *UserTenderCouponDetailsResponseStruct {
 	return &UserTenderCouponDetailsResponseStruct{}
 }
 
@@ -447,7 +451,7 @@ type UserTenderCouponDetailsThriftService interface {
 	GetUserTenderCouponDetails(requestObj *UserTenderCouponDetailsRequestStruct) (r *UserTenderCouponDetailsResponseStruct, err error)
 }
 
-type GetTenderCouponThriftServiceClient struct {
+type UserTenderCouponDetailsThriftServiceClient struct {
 	Transport       thrift.TTransport
 	ProtocolFactory thrift.TProtocolFactory
 	InputProtocol   thrift.TProtocol
@@ -455,8 +459,8 @@ type GetTenderCouponThriftServiceClient struct {
 	SeqId           int32
 }
 
-func NewGetTenderCouponThriftServiceClientFactory(t thrift.TTransport, f thrift.TProtocolFactory) *GetTenderCouponThriftServiceClient {
-	return &GetTenderCouponThriftServiceClient{Transport: t,
+func NewUserTenderCouponDetailsThriftServiceClientFactory(t thrift.TTransport, f thrift.TProtocolFactory) *UserTenderCouponDetailsThriftServiceClient {
+	return &UserTenderCouponDetailsThriftServiceClient{Transport: t,
 		ProtocolFactory: f,
 		InputProtocol:   f.GetProtocol(t),
 		OutputProtocol:  f.GetProtocol(t),
@@ -464,8 +468,8 @@ func NewGetTenderCouponThriftServiceClientFactory(t thrift.TTransport, f thrift.
 	}
 }
 
-func NewGetTenderCouponThriftServiceClientProtocol(t thrift.TTransport, iprot thrift.TProtocol, oprot thrift.TProtocol) *GetTenderCouponThriftServiceClient {
-	return &GetTenderCouponThriftServiceClient{Transport: t,
+func NewUserTenderCouponDetailsThriftServiceClientProtocol(t thrift.TTransport, iprot thrift.TProtocol, oprot thrift.TProtocol) *UserTenderCouponDetailsThriftServiceClient {
+	return &UserTenderCouponDetailsThriftServiceClient{Transport: t,
 		ProtocolFactory: nil,
 		InputProtocol:   iprot,
 		OutputProtocol:  oprot,
@@ -475,24 +479,24 @@ func NewGetTenderCouponThriftServiceClientProtocol(t thrift.TTransport, iprot th
 
 // Parameters:
 //  - RequestObj
-func (p *GetTenderCouponThriftServiceClient) GetUserTenderCouponDetails(requestObj *UserTenderCouponDetailsRequestStruct) (r *UserTenderCouponDetailsResponseStruct, err error) {
-	if err = p.sendGetCouponInfo(requestObj); err != nil {
+func (p *UserTenderCouponDetailsThriftServiceClient) GetUserTenderCouponDetails(requestObj *UserTenderCouponDetailsRequestStruct) (r *UserTenderCouponDetailsResponseStruct, err error) {
+	if err = p.sendGetUserTenderCouponDetails(requestObj); err != nil {
 		return
 	}
-	return p.recvGetCouponInfo()
+	return p.recvGetUserTenderCouponDetails()
 }
 
-func (p *GetTenderCouponThriftServiceClient) sendGetCouponInfo(requestObj *UserTenderCouponDetailsRequestStruct) (err error) {
+func (p *UserTenderCouponDetailsThriftServiceClient) sendGetUserTenderCouponDetails(requestObj *UserTenderCouponDetailsRequestStruct) (err error) {
 	oprot := p.OutputProtocol
 	if oprot == nil {
 		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
 		p.OutputProtocol = oprot
 	}
 	p.SeqId++
-	if err = oprot.WriteMessageBegin("getCouponInfo", thrift.CALL, p.SeqId); err != nil {
+	if err = oprot.WriteMessageBegin("getUserTenderCouponDetails", thrift.CALL, p.SeqId); err != nil {
 		return
 	}
-	args := GetTenderCouponThriftServiceGetCouponInfoArgs{
+	args := UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsArgs{
 		RequestObj: requestObj,
 	}
 	if err = args.Write(oprot); err != nil {
@@ -504,7 +508,7 @@ func (p *GetTenderCouponThriftServiceClient) sendGetCouponInfo(requestObj *UserT
 	return oprot.Flush()
 }
 
-func (p *GetTenderCouponThriftServiceClient) recvGetCouponInfo() (value *UserTenderCouponDetailsResponseStruct, err error) {
+func (p *UserTenderCouponDetailsThriftServiceClient) recvGetUserTenderCouponDetails() (value *UserTenderCouponDetailsResponseStruct, err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -514,12 +518,12 @@ func (p *GetTenderCouponThriftServiceClient) recvGetCouponInfo() (value *UserTen
 	if err != nil {
 		return
 	}
-	if method != "getCouponInfo" {
-		err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "getCouponInfo failed: wrong method name")
+	if method != "getUserTenderCouponDetails" {
+		err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "getUserTenderCouponDetails failed: wrong method name")
 		return
 	}
 	if p.SeqId != seqId {
-		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "getCouponInfo failed: out of sequence response")
+		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "getUserTenderCouponDetails failed: out of sequence response")
 		return
 	}
 	if mTypeId == thrift.EXCEPTION {
@@ -536,10 +540,10 @@ func (p *GetTenderCouponThriftServiceClient) recvGetCouponInfo() (value *UserTen
 		return
 	}
 	if mTypeId != thrift.REPLY {
-		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "getCouponInfo failed: invalid message type")
+		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "getUserTenderCouponDetails failed: invalid message type")
 		return
 	}
-	result := GetTenderCouponThriftServiceGetCouponInfoResult{}
+	result := UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsResult{}
 	if err = result.Read(iprot); err != nil {
 		return
 	}
@@ -550,32 +554,32 @@ func (p *GetTenderCouponThriftServiceClient) recvGetCouponInfo() (value *UserTen
 	return
 }
 
-type GetTenderCouponThriftServiceProcessor struct {
+type UserTenderCouponDetailsThriftServiceProcessor struct {
 	processorMap map[string]thrift.TProcessorFunction
 	handler      UserTenderCouponDetailsThriftService
 }
 
-func (p *GetTenderCouponThriftServiceProcessor) AddToProcessorMap(key string, processor thrift.TProcessorFunction) {
+func (p *UserTenderCouponDetailsThriftServiceProcessor) AddToProcessorMap(key string, processor thrift.TProcessorFunction) {
 	p.processorMap[key] = processor
 }
 
-func (p *GetTenderCouponThriftServiceProcessor) GetProcessorFunction(key string) (processor thrift.TProcessorFunction, ok bool) {
+func (p *UserTenderCouponDetailsThriftServiceProcessor) GetProcessorFunction(key string) (processor thrift.TProcessorFunction, ok bool) {
 	processor, ok = p.processorMap[key]
 	return processor, ok
 }
 
-func (p *GetTenderCouponThriftServiceProcessor) ProcessorMap() map[string]thrift.TProcessorFunction {
+func (p *UserTenderCouponDetailsThriftServiceProcessor) ProcessorMap() map[string]thrift.TProcessorFunction {
 	return p.processorMap
 }
 
-func NewGetTenderCouponThriftServiceProcessor(handler UserTenderCouponDetailsThriftService) *GetTenderCouponThriftServiceProcessor {
+func NewUserTenderCouponDetailsThriftServiceProcessor(handler UserTenderCouponDetailsThriftService) *UserTenderCouponDetailsThriftServiceProcessor {
 
-	self2 := &GetTenderCouponThriftServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
-	self2.processorMap["getCouponInfo"] = &getTenderCouponThriftServiceProcessorGetCouponInfo{handler: handler}
+	self2 := &UserTenderCouponDetailsThriftServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
+	self2.processorMap["getUserTenderCouponDetails"] = &userTenderCouponDetailsThriftServiceProcessorGetUserTenderCouponDetails{handler: handler}
 	return self2
 }
 
-func (p *GetTenderCouponThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+func (p *UserTenderCouponDetailsThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
 	name, _, seqId, err := iprot.ReadMessageBegin()
 	if err != nil {
 		return false, err
@@ -594,16 +598,16 @@ func (p *GetTenderCouponThriftServiceProcessor) Process(iprot, oprot thrift.TPro
 
 }
 
-type getTenderCouponThriftServiceProcessorGetCouponInfo struct {
+type userTenderCouponDetailsThriftServiceProcessorGetUserTenderCouponDetails struct {
 	handler UserTenderCouponDetailsThriftService
 }
 
-func (p *getTenderCouponThriftServiceProcessorGetCouponInfo) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := GetTenderCouponThriftServiceGetCouponInfoArgs{}
+func (p *userTenderCouponDetailsThriftServiceProcessorGetUserTenderCouponDetails) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("getCouponInfo", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("getUserTenderCouponDetails", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush()
@@ -611,12 +615,12 @@ func (p *getTenderCouponThriftServiceProcessorGetCouponInfo) Process(seqId int32
 	}
 
 	iprot.ReadMessageEnd()
-	result := GetTenderCouponThriftServiceGetCouponInfoResult{}
+	result := UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsResult{}
 	var retval *UserTenderCouponDetailsResponseStruct
 	var err2 error
 	if retval, err2 = p.handler.GetUserTenderCouponDetails(args.RequestObj); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing getCouponInfo: "+err2.Error())
-		oprot.WriteMessageBegin("getCouponInfo", thrift.EXCEPTION, seqId)
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing getUserTenderCouponDetails: "+err2.Error())
+		oprot.WriteMessageBegin("getUserTenderCouponDetails", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush()
@@ -624,7 +628,7 @@ func (p *getTenderCouponThriftServiceProcessorGetCouponInfo) Process(seqId int32
 	} else {
 		result.Success = retval
 	}
-	if err2 = oprot.WriteMessageBegin("getCouponInfo", thrift.REPLY, seqId); err2 != nil {
+	if err2 = oprot.WriteMessageBegin("getUserTenderCouponDetails", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -646,27 +650,27 @@ func (p *getTenderCouponThriftServiceProcessorGetCouponInfo) Process(seqId int32
 
 // Attributes:
 //  - RequestObj
-type GetTenderCouponThriftServiceGetCouponInfoArgs struct {
+type UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsArgs struct {
 	RequestObj *UserTenderCouponDetailsRequestStruct `thrift:"requestObj,1" db:"requestObj" json:"requestObj"`
 }
 
-func NewGetTenderCouponThriftServiceGetCouponInfoArgs() *GetTenderCouponThriftServiceGetCouponInfoArgs {
-	return &GetTenderCouponThriftServiceGetCouponInfoArgs{}
+func NewUserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsArgs() *UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsArgs {
+	return &UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsArgs{}
 }
 
-var GetTenderCouponThriftServiceGetCouponInfoArgs_RequestObj_DEFAULT *UserTenderCouponDetailsRequestStruct
+var UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsArgs_RequestObj_DEFAULT *UserTenderCouponDetailsRequestStruct
 
-func (p *GetTenderCouponThriftServiceGetCouponInfoArgs) GetRequestObj() *UserTenderCouponDetailsRequestStruct {
+func (p *UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsArgs) GetRequestObj() *UserTenderCouponDetailsRequestStruct {
 	if !p.IsSetRequestObj() {
-		return GetTenderCouponThriftServiceGetCouponInfoArgs_RequestObj_DEFAULT
+		return UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsArgs_RequestObj_DEFAULT
 	}
 	return p.RequestObj
 }
-func (p *GetTenderCouponThriftServiceGetCouponInfoArgs) IsSetRequestObj() bool {
+func (p *UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsArgs) IsSetRequestObj() bool {
 	return p.RequestObj != nil
 }
 
-func (p *GetTenderCouponThriftServiceGetCouponInfoArgs) Read(iprot thrift.TProtocol) error {
+func (p *UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsArgs) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -699,7 +703,7 @@ func (p *GetTenderCouponThriftServiceGetCouponInfoArgs) Read(iprot thrift.TProto
 	return nil
 }
 
-func (p *GetTenderCouponThriftServiceGetCouponInfoArgs) ReadField1(iprot thrift.TProtocol) error {
+func (p *UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsArgs) ReadField1(iprot thrift.TProtocol) error {
 	p.RequestObj = &UserTenderCouponDetailsRequestStruct{}
 	if err := p.RequestObj.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.RequestObj), err)
@@ -707,8 +711,8 @@ func (p *GetTenderCouponThriftServiceGetCouponInfoArgs) ReadField1(iprot thrift.
 	return nil
 }
 
-func (p *GetTenderCouponThriftServiceGetCouponInfoArgs) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("getCouponInfo_args"); err != nil {
+func (p *UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsArgs) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("getUserTenderCouponDetails_args"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
 	if p != nil {
@@ -725,7 +729,7 @@ func (p *GetTenderCouponThriftServiceGetCouponInfoArgs) Write(oprot thrift.TProt
 	return nil
 }
 
-func (p *GetTenderCouponThriftServiceGetCouponInfoArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("requestObj", thrift.STRUCT, 1); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:requestObj: ", p), err)
 	}
@@ -738,36 +742,36 @@ func (p *GetTenderCouponThriftServiceGetCouponInfoArgs) writeField1(oprot thrift
 	return err
 }
 
-func (p *GetTenderCouponThriftServiceGetCouponInfoArgs) String() string {
+func (p *UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("GetTenderCouponThriftServiceGetCouponInfoArgs(%+v)", *p)
+	return fmt.Sprintf("UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsArgs(%+v)", *p)
 }
 
 // Attributes:
 //  - Success
-type GetTenderCouponThriftServiceGetCouponInfoResult struct {
+type UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsResult struct {
 	Success *UserTenderCouponDetailsResponseStruct `thrift:"success,0" db:"success" json:"success,omitempty"`
 }
 
-func NewGetTenderCouponThriftServiceGetCouponInfoResult() *GetTenderCouponThriftServiceGetCouponInfoResult {
-	return &GetTenderCouponThriftServiceGetCouponInfoResult{}
+func NewUserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsResult() *UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsResult {
+	return &UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsResult{}
 }
 
-var GetTenderCouponThriftServiceGetCouponInfoResult_Success_DEFAULT *UserTenderCouponDetailsResponseStruct
+var UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsResult_Success_DEFAULT *UserTenderCouponDetailsResponseStruct
 
-func (p *GetTenderCouponThriftServiceGetCouponInfoResult) GetSuccess() *UserTenderCouponDetailsResponseStruct {
+func (p *UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsResult) GetSuccess() *UserTenderCouponDetailsResponseStruct {
 	if !p.IsSetSuccess() {
-		return GetTenderCouponThriftServiceGetCouponInfoResult_Success_DEFAULT
+		return UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsResult_Success_DEFAULT
 	}
 	return p.Success
 }
-func (p *GetTenderCouponThriftServiceGetCouponInfoResult) IsSetSuccess() bool {
+func (p *UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *GetTenderCouponThriftServiceGetCouponInfoResult) Read(iprot thrift.TProtocol) error {
+func (p *UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsResult) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -800,7 +804,7 @@ func (p *GetTenderCouponThriftServiceGetCouponInfoResult) Read(iprot thrift.TPro
 	return nil
 }
 
-func (p *GetTenderCouponThriftServiceGetCouponInfoResult) ReadField0(iprot thrift.TProtocol) error {
+func (p *UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsResult) ReadField0(iprot thrift.TProtocol) error {
 	p.Success = &UserTenderCouponDetailsResponseStruct{}
 	if err := p.Success.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Success), err)
@@ -808,8 +812,8 @@ func (p *GetTenderCouponThriftServiceGetCouponInfoResult) ReadField0(iprot thrif
 	return nil
 }
 
-func (p *GetTenderCouponThriftServiceGetCouponInfoResult) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("getCouponInfo_result"); err != nil {
+func (p *UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsResult) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("getUserTenderCouponDetails_result"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
 	if p != nil {
@@ -826,7 +830,7 @@ func (p *GetTenderCouponThriftServiceGetCouponInfoResult) Write(oprot thrift.TPr
 	return nil
 }
 
-func (p *GetTenderCouponThriftServiceGetCouponInfoResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err := oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T write field begin error 0:success: ", p), err)
@@ -841,9 +845,9 @@ func (p *GetTenderCouponThriftServiceGetCouponInfoResult) writeField0(oprot thri
 	return err
 }
 
-func (p *GetTenderCouponThriftServiceGetCouponInfoResult) String() string {
+func (p *UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("GetTenderCouponThriftServiceGetCouponInfoResult(%+v)", *p)
+	return fmt.Sprintf("UserTenderCouponDetailsThriftServiceGetUserTenderCouponDetailsResult(%+v)", *p)
 }

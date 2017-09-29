@@ -70,7 +70,7 @@ func StartGetTenderRedBagServer() {
 	}
 
 	handler := &gettenderredservice{}
-	processor := NewGetTenderRedbagThriftServiceProcessor(handler)
+	processor := NewUserTenderRedbagDestailsThriftServiceProcessor(handler)
 	server := thrift.NewTSimpleServer2(processor, serverTransport)
 	server.Serve()
 }

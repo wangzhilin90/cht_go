@@ -10,11 +10,11 @@ struct UserTenderRedbagDestailsRequestStruct {
  }
 
 struct UserTenderRedbagDestailsResponseStruct {
-    1: i32 status, 
+    1: i32 status, //1000:"查询红包金额成功",1001:"查询红包金额出错"
     2: string redbagMoney, //红包金额
     3: string msg
 }
 
 service UserTenderRedbagDestailsThriftService {
-    UserTenderRedbagDestailsResponseStruct GetUserTenderRedbagDestails(1:UserTenderRedbagDestailsRequestStruct requestObj)
+    UserTenderRedbagDestailsResponseStruct getUserTenderRedbagDestails(1:UserTenderRedbagDestailsRequestStruct requestObj)
 }

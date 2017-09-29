@@ -71,7 +71,7 @@ func StartGetCouponServer() {
 	}
 
 	handler := &gettendercouponservice{}
-	processor := NewGetTenderCouponThriftServiceProcessor(handler)
+	processor := NewUserTenderCouponDetailsThriftServiceProcessor(handler)
 	server := thrift.NewTSimpleServer2(processor, serverTransport)
 	server.Serve()
 }

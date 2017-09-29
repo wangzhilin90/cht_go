@@ -10,7 +10,7 @@ struct UserTenderCouponDetailsRequestStruct  {
  }
 
 struct UserTenderCouponDetailsResponseStruct  {
-    1: i32 status, 
+    1: i32 status, //1000:"查询加息值成功",1001:"查询加息值出错"
     2: string coupon, //加息值，比如前台显示0.12%，这里存0.0012'
     3: string msg
 }

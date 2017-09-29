@@ -17,6 +17,7 @@ import (
 	"cht/service/usercashrecordList"
 	"cht/service/usercollectionlist"
 	"cht/service/usercouponlist"
+	"cht/service/userdetailsbynamepassword"
 	"cht/service/userloginservice"
 	"cht/service/userrechargerecordlist"
 	"cht/service/usertendercoupondetails"
@@ -119,6 +120,11 @@ func main() {
 	go func() {
 		/*开启捐赠服务*/
 		juanzengthriftservice.StartJuanzengServer()
+	}()
+
+	go func() {
+		/*开启查询后台用户详情服务*/
+		userdetailsbynamepassword.StartUseDetailsrServer()
 	}()
 
 	<-ch

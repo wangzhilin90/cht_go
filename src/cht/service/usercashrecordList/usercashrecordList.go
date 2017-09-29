@@ -1,4 +1,4 @@
-package cashrecordthriftservice
+package usercashrecordList
 
 import (
 	. "cht/common/logger"
@@ -12,7 +12,7 @@ type cashrecordservice struct{}
 
 const (
 	QUERY_CASHRECORD_FAILED  = 1001
-	QUERY_CASHRECORD_SUCCESS = 1002
+	QUERY_CASHRECORD_SUCCESS = 1000
 )
 
 var Status = map[int]string{
@@ -20,7 +20,7 @@ var Status = map[int]string{
 	QUERY_CASHRECORD_SUCCESS: "查询提现记录成功",
 }
 
-func (cs *cashrecordservice) getUserCashRecordList(requestObj *CashRecordRequestStruct) (r *CashRecordResponseStruct, err error) {
+func (cs *cashrecordservice) GetUserCashRecordList(requestObj *UserCashRecordListRequestStruct) (r *UserCashRecordListResponseStruct, err error) {
 	crrs := new(cashrecord.CashRecordRequestStruct)
 	crrs.UserID = requestObj.GetUserID()
 	crrs.StartTime = requestObj.GetStartTime()
@@ -32,16 +32,16 @@ func (cs *cashrecordservice) getUserCashRecordList(requestObj *CashRecordRequest
 
 	res, CashStat, num, err := cashrecord.GetCashRecord(crrs)
 	if err != nil {
-		return &CashRecordResponseStruct{
+		return &UserCashRecordListResponseStruct{
 			Status:   QUERY_CASHRECORD_FAILED,
 			Msg:      Status[QUERY_CASHRECORD_FAILED],
 			Totalnum: 0,
 		}, err
 	}
 
-	var response CashRecordResponseStruct
+	var response UserCashRecordListResponseStruct
 	for _, v := range res {
-		crs := new(CashRecordStruct)
+		crs := new(UserCashRecordDetailsStruct)
 		crs.ID = v.ID
 		crs.UserID = v.UserID
 		crs.OrderSn = v.OrderSn
@@ -55,16 +55,16 @@ func (cs *cashrecordservice) getUserCashRecordList(requestObj *CashRecordRequest
 		crs.PayWay = v.PayWay
 		crs.DealTime = v.DealTime
 		crs.FailResult = v.FailResult
-		response.CashRecordList = append(response.CashRecordList, crs)
+		response.UserCashRecordList = append(response.UserCashRecordList, crs)
 	}
 
-	css := new(CashStatsStruct)
+	css := new(UserCashStatsStruct)
 	css.Fee = CashStat.Fee
 	css.Money = CashStat.Money
 	response.Status = QUERY_CASHRECORD_SUCCESS
 	response.Msg = Status[QUERY_CASHRECORD_SUCCESS]
 	response.Totalnum = num
-	response.CashStat = css
+	response.UserCashStruct = css
 
 	Logger.Debug("getUserCashRecordList res:", response)
 	return &response, nil
@@ -98,7 +98,7 @@ func StartCashRecordServer() {
 	}
 
 	handler := &cashrecordservice{}
-	processor := NewCashRecordThriftServiceProcessor(handler)
+	processor := NewUserCashRecordListThriftServiceProcessor(handler)
 	server := thrift.NewTSimpleServer2(processor, serverTransport)
 	server.Serve()
 }

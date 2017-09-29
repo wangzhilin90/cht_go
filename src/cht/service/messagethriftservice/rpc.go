@@ -714,7 +714,7 @@ func (p *MessageInfoResponseStruct) GetMsg() string {
 
 var MessageInfoResponseStruct_MessageInfo_DEFAULT *MessageInfoStruct
 
-func (p *MessageInfoResponseStruct) GetMessageDetails() *MessageInfoStruct {
+func (p *MessageInfoResponseStruct) GetMessageInfo() *MessageInfoStruct {
 	if !p.IsSetMessageInfo() {
 		return MessageInfoResponseStruct_MessageInfo_DEFAULT
 	}
@@ -1364,23 +1364,23 @@ func NewMessageThriftServiceClientProtocol(t thrift.TTransport, iprot thrift.TPr
 // Parameters:
 //  - RequestObj
 func (p *MessageThriftServiceClient) GetMessageDetails(requestObj *MessageRequestStruct) (r *MessageInfoResponseStruct, err error) {
-	if err = p.sendGetMessageInfo(requestObj); err != nil {
+	if err = p.sendGetMessageDetails(requestObj); err != nil {
 		return
 	}
-	return p.recvGetMessageInfo()
+	return p.recvGetMessageDetails()
 }
 
-func (p *MessageThriftServiceClient) sendGetMessageInfo(requestObj *MessageRequestStruct) (err error) {
+func (p *MessageThriftServiceClient) sendGetMessageDetails(requestObj *MessageRequestStruct) (err error) {
 	oprot := p.OutputProtocol
 	if oprot == nil {
 		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
 		p.OutputProtocol = oprot
 	}
 	p.SeqId++
-	if err = oprot.WriteMessageBegin("getMessageInfo", thrift.CALL, p.SeqId); err != nil {
+	if err = oprot.WriteMessageBegin("getMessageDetails", thrift.CALL, p.SeqId); err != nil {
 		return
 	}
-	args := MessageThriftServiceGetMessageInfoArgs{
+	args := MessageThriftServiceGetMessageDetailsArgs{
 		RequestObj: requestObj,
 	}
 	if err = args.Write(oprot); err != nil {
@@ -1392,7 +1392,7 @@ func (p *MessageThriftServiceClient) sendGetMessageInfo(requestObj *MessageReque
 	return oprot.Flush()
 }
 
-func (p *MessageThriftServiceClient) recvGetMessageInfo() (value *MessageInfoResponseStruct, err error) {
+func (p *MessageThriftServiceClient) recvGetMessageDetails() (value *MessageInfoResponseStruct, err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -1402,12 +1402,12 @@ func (p *MessageThriftServiceClient) recvGetMessageInfo() (value *MessageInfoRes
 	if err != nil {
 		return
 	}
-	if method != "getMessageInfo" {
-		err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "getMessageInfo failed: wrong method name")
+	if method != "getMessageDetails" {
+		err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "getMessageDetails failed: wrong method name")
 		return
 	}
 	if p.SeqId != seqId {
-		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "getMessageInfo failed: out of sequence response")
+		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "getMessageDetails failed: out of sequence response")
 		return
 	}
 	if mTypeId == thrift.EXCEPTION {
@@ -1424,10 +1424,10 @@ func (p *MessageThriftServiceClient) recvGetMessageInfo() (value *MessageInfoRes
 		return
 	}
 	if mTypeId != thrift.REPLY {
-		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "getMessageInfo failed: invalid message type")
+		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "getMessageDetails failed: invalid message type")
 		return
 	}
-	result := MessageThriftServiceGetMessageInfoResult{}
+	result := MessageThriftServiceGetMessageDetailsResult{}
 	if err = result.Read(iprot); err != nil {
 		return
 	}
@@ -1613,7 +1613,7 @@ func (p *MessageThriftServiceProcessor) ProcessorMap() map[string]thrift.TProces
 func NewMessageThriftServiceProcessor(handler MessageThriftService) *MessageThriftServiceProcessor {
 
 	self6 := &MessageThriftServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
-	self6.processorMap["getMessageInfo"] = &messageThriftServiceProcessorGetMessageInfo{handler: handler}
+	self6.processorMap["getMessageDetails"] = &messageThriftServiceProcessorGetMessageDetails{handler: handler}
 	self6.processorMap["getMessageCount"] = &messageThriftServiceProcessorGetMessageCount{handler: handler}
 	self6.processorMap["getUserInfo"] = &messageThriftServiceProcessorGetUserInfo{handler: handler}
 	return self6
@@ -1638,16 +1638,16 @@ func (p *MessageThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol) (
 
 }
 
-type messageThriftServiceProcessorGetMessageInfo struct {
+type messageThriftServiceProcessorGetMessageDetails struct {
 	handler MessageThriftService
 }
 
-func (p *messageThriftServiceProcessorGetMessageInfo) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := MessageThriftServiceGetMessageInfoArgs{}
+func (p *messageThriftServiceProcessorGetMessageDetails) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := MessageThriftServiceGetMessageDetailsArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("getMessageInfo", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("getMessageDetails", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush()
@@ -1655,12 +1655,12 @@ func (p *messageThriftServiceProcessorGetMessageInfo) Process(seqId int32, iprot
 	}
 
 	iprot.ReadMessageEnd()
-	result := MessageThriftServiceGetMessageInfoResult{}
+	result := MessageThriftServiceGetMessageDetailsResult{}
 	var retval *MessageInfoResponseStruct
 	var err2 error
 	if retval, err2 = p.handler.GetMessageDetails(args.RequestObj); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing getMessageInfo: "+err2.Error())
-		oprot.WriteMessageBegin("getMessageInfo", thrift.EXCEPTION, seqId)
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing getMessageDetails: "+err2.Error())
+		oprot.WriteMessageBegin("getMessageDetails", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush()
@@ -1668,7 +1668,7 @@ func (p *messageThriftServiceProcessorGetMessageInfo) Process(seqId int32, iprot
 	} else {
 		result.Success = retval
 	}
-	if err2 = oprot.WriteMessageBegin("getMessageInfo", thrift.REPLY, seqId); err2 != nil {
+	if err2 = oprot.WriteMessageBegin("getMessageDetails", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -1786,27 +1786,27 @@ func (p *messageThriftServiceProcessorGetUserInfo) Process(seqId int32, iprot, o
 
 // Attributes:
 //  - RequestObj
-type MessageThriftServiceGetMessageInfoArgs struct {
+type MessageThriftServiceGetMessageDetailsArgs struct {
 	RequestObj *MessageRequestStruct `thrift:"requestObj,1" db:"requestObj" json:"requestObj"`
 }
 
-func NewMessageThriftServiceGetMessageInfoArgs() *MessageThriftServiceGetMessageInfoArgs {
-	return &MessageThriftServiceGetMessageInfoArgs{}
+func NewMessageThriftServiceGetMessageDetailsArgs() *MessageThriftServiceGetMessageDetailsArgs {
+	return &MessageThriftServiceGetMessageDetailsArgs{}
 }
 
-var MessageThriftServiceGetMessageInfoArgs_RequestObj_DEFAULT *MessageRequestStruct
+var MessageThriftServiceGetMessageDetailsArgs_RequestObj_DEFAULT *MessageRequestStruct
 
-func (p *MessageThriftServiceGetMessageInfoArgs) GetRequestObj() *MessageRequestStruct {
+func (p *MessageThriftServiceGetMessageDetailsArgs) GetRequestObj() *MessageRequestStruct {
 	if !p.IsSetRequestObj() {
-		return MessageThriftServiceGetMessageInfoArgs_RequestObj_DEFAULT
+		return MessageThriftServiceGetMessageDetailsArgs_RequestObj_DEFAULT
 	}
 	return p.RequestObj
 }
-func (p *MessageThriftServiceGetMessageInfoArgs) IsSetRequestObj() bool {
+func (p *MessageThriftServiceGetMessageDetailsArgs) IsSetRequestObj() bool {
 	return p.RequestObj != nil
 }
 
-func (p *MessageThriftServiceGetMessageInfoArgs) Read(iprot thrift.TProtocol) error {
+func (p *MessageThriftServiceGetMessageDetailsArgs) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -1839,7 +1839,7 @@ func (p *MessageThriftServiceGetMessageInfoArgs) Read(iprot thrift.TProtocol) er
 	return nil
 }
 
-func (p *MessageThriftServiceGetMessageInfoArgs) ReadField1(iprot thrift.TProtocol) error {
+func (p *MessageThriftServiceGetMessageDetailsArgs) ReadField1(iprot thrift.TProtocol) error {
 	p.RequestObj = &MessageRequestStruct{}
 	if err := p.RequestObj.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.RequestObj), err)
@@ -1847,8 +1847,8 @@ func (p *MessageThriftServiceGetMessageInfoArgs) ReadField1(iprot thrift.TProtoc
 	return nil
 }
 
-func (p *MessageThriftServiceGetMessageInfoArgs) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("getMessageInfo_args"); err != nil {
+func (p *MessageThriftServiceGetMessageDetailsArgs) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("getMessageDetails_args"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
 	if p != nil {
@@ -1865,7 +1865,7 @@ func (p *MessageThriftServiceGetMessageInfoArgs) Write(oprot thrift.TProtocol) e
 	return nil
 }
 
-func (p *MessageThriftServiceGetMessageInfoArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *MessageThriftServiceGetMessageDetailsArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("requestObj", thrift.STRUCT, 1); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:requestObj: ", p), err)
 	}
@@ -1878,36 +1878,36 @@ func (p *MessageThriftServiceGetMessageInfoArgs) writeField1(oprot thrift.TProto
 	return err
 }
 
-func (p *MessageThriftServiceGetMessageInfoArgs) String() string {
+func (p *MessageThriftServiceGetMessageDetailsArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("MessageThriftServiceGetMessageInfoArgs(%+v)", *p)
+	return fmt.Sprintf("MessageThriftServiceGetMessageDetailsArgs(%+v)", *p)
 }
 
 // Attributes:
 //  - Success
-type MessageThriftServiceGetMessageInfoResult struct {
+type MessageThriftServiceGetMessageDetailsResult struct {
 	Success *MessageInfoResponseStruct `thrift:"success,0" db:"success" json:"success,omitempty"`
 }
 
-func NewMessageThriftServiceGetMessageInfoResult() *MessageThriftServiceGetMessageInfoResult {
-	return &MessageThriftServiceGetMessageInfoResult{}
+func NewMessageThriftServiceGetMessageDetailsResult() *MessageThriftServiceGetMessageDetailsResult {
+	return &MessageThriftServiceGetMessageDetailsResult{}
 }
 
-var MessageThriftServiceGetMessageInfoResult_Success_DEFAULT *MessageInfoResponseStruct
+var MessageThriftServiceGetMessageDetailsResult_Success_DEFAULT *MessageInfoResponseStruct
 
-func (p *MessageThriftServiceGetMessageInfoResult) GetSuccess() *MessageInfoResponseStruct {
+func (p *MessageThriftServiceGetMessageDetailsResult) GetSuccess() *MessageInfoResponseStruct {
 	if !p.IsSetSuccess() {
-		return MessageThriftServiceGetMessageInfoResult_Success_DEFAULT
+		return MessageThriftServiceGetMessageDetailsResult_Success_DEFAULT
 	}
 	return p.Success
 }
-func (p *MessageThriftServiceGetMessageInfoResult) IsSetSuccess() bool {
+func (p *MessageThriftServiceGetMessageDetailsResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *MessageThriftServiceGetMessageInfoResult) Read(iprot thrift.TProtocol) error {
+func (p *MessageThriftServiceGetMessageDetailsResult) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -1940,7 +1940,7 @@ func (p *MessageThriftServiceGetMessageInfoResult) Read(iprot thrift.TProtocol) 
 	return nil
 }
 
-func (p *MessageThriftServiceGetMessageInfoResult) ReadField0(iprot thrift.TProtocol) error {
+func (p *MessageThriftServiceGetMessageDetailsResult) ReadField0(iprot thrift.TProtocol) error {
 	p.Success = &MessageInfoResponseStruct{}
 	if err := p.Success.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Success), err)
@@ -1948,8 +1948,8 @@ func (p *MessageThriftServiceGetMessageInfoResult) ReadField0(iprot thrift.TProt
 	return nil
 }
 
-func (p *MessageThriftServiceGetMessageInfoResult) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("getMessageInfo_result"); err != nil {
+func (p *MessageThriftServiceGetMessageDetailsResult) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("getMessageDetails_result"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
 	if p != nil {
@@ -1966,7 +1966,7 @@ func (p *MessageThriftServiceGetMessageInfoResult) Write(oprot thrift.TProtocol)
 	return nil
 }
 
-func (p *MessageThriftServiceGetMessageInfoResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *MessageThriftServiceGetMessageDetailsResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err := oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T write field begin error 0:success: ", p), err)
@@ -1981,11 +1981,11 @@ func (p *MessageThriftServiceGetMessageInfoResult) writeField0(oprot thrift.TPro
 	return err
 }
 
-func (p *MessageThriftServiceGetMessageInfoResult) String() string {
+func (p *MessageThriftServiceGetMessageDetailsResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("MessageThriftServiceGetMessageInfoResult(%+v)", *p)
+	return fmt.Sprintf("MessageThriftServiceGetMessageDetailsResult(%+v)", *p)
 }
 
 // Attributes:

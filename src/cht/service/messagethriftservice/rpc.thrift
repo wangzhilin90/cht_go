@@ -1,15 +1,15 @@
 namespace  go messagethriftservice 
 
-//ÇëÇó½á¹¹Ìå
+//è¯·æ±‚ç»“æ„ä½“
 struct MessageRequestStruct {
-	1:i32 smsid ,//¶ÌĞÅid
-	2:string phone ,//ÊÖ»úºÅ
-	3:string addtime, //Ìí¼ÓÊ±¼ä
-	4:i32 type, //ÀàĞÍ     
+	1:i32 smsid ,//çŸ­ä¿¡id
+	2:string phone ,//æ‰‹æœºå·
+	3:string addtime, //æ·»åŠ æ—¶é—´
+	4:i32 type, //ç±»å‹     
 	5:string chengHuiTongTraceLog
 }
 
-//ÏìÓ¦½á¹¹Ìå
+//å“åº”ç»“æ„ä½“
 struct MessageInfoStruct {
 	1:i32 id,
 	2:i32 type,
@@ -25,30 +25,30 @@ struct MessageInfoStruct {
 }
 
 struct MessageInfoResponseStruct {
-	1:i32 status,	//×´Ì¬ 1000·µ»Ø³É¹¦£¬ 1001·µ»ØÊ§°Ü
+	1:i32 status,	//çŠ¶æ€ 1000è¿”å›æˆåŠŸï¼Œ 1001è¿”å›å¤±è´¥
 	2:string msg,	
-	3:MessageInfoStruct MessageInfo //»ñÈ¡¶ÌĞÅÏêÇé
+	3:MessageInfoStruct MessageInfo //è·å–çŸ­ä¿¡è¯¦æƒ…
 }
 
 struct MessageCountResponseStruct {
-	1:i32 status,	//×´Ì¬ 1000·µ»Ø³É¹¦£¬ 1002·µ»ØÊ§°Ü
+	1:i32 status,	//çŠ¶æ€ 1000è¿”å›æˆåŠŸï¼Œ 1002è¿”å›å¤±è´¥
 	2:string msg,		
-	3:i32 count ,	//»ñÈ¡¶ÌĞÅ¼ÇÂ¼Êı
+	3:i32 count ,	//è·å–çŸ­ä¿¡è®°å½•æ•°
 }
 
 struct UserInfoStruct {
-	1:i32 id,  //ÓÃ»§ID
-	2:string phone, //ÊÖ»úºÅ	
+	1:i32 id,  //ç”¨æˆ·ID
+	2:string phone, //æ‰‹æœºå·	
 }
 
 struct UserInfoResponseStruct {
-	1:i32 status,//×´Ì¬ 1000·µ»Ø³É¹¦£¬ 1003·µ»ØÊ§°Ü
+	1:i32 status,//çŠ¶æ€ 1000è¿”å›æˆåŠŸï¼Œ 1003è¿”å›å¤±è´¥
 	2:string msg,
 	3:UserInfoStruct userInfo,
 }
 
 service MessageThriftService {
-    MessageInfoResponseStruct getMessageInfo(1:MessageRequestStruct requestObj)
+    MessageInfoResponseStruct getMessageDetails(1:MessageRequestStruct requestObj)
 	MessageCountResponseStruct getMessageCount(1:MessageRequestStruct requestObj)
 	UserInfoResponseStruct getUserInfo(1:MessageRequestStruct requestObj)
 }

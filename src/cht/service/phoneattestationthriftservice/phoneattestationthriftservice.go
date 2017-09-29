@@ -47,7 +47,7 @@ func (pts *phoneattestationservice) UpdatePhoneByTransaction(requestObj *UpdateP
 	upr.UserID = requestObj.GetUserID()
 	status := phoneattestation.UpdatePhone(upr)
 
-	Logger.Debugf("UpdatePhoneByTransaction success status:%v", status)
+	Logger.Debugf("UpdatePhoneByTransaction status:%v", status)
 	return status, nil
 }
 

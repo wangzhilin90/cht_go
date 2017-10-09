@@ -62,7 +62,7 @@ func StartDutyDetailServer() {
 	}
 	defer conn.Close()
 
-	port := "30023"
+	port := "30022"
 	ip, _ := zkclient.GetLocalIP()
 	listenAddr := fmt.Sprintf("%s:%s", ip, port)
 

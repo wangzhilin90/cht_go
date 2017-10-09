@@ -4,8 +4,10 @@ import (
 	_ "cht/initial"
 	"cht/service/advertmanagethriftservice"
 	"cht/service/borrowuserdetails"
+	"cht/service/dutydetails"
 	"cht/service/emailattestationthriftservice"
 	"cht/service/juanzengthriftservice"
+	"cht/service/kefulist"
 	"cht/service/makeborrowservice"
 	"cht/service/messagethriftservice"
 	"cht/service/phoneattestationthriftservice"
@@ -125,6 +127,16 @@ func main() {
 	go func() {
 		/*开启查询后台用户详情服务*/
 		userdetailsbynamepassword.StartUseDetailsrServer()
+	}()
+
+	go func() {
+		/*开启查询客服列表服务*/
+		kefulist.StartKeFuListsServer()
+	}()
+
+	go func() {
+		/*开启后台---值班人详情服务*/
+		dutydetails.StartDutyDetailServer()
 	}()
 
 	<-ch

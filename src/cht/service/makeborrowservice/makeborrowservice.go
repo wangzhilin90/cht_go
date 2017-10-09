@@ -97,13 +97,13 @@ func NewMakeBorrowRequest(requestObj *MakeBorrowRequestStruct) *makeborrow.MakeB
 
 func DealTempFunc(mbr *makeborrow.MakeBorrowRequest) *makeborrow.MakeBorrowRequest {
 	if mbr.Title == "" {
-		mbr.Title = ","
+		mbr.Title = " "
 	}
 	if mbr.Content == "" {
-		mbr.Content = ","
+		mbr.Content = " "
 	}
 	if mbr.Litpic == "" {
-		mbr.Litpic = ","
+		mbr.Litpic = " "
 	}
 	if mbr.TimeLimit == 0 {
 		mbr.TimeLimit = 1
@@ -121,13 +121,13 @@ func DealTempFunc(mbr *makeborrow.MakeBorrowRequest) *makeborrow.MakeBorrowReque
 		mbr.AprAdd = "0.0000"
 	}
 	if mbr.MortgageFile == "" {
-		mbr.MortgageFile = ","
+		mbr.MortgageFile = " "
 	}
 	if mbr.VerifyRemark == "" {
-		mbr.VerifyRemark = ","
+		mbr.VerifyRemark = " "
 	}
 	if mbr.Pwd == "" {
-		mbr.Pwd = ","
+		mbr.Pwd = " "
 	}
 	if mbr.LowestAccount == "" {
 		mbr.LowestAccount = "50.00"
@@ -157,22 +157,22 @@ func DealTempFunc(mbr *makeborrow.MakeBorrowRequest) *makeborrow.MakeBorrowReque
 		mbr.OpenZiliao = 1
 	}
 	if mbr.Addip == "" {
-		mbr.Addip = ","
+		mbr.Addip = " "
 	}
 	if mbr.Secured == "" {
-		mbr.Secured = ","
+		mbr.Secured = " "
 	}
 	if mbr.Zhuanrangren == "" {
-		mbr.Zhuanrangren = ","
+		mbr.Zhuanrangren = " "
 	}
 	if mbr.SignDate == "" {
-		mbr.SignDate = ","
+		mbr.SignDate = " "
 	}
 	if mbr.FeeRate == "" {
-		mbr.FeeRate = ","
+		mbr.FeeRate = " "
 	}
 	if mbr.BorrowName == "" {
-		mbr.BorrowName = ","
+		mbr.BorrowName = " "
 	}
 	return mbr
 }
@@ -193,7 +193,7 @@ func (bs *borrowservice) makeBorrow(requestObj *MakeBorrowRequestStruct) (r *Mak
 	bIsAddCredit := checkAddCredit(mbr.BorrowType)
 	guarantor := makeborrow.GetGuarantor(mbr.UserID)
 	if guarantor == "" {
-		guarantor = ","
+		guarantor = " "
 	}
 	if bIsAddCredit {
 		mbr.Secured = guarantor

@@ -11,6 +11,11 @@ import (
 	"cht/service/makeborrowservice"
 	"cht/service/messagethriftservice"
 	"cht/service/phoneattestationthriftservice"
+	"cht/service/roleadd"
+	"cht/service/roledelete"
+	"cht/service/roledetails"
+	"cht/service/roleedit"
+	"cht/service/rolerightset"
 	"cht/service/securedlist"
 	"cht/service/subledgerlist"
 	"cht/service/sysconfigthriftservice"
@@ -137,6 +142,31 @@ func main() {
 	go func() {
 		/*开启后台---值班人详情服务*/
 		dutydetails.StartDutyDetailServer()
+	}()
+
+	go func() {
+		/*开启后台---用户角色添加服务*/
+		roleadd.StartRoleAddServer()
+	}()
+
+	go func() {
+		/*开启后台---用户角色删除服务*/
+		roledelete.StartRoleDeleteServer()
+	}()
+
+	go func() {
+		/*开启后台---用户角色详情获取服务*/
+		roledetails.StartRoleDetailsServer()
+	}()
+
+	go func() {
+		/*开启后台---用户角色编辑服务*/
+		roleedit.StartRoleEditServer()
+	}()
+
+	go func() {
+		/*开启后台---用户角色权限修改服务*/
+		rolerightset.StartRoleEditServer()
 	}()
 
 	<-ch

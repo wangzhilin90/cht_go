@@ -1,6 +1,7 @@
 package dutydetails
 
 import (
+	"cht/common/localtime"
 	. "cht/common/logger"
 	"fmt"
 	"github.com/astaxie/beego/orm"
@@ -23,20 +24,6 @@ type DutyDetailsStruct struct {
 	Addtime     int32  `orm:column(addtime)`
 }
 
-/*获取当天0点时间*/
-func getLocalZeroTime() int64 {
-	year, month, day := time.Now().Date()
-	zero := time.Date(year, month, day, 0, 0, 0, 0, time.Local).Unix()
-	return zero
-}
-
-/*获取当天23:59:59点时间*/
-func getLocal24Time() int64 {
-	year, month, day := time.Now().Date()
-	end := time.Date(year, month, day, 23, 59, 59, 0, time.Local).Unix()
-	return end
-}
-
 func GetDutyDetails(ddrs *DutyDetailsRequestStruct) (*DutyDetailsStruct, error) {
 	o := orm.NewOrm()
 	o.Using("default")
@@ -44,8 +31,8 @@ func GetDutyDetails(ddrs *DutyDetailsRequestStruct) (*DutyDetailsStruct, error) 
 	qb, _ := orm.NewQueryBuilder("mysql")
 	qb.Select("*").
 		From("jl_customer_plan").
-		Where(fmt.Sprintf("duty_time >= %d", getLocalZeroTime())).
-		And(fmt.Sprintf("duty_time <= %d", getLocal24Time())).
+		Where(fmt.Sprintf("duty_time >= %d", localtime.GetLocalZeroTime())).
+		And(fmt.Sprintf("duty_time <= %d", localtime.GetLocal24Time())).
 		And(fmt.Sprintf("start <= %d", time.Now().Unix())).
 		And(fmt.Sprintf("end >= %d", time.Now().Unix())).
 		Limit(1)

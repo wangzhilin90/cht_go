@@ -1,6 +1,7 @@
 package collection
 
 import (
+	"cht/common/localtime"
 	. "cht/common/logger"
 	"fmt"
 	"github.com/astaxie/beego/orm"
@@ -79,14 +80,17 @@ func GetCollectionInfo(trr *CollectionRequest) ([]CollectionInfoStruct, int32, e
 			qb.And(fmt.Sprintf("BC.repay_time <= %d", trr.Endtime))
 		}
 	case trr.SearchTime == 1:
-		/*查最近七天充值记录*/
-		qb.And(fmt.Sprintf("BC.repay_time >=%d", time.Now().Unix()-EVEN_DAYS_QUANTUM))
+		/*查最近七天充值记录---往后7天*/
+		qb.And(fmt.Sprintf("BC.repay_time <=%d", time.Now().Unix()+EVEN_DAYS_QUANTUM)).
+			And(fmt.Sprintf("BC.repay_time >=%d", localtime.GetLocalZeroTime()))
 	case trr.SearchTime == 2:
-		/*查最近一个月充值记录*/
-		qb.And(fmt.Sprintf("BC.repay_time >=%d", time.Now().Unix()-ONE_MONTH_QUANTUM))
+		/*查最近一个月充值记录---往后一个月*/
+		qb.And(fmt.Sprintf("BC.repay_time <=%d", time.Now().Unix()+ONE_MONTH_QUANTUM)).
+			And(fmt.Sprintf("BC.repay_time >=%d", localtime.GetLocalZeroTime()))
 	case trr.SearchTime == 3:
-		/*查最近两个月充值记录*/
-		qb.And(fmt.Sprintf("BC.repay_time >=%d", time.Now().Unix()-TWO_MONTH_QUANTUM))
+		/*查最近两个月充值记录---往后一个月*/
+		qb.And(fmt.Sprintf("BC.repay_time <=%d", time.Now().Unix()+TWO_MONTH_QUANTUM)).
+			And(fmt.Sprintf("BC.repay_time >=%d", localtime.GetLocalZeroTime()))
 	}
 
 	//0:全部，1: 还款中2：已回款

@@ -1,6 +1,7 @@
 package cashrecord
 
 import (
+	"cht/common/localtime"
 	. "cht/common/logger"
 	"fmt"
 	"github.com/astaxie/beego/orm"
@@ -102,13 +103,16 @@ func GetCashRecord(crrs *CashRecordRequestStruct) ([]CashRecordStruct, *CashStat
 		}
 	case crrs.QueryTime == 1:
 		/*查最近七天充值记录*/
-		qb.And(fmt.Sprintf("addtime >=%d", time.Now().Unix()-EVEN_DAYS_QUANTUM))
+		qb.And(fmt.Sprintf("addtime >=%d", time.Now().Unix()-EVEN_DAYS_QUANTUM)).
+			And(fmt.Sprintf("addtime <=%d", localtime.GetLocalZeroTime()))
 	case crrs.QueryTime == 2:
 		/*查最近一个月充值记录*/
-		qb.And(fmt.Sprintf("addtime >=%d", time.Now().Unix()-ONE_MONTH_QUANTUM))
+		qb.And(fmt.Sprintf("addtime >=%d", time.Now().Unix()-ONE_MONTH_QUANTUM)).
+			And(fmt.Sprintf("addtime <=%d", localtime.GetLocalZeroTime()))
 	case crrs.QueryTime == 3:
 		/*查最近两个月充值记录*/
-		qb.And(fmt.Sprintf("addtime >=%d", time.Now().Unix()-TWO_MONTH_QUANTUM))
+		qb.And(fmt.Sprintf("addtime >=%d", time.Now().Unix()-TWO_MONTH_QUANTUM)).
+			And(fmt.Sprintf("addtime <=%d", localtime.GetLocalZeroTime()))
 	}
 
 	//充值状态,0:查全部 1:已成功 2:审核中  3:审核失败

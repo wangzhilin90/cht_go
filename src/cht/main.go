@@ -10,6 +10,7 @@ import (
 	"cht/service/kefulist"
 	"cht/service/makeborrowservice"
 	"cht/service/messagethriftservice"
+	"cht/service/operationaldata"
 	"cht/service/phoneattestationthriftservice"
 	"cht/service/roleadd"
 	"cht/service/roledelete"
@@ -173,6 +174,11 @@ func main() {
 	go func() {
 		/*开启后台---小城交流日服务*/
 		talking.StartTalkingServer()
+	}()
+
+	go func() {
+		/*开启后台---运营数据查询服务*/
+		operationaldata.StartOperationalDataServer()
 	}()
 
 	<-ch

@@ -19,6 +19,7 @@ import (
 	"cht/service/securedlist"
 	"cht/service/subledgerlist"
 	"cht/service/sysconfigthriftservice"
+	"cht/service/talking"
 	"cht/service/updateuserloginlogdetails"
 	"cht/service/updateuserpasswword"
 	"cht/service/usercashrecordList"
@@ -167,6 +168,11 @@ func main() {
 	go func() {
 		/*开启后台---用户角色权限修改服务*/
 		rolerightset.StartRoleEditServer()
+	}()
+
+	go func() {
+		/*开启后台---小城交流日服务*/
+		talking.StartTalkingServer()
 	}()
 
 	<-ch

@@ -3,6 +3,7 @@ package main
 import (
 	_ "cht/initial"
 	"cht/service/advertmanagethriftservice"
+	"cht/service/articledetails"
 	"cht/service/borrowuserdetails"
 	"cht/service/dutydetails"
 	"cht/service/emailattestationthriftservice"
@@ -185,6 +186,11 @@ func main() {
 	go func() {
 		/*开启后台---获取帮助中心文章列表服务*/
 		helplist.StartHelpListServer()
+	}()
+
+	go func() {
+		/*开启后台---文章详情服务*/
+		articledetails.StartArticleDetailsServer()
 	}()
 
 	<-ch

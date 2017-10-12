@@ -6,6 +6,7 @@ import (
 	"cht/service/borrowuserdetails"
 	"cht/service/dutydetails"
 	"cht/service/emailattestationthriftservice"
+	"cht/service/helplist"
 	"cht/service/juanzengthriftservice"
 	"cht/service/kefulist"
 	"cht/service/makeborrowservice"
@@ -179,6 +180,11 @@ func main() {
 	go func() {
 		/*开启后台---运营数据查询服务*/
 		operationaldata.StartOperationalDataServer()
+	}()
+
+	go func() {
+		/*开启后台---获取帮助中心文章列表服务*/
+		helplist.StartHelpListServer()
 	}()
 
 	<-ch

@@ -23,7 +23,7 @@ type ArticleDetailsRequestStruct struct {
 }
 
 // func NewArticleDetailsRequestStruct() *ArticleDetailsRequestStruct {
-//   return &ArticleDetailsRequestStruct{}
+// 	return &ArticleDetailsRequestStruct{}
 // }
 
 func (p *ArticleDetailsRequestStruct) GetID() int32 {
@@ -157,26 +157,30 @@ func (p *ArticleDetailsRequestStruct) String() string {
 //  - Isbanner
 //  - Type
 //  - Name
+//  - ResultStatus
+//  - Msg
 type ArticleDetailsResultStruct struct {
-	ID          int32  `thrift:"id,1" db:"id" json:"id"`
-	Cateid      int32  `thrift:"cateid,2" db:"cateid" json:"cateid"`
-	Title       string `thrift:"title,3" db:"title" json:"title"`
-	Content     string `thrift:"content,4" db:"content" json:"content"`
-	Keywords    string `thrift:"keywords,5" db:"keywords" json:"keywords"`
-	Description string `thrift:"description,6" db:"description" json:"description"`
-	ImgURL      string `thrift:"img_url,7" db:"img_url" json:"img_url"`
-	Sort        string `thrift:"sort,8" db:"sort" json:"sort"`
-	Status      int32  `thrift:"status,9" db:"status" json:"status"`
-	Addtime     int32  `thrift:"addtime,10" db:"addtime" json:"addtime"`
-	BannerURL   string `thrift:"banner_url,11" db:"banner_url" json:"banner_url"`
-	Isbanner    int32  `thrift:"isbanner,12" db:"isbanner" json:"isbanner"`
-	Type        int32  `thrift:"type,13" db:"type" json:"type"`
-	Name        string `thrift:"name,14" db:"name" json:"name"`
+	ID           int32  `thrift:"id,1" db:"id" json:"id"`
+	Cateid       int32  `thrift:"cateid,2" db:"cateid" json:"cateid"`
+	Title        string `thrift:"title,3" db:"title" json:"title"`
+	Content      string `thrift:"content,4" db:"content" json:"content"`
+	Keywords     string `thrift:"keywords,5" db:"keywords" json:"keywords"`
+	Description  string `thrift:"description,6" db:"description" json:"description"`
+	ImgURL       string `thrift:"img_url,7" db:"img_url" json:"img_url"`
+	Sort         string `thrift:"sort,8" db:"sort" json:"sort"`
+	Status       int32  `thrift:"status,9" db:"status" json:"status"`
+	Addtime      int32  `thrift:"addtime,10" db:"addtime" json:"addtime"`
+	BannerURL    string `thrift:"banner_url,11" db:"banner_url" json:"banner_url"`
+	Isbanner     int32  `thrift:"isbanner,12" db:"isbanner" json:"isbanner"`
+	Type         int32  `thrift:"type,13" db:"type" json:"type"`
+	Name         string `thrift:"name,14" db:"name" json:"name"`
+	ResultStatus int32  `thrift:"result_status,15" db:"result_status" json:"result_status"`
+	Msg          string `thrift:"msg,16" db:"msg" json:"msg"`
 }
 
-func NewArticleDetailsResultStruct() *ArticleDetailsResultStruct {
-	return &ArticleDetailsResultStruct{}
-}
+// func NewArticleDetailsResultStruct() *ArticleDetailsResultStruct {
+//   return &ArticleDetailsResultStruct{}
+// }
 
 func (p *ArticleDetailsResultStruct) GetID() int32 {
 	return p.ID
@@ -232,6 +236,14 @@ func (p *ArticleDetailsResultStruct) GetType() int32 {
 
 func (p *ArticleDetailsResultStruct) GetName() string {
 	return p.Name
+}
+
+func (p *ArticleDetailsResultStruct) GetResultStatus() int32 {
+	return p.ResultStatus
+}
+
+func (p *ArticleDetailsResultStruct) GetMsg() string {
+	return p.Msg
 }
 func (p *ArticleDetailsResultStruct) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
@@ -301,6 +313,14 @@ func (p *ArticleDetailsResultStruct) Read(iprot thrift.TProtocol) error {
 			}
 		case 14:
 			if err := p.ReadField14(iprot); err != nil {
+				return err
+			}
+		case 15:
+			if err := p.ReadField15(iprot); err != nil {
+				return err
+			}
+		case 16:
+			if err := p.ReadField16(iprot); err != nil {
 				return err
 			}
 		default:
@@ -444,6 +464,24 @@ func (p *ArticleDetailsResultStruct) ReadField14(iprot thrift.TProtocol) error {
 	return nil
 }
 
+func (p *ArticleDetailsResultStruct) ReadField15(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadI32(); err != nil {
+		return thrift.PrependError("error reading field 15: ", err)
+	} else {
+		p.ResultStatus = v
+	}
+	return nil
+}
+
+func (p *ArticleDetailsResultStruct) ReadField16(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 16: ", err)
+	} else {
+		p.Msg = v
+	}
+	return nil
+}
+
 func (p *ArticleDetailsResultStruct) Write(oprot thrift.TProtocol) error {
 	if err := oprot.WriteStructBegin("ArticleDetailsResultStruct"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
@@ -489,6 +527,12 @@ func (p *ArticleDetailsResultStruct) Write(oprot thrift.TProtocol) error {
 			return err
 		}
 		if err := p.writeField14(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField15(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField16(oprot); err != nil {
 			return err
 		}
 	}
@@ -679,6 +723,32 @@ func (p *ArticleDetailsResultStruct) writeField14(oprot thrift.TProtocol) (err e
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field end error 14:name: ", p), err)
+	}
+	return err
+}
+
+func (p *ArticleDetailsResultStruct) writeField15(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("result_status", thrift.I32, 15); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 15:result_status: ", p), err)
+	}
+	if err := oprot.WriteI32(int32(p.ResultStatus)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.result_status (15) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 15:result_status: ", p), err)
+	}
+	return err
+}
+
+func (p *ArticleDetailsResultStruct) writeField16(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("msg", thrift.STRING, 16); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 16:msg: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.Msg)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.msg (16) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 16:msg: ", p), err)
 	}
 	return err
 }

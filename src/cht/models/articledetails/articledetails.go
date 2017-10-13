@@ -57,7 +57,7 @@ func GetArticleDetails(adrs *ArticleDetailsRequestStruct) (*ArticleDetailsResult
 	err := o.Raw(sql).QueryRow(&adrst)
 	if err != nil {
 		Logger.Debugf("GetArticleDetails query failed %v", err)
-		return nil, nil
+		return nil, err
 	}
 	Logger.Debugf("GetArticleDetails res %v", adrst)
 	return &adrst, nil
@@ -116,7 +116,7 @@ func GetPrevArticle(nrs *NextRequestStruct) (*ArticleDetailsResultStruct, error)
 		err := o.Raw(sql).QueryRow(&adrs)
 		if err != nil {
 			Logger.Debugf("PrevArticle query failed %v", err)
-			return nil, nil
+			return nil, err
 		}
 		Logger.Debugf("PrevArticle return value: %v", adrs)
 		return &adrs, nil
@@ -140,7 +140,7 @@ func GetPrevArticle(nrs *NextRequestStruct) (*ArticleDetailsResultStruct, error)
 		err := o.Raw(sql).QueryRow(&adrs)
 		if err != nil {
 			Logger.Debugf("PrevArticle query failed %v", err)
-			return nil, nil
+			return nil, err
 		}
 		Logger.Debugf("PrevArticle return value: %v", adrs)
 		return &adrs, nil
@@ -170,7 +170,7 @@ func GetNextArticle(nrs *NextRequestStruct) (*ArticleDetailsResultStruct, error)
 		err := o.Raw(sql).QueryRow(&adrs)
 		if err != nil {
 			Logger.Debugf("NextArticle query failed %v", err)
-			return nil, nil
+			return nil, err
 		}
 		Logger.Debugf("NextArticle return value: %v", adrs)
 		return &adrs, nil
@@ -192,7 +192,7 @@ func GetNextArticle(nrs *NextRequestStruct) (*ArticleDetailsResultStruct, error)
 		err := o.Raw(sql).QueryRow(&adrs)
 		if err != nil {
 			Logger.Debugf("NextArticle query failed %v", err)
-			return nil, nil
+			return nil, err
 		}
 		Logger.Debugf("NextArticle return value: %v", adrs)
 		return &adrs, nil

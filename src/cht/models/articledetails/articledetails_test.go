@@ -39,7 +39,8 @@ func TestUpdateReadNum(t *testing.T) {
 }
 
 func TestGetPrevArticle(t *testing.T) {
-	adrs := NewNextRequestStruct(3941, 10, 1, 1413881500)
+	// adrs := NewNextRequestStruct(3941, 10, 1, 1413881500)
+	adrs := NewNextRequestStruct(2495, 8, 1, 1413881500)
 	res, err := GetPrevArticle(adrs)
 	if err != nil {
 		t.Fatalf("TestGetPrevArticle failed", err)
@@ -48,7 +49,7 @@ func TestGetPrevArticle(t *testing.T) {
 }
 
 func TestGetNextArticle(t *testing.T) {
-	adrs := NewNextRequestStruct(2, 2, 1, 1413881500)
+	adrs := NewNextRequestStruct(2495, 8, 1, 1413881500)
 	res, err := GetNextArticle(adrs)
 	if err != nil {
 		t.Fatalf("TestGetNextArticle failed", err)

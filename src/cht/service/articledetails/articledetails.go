@@ -8,14 +8,49 @@ import (
 	"git.apache.org/thrift.git/lib/go/thrift"
 )
 
+const (
+	QUERY_ARTICLE_DETAILS_SUCCESS = 1000
+	QUERY_ARTICLE_DETAILS_FAILED  = 1001
+)
+
+var ArticleStatus = map[int]string{
+	QUERY_ARTICLE_DETAILS_SUCCESS: "查询文章详情成功",
+	QUERY_ARTICLE_DETAILS_FAILED:  "查询文章详情失败",
+}
+
+const (
+	QUERY_PREV_ARTICLE_SUCCESS = 1000
+	QUERY_PREV_ARTICLE_FAILED  = 1001
+)
+
+var PrevArticleStatus = map[int]string{
+	QUERY_PREV_ARTICLE_SUCCESS: "查询上一篇文章成功",
+	QUERY_PREV_ARTICLE_FAILED:  "查询下一篇文章失败",
+}
+
+const (
+	QUERY_NEXT_ARTICLE_SUCCESS = 1000
+	QUERY_NEXT_ARTICLE_FAILED  = 1001
+)
+
+var NextArticleStatus = map[int]string{
+	QUERY_NEXT_ARTICLE_SUCCESS: "查询下一篇文章成功",
+	QUERY_NEXT_ARTICLE_FAILED:  "查询下一篇文章失败",
+}
+
 type articledetailsservice struct{}
 
 func (ads *articledetailsservice) GetArticleDetails(requestObj *ArticleDetailsRequestStruct) (r *ArticleDetailsResultStruct, err error) {
 	adrs := new(articledetails.ArticleDetailsRequestStruct)
 	adrs.ID = requestObj.GetID()
 	adrs.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
-	res, _ := articledetails.GetArticleDetails(adrs)
-
+	res, err := articledetails.GetArticleDetails(adrs)
+	if err != nil {
+		return &ArticleDetailsResultStruct{
+			ResultStatus: QUERY_ARTICLE_DETAILS_FAILED,
+			Msg:          ArticleStatus[QUERY_ARTICLE_DETAILS_FAILED],
+		}, nil
+	}
 	var response ArticleDetailsResultStruct
 	response.ID = res.ID
 	response.Cateid = res.Cateid
@@ -31,6 +66,9 @@ func (ads *articledetailsservice) GetArticleDetails(requestObj *ArticleDetailsRe
 	response.Isbanner = res.Isbanner
 	response.Type = res.Type
 	response.Name = res.Name
+	response.ResultStatus = QUERY_ARTICLE_DETAILS_SUCCESS
+	response.Msg = ArticleStatus[QUERY_ARTICLE_DETAILS_SUCCESS]
+	Logger.Debugf("GetArticleDetails response:%v", response)
 	return &response, nil
 }
 
@@ -39,6 +77,7 @@ func (ads *articledetailsservice) UpdateReadNum(requestObj *ArticleDetailsReques
 	adrs.ID = requestObj.GetID()
 	adrs.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	res, _ := articledetails.UpdateReadNum(adrs)
+
 	return res, nil
 }
 
@@ -49,7 +88,13 @@ func (ads *articledetailsservice) PrevArticle(requestObj *NextRequestStruct) (r 
 	nrs.Type = requestObj.GetType()
 	nrs.Addtime = requestObj.GetAddtime()
 	nrs.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
-	res, _ := articledetails.GetPrevArticle(nrs)
+	res, err := articledetails.GetPrevArticle(nrs)
+	if err != nil {
+		return &ArticleDetailsResultStruct{
+			ResultStatus: QUERY_PREV_ARTICLE_FAILED,
+			Msg:          PrevArticleStatus[QUERY_PREV_ARTICLE_FAILED],
+		}, nil
+	}
 
 	var response ArticleDetailsResultStruct
 	response.ID = res.ID
@@ -66,6 +111,9 @@ func (ads *articledetailsservice) PrevArticle(requestObj *NextRequestStruct) (r 
 	response.Isbanner = res.Isbanner
 	response.Type = res.Type
 	response.Name = res.Name
+	response.ResultStatus = QUERY_PREV_ARTICLE_SUCCESS
+	response.Msg = PrevArticleStatus[QUERY_PREV_ARTICLE_SUCCESS]
+	Logger.Debugf("PrevArticle response:%v", response)
 	return &response, nil
 }
 
@@ -76,7 +124,13 @@ func (ads *articledetailsservice) NextArticle(requestObj *NextRequestStruct) (r 
 	nrs.Type = requestObj.GetType()
 	nrs.Addtime = requestObj.GetAddtime()
 	nrs.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
-	res, _ := articledetails.GetNextArticle(nrs)
+	res, err := articledetails.GetNextArticle(nrs)
+	if err != nil {
+		return &ArticleDetailsResultStruct{
+			Status: QUERY_NEXT_ARTICLE_FAILED,
+			Msg:    NextArticleStatus[QUERY_NEXT_ARTICLE_FAILED],
+		}, nil
+	}
 
 	var response ArticleDetailsResultStruct
 	response.ID = res.ID
@@ -93,6 +147,9 @@ func (ads *articledetailsservice) NextArticle(requestObj *NextRequestStruct) (r 
 	response.Isbanner = res.Isbanner
 	response.Type = res.Type
 	response.Name = res.Name
+	response.ResultStatus = QUERY_NEXT_ARTICLE_SUCCESS
+	response.Msg = NextArticleStatus[QUERY_NEXT_ARTICLE_SUCCESS]
+	Logger.Debugf("NextArticle response:%v", response)
 	return &response, nil
 }
 

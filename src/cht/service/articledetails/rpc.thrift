@@ -23,7 +23,9 @@ struct ArticleDetailsResultStruct{
 	11:string banner_url,
 	12:i32 isbanner,
 	13:i32 type,
-	14:string name
+	14:string name,
+	15:i32 result_status,
+	16:string msg
 }
 //SELECT A.*,AC.name FROM jl_article A LEFT JOIN jl_article_cate AC ON A.cateid=AC.id WHERE A.id='3777'
 

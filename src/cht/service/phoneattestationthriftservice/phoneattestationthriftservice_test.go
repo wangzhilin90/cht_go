@@ -24,10 +24,10 @@ func NewUpdatePhoneRequestStruct(user_id int32, phone string) *UpdatePhoneReques
 	}
 }
 
-func TestCheckPhoneByPhone(t *testing.T) {
+func TestCheckPhoneUse(t *testing.T) {
 	cprs := NewCheckPhoneUseRequestStruct("13537573273")
 	pts := &phoneattestationservice{}
-	str, _ := pts.CheckPhoneByPhone(cprs)
+	str, _ := pts.CheckPhoneUse(cprs)
 	if str == "1000" {
 		t.Fatalf("TestCheckPhoneUse failed")
 	}
@@ -42,10 +42,10 @@ func TestGetUserIdByhsid(t *testing.T) {
 	}
 }
 
-func TestUpdatePhoneByTransaction(t *testing.T) {
+func TestUpdatePhone(t *testing.T) {
 	ubrs := NewUpdatePhoneRequestStruct(204742, "1371405792")
 	pts := &phoneattestationservice{}
-	str, _ := pts.UpdatePhoneByTransaction(ubrs)
+	str, _ := pts.UpdatePhone(ubrs)
 	if str == "1001" {
 		t.Fatalf("TestUpdatePhone failed")
 	}

@@ -11,20 +11,20 @@ import (
 type phoneattestationservice struct{}
 
 const (
-	PHONE_USED   = "1001"
-	PHONE_UNUSED = "1000"
+	PHONE_USED   = "1001" //没查到记录返回1000
+	PHONE_UNUSED = "1000" //查到记录返回1001
 )
 
-func (pts *phoneattestationservice) CheckPhoneByPhone(requestObj *CheckPhoneUseRequestStruct) (string, error) {
+func (pts *phoneattestationservice) CheckPhoneUse(requestObj *CheckPhoneUseRequestStruct) (string, error) {
 	cpur := new(phoneattestation.CheckPhoneUseRequest)
 	cpur.Phone = requestObj.GetPhone()
 	cpur.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	b := phoneattestation.CheckPhoneUse(cpur)
 	if b {
-		Logger.Debugf("CheckPhoneByPhone phone %v is used status :%v", cpur.Phone, PHONE_USED)
+		Logger.Debugf("CheckPhoneUse phone %v is used status :%v", cpur.Phone, PHONE_USED)
 		return PHONE_USED, nil
 	} else {
-		Logger.Debugf("CheckPhoneByPhone phone %v is not used status :%v", cpur.Phone, PHONE_UNUSED)
+		Logger.Debugf("CheckPhoneUse phone %v is not used status :%v", cpur.Phone, PHONE_UNUSED)
 		return PHONE_UNUSED, nil
 	}
 }
@@ -41,13 +41,13 @@ func (pts *phoneattestationservice) GetUserIdByhsid(requestObj *GetUserIdByhsidR
 	return user_id, nil
 }
 
-func (pts *phoneattestationservice) UpdatePhoneByTransaction(requestObj *UpdatePhoneRequestStruct) (string, error) {
+func (pts *phoneattestationservice) UpdatePhone(requestObj *UpdatePhoneRequestStruct) (string, error) {
 	upr := new(phoneattestation.UpdatePhoneRequest)
 	upr.Phone = requestObj.GetPhone()
 	upr.UserID = requestObj.GetUserID()
 	status := phoneattestation.UpdatePhone(upr)
 
-	Logger.Debugf("UpdatePhoneByTransaction status:%v", status)
+	Logger.Debugf("UpdatePhone status:%v", status)
 	return status, nil
 }
 

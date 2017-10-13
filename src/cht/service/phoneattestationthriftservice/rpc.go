@@ -436,13 +436,13 @@ func (p *UpdatePhoneRequestStruct) String() string {
 type PhoneAttestationThriftService interface {
 	// Parameters:
 	//  - RequestObj
-	CheckPhoneByPhone(requestObj *CheckPhoneUseRequestStruct) (r string, err error)
+	CheckPhoneUse(requestObj *CheckPhoneUseRequestStruct) (r string, err error)
 	// Parameters:
 	//  - RequestObj
 	GetUserIdByhsid(requestObj *GetUserIdByhsidRequestStruct) (r int32, err error)
 	// Parameters:
 	//  - RequestObj
-	UpdatePhoneByTransaction(requestObj *UpdatePhoneRequestStruct) (r string, err error)
+	UpdatePhone(requestObj *UpdatePhoneRequestStruct) (r string, err error)
 }
 
 type PhoneAttestationThriftServiceClient struct {
@@ -473,24 +473,24 @@ func NewPhoneAttestationThriftServiceClientProtocol(t thrift.TTransport, iprot t
 
 // Parameters:
 //  - RequestObj
-func (p *PhoneAttestationThriftServiceClient) CheckPhoneByPhone(requestObj *CheckPhoneUseRequestStruct) (r string, err error) {
-	if err = p.sendCheckPhoneByPhone(requestObj); err != nil {
+func (p *PhoneAttestationThriftServiceClient) CheckPhoneUse(requestObj *CheckPhoneUseRequestStruct) (r string, err error) {
+	if err = p.sendCheckPhoneUse(requestObj); err != nil {
 		return
 	}
-	return p.recvCheckPhoneByPhone()
+	return p.recvCheckPhoneUse()
 }
 
-func (p *PhoneAttestationThriftServiceClient) sendCheckPhoneByPhone(requestObj *CheckPhoneUseRequestStruct) (err error) {
+func (p *PhoneAttestationThriftServiceClient) sendCheckPhoneUse(requestObj *CheckPhoneUseRequestStruct) (err error) {
 	oprot := p.OutputProtocol
 	if oprot == nil {
 		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
 		p.OutputProtocol = oprot
 	}
 	p.SeqId++
-	if err = oprot.WriteMessageBegin("CheckPhoneByPhone", thrift.CALL, p.SeqId); err != nil {
+	if err = oprot.WriteMessageBegin("checkPhoneUse", thrift.CALL, p.SeqId); err != nil {
 		return
 	}
-	args := PhoneAttestationThriftServiceCheckPhoneByPhoneArgs{
+	args := PhoneAttestationThriftServiceCheckPhoneUseArgs{
 		RequestObj: requestObj,
 	}
 	if err = args.Write(oprot); err != nil {
@@ -502,7 +502,7 @@ func (p *PhoneAttestationThriftServiceClient) sendCheckPhoneByPhone(requestObj *
 	return oprot.Flush()
 }
 
-func (p *PhoneAttestationThriftServiceClient) recvCheckPhoneByPhone() (value string, err error) {
+func (p *PhoneAttestationThriftServiceClient) recvCheckPhoneUse() (value string, err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -512,12 +512,12 @@ func (p *PhoneAttestationThriftServiceClient) recvCheckPhoneByPhone() (value str
 	if err != nil {
 		return
 	}
-	if method != "CheckPhoneByPhone" {
-		err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "CheckPhoneByPhone failed: wrong method name")
+	if method != "checkPhoneUse" {
+		err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "checkPhoneUse failed: wrong method name")
 		return
 	}
 	if p.SeqId != seqId {
-		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "CheckPhoneByPhone failed: out of sequence response")
+		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "checkPhoneUse failed: out of sequence response")
 		return
 	}
 	if mTypeId == thrift.EXCEPTION {
@@ -534,10 +534,10 @@ func (p *PhoneAttestationThriftServiceClient) recvCheckPhoneByPhone() (value str
 		return
 	}
 	if mTypeId != thrift.REPLY {
-		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "CheckPhoneByPhone failed: invalid message type")
+		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "checkPhoneUse failed: invalid message type")
 		return
 	}
-	result := PhoneAttestationThriftServiceCheckPhoneByPhoneResult{}
+	result := PhoneAttestationThriftServiceCheckPhoneUseResult{}
 	if err = result.Read(iprot); err != nil {
 		return
 	}
@@ -627,24 +627,24 @@ func (p *PhoneAttestationThriftServiceClient) recvGetUserIdByhsid() (value int32
 
 // Parameters:
 //  - RequestObj
-func (p *PhoneAttestationThriftServiceClient) UpdatePhoneByTransaction(requestObj *UpdatePhoneRequestStruct) (r string, err error) {
-	if err = p.sendUpdatePhoneByTransaction(requestObj); err != nil {
+func (p *PhoneAttestationThriftServiceClient) UpdatePhone(requestObj *UpdatePhoneRequestStruct) (r string, err error) {
+	if err = p.sendUpdatePhone(requestObj); err != nil {
 		return
 	}
-	return p.recvUpdatePhoneByTransaction()
+	return p.recvUpdatePhone()
 }
 
-func (p *PhoneAttestationThriftServiceClient) sendUpdatePhoneByTransaction(requestObj *UpdatePhoneRequestStruct) (err error) {
+func (p *PhoneAttestationThriftServiceClient) sendUpdatePhone(requestObj *UpdatePhoneRequestStruct) (err error) {
 	oprot := p.OutputProtocol
 	if oprot == nil {
 		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
 		p.OutputProtocol = oprot
 	}
 	p.SeqId++
-	if err = oprot.WriteMessageBegin("UpdatePhoneByTransaction", thrift.CALL, p.SeqId); err != nil {
+	if err = oprot.WriteMessageBegin("updatePhone", thrift.CALL, p.SeqId); err != nil {
 		return
 	}
-	args := PhoneAttestationThriftServiceUpdatePhoneByTransactionArgs{
+	args := PhoneAttestationThriftServiceUpdatePhoneArgs{
 		RequestObj: requestObj,
 	}
 	if err = args.Write(oprot); err != nil {
@@ -656,7 +656,7 @@ func (p *PhoneAttestationThriftServiceClient) sendUpdatePhoneByTransaction(reque
 	return oprot.Flush()
 }
 
-func (p *PhoneAttestationThriftServiceClient) recvUpdatePhoneByTransaction() (value string, err error) {
+func (p *PhoneAttestationThriftServiceClient) recvUpdatePhone() (value string, err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -666,12 +666,12 @@ func (p *PhoneAttestationThriftServiceClient) recvUpdatePhoneByTransaction() (va
 	if err != nil {
 		return
 	}
-	if method != "UpdatePhoneByTransaction" {
-		err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "UpdatePhoneByTransaction failed: wrong method name")
+	if method != "updatePhone" {
+		err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "updatePhone failed: wrong method name")
 		return
 	}
 	if p.SeqId != seqId {
-		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "UpdatePhoneByTransaction failed: out of sequence response")
+		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "updatePhone failed: out of sequence response")
 		return
 	}
 	if mTypeId == thrift.EXCEPTION {
@@ -688,10 +688,10 @@ func (p *PhoneAttestationThriftServiceClient) recvUpdatePhoneByTransaction() (va
 		return
 	}
 	if mTypeId != thrift.REPLY {
-		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "UpdatePhoneByTransaction failed: invalid message type")
+		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "updatePhone failed: invalid message type")
 		return
 	}
-	result := PhoneAttestationThriftServiceUpdatePhoneByTransactionResult{}
+	result := PhoneAttestationThriftServiceUpdatePhoneResult{}
 	if err = result.Read(iprot); err != nil {
 		return
 	}
@@ -723,9 +723,9 @@ func (p *PhoneAttestationThriftServiceProcessor) ProcessorMap() map[string]thrif
 func NewPhoneAttestationThriftServiceProcessor(handler PhoneAttestationThriftService) *PhoneAttestationThriftServiceProcessor {
 
 	self6 := &PhoneAttestationThriftServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
-	self6.processorMap["CheckPhoneByPhone"] = &phoneAttestationThriftServiceProcessorCheckPhoneByPhone{handler: handler}
+	self6.processorMap["checkPhoneUse"] = &phoneAttestationThriftServiceProcessorCheckPhoneUse{handler: handler}
 	self6.processorMap["getUserIdByhsid"] = &phoneAttestationThriftServiceProcessorGetUserIdByhsid{handler: handler}
-	self6.processorMap["UpdatePhoneByTransaction"] = &phoneAttestationThriftServiceProcessorUpdatePhoneByTransaction{handler: handler}
+	self6.processorMap["updatePhone"] = &phoneAttestationThriftServiceProcessorUpdatePhone{handler: handler}
 	return self6
 }
 
@@ -748,16 +748,16 @@ func (p *PhoneAttestationThriftServiceProcessor) Process(iprot, oprot thrift.TPr
 
 }
 
-type phoneAttestationThriftServiceProcessorCheckPhoneByPhone struct {
+type phoneAttestationThriftServiceProcessorCheckPhoneUse struct {
 	handler PhoneAttestationThriftService
 }
 
-func (p *phoneAttestationThriftServiceProcessorCheckPhoneByPhone) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := PhoneAttestationThriftServiceCheckPhoneByPhoneArgs{}
+func (p *phoneAttestationThriftServiceProcessorCheckPhoneUse) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := PhoneAttestationThriftServiceCheckPhoneUseArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("CheckPhoneByPhone", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("checkPhoneUse", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush()
@@ -765,12 +765,12 @@ func (p *phoneAttestationThriftServiceProcessorCheckPhoneByPhone) Process(seqId 
 	}
 
 	iprot.ReadMessageEnd()
-	result := PhoneAttestationThriftServiceCheckPhoneByPhoneResult{}
+	result := PhoneAttestationThriftServiceCheckPhoneUseResult{}
 	var retval string
 	var err2 error
-	if retval, err2 = p.handler.CheckPhoneByPhone(args.RequestObj); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing CheckPhoneByPhone: "+err2.Error())
-		oprot.WriteMessageBegin("CheckPhoneByPhone", thrift.EXCEPTION, seqId)
+	if retval, err2 = p.handler.CheckPhoneUse(args.RequestObj); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing checkPhoneUse: "+err2.Error())
+		oprot.WriteMessageBegin("checkPhoneUse", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush()
@@ -778,7 +778,7 @@ func (p *phoneAttestationThriftServiceProcessorCheckPhoneByPhone) Process(seqId 
 	} else {
 		result.Success = &retval
 	}
-	if err2 = oprot.WriteMessageBegin("CheckPhoneByPhone", thrift.REPLY, seqId); err2 != nil {
+	if err2 = oprot.WriteMessageBegin("checkPhoneUse", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -844,16 +844,16 @@ func (p *phoneAttestationThriftServiceProcessorGetUserIdByhsid) Process(seqId in
 	return true, err
 }
 
-type phoneAttestationThriftServiceProcessorUpdatePhoneByTransaction struct {
+type phoneAttestationThriftServiceProcessorUpdatePhone struct {
 	handler PhoneAttestationThriftService
 }
 
-func (p *phoneAttestationThriftServiceProcessorUpdatePhoneByTransaction) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := PhoneAttestationThriftServiceUpdatePhoneByTransactionArgs{}
+func (p *phoneAttestationThriftServiceProcessorUpdatePhone) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := PhoneAttestationThriftServiceUpdatePhoneArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("UpdatePhoneByTransaction", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("updatePhone", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush()
@@ -861,12 +861,12 @@ func (p *phoneAttestationThriftServiceProcessorUpdatePhoneByTransaction) Process
 	}
 
 	iprot.ReadMessageEnd()
-	result := PhoneAttestationThriftServiceUpdatePhoneByTransactionResult{}
+	result := PhoneAttestationThriftServiceUpdatePhoneResult{}
 	var retval string
 	var err2 error
-	if retval, err2 = p.handler.UpdatePhoneByTransaction(args.RequestObj); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing UpdatePhoneByTransaction: "+err2.Error())
-		oprot.WriteMessageBegin("UpdatePhoneByTransaction", thrift.EXCEPTION, seqId)
+	if retval, err2 = p.handler.UpdatePhone(args.RequestObj); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing updatePhone: "+err2.Error())
+		oprot.WriteMessageBegin("updatePhone", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush()
@@ -874,7 +874,7 @@ func (p *phoneAttestationThriftServiceProcessorUpdatePhoneByTransaction) Process
 	} else {
 		result.Success = &retval
 	}
-	if err2 = oprot.WriteMessageBegin("UpdatePhoneByTransaction", thrift.REPLY, seqId); err2 != nil {
+	if err2 = oprot.WriteMessageBegin("updatePhone", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -896,27 +896,27 @@ func (p *phoneAttestationThriftServiceProcessorUpdatePhoneByTransaction) Process
 
 // Attributes:
 //  - RequestObj
-type PhoneAttestationThriftServiceCheckPhoneByPhoneArgs struct {
+type PhoneAttestationThriftServiceCheckPhoneUseArgs struct {
 	RequestObj *CheckPhoneUseRequestStruct `thrift:"requestObj,1" db:"requestObj" json:"requestObj"`
 }
 
-func NewPhoneAttestationThriftServiceCheckPhoneByPhoneArgs() *PhoneAttestationThriftServiceCheckPhoneByPhoneArgs {
-	return &PhoneAttestationThriftServiceCheckPhoneByPhoneArgs{}
+func NewPhoneAttestationThriftServiceCheckPhoneUseArgs() *PhoneAttestationThriftServiceCheckPhoneUseArgs {
+	return &PhoneAttestationThriftServiceCheckPhoneUseArgs{}
 }
 
-var PhoneAttestationThriftServiceCheckPhoneByPhoneArgs_RequestObj_DEFAULT *CheckPhoneUseRequestStruct
+var PhoneAttestationThriftServiceCheckPhoneUseArgs_RequestObj_DEFAULT *CheckPhoneUseRequestStruct
 
-func (p *PhoneAttestationThriftServiceCheckPhoneByPhoneArgs) GetRequestObj() *CheckPhoneUseRequestStruct {
+func (p *PhoneAttestationThriftServiceCheckPhoneUseArgs) GetRequestObj() *CheckPhoneUseRequestStruct {
 	if !p.IsSetRequestObj() {
-		return PhoneAttestationThriftServiceCheckPhoneByPhoneArgs_RequestObj_DEFAULT
+		return PhoneAttestationThriftServiceCheckPhoneUseArgs_RequestObj_DEFAULT
 	}
 	return p.RequestObj
 }
-func (p *PhoneAttestationThriftServiceCheckPhoneByPhoneArgs) IsSetRequestObj() bool {
+func (p *PhoneAttestationThriftServiceCheckPhoneUseArgs) IsSetRequestObj() bool {
 	return p.RequestObj != nil
 }
 
-func (p *PhoneAttestationThriftServiceCheckPhoneByPhoneArgs) Read(iprot thrift.TProtocol) error {
+func (p *PhoneAttestationThriftServiceCheckPhoneUseArgs) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -949,7 +949,7 @@ func (p *PhoneAttestationThriftServiceCheckPhoneByPhoneArgs) Read(iprot thrift.T
 	return nil
 }
 
-func (p *PhoneAttestationThriftServiceCheckPhoneByPhoneArgs) ReadField1(iprot thrift.TProtocol) error {
+func (p *PhoneAttestationThriftServiceCheckPhoneUseArgs) ReadField1(iprot thrift.TProtocol) error {
 	p.RequestObj = &CheckPhoneUseRequestStruct{}
 	if err := p.RequestObj.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.RequestObj), err)
@@ -957,8 +957,8 @@ func (p *PhoneAttestationThriftServiceCheckPhoneByPhoneArgs) ReadField1(iprot th
 	return nil
 }
 
-func (p *PhoneAttestationThriftServiceCheckPhoneByPhoneArgs) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("CheckPhoneByPhone_args"); err != nil {
+func (p *PhoneAttestationThriftServiceCheckPhoneUseArgs) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("checkPhoneUse_args"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
 	if p != nil {
@@ -975,7 +975,7 @@ func (p *PhoneAttestationThriftServiceCheckPhoneByPhoneArgs) Write(oprot thrift.
 	return nil
 }
 
-func (p *PhoneAttestationThriftServiceCheckPhoneByPhoneArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *PhoneAttestationThriftServiceCheckPhoneUseArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("requestObj", thrift.STRUCT, 1); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:requestObj: ", p), err)
 	}
@@ -988,36 +988,36 @@ func (p *PhoneAttestationThriftServiceCheckPhoneByPhoneArgs) writeField1(oprot t
 	return err
 }
 
-func (p *PhoneAttestationThriftServiceCheckPhoneByPhoneArgs) String() string {
+func (p *PhoneAttestationThriftServiceCheckPhoneUseArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("PhoneAttestationThriftServiceCheckPhoneByPhoneArgs(%+v)", *p)
+	return fmt.Sprintf("PhoneAttestationThriftServiceCheckPhoneUseArgs(%+v)", *p)
 }
 
 // Attributes:
 //  - Success
-type PhoneAttestationThriftServiceCheckPhoneByPhoneResult struct {
+type PhoneAttestationThriftServiceCheckPhoneUseResult struct {
 	Success *string `thrift:"success,0" db:"success" json:"success,omitempty"`
 }
 
-func NewPhoneAttestationThriftServiceCheckPhoneByPhoneResult() *PhoneAttestationThriftServiceCheckPhoneByPhoneResult {
-	return &PhoneAttestationThriftServiceCheckPhoneByPhoneResult{}
+func NewPhoneAttestationThriftServiceCheckPhoneUseResult() *PhoneAttestationThriftServiceCheckPhoneUseResult {
+	return &PhoneAttestationThriftServiceCheckPhoneUseResult{}
 }
 
-var PhoneAttestationThriftServiceCheckPhoneByPhoneResult_Success_DEFAULT string
+var PhoneAttestationThriftServiceCheckPhoneUseResult_Success_DEFAULT string
 
-func (p *PhoneAttestationThriftServiceCheckPhoneByPhoneResult) GetSuccess() string {
+func (p *PhoneAttestationThriftServiceCheckPhoneUseResult) GetSuccess() string {
 	if !p.IsSetSuccess() {
-		return PhoneAttestationThriftServiceCheckPhoneByPhoneResult_Success_DEFAULT
+		return PhoneAttestationThriftServiceCheckPhoneUseResult_Success_DEFAULT
 	}
 	return *p.Success
 }
-func (p *PhoneAttestationThriftServiceCheckPhoneByPhoneResult) IsSetSuccess() bool {
+func (p *PhoneAttestationThriftServiceCheckPhoneUseResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *PhoneAttestationThriftServiceCheckPhoneByPhoneResult) Read(iprot thrift.TProtocol) error {
+func (p *PhoneAttestationThriftServiceCheckPhoneUseResult) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -1050,7 +1050,7 @@ func (p *PhoneAttestationThriftServiceCheckPhoneByPhoneResult) Read(iprot thrift
 	return nil
 }
 
-func (p *PhoneAttestationThriftServiceCheckPhoneByPhoneResult) ReadField0(iprot thrift.TProtocol) error {
+func (p *PhoneAttestationThriftServiceCheckPhoneUseResult) ReadField0(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return thrift.PrependError("error reading field 0: ", err)
 	} else {
@@ -1059,8 +1059,8 @@ func (p *PhoneAttestationThriftServiceCheckPhoneByPhoneResult) ReadField0(iprot 
 	return nil
 }
 
-func (p *PhoneAttestationThriftServiceCheckPhoneByPhoneResult) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("CheckPhoneByPhone_result"); err != nil {
+func (p *PhoneAttestationThriftServiceCheckPhoneUseResult) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("checkPhoneUse_result"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
 	if p != nil {
@@ -1077,7 +1077,7 @@ func (p *PhoneAttestationThriftServiceCheckPhoneByPhoneResult) Write(oprot thrif
 	return nil
 }
 
-func (p *PhoneAttestationThriftServiceCheckPhoneByPhoneResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *PhoneAttestationThriftServiceCheckPhoneUseResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err := oprot.WriteFieldBegin("success", thrift.STRING, 0); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T write field begin error 0:success: ", p), err)
@@ -1092,11 +1092,11 @@ func (p *PhoneAttestationThriftServiceCheckPhoneByPhoneResult) writeField0(oprot
 	return err
 }
 
-func (p *PhoneAttestationThriftServiceCheckPhoneByPhoneResult) String() string {
+func (p *PhoneAttestationThriftServiceCheckPhoneUseResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("PhoneAttestationThriftServiceCheckPhoneByPhoneResult(%+v)", *p)
+	return fmt.Sprintf("PhoneAttestationThriftServiceCheckPhoneUseResult(%+v)", *p)
 }
 
 // Attributes:
@@ -1306,27 +1306,27 @@ func (p *PhoneAttestationThriftServiceGetUserIdByhsidResult) String() string {
 
 // Attributes:
 //  - RequestObj
-type PhoneAttestationThriftServiceUpdatePhoneByTransactionArgs struct {
+type PhoneAttestationThriftServiceUpdatePhoneArgs struct {
 	RequestObj *UpdatePhoneRequestStruct `thrift:"requestObj,1" db:"requestObj" json:"requestObj"`
 }
 
-func NewPhoneAttestationThriftServiceUpdatePhoneByTransactionArgs() *PhoneAttestationThriftServiceUpdatePhoneByTransactionArgs {
-	return &PhoneAttestationThriftServiceUpdatePhoneByTransactionArgs{}
+func NewPhoneAttestationThriftServiceUpdatePhoneArgs() *PhoneAttestationThriftServiceUpdatePhoneArgs {
+	return &PhoneAttestationThriftServiceUpdatePhoneArgs{}
 }
 
-var PhoneAttestationThriftServiceUpdatePhoneByTransactionArgs_RequestObj_DEFAULT *UpdatePhoneRequestStruct
+var PhoneAttestationThriftServiceUpdatePhoneArgs_RequestObj_DEFAULT *UpdatePhoneRequestStruct
 
-func (p *PhoneAttestationThriftServiceUpdatePhoneByTransactionArgs) GetRequestObj() *UpdatePhoneRequestStruct {
+func (p *PhoneAttestationThriftServiceUpdatePhoneArgs) GetRequestObj() *UpdatePhoneRequestStruct {
 	if !p.IsSetRequestObj() {
-		return PhoneAttestationThriftServiceUpdatePhoneByTransactionArgs_RequestObj_DEFAULT
+		return PhoneAttestationThriftServiceUpdatePhoneArgs_RequestObj_DEFAULT
 	}
 	return p.RequestObj
 }
-func (p *PhoneAttestationThriftServiceUpdatePhoneByTransactionArgs) IsSetRequestObj() bool {
+func (p *PhoneAttestationThriftServiceUpdatePhoneArgs) IsSetRequestObj() bool {
 	return p.RequestObj != nil
 }
 
-func (p *PhoneAttestationThriftServiceUpdatePhoneByTransactionArgs) Read(iprot thrift.TProtocol) error {
+func (p *PhoneAttestationThriftServiceUpdatePhoneArgs) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -1359,7 +1359,7 @@ func (p *PhoneAttestationThriftServiceUpdatePhoneByTransactionArgs) Read(iprot t
 	return nil
 }
 
-func (p *PhoneAttestationThriftServiceUpdatePhoneByTransactionArgs) ReadField1(iprot thrift.TProtocol) error {
+func (p *PhoneAttestationThriftServiceUpdatePhoneArgs) ReadField1(iprot thrift.TProtocol) error {
 	p.RequestObj = &UpdatePhoneRequestStruct{}
 	if err := p.RequestObj.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.RequestObj), err)
@@ -1367,8 +1367,8 @@ func (p *PhoneAttestationThriftServiceUpdatePhoneByTransactionArgs) ReadField1(i
 	return nil
 }
 
-func (p *PhoneAttestationThriftServiceUpdatePhoneByTransactionArgs) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("UpdatePhoneByTransaction_args"); err != nil {
+func (p *PhoneAttestationThriftServiceUpdatePhoneArgs) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("updatePhone_args"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
 	if p != nil {
@@ -1385,7 +1385,7 @@ func (p *PhoneAttestationThriftServiceUpdatePhoneByTransactionArgs) Write(oprot 
 	return nil
 }
 
-func (p *PhoneAttestationThriftServiceUpdatePhoneByTransactionArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *PhoneAttestationThriftServiceUpdatePhoneArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("requestObj", thrift.STRUCT, 1); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:requestObj: ", p), err)
 	}
@@ -1398,36 +1398,36 @@ func (p *PhoneAttestationThriftServiceUpdatePhoneByTransactionArgs) writeField1(
 	return err
 }
 
-func (p *PhoneAttestationThriftServiceUpdatePhoneByTransactionArgs) String() string {
+func (p *PhoneAttestationThriftServiceUpdatePhoneArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("PhoneAttestationThriftServiceUpdatePhoneByTransactionArgs(%+v)", *p)
+	return fmt.Sprintf("PhoneAttestationThriftServiceUpdatePhoneArgs(%+v)", *p)
 }
 
 // Attributes:
 //  - Success
-type PhoneAttestationThriftServiceUpdatePhoneByTransactionResult struct {
+type PhoneAttestationThriftServiceUpdatePhoneResult struct {
 	Success *string `thrift:"success,0" db:"success" json:"success,omitempty"`
 }
 
-func NewPhoneAttestationThriftServiceUpdatePhoneByTransactionResult() *PhoneAttestationThriftServiceUpdatePhoneByTransactionResult {
-	return &PhoneAttestationThriftServiceUpdatePhoneByTransactionResult{}
+func NewPhoneAttestationThriftServiceUpdatePhoneResult() *PhoneAttestationThriftServiceUpdatePhoneResult {
+	return &PhoneAttestationThriftServiceUpdatePhoneResult{}
 }
 
-var PhoneAttestationThriftServiceUpdatePhoneByTransactionResult_Success_DEFAULT string
+var PhoneAttestationThriftServiceUpdatePhoneResult_Success_DEFAULT string
 
-func (p *PhoneAttestationThriftServiceUpdatePhoneByTransactionResult) GetSuccess() string {
+func (p *PhoneAttestationThriftServiceUpdatePhoneResult) GetSuccess() string {
 	if !p.IsSetSuccess() {
-		return PhoneAttestationThriftServiceUpdatePhoneByTransactionResult_Success_DEFAULT
+		return PhoneAttestationThriftServiceUpdatePhoneResult_Success_DEFAULT
 	}
 	return *p.Success
 }
-func (p *PhoneAttestationThriftServiceUpdatePhoneByTransactionResult) IsSetSuccess() bool {
+func (p *PhoneAttestationThriftServiceUpdatePhoneResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *PhoneAttestationThriftServiceUpdatePhoneByTransactionResult) Read(iprot thrift.TProtocol) error {
+func (p *PhoneAttestationThriftServiceUpdatePhoneResult) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -1460,7 +1460,7 @@ func (p *PhoneAttestationThriftServiceUpdatePhoneByTransactionResult) Read(iprot
 	return nil
 }
 
-func (p *PhoneAttestationThriftServiceUpdatePhoneByTransactionResult) ReadField0(iprot thrift.TProtocol) error {
+func (p *PhoneAttestationThriftServiceUpdatePhoneResult) ReadField0(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return thrift.PrependError("error reading field 0: ", err)
 	} else {
@@ -1469,8 +1469,8 @@ func (p *PhoneAttestationThriftServiceUpdatePhoneByTransactionResult) ReadField0
 	return nil
 }
 
-func (p *PhoneAttestationThriftServiceUpdatePhoneByTransactionResult) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("UpdatePhoneByTransaction_result"); err != nil {
+func (p *PhoneAttestationThriftServiceUpdatePhoneResult) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("updatePhone_result"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
 	if p != nil {
@@ -1487,7 +1487,7 @@ func (p *PhoneAttestationThriftServiceUpdatePhoneByTransactionResult) Write(opro
 	return nil
 }
 
-func (p *PhoneAttestationThriftServiceUpdatePhoneByTransactionResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *PhoneAttestationThriftServiceUpdatePhoneResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err := oprot.WriteFieldBegin("success", thrift.STRING, 0); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T write field begin error 0:success: ", p), err)
@@ -1502,9 +1502,9 @@ func (p *PhoneAttestationThriftServiceUpdatePhoneByTransactionResult) writeField
 	return err
 }
 
-func (p *PhoneAttestationThriftServiceUpdatePhoneByTransactionResult) String() string {
+func (p *PhoneAttestationThriftServiceUpdatePhoneResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("PhoneAttestationThriftServiceUpdatePhoneByTransactionResult(%+v)", *p)
+	return fmt.Sprintf("PhoneAttestationThriftServiceUpdatePhoneResult(%+v)", *p)
 }

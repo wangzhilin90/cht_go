@@ -45,7 +45,7 @@ var UserInfoStatus = map[int]string{
 }
 
 /*获取短信详情*/
-func (ms *messageservice) GetMessageDetails(requestObj *MessageRequestStruct) (r *MessageInfoResponseStruct, err error) {
+func (ms *messageservice) GetMessageDetails(requestObj *MessageRequestStruct) (r *MessageDetailsResponseStruct, err error) {
 	mr := new(message.MessageRequest)
 	mr.Smsid = requestObj.GetSmsid()
 	mr.Phone = requestObj.GetPhone()
@@ -54,13 +54,13 @@ func (ms *messageservice) GetMessageDetails(requestObj *MessageRequestStruct) (r
 	mes, err := message.GetMessageInfo(mr)
 	if err != nil {
 		Logger.Debugf("GetMessageDetails query failed", err)
-		return &MessageInfoResponseStruct{
+		return &MessageDetailsResponseStruct{
 			Status: QUERY_MES_INFO_FAILED,
 			Msg:    MesInfoStatus[QUERY_MES_INFO_FAILED],
 		}, nil
 	}
 
-	mis := new(MessageInfoStruct)
+	mis := new(MessageDetailsStruct)
 	mis.ID = mes.ID
 	mis.Type = mes.Type
 	mis.UserID = mes.UserID
@@ -73,8 +73,8 @@ func (ms *messageservice) GetMessageDetails(requestObj *MessageRequestStruct) (r
 	mis.Posttime = mes.Posttime
 	mis.Status = mes.Status
 
-	response := new(MessageInfoResponseStruct)
-	response.MessageInfo = mis
+	response := new(MessageDetailsResponseStruct)
+	response.MessageDetails = mis
 	response.Status = QUERY_MES_INFO_SUCCESS
 	response.Msg = MesInfoStatus[QUERY_MES_INFO_SUCCESS]
 	Logger.Debugf("GetMessageDetails res %v", response)
@@ -105,7 +105,7 @@ func (ms *messageservice) GetMessageCount(requestObj *MessageRequestStruct) (*Me
 }
 
 /*根据phone获取用户id和手机号*/
-func (ms *messageservice) GetUserInfo(requestObj *MessageRequestStruct) (r *UserInfoResponseStruct, err error) {
+func (ms *messageservice) GetUserDetials(requestObj *MessageRequestStruct) (r *UserDetailsResponseStruct, err error) {
 	mr := new(message.MessageRequest)
 	mr.Smsid = requestObj.GetSmsid()
 	mr.Phone = requestObj.GetPhone()
@@ -114,20 +114,20 @@ func (ms *messageservice) GetUserInfo(requestObj *MessageRequestStruct) (r *User
 	userInfo, err := message.GetUserInfo(mr)
 	if err != nil {
 		Logger.Debugf("GetUserInfo query failed", err)
-		return &UserInfoResponseStruct{
+		return &UserDetailsResponseStruct{
 			Status: QUERY_USER_INFO_FAILED,
 			Msg:    UserInfoStatus[QUERY_USER_INFO_FAILED],
 		}, nil
 	}
 
-	uis := new(UserInfoStruct)
+	uis := new(UserDetailsStruct)
 	uis.ID = userInfo.ID
 	uis.Phone = userInfo.Phone
 
-	uirs := new(UserInfoResponseStruct)
+	uirs := new(UserDetailsResponseStruct)
 	uirs.Status = QUERY_USER_INFO_SUCCESS
 	uirs.Msg = UserInfoStatus[QUERY_USER_INFO_SUCCESS]
-	uirs.UserInfo = uis
+	uirs.UserDetails = uis
 	return uirs, nil
 }
 

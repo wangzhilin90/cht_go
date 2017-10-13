@@ -14,20 +14,20 @@ type ArticleDetailsRequestStruct struct {
 }
 
 type ArticleDetailsResultStruct struct {
-	ID          int32  `orm:column(id)`
-	Cateid      int32  `orm:column(cateid)`
-	Title       string `orm:column(title)`
-	Content     string `orm:column(content)`
-	Keywords    string `orm:column(keywords)`
-	Description string `orm:column(description)`
-	ImgURL      string `orm:column(img_url)`
-	Sort        string `orm:column(sort)`
-	Status      int32  `orm:column(status)`
-	Addtime     int32  `orm:column(addtime)`
-	BannerURL   string `orm:column(banner_url)`
-	Isbanner    int32  `orm:column(isbanner)`
-	Type        int32  `orm:column(type)`
-	Name        string `orm:column(name)`
+	ID          int32  `orm:"column(id)"`
+	Cateid      int32  `orm:"column(cateid)"`
+	Title       string `orm:"column(title)"`
+	Content     string `orm:"column(content)"`
+	Keywords    string `orm:"column(keywords)"`
+	Description string `orm:"column(description)"`
+	ImgURL      string `orm:"column(img_url)"`
+	Sort        string `orm:"column(sort)"`
+	Status      int32  `orm:"column(status)"`
+	Addtime     int32  `orm:"column(addtime)"`
+	BannerURL   string `orm:"column(banner_url)"`
+	Isbanner    int32  `orm:"column(isbanner)"`
+	Type        int32  `orm:"column(type)"`
+	Name        string `orm:"column(name)"`
 }
 
 type NextRequestStruct struct {

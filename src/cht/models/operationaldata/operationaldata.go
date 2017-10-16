@@ -21,47 +21,47 @@ type OperationalDataRequestStruct struct {
 
 //最近30天投标排行
 type ThirtyDaysResult struct {
-	Money    string `orm:column(money)`
-	Username string `orm:column(username)`
+	Money    string `orm:"column(money)"`
+	Username string `orm:"column(username)"`
 }
 
 //最近12个月每月成交量
 type TwelveMonthResult struct {
-	Category string `orm:column(category)`
-	Account  string `orm:column(account)`
+	Category string `orm:"column(category)"`
+	Account  string `orm:"column(account)"`
 }
 
 //最近1个月每月成交量
 type OneMonthResult struct {
-	Category string `orm:column(category)`
-	Account  string `orm:column(account)`
+	Category string `orm:"column(category)"`
+	Account  string `orm:"column(account)"`
 }
 
 //借款周期占比
 type PeriodResult struct {
-	Category string `orm:column(category)`
-	Column_1 string `orm:column(column_1)`
+	Category string `orm:"column(category)"`
+	Column_1 string `orm:"column(column_1)"`
 }
 
 //投资金额占比
 type InvestResult struct {
-	A1 string `orm:column(a1)`
-	A2 string `orm:column(a2)`
-	A3 string `orm:column(a3)`
-	A4 string `orm:column(a4)`
-	A5 string `orm:column(a5)`
+	A1 string `orm:"column(a1)"`
+	A2 string `orm:"column(a2)"`
+	A3 string `orm:"column(a3)"`
+	A4 string `orm:"column(a4)"`
+	A5 string `orm:"column(a5)"`
 }
 
 //标的比例
 type BidResult struct {
-	BorrowType int32  `orm:column(borrow_type)`
-	Number     string `orm:column(number)`
+	BorrowType int32  `orm:"column(borrow_type)"`
+	Number     string `orm:"column(number)"`
 }
 
 //实时待收排行榜
 type WaitResult struct {
-	Money    string `orm:column(money)`
-	Username string `orm:column(username)`
+	Money    string `orm:"column(money)"`
+	Username string `orm:"column(username)"`
 }
 
 /*得到最近30天投标排行结果*/

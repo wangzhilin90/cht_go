@@ -22,6 +22,7 @@ import (
 	"cht/service/securedlist"
 	"cht/service/subledgerlist"
 	"cht/service/sysconfigthriftservice"
+	"cht/service/sysuseradd"
 	"cht/service/talking"
 	"cht/service/updateuserloginlogdetails"
 	"cht/service/updateuserpasswword"
@@ -191,6 +192,11 @@ func main() {
 	go func() {
 		/*开启后台---文章详情服务*/
 		articledetails.StartArticleDetailsServer()
+	}()
+
+	go func() {
+		/*开启后台---添加后台管理用户服务*/
+		sysuseradd.StartSysUserAddServer()
 	}()
 
 	<-ch

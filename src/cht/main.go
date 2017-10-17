@@ -23,6 +23,7 @@ import (
 	"cht/service/subledgerlist"
 	"cht/service/sysconfigthriftservice"
 	"cht/service/sysuseradd"
+	"cht/service/sysuserdelete"
 	"cht/service/talking"
 	"cht/service/updateuserloginlogdetails"
 	"cht/service/updateuserpasswword"
@@ -197,6 +198,11 @@ func main() {
 	go func() {
 		/*开启后台---添加后台管理用户服务*/
 		sysuseradd.StartSysUserAddServer()
+	}()
+
+	go func() {
+		/**/
+		sysuserdelete.StartSysUserDeleteServer()
 	}()
 
 	<-ch

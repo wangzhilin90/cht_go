@@ -63,6 +63,6 @@ func AddSysUser(suars *SysUserAddRequest) bool {
 	if num == 0 {
 		return false
 	}
-	Logger.Debugf("rows effect num:%v", num)
+	Logger.Debugf("AddSysUser rows effect num:%v", num)
 	return true
 }

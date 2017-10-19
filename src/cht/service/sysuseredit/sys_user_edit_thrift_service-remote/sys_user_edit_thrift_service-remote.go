@@ -13,7 +13,7 @@ import (
         "strconv"
         "strings"
         "git.apache.org/thrift.git/lib/go/thrift"
-        "operationaldata"
+        "sysuseredit"
 )
 
 
@@ -21,7 +21,7 @@ func Usage() {
   fmt.Fprintln(os.Stderr, "Usage of ", os.Args[0], " [-h host:port] [-u url] [-f[ramed]] function [arg1 [arg2...]]:")
   flag.PrintDefaults()
   fmt.Fprintln(os.Stderr, "\nFunctions:")
-  fmt.Fprintln(os.Stderr, "  OperationalDataResponseStruct getOperationalData(OperationalDataRequestStruct requestObj)")
+  fmt.Fprintln(os.Stderr, "  SysUserEditResponseStruct editSysUser(SysUserEditRequestStruct requestObj)")
   fmt.Fprintln(os.Stderr)
   os.Exit(0)
 }
@@ -109,36 +109,36 @@ func main() {
     Usage()
     os.Exit(1)
   }
-  client := operationaldata.NewOperationalDataThriftServiceClientFactory(trans, protocolFactory)
+  client := sysuseredit.NewSysUserEditThriftServiceClientFactory(trans, protocolFactory)
   if err := trans.Open(); err != nil {
     fmt.Fprintln(os.Stderr, "Error opening socket to ", host, ":", port, " ", err)
     os.Exit(1)
   }
   
   switch cmd {
-  case "getOperationalData":
+  case "editSysUser":
     if flag.NArg() - 1 != 1 {
-      fmt.Fprintln(os.Stderr, "GetOperationalData requires 1 args")
+      fmt.Fprintln(os.Stderr, "EditSysUser requires 1 args")
       flag.Usage()
     }
-    arg10 := flag.Arg(1)
-    mbTrans11 := thrift.NewTMemoryBufferLen(len(arg10))
-    defer mbTrans11.Close()
-    _, err12 := mbTrans11.WriteString(arg10)
-    if err12 != nil {
+    arg4 := flag.Arg(1)
+    mbTrans5 := thrift.NewTMemoryBufferLen(len(arg4))
+    defer mbTrans5.Close()
+    _, err6 := mbTrans5.WriteString(arg4)
+    if err6 != nil {
       Usage()
       return
     }
-    factory13 := thrift.NewTSimpleJSONProtocolFactory()
-    jsProt14 := factory13.GetProtocol(mbTrans11)
-    argvalue0 := operationaldata.NewOperationalDataRequestStruct()
-    err15 := argvalue0.Read(jsProt14)
-    if err15 != nil {
+    factory7 := thrift.NewTSimpleJSONProtocolFactory()
+    jsProt8 := factory7.GetProtocol(mbTrans5)
+    argvalue0 := sysuseredit.NewSysUserEditRequestStruct()
+    err9 := argvalue0.Read(jsProt8)
+    if err9 != nil {
       Usage()
       return
     }
     value0 := argvalue0
-    fmt.Print(client.GetOperationalData(value0))
+    fmt.Print(client.EditSysUser(value0))
     fmt.Print("\n")
     break
   case "":

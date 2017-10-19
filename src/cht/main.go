@@ -24,6 +24,9 @@ import (
 	"cht/service/sysconfigthriftservice"
 	"cht/service/sysuseradd"
 	"cht/service/sysuserdelete"
+	"cht/service/sysuserdetails"
+	"cht/service/sysuseredit"
+	"cht/service/sysuserlist"
 	"cht/service/talking"
 	"cht/service/updateuserloginlogdetails"
 	"cht/service/updateuserpasswword"
@@ -201,8 +204,23 @@ func main() {
 	}()
 
 	go func() {
-		/**/
+		/*开启后台---删除后台管理用户服务*/
 		sysuserdelete.StartSysUserDeleteServer()
+	}()
+
+	go func() {
+		/*开启后台---后台管理员详情服务*/
+		sysuserdetails.StartSysUserDetailsServer()
+	}()
+
+	go func() {
+		/*开启后台---编辑后台管理用户服务*/
+		sysuseredit.StartSysUserEditServer()
+	}()
+
+	go func() {
+		/*开启后台---后台管理员列表服务*/
+		sysuserlist.StartSysUserListServer()
 	}()
 
 	<-ch

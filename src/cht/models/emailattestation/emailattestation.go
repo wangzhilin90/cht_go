@@ -87,6 +87,7 @@ func InsertUserAttestation(uesrs *UserAttestationSaveStruct) error {
 }
 
 func UpdateUserAttestation(uesrs *UserAttestationSaveStruct) error {
+	Logger.Debugf("UpdateUserAttestation input param:%v", uesrs)
 	o := orm.NewOrm()
 	o.Using("default")
 	buf := bytes.Buffer{}
@@ -146,6 +147,7 @@ func UserAttestationSave(uesrs *UserAttestationSaveStruct) int32 {
 
 //根据user_id修改用户的email，成功返回1，失败0
 func UserEmailSave(uesrs *UserEmailSaveRequestStruct) int32 {
+	Logger.Debugf("UserEmailSave input param:%v", uesrs)
 	o := orm.NewOrm()
 	o.Using("default")
 	buf := bytes.Buffer{}

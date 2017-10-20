@@ -30,6 +30,9 @@ import (
 	"cht/service/talking"
 	"cht/service/updateuserloginlogdetails"
 	"cht/service/updateuserpasswword"
+	"cht/service/userattestionbaseinfosave"
+	"cht/service/userattestioncardinfosave"
+	"cht/service/userattestionlist"
 	"cht/service/usercashrecordList"
 	"cht/service/usercollectionlist"
 	"cht/service/usercouponlist"
@@ -221,6 +224,21 @@ func main() {
 	go func() {
 		/*开启后台---后台管理员列表服务*/
 		sysuserlist.StartSysUserListServer()
+	}()
+
+	go func() {
+		/*开启后台---基础认证列表服务*/
+		userattestionlist.StartUserAttestionListServer()
+	}()
+
+	go func() {
+		/*开启后台---保存用户认证信息*/
+		userattestionbaseinfosave.StartUserAttestionBaseInfoSaveServer()
+	}()
+
+	go func() {
+		/*开启后台---保存用户认证卡证信息服务*/
+		userattestioncardinfosave.StartUserAttestionCardInfoSaveServer()
 	}()
 
 	<-ch

@@ -8,6 +8,8 @@ import (
 	"cht/service/dutydetails"
 	"cht/service/emailattestationthriftservice"
 	"cht/service/helplist"
+	"cht/service/hscashlist"
+	"cht/service/hsloglist"
 	"cht/service/juanzengthriftservice"
 	"cht/service/kefulist"
 	"cht/service/makeborrowservice"
@@ -239,6 +241,16 @@ func main() {
 	go func() {
 		/*开启后台---保存用户认证卡证信息服务*/
 		userattestioncardinfosave.StartUserAttestionCardInfoSaveServer()
+	}()
+
+	go func() {
+		/*开启后台---徽商日志明细服务*/
+		hsloglist.StartHSLogListServer()
+	}()
+
+	go func() {
+		/*开启后台---徽商提现记录服务*/
+		hscashlist.StartHSCashListServer()
 	}()
 
 	<-ch

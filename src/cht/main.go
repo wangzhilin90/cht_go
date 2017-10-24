@@ -7,6 +7,11 @@ import (
 	"cht/service/borrowuserdetails"
 	"cht/service/dutydetails"
 	"cht/service/emailattestationthriftservice"
+	"cht/service/goodsadd"
+	"cht/service/goodsdel"
+	"cht/service/goodsdetails"
+	"cht/service/goodsedit"
+	"cht/service/goodslist"
 	"cht/service/helplist"
 	"cht/service/hscashlist"
 	"cht/service/hsloglist"
@@ -251,6 +256,31 @@ func main() {
 	go func() {
 		/*开启后台---徽商提现记录服务*/
 		hscashlist.StartHSCashListServer()
+	}()
+
+	go func() {
+		/*开启[后台]商品管理---添加商品服务*/
+		goodsadd.StartAddGoodsServer()
+	}()
+
+	go func() {
+		/*开启[后台]商品管理---删除商品服务*/
+		goodsdel.StartDelGoodsServer()
+	}()
+
+	go func() {
+		/*开启[后台]商品管理---商品详情服务*/
+		goodsdetails.StartGoodsDetailsServer()
+	}()
+
+	go func() {
+		/*开启[后台]商品管理---编辑商品服务*/
+		goodsedit.StartGoodsEditServer()
+	}()
+
+	go func() {
+		/*开启[后台]商品管理列表服务*/
+		goodslist.StartGoodsListServer()
 	}()
 
 	<-ch

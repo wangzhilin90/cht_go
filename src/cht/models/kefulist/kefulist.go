@@ -37,9 +37,12 @@ func GetKeFuList(kfrs *KeFuListRequestStruct) ([]KeFuDetailsStruct, error) {
 	qb, _ := orm.NewQueryBuilder("mysql")
 	qb.Select("*").
 		From("jl_sys_user").
-		Where(fmt.Sprintf("status=%d", 0)).
-		And(fmt.Sprintf("role_id=%d", 2)).
-		And(fmt.Sprintf("%s IN (2,3)", kfrs.CustomerType))
+		Where(fmt.Sprintf("status=%d", kfrs.Status)).
+		And(fmt.Sprintf("role_id=%d", kfrs.RoleID))
+
+	if kfrs.CustomerType != "" {
+		qb.And(fmt.Sprintf("customer_type IN (%v)", kfrs.CustomerType))
+	}
 
 	sql := qb.String()
 	Logger.Debugf("GetKeFuList sql:%v", sql)

@@ -38,6 +38,20 @@ func (ss *securedservice) GetSecuredList(requestObj *SecuredListRequestStruct) (
 		sis.Secured = v.Secured
 		response.SecuredList = append(response.SecuredList, sis)
 	}
+
+	//固定担保人
+	var PermanentSecured = []SecuredDetailsStruct{
+		{"贵州喜年华装饰工程有限公司/贵州联宇置业有限公司"},
+		{"贵州行成道企业管理有限公司/贵州联宇置业有限公司"},
+		{"贵州联宇同行汽车销售服务有限公司/贵州联宇置业有限公司"},
+		{"深圳市合泰典当有限公司"},
+		{"贵州保胜信用管理有限公司"},
+	}
+
+	for _, v := range PermanentSecured {
+		response.SecuredList = append(response.SecuredList, &v)
+	}
+
 	response.Status = QUERY_SECURED_SUCCESS
 	response.Msg = Status[QUERY_SECURED_SUCCESS]
 	Logger.Debugf("GetSecuredList res:%v", response)

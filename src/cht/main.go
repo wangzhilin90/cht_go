@@ -18,6 +18,7 @@ import (
 	"cht/service/juanzengthriftservice"
 	"cht/service/kefulist"
 	"cht/service/makeborrowservice"
+	"cht/service/memberhelperlist"
 	"cht/service/messagethriftservice"
 	"cht/service/operationaldata"
 	"cht/service/phoneattestationthriftservice"
@@ -256,6 +257,11 @@ func main() {
 	go func() {
 		/*开启后台---徽商提现记录服务*/
 		hscashlist.StartHSCashListServer()
+	}()
+
+	go func() {
+		/*开启后台---会员紧急联系人服务*/
+		memberhelperlist.StartMemberHelperListServer()
 	}()
 
 	go func() {

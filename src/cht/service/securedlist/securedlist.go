@@ -6,6 +6,7 @@ import (
 	"cht/models/secured"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
+	"strings"
 )
 
 type securedservice struct{}
@@ -33,12 +34,6 @@ func (ss *securedservice) GetSecuredList(requestObj *SecuredListRequestStruct) (
 	}
 
 	response := new(SecuredListResponseStruct)
-	for _, v := range securedList {
-		sis := new(SecuredDetailsStruct)
-		sis.Secured = v.Secured
-		response.SecuredList = append(response.SecuredList, sis)
-	}
-
 	//固定担保人
 	var PermanentSecured = []SecuredDetailsStruct{
 		{"贵州喜年华装饰工程有限公司/贵州联宇置业有限公司"},
@@ -48,8 +43,32 @@ func (ss *securedservice) GetSecuredList(requestObj *SecuredListRequestStruct) (
 		{"贵州保胜信用管理有限公司"},
 	}
 
-	for _, v := range PermanentSecured {
-		response.SecuredList = append(response.SecuredList, &v)
+	for k, _ := range PermanentSecured {
+		response.SecuredList = append(response.SecuredList, &PermanentSecured[k])
+	}
+
+	for _, v := range securedList {
+		sis := new(SecuredDetailsStruct)
+		person := strings.TrimSpace(v.Secured)
+		//兼容性处理
+		if person == "无" || person == "" || person == "-1" {
+			sis.Secured = "无"
+		} else {
+			//不存在“无”，“-1”，“”字符串，按正常字符处理
+			sis.Secured = person
+		}
+
+		//元素去重,默认false不重复
+		flag := false
+		for _, v := range PermanentSecured {
+			if person == v.Secured {
+				flag = true
+				break
+			}
+		}
+		if flag == false {
+			response.SecuredList = append(response.SecuredList, sis)
+		}
 	}
 
 	response.Status = QUERY_SECURED_SUCCESS

@@ -22,9 +22,9 @@ type AdvertDetailsRequestStruct struct {
 	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,2" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
 }
 
-// func NewAdvertDetailsRequestStruct() *AdvertDetailsRequestStruct {
-//   return &AdvertDetailsRequestStruct{}
-// }
+func NewAdvertDetailsRequestStruct() *AdvertDetailsRequestStruct {
+	return &AdvertDetailsRequestStruct{}
+}
 
 func (p *AdvertDetailsRequestStruct) GetID() int32 {
 	return p.ID
@@ -756,13 +756,13 @@ func (p *AdvertDetailsReponseStruct) String() string {
 	return fmt.Sprintf("AdvertDetailsReponseStruct(%+v)", *p)
 }
 
-type AdvertAddThriftService interface {
+type AdvertDetailsThriftService interface {
 	// Parameters:
 	//  - RequestObj
 	GetAdvertDetails(requestObj *AdvertDetailsRequestStruct) (r *AdvertDetailsReponseStruct, err error)
 }
 
-type AdvertAddThriftServiceClient struct {
+type AdvertDetailsThriftServiceClient struct {
 	Transport       thrift.TTransport
 	ProtocolFactory thrift.TProtocolFactory
 	InputProtocol   thrift.TProtocol
@@ -770,8 +770,8 @@ type AdvertAddThriftServiceClient struct {
 	SeqId           int32
 }
 
-func NewAdvertAddThriftServiceClientFactory(t thrift.TTransport, f thrift.TProtocolFactory) *AdvertAddThriftServiceClient {
-	return &AdvertAddThriftServiceClient{Transport: t,
+func NewAdvertDetailsThriftServiceClientFactory(t thrift.TTransport, f thrift.TProtocolFactory) *AdvertDetailsThriftServiceClient {
+	return &AdvertDetailsThriftServiceClient{Transport: t,
 		ProtocolFactory: f,
 		InputProtocol:   f.GetProtocol(t),
 		OutputProtocol:  f.GetProtocol(t),
@@ -779,8 +779,8 @@ func NewAdvertAddThriftServiceClientFactory(t thrift.TTransport, f thrift.TProto
 	}
 }
 
-func NewAdvertAddThriftServiceClientProtocol(t thrift.TTransport, iprot thrift.TProtocol, oprot thrift.TProtocol) *AdvertAddThriftServiceClient {
-	return &AdvertAddThriftServiceClient{Transport: t,
+func NewAdvertDetailsThriftServiceClientProtocol(t thrift.TTransport, iprot thrift.TProtocol, oprot thrift.TProtocol) *AdvertDetailsThriftServiceClient {
+	return &AdvertDetailsThriftServiceClient{Transport: t,
 		ProtocolFactory: nil,
 		InputProtocol:   iprot,
 		OutputProtocol:  oprot,
@@ -790,14 +790,14 @@ func NewAdvertAddThriftServiceClientProtocol(t thrift.TTransport, iprot thrift.T
 
 // Parameters:
 //  - RequestObj
-func (p *AdvertAddThriftServiceClient) GetAdvertDetails(requestObj *AdvertDetailsRequestStruct) (r *AdvertDetailsReponseStruct, err error) {
+func (p *AdvertDetailsThriftServiceClient) GetAdvertDetails(requestObj *AdvertDetailsRequestStruct) (r *AdvertDetailsReponseStruct, err error) {
 	if err = p.sendGetAdvertDetails(requestObj); err != nil {
 		return
 	}
 	return p.recvGetAdvertDetails()
 }
 
-func (p *AdvertAddThriftServiceClient) sendGetAdvertDetails(requestObj *AdvertDetailsRequestStruct) (err error) {
+func (p *AdvertDetailsThriftServiceClient) sendGetAdvertDetails(requestObj *AdvertDetailsRequestStruct) (err error) {
 	oprot := p.OutputProtocol
 	if oprot == nil {
 		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -807,7 +807,7 @@ func (p *AdvertAddThriftServiceClient) sendGetAdvertDetails(requestObj *AdvertDe
 	if err = oprot.WriteMessageBegin("getAdvertDetails", thrift.CALL, p.SeqId); err != nil {
 		return
 	}
-	args := AdvertAddThriftServiceGetAdvertDetailsArgs{
+	args := AdvertDetailsThriftServiceGetAdvertDetailsArgs{
 		RequestObj: requestObj,
 	}
 	if err = args.Write(oprot); err != nil {
@@ -819,7 +819,7 @@ func (p *AdvertAddThriftServiceClient) sendGetAdvertDetails(requestObj *AdvertDe
 	return oprot.Flush()
 }
 
-func (p *AdvertAddThriftServiceClient) recvGetAdvertDetails() (value *AdvertDetailsReponseStruct, err error) {
+func (p *AdvertDetailsThriftServiceClient) recvGetAdvertDetails() (value *AdvertDetailsReponseStruct, err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -854,7 +854,7 @@ func (p *AdvertAddThriftServiceClient) recvGetAdvertDetails() (value *AdvertDeta
 		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "getAdvertDetails failed: invalid message type")
 		return
 	}
-	result := AdvertAddThriftServiceGetAdvertDetailsResult{}
+	result := AdvertDetailsThriftServiceGetAdvertDetailsResult{}
 	if err = result.Read(iprot); err != nil {
 		return
 	}
@@ -865,32 +865,32 @@ func (p *AdvertAddThriftServiceClient) recvGetAdvertDetails() (value *AdvertDeta
 	return
 }
 
-type AdvertAddThriftServiceProcessor struct {
+type AdvertDetailsThriftServiceProcessor struct {
 	processorMap map[string]thrift.TProcessorFunction
-	handler      AdvertAddThriftService
+	handler      AdvertDetailsThriftService
 }
 
-func (p *AdvertAddThriftServiceProcessor) AddToProcessorMap(key string, processor thrift.TProcessorFunction) {
+func (p *AdvertDetailsThriftServiceProcessor) AddToProcessorMap(key string, processor thrift.TProcessorFunction) {
 	p.processorMap[key] = processor
 }
 
-func (p *AdvertAddThriftServiceProcessor) GetProcessorFunction(key string) (processor thrift.TProcessorFunction, ok bool) {
+func (p *AdvertDetailsThriftServiceProcessor) GetProcessorFunction(key string) (processor thrift.TProcessorFunction, ok bool) {
 	processor, ok = p.processorMap[key]
 	return processor, ok
 }
 
-func (p *AdvertAddThriftServiceProcessor) ProcessorMap() map[string]thrift.TProcessorFunction {
+func (p *AdvertDetailsThriftServiceProcessor) ProcessorMap() map[string]thrift.TProcessorFunction {
 	return p.processorMap
 }
 
-func NewAdvertAddThriftServiceProcessor(handler AdvertAddThriftService) *AdvertAddThriftServiceProcessor {
+func NewAdvertDetailsThriftServiceProcessor(handler AdvertDetailsThriftService) *AdvertDetailsThriftServiceProcessor {
 
-	self2 := &AdvertAddThriftServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
-	self2.processorMap["getAdvertDetails"] = &advertAddThriftServiceProcessorGetAdvertDetails{handler: handler}
+	self2 := &AdvertDetailsThriftServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
+	self2.processorMap["getAdvertDetails"] = &advertDetailsThriftServiceProcessorGetAdvertDetails{handler: handler}
 	return self2
 }
 
-func (p *AdvertAddThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+func (p *AdvertDetailsThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
 	name, _, seqId, err := iprot.ReadMessageBegin()
 	if err != nil {
 		return false, err
@@ -909,12 +909,12 @@ func (p *AdvertAddThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol)
 
 }
 
-type advertAddThriftServiceProcessorGetAdvertDetails struct {
-	handler AdvertAddThriftService
+type advertDetailsThriftServiceProcessorGetAdvertDetails struct {
+	handler AdvertDetailsThriftService
 }
 
-func (p *advertAddThriftServiceProcessorGetAdvertDetails) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := AdvertAddThriftServiceGetAdvertDetailsArgs{}
+func (p *advertDetailsThriftServiceProcessorGetAdvertDetails) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := AdvertDetailsThriftServiceGetAdvertDetailsArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
@@ -926,7 +926,7 @@ func (p *advertAddThriftServiceProcessorGetAdvertDetails) Process(seqId int32, i
 	}
 
 	iprot.ReadMessageEnd()
-	result := AdvertAddThriftServiceGetAdvertDetailsResult{}
+	result := AdvertDetailsThriftServiceGetAdvertDetailsResult{}
 	var retval *AdvertDetailsReponseStruct
 	var err2 error
 	if retval, err2 = p.handler.GetAdvertDetails(args.RequestObj); err2 != nil {
@@ -961,27 +961,27 @@ func (p *advertAddThriftServiceProcessorGetAdvertDetails) Process(seqId int32, i
 
 // Attributes:
 //  - RequestObj
-type AdvertAddThriftServiceGetAdvertDetailsArgs struct {
+type AdvertDetailsThriftServiceGetAdvertDetailsArgs struct {
 	RequestObj *AdvertDetailsRequestStruct `thrift:"requestObj,1" db:"requestObj" json:"requestObj"`
 }
 
-func NewAdvertAddThriftServiceGetAdvertDetailsArgs() *AdvertAddThriftServiceGetAdvertDetailsArgs {
-	return &AdvertAddThriftServiceGetAdvertDetailsArgs{}
+func NewAdvertDetailsThriftServiceGetAdvertDetailsArgs() *AdvertDetailsThriftServiceGetAdvertDetailsArgs {
+	return &AdvertDetailsThriftServiceGetAdvertDetailsArgs{}
 }
 
-var AdvertAddThriftServiceGetAdvertDetailsArgs_RequestObj_DEFAULT *AdvertDetailsRequestStruct
+var AdvertDetailsThriftServiceGetAdvertDetailsArgs_RequestObj_DEFAULT *AdvertDetailsRequestStruct
 
-func (p *AdvertAddThriftServiceGetAdvertDetailsArgs) GetRequestObj() *AdvertDetailsRequestStruct {
+func (p *AdvertDetailsThriftServiceGetAdvertDetailsArgs) GetRequestObj() *AdvertDetailsRequestStruct {
 	if !p.IsSetRequestObj() {
-		return AdvertAddThriftServiceGetAdvertDetailsArgs_RequestObj_DEFAULT
+		return AdvertDetailsThriftServiceGetAdvertDetailsArgs_RequestObj_DEFAULT
 	}
 	return p.RequestObj
 }
-func (p *AdvertAddThriftServiceGetAdvertDetailsArgs) IsSetRequestObj() bool {
+func (p *AdvertDetailsThriftServiceGetAdvertDetailsArgs) IsSetRequestObj() bool {
 	return p.RequestObj != nil
 }
 
-func (p *AdvertAddThriftServiceGetAdvertDetailsArgs) Read(iprot thrift.TProtocol) error {
+func (p *AdvertDetailsThriftServiceGetAdvertDetailsArgs) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -1014,7 +1014,7 @@ func (p *AdvertAddThriftServiceGetAdvertDetailsArgs) Read(iprot thrift.TProtocol
 	return nil
 }
 
-func (p *AdvertAddThriftServiceGetAdvertDetailsArgs) ReadField1(iprot thrift.TProtocol) error {
+func (p *AdvertDetailsThriftServiceGetAdvertDetailsArgs) ReadField1(iprot thrift.TProtocol) error {
 	p.RequestObj = &AdvertDetailsRequestStruct{}
 	if err := p.RequestObj.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.RequestObj), err)
@@ -1022,7 +1022,7 @@ func (p *AdvertAddThriftServiceGetAdvertDetailsArgs) ReadField1(iprot thrift.TPr
 	return nil
 }
 
-func (p *AdvertAddThriftServiceGetAdvertDetailsArgs) Write(oprot thrift.TProtocol) error {
+func (p *AdvertDetailsThriftServiceGetAdvertDetailsArgs) Write(oprot thrift.TProtocol) error {
 	if err := oprot.WriteStructBegin("getAdvertDetails_args"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
@@ -1040,7 +1040,7 @@ func (p *AdvertAddThriftServiceGetAdvertDetailsArgs) Write(oprot thrift.TProtoco
 	return nil
 }
 
-func (p *AdvertAddThriftServiceGetAdvertDetailsArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *AdvertDetailsThriftServiceGetAdvertDetailsArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("requestObj", thrift.STRUCT, 1); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:requestObj: ", p), err)
 	}
@@ -1053,36 +1053,36 @@ func (p *AdvertAddThriftServiceGetAdvertDetailsArgs) writeField1(oprot thrift.TP
 	return err
 }
 
-func (p *AdvertAddThriftServiceGetAdvertDetailsArgs) String() string {
+func (p *AdvertDetailsThriftServiceGetAdvertDetailsArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("AdvertAddThriftServiceGetAdvertDetailsArgs(%+v)", *p)
+	return fmt.Sprintf("AdvertDetailsThriftServiceGetAdvertDetailsArgs(%+v)", *p)
 }
 
 // Attributes:
 //  - Success
-type AdvertAddThriftServiceGetAdvertDetailsResult struct {
+type AdvertDetailsThriftServiceGetAdvertDetailsResult struct {
 	Success *AdvertDetailsReponseStruct `thrift:"success,0" db:"success" json:"success,omitempty"`
 }
 
-func NewAdvertAddThriftServiceGetAdvertDetailsResult() *AdvertAddThriftServiceGetAdvertDetailsResult {
-	return &AdvertAddThriftServiceGetAdvertDetailsResult{}
+func NewAdvertDetailsThriftServiceGetAdvertDetailsResult() *AdvertDetailsThriftServiceGetAdvertDetailsResult {
+	return &AdvertDetailsThriftServiceGetAdvertDetailsResult{}
 }
 
-var AdvertAddThriftServiceGetAdvertDetailsResult_Success_DEFAULT *AdvertDetailsReponseStruct
+var AdvertDetailsThriftServiceGetAdvertDetailsResult_Success_DEFAULT *AdvertDetailsReponseStruct
 
-func (p *AdvertAddThriftServiceGetAdvertDetailsResult) GetSuccess() *AdvertDetailsReponseStruct {
+func (p *AdvertDetailsThriftServiceGetAdvertDetailsResult) GetSuccess() *AdvertDetailsReponseStruct {
 	if !p.IsSetSuccess() {
-		return AdvertAddThriftServiceGetAdvertDetailsResult_Success_DEFAULT
+		return AdvertDetailsThriftServiceGetAdvertDetailsResult_Success_DEFAULT
 	}
 	return p.Success
 }
-func (p *AdvertAddThriftServiceGetAdvertDetailsResult) IsSetSuccess() bool {
+func (p *AdvertDetailsThriftServiceGetAdvertDetailsResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *AdvertAddThriftServiceGetAdvertDetailsResult) Read(iprot thrift.TProtocol) error {
+func (p *AdvertDetailsThriftServiceGetAdvertDetailsResult) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -1115,7 +1115,7 @@ func (p *AdvertAddThriftServiceGetAdvertDetailsResult) Read(iprot thrift.TProtoc
 	return nil
 }
 
-func (p *AdvertAddThriftServiceGetAdvertDetailsResult) ReadField0(iprot thrift.TProtocol) error {
+func (p *AdvertDetailsThriftServiceGetAdvertDetailsResult) ReadField0(iprot thrift.TProtocol) error {
 	p.Success = &AdvertDetailsReponseStruct{}
 	if err := p.Success.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Success), err)
@@ -1123,7 +1123,7 @@ func (p *AdvertAddThriftServiceGetAdvertDetailsResult) ReadField0(iprot thrift.T
 	return nil
 }
 
-func (p *AdvertAddThriftServiceGetAdvertDetailsResult) Write(oprot thrift.TProtocol) error {
+func (p *AdvertDetailsThriftServiceGetAdvertDetailsResult) Write(oprot thrift.TProtocol) error {
 	if err := oprot.WriteStructBegin("getAdvertDetails_result"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
@@ -1141,7 +1141,7 @@ func (p *AdvertAddThriftServiceGetAdvertDetailsResult) Write(oprot thrift.TProto
 	return nil
 }
 
-func (p *AdvertAddThriftServiceGetAdvertDetailsResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *AdvertDetailsThriftServiceGetAdvertDetailsResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err := oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T write field begin error 0:success: ", p), err)
@@ -1156,9 +1156,9 @@ func (p *AdvertAddThriftServiceGetAdvertDetailsResult) writeField0(oprot thrift.
 	return err
 }
 
-func (p *AdvertAddThriftServiceGetAdvertDetailsResult) String() string {
+func (p *AdvertDetailsThriftServiceGetAdvertDetailsResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("AdvertAddThriftServiceGetAdvertDetailsResult(%+v)", *p)
+	return fmt.Sprintf("AdvertDetailsThriftServiceGetAdvertDetailsResult(%+v)", *p)
 }

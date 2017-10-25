@@ -3,6 +3,7 @@ package main
 import (
 	_ "cht/initial"
 	"cht/service/advertadd"
+	"cht/service/advertdel"
 	"cht/service/advertdetails"
 	"cht/service/advertlist"
 	"cht/service/advertmanagethriftservice"
@@ -296,6 +297,10 @@ func main() {
 	go func() {
 		/*开启[后台]广告图片管理---添加广告图片服务*/
 		advertadd.StartAdvertAddServer()
+	}()
+
+	go func() {
+		advertdel.StartAdvertDelServer()
 	}()
 
 	go func() {

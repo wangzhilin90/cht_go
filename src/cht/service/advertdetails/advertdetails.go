@@ -67,11 +67,11 @@ func StartAdvertDetailsServer() {
 	}
 	defer conn.Close()
 
-	port := "30049"
+	port := "30050"
 	ip, _ := zkclient.GetLocalIP()
 	listenAddr := fmt.Sprintf("%s:%s", ip, port)
 
-	servicename := "/cht/AdvertAddThriftService/providers"
+	servicename := "/cht/AdvertDetailsThriftService/providers"
 	err = zkclient.RegisterNode(conn, servicename, listenAddr)
 	if err != nil {
 		Logger.Fatalf("RegisterNode failed", err)
@@ -83,7 +83,7 @@ func StartAdvertDetailsServer() {
 	}
 
 	handler := &advertdetailsservice{}
-	processor := NewAdvertAddThriftServiceProcessor(handler)
+	processor := NewAdvertDetailsThriftServiceProcessor(handler)
 	server := thrift.NewTSimpleServer2(processor, serverTransport)
 	server.Serve()
 }

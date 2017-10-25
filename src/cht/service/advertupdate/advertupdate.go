@@ -60,7 +60,7 @@ func StartAdvertUpdateServer() {
 	}
 	defer conn.Close()
 
-	port := "30051"
+	port := "30052"
 	ip, _ := zkclient.GetLocalIP()
 	listenAddr := fmt.Sprintf("%s:%s", ip, port)
 

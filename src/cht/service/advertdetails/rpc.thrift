@@ -27,7 +27,7 @@ struct AdvertDetailsReponseStruct{
     3:AdvertDetailsStruct AdvertDetails
 }
 
-service AdvertAddThriftService {
+service AdvertDetailsThriftService {
 	AdvertDetailsReponseStruct getAdvertDetails (1:AdvertDetailsRequestStruct requestObj)
 }
 

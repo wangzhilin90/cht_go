@@ -68,7 +68,7 @@ func (als *advertlistservice) GetAdvertList(requestObj *AdvertListRequestStruct)
 }
 
 /**
- * [StartAdvertDetailsServer description]
+ * [StartAdvertDetailsServer 广告图片管理---列表服务]
  * @DateTime 2017-10-25T15:00:12+0800
  */
 func StartAdvertListServer() {
@@ -79,7 +79,7 @@ func StartAdvertListServer() {
 	}
 	defer conn.Close()
 
-	port := "30050"
+	port := "30051"
 	ip, _ := zkclient.GetLocalIP()
 	listenAddr := fmt.Sprintf("%s:%s", ip, port)
 

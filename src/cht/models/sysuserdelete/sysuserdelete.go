@@ -41,7 +41,7 @@ func DeleteSysUser(sudr *SysUserDeleteRequest) bool {
 
 	res, err := o.Raw(sql, users).Exec()
 	if err != nil {
-		Logger.Errorf("DeleteSysUser insert failed:%v", err)
+		Logger.Errorf("DeleteSysUser delete failed:%v", err)
 		return false
 	}
 	num, _ := res.RowsAffected()

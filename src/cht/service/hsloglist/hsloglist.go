@@ -92,7 +92,7 @@ func StartHSLogListServer() {
 	}
 	defer conn.Close()
 
-	port := "30039"
+	port := "30047"
 	ip, _ := zkclient.GetLocalIP()
 	listenAddr := fmt.Sprintf("%s:%s", ip, port)
 

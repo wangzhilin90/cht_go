@@ -2,7 +2,11 @@ package main
 
 import (
 	_ "cht/initial"
+	"cht/service/advertadd"
+	"cht/service/advertdetails"
+	"cht/service/advertlist"
 	"cht/service/advertmanagethriftservice"
+	"cht/service/advertupdate"
 	"cht/service/articledetails"
 	"cht/service/borrowuserdetails"
 	"cht/service/dutydetails"
@@ -287,6 +291,26 @@ func main() {
 	go func() {
 		/*开启[后台]商品管理列表服务*/
 		goodslist.StartGoodsListServer()
+	}()
+
+	go func() {
+		/*开启[后台]广告图片管理---添加广告图片服务*/
+		advertadd.StartAdvertAddServer()
+	}()
+
+	go func() {
+		/*开启[后台]广告图片管理---图片详情服务*/
+		advertdetails.StartAdvertDetailsServer()
+	}()
+
+	go func() {
+		/*开启[后台]广告图片管理---列表服务*/
+		advertlist.StartAdvertListServer()
+	}()
+
+	go func() {
+		/*开启[后台]广告图片管理---修改广告图片*/
+		advertupdate.StartAdvertUpdateServer()
 	}()
 
 	<-ch

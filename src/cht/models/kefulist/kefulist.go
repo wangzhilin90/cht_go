@@ -15,19 +15,19 @@ type KeFuListRequestStruct struct {
 }
 
 type KeFuDetailsStruct struct {
-	ID            int32  `orm:column(id)`
-	RoleID        int32  `orm:column(role_id)`
-	Account       string `orm:column(account)`
-	Realname      string `orm:column(realname)`
-	Password      string `orm:column(password)`
-	Mobile        string `orm:column(mobile)`
-	Qq            string `orm:column(qq)`
-	Lastloginip   string `orm:column(lastloginip)`
-	Lastlogintime int32  `orm:column(lastlogintime)`
-	CreateTime    int32  `orm:column(create_time)`
-	Status        int32  `orm:column(status)`
-	Views         int32  `orm:column(views)`
-	CustomerType  int32  `orm:column(customer_type)`
+	ID            int32  `orm:"column(id)"`
+	RoleID        int32  `orm:"column(role_id)"`
+	Account       string `orm:"column(account)"`
+	Realname      string `orm:"column(realname)"`
+	Password      string `orm:"column(password)"`
+	Mobile        string `orm:"column(mobile)"`
+	Qq            string `orm:"column(qq)"`
+	Lastloginip   string `orm:"column(lastloginip)"`
+	Lastlogintime int32  `orm:"column(lastlogintime)"`
+	CreateTime    int32  `orm:"column(create_time)"`
+	Status        int32  `orm:"column(status)"`
+	Views         int32  `orm:"column(views)"`
+	CustomerType  int32  `orm:"column(customer_type)"`
 }
 
 func GetKeFuList(kfrs *KeFuListRequestStruct) ([]KeFuDetailsStruct, error) {
@@ -37,8 +37,15 @@ func GetKeFuList(kfrs *KeFuListRequestStruct) ([]KeFuDetailsStruct, error) {
 	qb, _ := orm.NewQueryBuilder("mysql")
 	qb.Select("*").
 		From("jl_sys_user").
-		Where(fmt.Sprintf("status=%d", kfrs.Status)).
-		And(fmt.Sprintf("role_id=%d", kfrs.RoleID))
+		Where("1=1")
+
+	if kfrs.Status != 0 {
+		qb.And(fmt.Sprintf("status=%d", kfrs.Status))
+	}
+
+	if kfrs.RoleID != 0 {
+		qb.And(fmt.Sprintf("role_id=%d", kfrs.RoleID))
+	}
 
 	if kfrs.CustomerType != "" {
 		qb.And(fmt.Sprintf("customer_type IN (%v)", kfrs.CustomerType))

@@ -10,6 +10,8 @@ import (
 	"cht/service/advertupdate"
 	"cht/service/articledetails"
 	"cht/service/borrowuserdetails"
+	"cht/service/customerlist"
+	"cht/service/customerupdate"
 	"cht/service/dutydetails"
 	"cht/service/emailattestationthriftservice"
 	"cht/service/forgetpassword"
@@ -55,6 +57,7 @@ import (
 	"cht/service/userrechargerecordlist"
 	"cht/service/usertendercoupondetails"
 	"cht/service/usertenderredbagdestails"
+	"cht/service/vipcustomerloglist"
 )
 
 func main() {
@@ -322,6 +325,21 @@ func main() {
 	go func() {
 		/*开启[后台]广告图片管理---修改广告图片*/
 		advertupdate.StartAdvertUpdateServer()
+	}()
+
+	go func() {
+		/*开启[后台]专属客服---列表服务*/
+		customerlist.StartCustomerListServer()
+	}()
+
+	go func() {
+		/*开启[后台]专属客服---会员启用、禁用*/
+		customerupdate.StartCustomerUpdateServer()
+	}()
+
+	go func() {
+		/*开启[后台]专属客服日志记录服务*/
+		vipcustomerloglist.StartVipCustomerLogListServer()
 	}()
 
 	<-ch

@@ -35,7 +35,7 @@ func GetDBPasswd(upr *UpdatePasswdRequest) (string, error) {
 }
 
 /**
- * [UpdatePasswd 更新密码]
+ * [UpdatePasswd 修改密码]
  * @param   upr *UpdatePasswdRequest 请求入参
  * @return  bool true：更新成功，false更新失败
  * @DateTime 2017-09-04T11:19:05+0800

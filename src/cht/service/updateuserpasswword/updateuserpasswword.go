@@ -64,7 +64,7 @@ func (ups *updatepasswdservice) UpdateUserPasswWord(requestObj *UpdateUserPasswW
 }
 
 /**
- * [StartUpdatePasswdsServer 开启忘记密码重置密码服务]
+ * [StartUpdatePasswdsServer 修改登录密码服务]
  * @DateTime 2017-08-24T15:19:45+0800
  */
 func StartUpdatePasswdsServer() {

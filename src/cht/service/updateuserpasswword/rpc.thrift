@@ -1,4 +1,4 @@
-//忘记密码重置密码服务
+//修改登录密码
 namespace go updateuserpasswword
 namespace php User.UpdateUserPasswWord
 

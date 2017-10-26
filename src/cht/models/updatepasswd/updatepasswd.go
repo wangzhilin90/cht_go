@@ -1,14 +1,37 @@
 package updatepasswd
 
 import (
+	"bytes"
 	. "cht/common/logger"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 )
 
 type UpdatePasswdRequest struct {
-	ID       int32  `orm:"column(id)"`
-	Password string `orm:"column(password)"`
+	ID           int32
+	NewPassword_ string
+	OldPassword  string
+}
+
+func GetDBPasswd(upr *UpdatePasswdRequest) (string, error) {
+	o := orm.NewOrm()
+	o.Using("default")
+	Logger.Debug("GetDBPasswd input param:", upr)
+
+	buf := bytes.Buffer{}
+	buf.WriteString("SELECT password FROM jl_user WHERE id=? limit 1")
+	sql := buf.String()
+	Logger.Debugf("GetDBPasswd sql %v", sql)
+
+	var dbPassword string
+	err := o.Raw(sql, upr.ID).QueryRow(&dbPassword)
+	if err != nil {
+		Logger.Errorf("GetDBPasswd query failed :%v", err)
+		return "", err
+	}
+
+	Logger.Debugf("GetDBPasswd res :%v", dbPassword)
+	return dbPassword, nil
 }
 
 /**
@@ -22,12 +45,15 @@ func UpdatePasswd(upr *UpdatePasswdRequest) bool {
 	o.Using("default")
 
 	Logger.Debug("UpdatePasswd input param:", upr)
-	res, err := o.Raw("update jl_user set password=? where id=?", upr.Password, upr.ID).Exec()
+	res, err := o.Raw("update jl_user set password=? where id=?", upr.NewPassword_, upr.ID).Exec()
 	if err != nil {
 		Logger.Error("UpdatePasswd update failed")
 		return false
 	}
 	num, _ := res.RowsAffected()
+	if num == 0 {
+		return false
+	}
 	Logger.Debug("rows effect", num)
 	return true
 }

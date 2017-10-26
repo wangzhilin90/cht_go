@@ -92,8 +92,8 @@ func GetHsCashList(hclr *HsCashListRequest) ([]HsCashListResult, error) {
 		qb.And(fmt.Sprintf("HC.addtime<%d", hclr.EndTime))
 	}
 
-	if hclr.PayWay != -1 && hclr.PayWay != 0 {
-		qb.And(fmt.Sprintf("HC.pay_type=%d", hclr.PayWay))
+	if hclr.PayWay != -1 {
+		qb.And(fmt.Sprintf("HC.pay_way=%d", hclr.PayWay))
 	}
 
 	if hclr.Type != 0 && hclr.Keywords != "" {
@@ -121,6 +121,10 @@ func GetHsCashList(hclr *HsCashListRequest) ([]HsCashListResult, error) {
 	} else if hclr.Utype == 5 {
 		//广州保胜
 		qb.And(fmt.Sprintf("U.is_borrower=3"))
+	}
+
+	if hclr.Status != -1 {
+		qb.And(fmt.Sprintf("HC.status=%d", hclr.Status))
 	}
 
 	qb.OrderBy("HC.id").Desc()

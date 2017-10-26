@@ -12,6 +12,7 @@ import (
 	"cht/service/borrowuserdetails"
 	"cht/service/dutydetails"
 	"cht/service/emailattestationthriftservice"
+	"cht/service/forgetpassword"
 	"cht/service/goodsadd"
 	"cht/service/goodsdel"
 	"cht/service/goodsdetails"
@@ -75,7 +76,12 @@ func main() {
 	}()
 
 	go func() {
-		/*修改用户密码服务*/
+		/*忘记密码重置密码服务*/
+		forgetpassword.StartForgetPasswordServer()
+	}()
+
+	go func() {
+		/*修改登录密码服务*/
 		updateuserpasswword.StartUpdatePasswdsServer()
 	}()
 

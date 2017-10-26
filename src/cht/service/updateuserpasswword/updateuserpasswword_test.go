@@ -5,15 +5,16 @@ import (
 	"testing"
 )
 
-func NewUpdatePasswdRequestStruct(id int32, passwd string) *UpdateUserPasswWordRequestStruct {
+func NewUpdatePasswdRequestStruct(id int32, oldpw, newpw string) *UpdateUserPasswWordRequestStruct {
 	return &UpdateUserPasswWordRequestStruct{
-		ID:       id,
-		Password: passwd,
+		ID:           id,
+		OldPassword:  oldpw,
+		NewPassword_: newpw,
 	}
 }
 
 func TestUpdatePasswd(t *testing.T) {
-	uprs := NewUpdatePasswdRequestStruct(134234, "mimamamaipi")
+	uprs := NewUpdatePasswdRequestStruct(134234, "mimamamaipi", "newmimamamaipi")
 	ups := updatepasswdservice{}
 	res, err := ups.UpdateUserPasswWord(uprs)
 	if err != nil {

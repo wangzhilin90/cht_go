@@ -3,7 +3,7 @@ package updateuserpasswword
 import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
-	"cht/models/updatepasswd"
+	up "cht/models/updatepasswd"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 )
@@ -11,30 +11,55 @@ import (
 type updatepasswdservice struct{}
 
 const (
-	UPDATEPASSWDFAILED  = 1001
-	UPDATEPASSWDSUCCESS = 1000
+	UPDATE_PASSWORD_SUCCESS  = 1000
+	GET_OLD_PASSWORD_FAILED  = 1001
+	OLD_PASSWORD_INPUT_ERROR = 1002
+	UPDATE_PASSWORD_FAILED   = 1003
 )
 
 var Status = map[int]string{
-	UPDATEPASSWDFAILED:  "更新密码失败",
-	UPDATEPASSWDSUCCESS: "更新密码成功",
+	UPDATE_PASSWORD_SUCCESS:  "更新密码成功",
+	GET_OLD_PASSWORD_FAILED:  "获取数据库登录密码失败",
+	OLD_PASSWORD_INPUT_ERROR: "旧密码输入不正确",
+	UPDATE_PASSWORD_FAILED:   "更新密码失败",
 }
 
 func (ups *updatepasswdservice) UpdateUserPasswWord(requestObj *UpdateUserPasswWordRequestStruct) (r *UpdateUserPasswWordResponseStruct, err error) {
-	upr := new(updatepasswd.UpdatePasswdRequest)
+	upr := new(up.UpdatePasswdRequest)
 	upr.ID = requestObj.GetID()
-	upr.Password = requestObj.GetPassword()
+	upr.NewPassword_ = requestObj.GetNewPassword_()
+	upr.OldPassword = requestObj.GetOldPassword()
 
-	b := updatepasswd.UpdatePasswd(upr)
-	if b == false {
+	oldPw, err := up.GetDBPasswd(upr)
+	if err != nil {
+		Logger.Errorf("UpdateUserPasswWord get old password failed:%v", err)
 		return &UpdateUserPasswWordResponseStruct{
-			Status: UPDATEPASSWDFAILED,
-			Msg:    Status[UPDATEPASSWDFAILED],
+			Status: GET_OLD_PASSWORD_FAILED,
+			Msg:    Status[GET_OLD_PASSWORD_FAILED],
 		}, nil
 	}
+
+	if oldPw != requestObj.GetOldPassword() {
+		Logger.Errorf("UpdateUserPasswWord old password input error")
+		return &UpdateUserPasswWordResponseStruct{
+			Status: OLD_PASSWORD_INPUT_ERROR,
+			Msg:    Status[OLD_PASSWORD_INPUT_ERROR],
+		}, nil
+	}
+
+	b := up.UpdatePasswd(upr)
+	if b == false {
+		Logger.Errorf("UpdateUserPasswWord update password failed")
+		return &UpdateUserPasswWordResponseStruct{
+			Status: UPDATE_PASSWORD_FAILED,
+			Msg:    Status[UPDATE_PASSWORD_FAILED],
+		}, nil
+	}
+
+	Logger.Debugf("UpdateUserPasswWord update password success")
 	return &UpdateUserPasswWordResponseStruct{
-		Status: UPDATEPASSWDSUCCESS,
-		Msg:    Status[UPDATEPASSWDSUCCESS],
+		Status: UPDATE_PASSWORD_SUCCESS,
+		Msg:    Status[UPDATE_PASSWORD_SUCCESS],
 	}, nil
 }
 

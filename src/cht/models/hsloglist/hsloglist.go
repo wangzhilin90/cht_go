@@ -49,7 +49,7 @@ func GetHsLogTotalNum(hllr *HsLogListRequest) (int32, error) {
 	o := orm.NewOrm()
 	o.Using("default")
 	var sql string
-	if hllr.StartTime != 0 || hllr.EndTime != 0 || hllr.Type != 0 || (hllr.Type2 != 0 && hllr.Kws != "") || hllr.Utype != 0 {
+	if hllr.StartTime != 0 || hllr.EndTime != 0 || hllr.Type != -1 || (hllr.Type2 != 0 && hllr.Kws != "") || hllr.Utype != 0 {
 		Logger.Debugf("GetHsLogTotalNum query condition is not null")
 		buf := bytes.Buffer{}
 		buf.WriteString("SELECT COUNT(1) FROM jl_hs_log HL LEFT JOIN jl_user U ON HL.user_id=U.id WHERE U.is_borrower > 0")
@@ -93,7 +93,7 @@ func GetHsLog(hllr *HsLogListRequest) ([]HsLogDetails, error) {
 		qb.And(fmt.Sprintf("HL.addtime<%d", hllr.EndTime))
 	}
 
-	if hllr.Type != -1 && hllr.Type != 0 {
+	if hllr.Type != -1 {
 		qb.And(fmt.Sprintf("HL.type=%d", hllr.Type))
 	}
 

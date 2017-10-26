@@ -16,22 +16,28 @@ var _ = bytes.Equal
 
 // Attributes:
 //  - ID
-//  - Password
+//  - NewPassword_
+//  - OldPassword
 type UpdateUserPasswWordRequestStruct struct {
-	ID       int32  `thrift:"id,1" db:"id" json:"id"`
-	Password string `thrift:"password,2" db:"password" json:"password"`
+	ID           int32  `thrift:"id,1" db:"id" json:"id"`
+	NewPassword_ string `thrift:"newPassword,2" db:"newPassword" json:"newPassword"`
+	OldPassword  string `thrift:"oldPassword,3" db:"oldPassword" json:"oldPassword"`
 }
 
-func NewUpdateUserPasswWordRequestStruct() *UpdateUserPasswWordRequestStruct {
-	return &UpdateUserPasswWordRequestStruct{}
-}
+// func NewUpdateUserPasswWordRequestStruct() *UpdateUserPasswWordRequestStruct {
+//   return &UpdateUserPasswWordRequestStruct{}
+// }
 
 func (p *UpdateUserPasswWordRequestStruct) GetID() int32 {
 	return p.ID
 }
 
-func (p *UpdateUserPasswWordRequestStruct) GetPassword() string {
-	return p.Password
+func (p *UpdateUserPasswWordRequestStruct) GetNewPassword_() string {
+	return p.NewPassword_
+}
+
+func (p *UpdateUserPasswWordRequestStruct) GetOldPassword() string {
+	return p.OldPassword
 }
 func (p *UpdateUserPasswWordRequestStruct) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
@@ -53,6 +59,10 @@ func (p *UpdateUserPasswWordRequestStruct) Read(iprot thrift.TProtocol) error {
 			}
 		case 2:
 			if err := p.ReadField2(iprot); err != nil {
+				return err
+			}
+		case 3:
+			if err := p.ReadField3(iprot); err != nil {
 				return err
 			}
 		default:
@@ -83,7 +93,16 @@ func (p *UpdateUserPasswWordRequestStruct) ReadField2(iprot thrift.TProtocol) er
 	if v, err := iprot.ReadString(); err != nil {
 		return thrift.PrependError("error reading field 2: ", err)
 	} else {
-		p.Password = v
+		p.NewPassword_ = v
+	}
+	return nil
+}
+
+func (p *UpdateUserPasswWordRequestStruct) ReadField3(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 3: ", err)
+	} else {
+		p.OldPassword = v
 	}
 	return nil
 }
@@ -97,6 +116,9 @@ func (p *UpdateUserPasswWordRequestStruct) Write(oprot thrift.TProtocol) error {
 			return err
 		}
 		if err := p.writeField2(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField3(oprot); err != nil {
 			return err
 		}
 	}
@@ -123,14 +145,27 @@ func (p *UpdateUserPasswWordRequestStruct) writeField1(oprot thrift.TProtocol) (
 }
 
 func (p *UpdateUserPasswWordRequestStruct) writeField2(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("password", thrift.STRING, 2); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:password: ", p), err)
+	if err := oprot.WriteFieldBegin("newPassword", thrift.STRING, 2); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:newPassword: ", p), err)
 	}
-	if err := oprot.WriteString(string(p.Password)); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.password (2) field write error: ", p), err)
+	if err := oprot.WriteString(string(p.NewPassword_)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.newPassword (2) field write error: ", p), err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:password: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:newPassword: ", p), err)
+	}
+	return err
+}
+
+func (p *UpdateUserPasswWordRequestStruct) writeField3(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("oldPassword", thrift.STRING, 3); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:oldPassword: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.OldPassword)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.oldPassword (3) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:oldPassword: ", p), err)
 	}
 	return err
 }

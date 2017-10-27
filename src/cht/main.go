@@ -58,6 +58,7 @@ import (
 	"cht/service/usertendercoupondetails"
 	"cht/service/usertenderredbagdestails"
 	"cht/service/vipcustomerloglist"
+	"cht/service/vipmemberranklist"
 )
 
 func main() {
@@ -340,6 +341,11 @@ func main() {
 	go func() {
 		/*开启[后台]专属客服日志记录服务*/
 		vipcustomerloglist.StartVipCustomerLogListServer()
+	}()
+
+	go func() {
+		/*开启[后台]客户管理---VIP会员等级服务*/
+		vipmemberranklist.StartVipMemberRankListServer()
 	}()
 
 	<-ch

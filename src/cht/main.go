@@ -24,6 +24,7 @@ import (
 	"cht/service/hscashlist"
 	"cht/service/hsloglist"
 	"cht/service/juanzengthriftservice"
+	"cht/service/kefudutyadd"
 	"cht/service/kefulist"
 	"cht/service/makeborrowservice"
 	"cht/service/memberhelperlist"
@@ -352,6 +353,11 @@ func main() {
 	go func() {
 		/*开启[后台]第三方支付方式列表服务*/
 		paymentconfiglist.StartPaymentConfigListServer()
+	}()
+
+	go func() {
+		/*开启[后台]客服值班---新增值班服务*/
+		kefudutyadd.StartKeFuDutyAddServer()
 	}()
 
 	<-ch

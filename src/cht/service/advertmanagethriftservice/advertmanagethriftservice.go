@@ -58,7 +58,7 @@ func (ams *advertmanageservice) GetAdvertManage(requestObj *AdvertManageRequestS
  * @DateTime 2017-09-20T11:19:45+0800
  */
 func StartAdvertManageServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

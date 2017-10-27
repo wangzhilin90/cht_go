@@ -79,7 +79,7 @@ func (vmrls *vipmemberranklistservice) GetVipMemberRankList(requestObj *VipMembe
  * @DateTime 2017-10-27T14:02:02+0800
  */
 func StartVipMemberRankListServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

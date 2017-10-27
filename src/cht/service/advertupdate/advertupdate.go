@@ -53,7 +53,7 @@ func (aus *advertupdateservice) UpdateAdvert(requestObj *AdvertUpdateRequestStru
  * @DateTime 2017-10-25T15:57:37+0800
  */
 func StartAdvertUpdateServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

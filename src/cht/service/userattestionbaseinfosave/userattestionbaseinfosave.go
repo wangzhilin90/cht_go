@@ -52,7 +52,7 @@ func (uabss *userattestionbaseinfosaveservice) SaveUserAttestionBaseInfo(request
  * @DateTime 2017-10-19T17:14:16+0800
  */
 func StartUserAttestionBaseInfoSaveServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

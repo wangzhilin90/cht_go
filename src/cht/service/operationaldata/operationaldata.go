@@ -204,7 +204,7 @@ func (ods *operationaldataservice) GetOperationalData(requestObj *OperationalDat
  * [StartUpdatePasswdsServer 开启[后台]运营数据服务]
  */
 func StartOperationalDataServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

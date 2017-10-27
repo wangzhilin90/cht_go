@@ -62,7 +62,7 @@ func (gds *goodsdetailsservice) GetGoodsDetails(requestObj *GoodsDetailsRequestS
  * @DateTime 2017-10-24T14:28:24+0800
  */
 func StartGoodsDetailsServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

@@ -45,7 +45,7 @@ func (ts *talkingservcie) GetTalkingList(requestObj *TalkingRequestStruct) (r *T
  * @DateTime 2017-10-11T14:58:45+0800
  */
 func StartTalkingServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

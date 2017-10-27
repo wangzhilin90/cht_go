@@ -45,7 +45,7 @@ func (uis *userattestioncardinfosaveservice) SaveUserAttestionCardInfo(requestOb
  * @DateTime 2017-10-20T09:47:01+0800
  */
 func StartUserAttestionCardInfoSaveServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

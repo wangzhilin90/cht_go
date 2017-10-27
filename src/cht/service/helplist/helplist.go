@@ -30,7 +30,7 @@ func (hs *helplistservice) GetHelpList(requestObj *HelpListRequestStruct) (r *He
 
 /*获取帮助中心文章列表服务*/
 func StartHelpListServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

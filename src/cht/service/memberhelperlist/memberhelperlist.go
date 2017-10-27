@@ -75,7 +75,7 @@ func (mhls *memberhelperlistservice) GetMemberHelperList(requestObj *MemberHelpe
  * @DateTime 2017-10-23T14:34:48+0800
  */
 func StartMemberHelperListServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

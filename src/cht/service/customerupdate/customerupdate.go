@@ -45,7 +45,7 @@ func (cus *customerupdateservice) UpdateCustomer(requestObj *CustomerUpdateReque
  * @DateTime 2017-10-26T16:35:32+0800
  */
 func StartCustomerUpdateServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

@@ -53,7 +53,7 @@ func (sues *sysusereditservice) EditSysUser(requestObj *SysUserEditRequestStruct
  * @DateTime 2017-10-18T17:24:39+0800
  */
 func StartSysUserEditServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

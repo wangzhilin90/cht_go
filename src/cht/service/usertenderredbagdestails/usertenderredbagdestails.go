@@ -47,7 +47,7 @@ func (gts *gettenderredservice) GetUserTenderRedbagDestails(requestObj *UserTend
 }
 
 func StartGetTenderRedBagServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

@@ -56,7 +56,7 @@ func (ads *advertdelservice) DelAdvert(requestObj *AdvertDelRequestStruct) (r *A
  * @DateTime 2017-10-25T13:48:57+0800
  */
 func StartAdvertDelServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

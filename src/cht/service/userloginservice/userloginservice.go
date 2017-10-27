@@ -95,7 +95,7 @@ func (uls *UserLoginService) GetUserLoginInfo(requestObj *UserlLoginRequestStruc
  * @DateTime 2017-08-30T10:38:44+0800
  */
 func StartUserLoginServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

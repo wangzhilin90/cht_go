@@ -85,7 +85,7 @@ func (js *juanzengservice) AddMess(requestObj *RequestStruct) (r int32, err erro
 
 /*开启捐赠服务*/
 func StartJuanzengServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

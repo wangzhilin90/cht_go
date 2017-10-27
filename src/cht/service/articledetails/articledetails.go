@@ -155,7 +155,7 @@ func (ads *articledetailsservice) NextArticle(requestObj *NextRequestStruct) (r 
 
 /*开启获取文章详情服务*/
 func StartArticleDetailsServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

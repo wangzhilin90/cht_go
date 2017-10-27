@@ -1,28 +1,32 @@
-//文章管理---广告图片管理---修改广告图片
-namespace php Article.AdvertUpdate
-namespace go  advertupdate
+//第三方支付方式列表
+namespace php Common.PaymentConfigList
+namespace go  paymentconfiglist
 
-struct AdvertUpdateRequestStruct{
-	1:i32 id,
-	2:i32 type,
-	3:string img,
-	4:string adverturl,
-	5:string title,
-	6:i32 adduser,
-	7:i32 fid,
-	8:i32 starttime,
-	9:i32 endtime,
-	10:string chengHuiTongTraceLog
+struct PaymentConfigListRequestStruct {
+    1:string chengHuiTongTraceLog
 }
 
-struct AdvertUpdateResponseStruct{
-	1:i32 status,
-	2:string msg
+struct PaymentConfigDetailsStruct {
+    1:i32 id,//支付方式表,
+    2:i32 type,//分类,
+    3:string nid,//标识,
+    4:string name,//支付方式名称,
+    5:string logo,//COMMENT logo,
+    6:string config,//配置信息,
+    7:string fee,//手续费,
+    8:i32 status,//状态 0开通 1停用,
+    9:string remark,//备注,
+    10:i32 sort,//排序,
 }
 
-service AdvertUpdateThriftService {
-	AdvertUpdateResponseStruct updateAdvert (1:AdvertUpdateRequestStruct requestObj)
+struct PaymentConfigListResponseStruct {
+    1:i32 status,
+    2:string msg,
+    3:list<PaymentConfigDetailsStruct> PaymentConfigList
 }
 
-//UPDATE `jl_advert_manage` SET `img` = 'advert/2017/1019/20171019045638703.png',`adverturl` = '',`fid` = '59769',`type` = '2',`title` = '登录11',`starttime` = '1497801599',`endtime` = '1548950399',`adduser` = '1',`addtime` = '1508403399' WHERE `id`='1'
-//addtime获取系统当前时间
+service PaymentConfigListThriftService {
+    PaymentConfigListResponseStruct getPaymentConfigList (1:PaymentConfigListRequestStruct requestObj)
+}
+
+//sql = "select * from jl_payment_config order by sort"

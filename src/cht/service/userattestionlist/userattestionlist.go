@@ -87,7 +87,7 @@ func (uals *userattestionlistservice) UserAttestionList(requestObj *UserAttestio
  * @DateTime 2017-10-19T16:35:39+0800
  */
 func StartUserAttestionListServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

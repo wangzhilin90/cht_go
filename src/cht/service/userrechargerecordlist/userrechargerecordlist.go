@@ -67,7 +67,7 @@ func (rrs *rechargerecordservice) GetUserRechargeRecordList(requestObj *UserRech
  * @DateTime 2017-08-24T15:19:45+0800
  */
 func StartRechargeRecordServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

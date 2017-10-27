@@ -136,7 +136,7 @@ func (ms *messageservice) GetUserDetials(requestObj *MessageRequestStruct) (r *U
  * @DateTime 2017-09-11T15:19:45+0800
  */
 func StartMessageServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

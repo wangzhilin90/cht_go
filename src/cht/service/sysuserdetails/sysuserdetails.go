@@ -60,7 +60,7 @@ func (suds *sysuserdetailsservice) GetSysUserDetails(requestObj *SysUserDetailsR
  * @DateTime 2017-10-18T14:58:03+0800
  */
 func StartSysUserDetailsServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

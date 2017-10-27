@@ -59,7 +59,7 @@ func (pcls *paymentconfiglistservice) GetPaymentConfigList(requestObj *PaymentCo
  * @DateTime 2017-10-27T14:30:19+0800
  */
 func StartPaymentConfigListServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

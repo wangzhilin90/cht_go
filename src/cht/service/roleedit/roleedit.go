@@ -44,7 +44,7 @@ func (res *roleeditservice) EditRole(requestObj *RoleEditRequestStruct) (r *Role
 }
 
 func StartRoleEditServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

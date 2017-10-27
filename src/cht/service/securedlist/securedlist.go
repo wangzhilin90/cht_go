@@ -79,7 +79,7 @@ func (ss *securedservice) GetSecuredList(requestObj *SecuredListRequestStruct) (
 
 /*开启做标服务---担保人服务*/
 func StartSecuredServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

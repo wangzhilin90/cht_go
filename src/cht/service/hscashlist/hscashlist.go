@@ -94,7 +94,7 @@ func (hcls *hscashlistservice) GetHsCashList(requestObj *HsCashListRequestStruct
  * @DateTime 2017-10-23T11:34:48+0800
  */
 func StartHSCashListServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

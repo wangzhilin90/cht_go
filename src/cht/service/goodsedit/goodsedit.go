@@ -55,7 +55,7 @@ func (ges *goodseditservice) EditGoods(requestObj *GoodsEditRequestStruct) (r *G
  * @DateTime 2017-10-24T14:57:42+0800
  */
 func StartGoodsEditServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

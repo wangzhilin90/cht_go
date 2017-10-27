@@ -52,7 +52,7 @@ func (eas *emailattestationservice) SendEmail(requestObj *SendEmailRequestStruct
 
 /*开启邮箱认证服务*/
 func StartEmailAttestationServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

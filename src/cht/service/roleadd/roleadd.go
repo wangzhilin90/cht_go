@@ -42,7 +42,7 @@ func (rs *roleaddservice) AddRole(requestObj *RoleAddRequestStruct) (r *RoleAddR
 }
 
 func StartRoleAddServer() {
-	zkServers := []string{"192.168.8.208:2181"}
+	zkServers := zkclient.ZkServerAddress
 	conn, err := zkclient.ConnectZk(zkServers)
 	if err != nil {
 		Logger.Fatalf("connect zk failed %v ", err)

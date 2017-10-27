@@ -29,6 +29,7 @@ import (
 	"cht/service/memberhelperlist"
 	"cht/service/messagethriftservice"
 	"cht/service/operationaldata"
+	"cht/service/paymentconfiglist"
 	"cht/service/phoneattestationthriftservice"
 	"cht/service/roleadd"
 	"cht/service/roledelete"
@@ -346,6 +347,11 @@ func main() {
 	go func() {
 		/*开启[后台]客户管理---VIP会员等级服务*/
 		vipmemberranklist.StartVipMemberRankListServer()
+	}()
+
+	go func() {
+		/*开启[后台]第三方支付方式列表服务*/
+		paymentconfiglist.StartPaymentConfigListServer()
 	}()
 
 	<-ch

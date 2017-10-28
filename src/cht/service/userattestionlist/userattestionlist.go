@@ -73,6 +73,11 @@ func (uals *userattestionlistservice) UserAttestionList(requestObj *UserAttestio
 		uads.VipStatus = v.VipStatus
 		uads.VipPasstime = v.VipPasstime
 		uads.VipVerifytime = v.VipVerifytime
+		uads.Username = v.Username
+		uads.Realname = v.Realname
+		uads.Phone = v.Phone
+		uads.Email = v.Email
+		uads.Name = v.Name
 		response.UserAttestionList = append(response.UserAttestionList, uads)
 	}
 	response.Total = tatalNum

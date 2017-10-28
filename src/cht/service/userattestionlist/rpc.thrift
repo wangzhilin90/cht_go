@@ -35,6 +35,11 @@ struct UserAttestationDetailsStruct {
 	18: i32 vip_status,//VIP状态（0：未申请认证，1：申请中，2：已经认证,3未通过认证）
 	19: i32 vip_passtime,//VIP通过时间
 	20: i32 vip_verifytime//VIP有效期时间
+	21: string username,
+	22: string realname,
+	23: string phone,
+	24: string email,
+	25: string name,
 }
 
 struct UserAttestionListResponseStruct {

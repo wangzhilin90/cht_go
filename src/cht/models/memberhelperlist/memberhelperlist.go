@@ -1,7 +1,6 @@
 package memberhelperlist
 
 import (
-	"bytes"
 	. "cht/common/logger"
 	"fmt"
 	"github.com/astaxie/beego/orm"
@@ -38,12 +37,22 @@ func GetMemberHelperListTotalNum(mhlr *MemberHelperListRequest) (int32, error) {
 	Logger.Debugf("GetMemberHelperListTotalNum input param:%v", mhlr)
 	o := orm.NewOrm()
 	o.Using("default")
-	var sql string
-	Logger.Debugf("GetMemberHelperListTotalNum query condition is null")
-	buf := bytes.Buffer{}
-	buf.WriteString("SELECT COUNT(1) FROM jl_user_field UF LEFT JOIN jl_user U ON UF.user_id=U.id WHERE UF.linkman <>''")
-	sql = buf.String()
+	qb, _ := orm.NewQueryBuilder("mysql")
+	qb.Select("COUNT(1) FROM jl_user_field UF LEFT JOIN jl_user U ON UF.user_id=U.id WHERE UF.linkman <>''")
 
+	if mhlr.Type != 0 && mhlr.Keywords != "" {
+		if mhlr.Type == 1 {
+			qb.And(fmt.Sprintf("U.username like \"%%%s%%\"", mhlr.Keywords))
+		} else if mhlr.Type == 2 {
+			qb.And(fmt.Sprintf("U.realname like \"%%%s%%\"", mhlr.Keywords))
+		} else if mhlr.Type == 3 {
+			qb.And(fmt.Sprintf("U.phone=\"%s\"", mhlr.Keywords))
+		} else {
+			qb.And(fmt.Sprintf("id=\"%s\"", mhlr.Keywords))
+		}
+	}
+
+	sql := qb.String()
 	Logger.Debugf("GetMemberHelperListTotalNum sql:%v", sql)
 	var totalNum int32
 	err := o.Raw(sql).QueryRow(&totalNum)
@@ -76,7 +85,9 @@ func GetMemberHelperList(mhlr *MemberHelperListRequest) ([]MemberHelperDetails, 
 		} else if mhlr.Type == 2 {
 			qb.And(fmt.Sprintf("U.realname like \"%%%s%%\"", mhlr.Keywords))
 		} else if mhlr.Type == 3 {
-			qb.And(fmt.Sprintf("U.phone==\"%s\"", mhlr.Keywords))
+			qb.And(fmt.Sprintf("U.phone=\"%s\"", mhlr.Keywords))
+		} else {
+			qb.And(fmt.Sprintf("id=\"%s\"", mhlr.Keywords))
 		}
 	}
 

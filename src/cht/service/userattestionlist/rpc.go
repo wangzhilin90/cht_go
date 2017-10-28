@@ -39,7 +39,7 @@ type UserAttestionListRequestStruct struct {
 }
 
 // func NewUserAttestionListRequestStruct() *UserAttestionListRequestStruct {
-//   return &UserAttestionListRequestStruct{}
+// 	return &UserAttestionListRequestStruct{}
 // }
 
 func (p *UserAttestionListRequestStruct) GetUsername() string {
@@ -443,6 +443,11 @@ func (p *UserAttestionListRequestStruct) String() string {
 //  - VipStatus
 //  - VipPasstime
 //  - VipVerifytime
+//  - Username
+//  - Realname
+//  - Phone
+//  - Email
+//  - Name
 type UserAttestationDetailsStruct struct {
 	UserID        int32  `thrift:"user_id,1" db:"user_id" json:"user_id"`
 	CardType      int32  `thrift:"card_type,2" db:"card_type" json:"card_type"`
@@ -464,6 +469,11 @@ type UserAttestationDetailsStruct struct {
 	VipStatus     int32  `thrift:"vip_status,18" db:"vip_status" json:"vip_status"`
 	VipPasstime   int32  `thrift:"vip_passtime,19" db:"vip_passtime" json:"vip_passtime"`
 	VipVerifytime int32  `thrift:"vip_verifytime,20" db:"vip_verifytime" json:"vip_verifytime"`
+	Username      string `thrift:"username,21" db:"username" json:"username"`
+	Realname      string `thrift:"realname,22" db:"realname" json:"realname"`
+	Phone         string `thrift:"phone,23" db:"phone" json:"phone"`
+	Email         string `thrift:"email,24" db:"email" json:"email"`
+	Name          string `thrift:"name,25" db:"name" json:"name"`
 }
 
 func NewUserAttestationDetailsStruct() *UserAttestationDetailsStruct {
@@ -548,6 +558,26 @@ func (p *UserAttestationDetailsStruct) GetVipPasstime() int32 {
 
 func (p *UserAttestationDetailsStruct) GetVipVerifytime() int32 {
 	return p.VipVerifytime
+}
+
+func (p *UserAttestationDetailsStruct) GetUsername() string {
+	return p.Username
+}
+
+func (p *UserAttestationDetailsStruct) GetRealname() string {
+	return p.Realname
+}
+
+func (p *UserAttestationDetailsStruct) GetPhone() string {
+	return p.Phone
+}
+
+func (p *UserAttestationDetailsStruct) GetEmail() string {
+	return p.Email
+}
+
+func (p *UserAttestationDetailsStruct) GetName() string {
+	return p.Name
 }
 func (p *UserAttestationDetailsStruct) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
@@ -641,6 +671,26 @@ func (p *UserAttestationDetailsStruct) Read(iprot thrift.TProtocol) error {
 			}
 		case 20:
 			if err := p.ReadField20(iprot); err != nil {
+				return err
+			}
+		case 21:
+			if err := p.ReadField21(iprot); err != nil {
+				return err
+			}
+		case 22:
+			if err := p.ReadField22(iprot); err != nil {
+				return err
+			}
+		case 23:
+			if err := p.ReadField23(iprot); err != nil {
+				return err
+			}
+		case 24:
+			if err := p.ReadField24(iprot); err != nil {
+				return err
+			}
+		case 25:
+			if err := p.ReadField25(iprot); err != nil {
 				return err
 			}
 		default:
@@ -838,6 +888,51 @@ func (p *UserAttestationDetailsStruct) ReadField20(iprot thrift.TProtocol) error
 	return nil
 }
 
+func (p *UserAttestationDetailsStruct) ReadField21(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 21: ", err)
+	} else {
+		p.Username = v
+	}
+	return nil
+}
+
+func (p *UserAttestationDetailsStruct) ReadField22(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 22: ", err)
+	} else {
+		p.Realname = v
+	}
+	return nil
+}
+
+func (p *UserAttestationDetailsStruct) ReadField23(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 23: ", err)
+	} else {
+		p.Phone = v
+	}
+	return nil
+}
+
+func (p *UserAttestationDetailsStruct) ReadField24(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 24: ", err)
+	} else {
+		p.Email = v
+	}
+	return nil
+}
+
+func (p *UserAttestationDetailsStruct) ReadField25(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 25: ", err)
+	} else {
+		p.Name = v
+	}
+	return nil
+}
+
 func (p *UserAttestationDetailsStruct) Write(oprot thrift.TProtocol) error {
 	if err := oprot.WriteStructBegin("UserAttestationDetailsStruct"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
@@ -901,6 +996,21 @@ func (p *UserAttestationDetailsStruct) Write(oprot thrift.TProtocol) error {
 			return err
 		}
 		if err := p.writeField20(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField21(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField22(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField23(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField24(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField25(oprot); err != nil {
 			return err
 		}
 	}
@@ -1169,6 +1279,71 @@ func (p *UserAttestationDetailsStruct) writeField20(oprot thrift.TProtocol) (err
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field end error 20:vip_verifytime: ", p), err)
+	}
+	return err
+}
+
+func (p *UserAttestationDetailsStruct) writeField21(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("username", thrift.STRING, 21); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 21:username: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.Username)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.username (21) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 21:username: ", p), err)
+	}
+	return err
+}
+
+func (p *UserAttestationDetailsStruct) writeField22(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("realname", thrift.STRING, 22); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 22:realname: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.Realname)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.realname (22) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 22:realname: ", p), err)
+	}
+	return err
+}
+
+func (p *UserAttestationDetailsStruct) writeField23(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("phone", thrift.STRING, 23); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 23:phone: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.Phone)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.phone (23) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 23:phone: ", p), err)
+	}
+	return err
+}
+
+func (p *UserAttestationDetailsStruct) writeField24(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("email", thrift.STRING, 24); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 24:email: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.Email)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.email (24) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 24:email: ", p), err)
+	}
+	return err
+}
+
+func (p *UserAttestationDetailsStruct) writeField25(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("name", thrift.STRING, 25); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 25:name: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.Name)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.name (25) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 25:name: ", p), err)
 	}
 	return err
 }

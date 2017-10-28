@@ -42,6 +42,11 @@ type UserAttestationDetails struct {
 	VipStatus     int32  `orm:"column(vip_status)"`
 	VipPasstime   int32  `orm:"column(vip_passtime)"`
 	VipVerifytime int32  `orm:"column(vip_verifytime)"`
+	Username      string `orm:"column(username)"`
+	Realname      string `orm:"column(realname)"`
+	Phone         string `orm:"column(phone)"`
+	Email         string `orm:"column(email)"`
+	Name          string `orm:"column(name)"`
 }
 
 /**
@@ -148,6 +153,8 @@ func GetUserAttestionList(ualr *UserAttestionListRequest) ([]UserAttestationDeta
 	if ualr.SceneStatus != 0 && ualr.SceneStatus != -1 {
 		qb.And(fmt.Sprintf("UA.scene_status=%d", ualr.SceneStatus))
 	}
+
+	qb.OrderBy("U.id").Desc()
 
 	if ualr.LimitNum != 0 {
 		qb.Limit(int(ualr.LimitNum))

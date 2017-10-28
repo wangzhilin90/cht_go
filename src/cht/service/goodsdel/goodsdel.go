@@ -58,7 +58,7 @@ func StartDelGoodsServer() {
 	servicename := "/cht/GoodsDeLThriftService/providers"
 	err = zkclient.RegisterNode(conn, servicename, listenAddr)
 	if err != nil {
-		Logger.Fatalf("RegisterNode failed", err)
+		Logger.Fatalf("RegisterNode %v failed", servicename, err)
 	}
 
 	serverTransport, err := thrift.NewTServerSocket(listenAddr)

@@ -5,15 +5,16 @@ namespace go  hscashlist
 struct HsCashListRequestStruct{
 	1:i32 start_time,
 	2:i32 end_time,
-	3:i32 utype,//借款人,默认0：不限
-	4:i32 type,
-	5:string keywords,
-	6:i32 pay_way,//提现途径，默认-1不限
-	7:i32 status,//提现状态，默认-1不限
-	8:i32 is_export,//是否导出，默认不导出 0
-	9:i32 limitOffset,
-	10:i32 limitNum,
-	11:string chengHuiTongTraceLog
+	3:i32 timetype,
+	4:i32 utype,//借款人,默认0：不限
+	5:i32 type,
+	6:string keywords,
+	7:i32 pay_way,//提现途径，默认-1不限
+	8:i32 status,//提现状态，默认-1不限
+	9:i32 is_export,//是否导出，默认不导出 0
+	10:i32 limitOffset,
+	11:i32 limitNum,
+	12:string chengHuiTongTraceLog
 }
 
 struct HsCashListResultStruct{
@@ -72,17 +73,17 @@ service HsCashListThriftService {
 //            if($is_borrower == 1){//保胜借款人
 //                $where[] = 'U.is_borrower>0';
 //            }
-//            if($is_borrower == 2){//普通客户
-//                 $where['U.is_borrower'] = 0;
+//            if($is_borrower == 640){//普通客户
+//                 $where['U.is_borrower'] = 640;
 //            }
-//            if($is_borrower == 3){//深圳保胜
-//                $where['U.is_borrower'] = 1;
+//            if($is_borrower == 641){//深圳保胜
+//                $where['U.is_borrower'] = 641;
 //            }
-//            if($is_borrower == 4){//贵州保胜
-//                $where['U.is_borrower'] = 2;
+//            if($is_borrower == 642){//贵州保胜
+//                $where['U.is_borrower'] = 642;
 //            }
-//            if($is_borrower == 5){//广州保胜
-//                $where['U.is_borrower'] = 3;
+//            if($is_borrower == 643){//广州保胜
+//                $where['U.is_borrower'] = 643;
 //            }
 //        }
 //        if (isset($_GET['type']) && isset($_GET['keywords']) && !empty($_GET['keywords'])) {
@@ -93,9 +94,6 @@ service HsCashListThriftService {
 //            } elseif ($_GET['type'] == 3) {
 //                $where[] = "HC.order_sn='" . $_GET['keywords'] . "'";
 //            }
-//        }
-//        if (isset($_GET['pay_type']) && $_GET['pay_type'] != -1) {
-//            $where[] = "HC.pay_type='" . intval($_GET['pay_type']) . "'";
 //        }
 //        if (isset($_GET['pay_way']) && $_GET['pay_way'] != -1) {
 //            $where[] = "HC.pay_way='" . intval($_GET['pay_way']) . "'";

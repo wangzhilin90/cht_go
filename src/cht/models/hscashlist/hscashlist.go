@@ -1,16 +1,20 @@
 package hscashlist
 
 import (
-	"bytes"
 	. "cht/common/logger"
 	"fmt"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 )
 
+const (
+	NEXT_DAY_TIME = 24 * 3600
+)
+
 type HsCashListRequest struct {
 	StartTime            int32
 	EndTime              int32
+	Timetype             int32
 	Utype                int32 //借款人
 	Type                 int32 //类型 用户名,真是姓名，订单号
 	Keywords             string
@@ -52,13 +56,62 @@ func GetHsCashListTotalNum(hclr *HsCashListRequest) (int32, error) {
 	Logger.Debugf("GetHsCashListTotalNum input param:%v", hclr)
 	o := orm.NewOrm()
 	o.Using("default")
-	var sql string
+	qb, _ := orm.NewQueryBuilder("mysql")
+	qb.Select("COUNT(1) FROM jl_hs_cash HC LEFT JOIN jl_user U ON HC.user_id=U.id").
+		Where("1=1")
 
-	Logger.Debugf("GetHsCashListTotalNum query condition is null")
-	buf := bytes.Buffer{}
-	buf.WriteString("SELECT COUNT(1) FROM jl_hs_cash HC LEFT JOIN jl_user U ON HC.user_id=U.id")
-	sql = buf.String()
+	if hclr.StartTime != 0 {
+		if hclr.Timetype == 0 {
+			qb.And(fmt.Sprintf("HC.addtime>=%d", hclr.StartTime))
+		} else {
+			qb.And(fmt.Sprintf("HC.deal_time>=%d", hclr.StartTime))
+		}
+	}
 
+	if hclr.EndTime != 0 && hclr.StartTime <= hclr.EndTime {
+		if hclr.EndTime == 0 {
+			qb.And(fmt.Sprintf("HC.addtime<%d", hclr.EndTime+NEXT_DAY_TIME))
+		} else {
+			qb.And(fmt.Sprintf("HC.deal_time<%d", hclr.EndTime+NEXT_DAY_TIME))
+		}
+	}
+
+	if hclr.PayWay != -1 {
+		qb.And(fmt.Sprintf("HC.pay_way=%d", hclr.PayWay))
+	}
+
+	if hclr.Type != 0 && hclr.Keywords != "" {
+		if hclr.Type == 1 {
+			qb.And(fmt.Sprintf("U.username=\"%s\"", hclr.Keywords))
+		} else if hclr.Type == 2 {
+			qb.And(fmt.Sprintf("U.realname=\"%s\"", hclr.Keywords))
+		} else if hclr.Type == 3 {
+			qb.And(fmt.Sprintf("HC.order_sn=\"%s\"", hclr.Keywords))
+		}
+	}
+
+	if hclr.Utype == 1 {
+		//保胜借款人
+		qb.And(fmt.Sprintf("U.is_borrower>0"))
+	} else if hclr.Utype == 640 {
+		//普通客户
+		qb.And(fmt.Sprintf("U.is_borrower=640"))
+	} else if hclr.Utype == 641 {
+		//深圳保胜
+		qb.And(fmt.Sprintf("U.is_borrower=641"))
+	} else if hclr.Utype == 642 {
+		//贵州保胜
+		qb.And(fmt.Sprintf("U.is_borrower=642"))
+	} else if hclr.Utype == 643 {
+		//广州保胜
+		qb.And(fmt.Sprintf("U.is_borrower=643"))
+	}
+
+	if hclr.Status != -1 {
+		qb.And(fmt.Sprintf("HC.status=%d", hclr.Status))
+	}
+
+	sql := qb.String()
 	Logger.Debugf("GetHsCashListTotalNum sql:%v", sql)
 	var totalNum int32
 	err := o.Raw(sql).QueryRow(&totalNum)
@@ -85,11 +138,19 @@ func GetHsCashList(hclr *HsCashListRequest) ([]HsCashListResult, error) {
 		Where("1=1")
 
 	if hclr.StartTime != 0 {
-		qb.And(fmt.Sprintf("HC.addtime>=%d", hclr.StartTime))
+		if hclr.Timetype == 0 {
+			qb.And(fmt.Sprintf("HC.addtime>=%d", hclr.StartTime))
+		} else {
+			qb.And(fmt.Sprintf("HC.deal_time>=%d", hclr.StartTime))
+		}
 	}
 
 	if hclr.EndTime != 0 && hclr.StartTime <= hclr.EndTime {
-		qb.And(fmt.Sprintf("HC.addtime<%d", hclr.EndTime))
+		if hclr.EndTime == 0 {
+			qb.And(fmt.Sprintf("HC.addtime<%d", hclr.EndTime+NEXT_DAY_TIME))
+		} else {
+			qb.And(fmt.Sprintf("HC.deal_time<%d", hclr.EndTime+NEXT_DAY_TIME))
+		}
 	}
 
 	if hclr.PayWay != -1 {
@@ -109,18 +170,18 @@ func GetHsCashList(hclr *HsCashListRequest) ([]HsCashListResult, error) {
 	if hclr.Utype == 1 {
 		//保胜借款人
 		qb.And(fmt.Sprintf("U.is_borrower>0"))
-	} else if hclr.Utype == 2 {
+	} else if hclr.Utype == 640 {
 		//普通客户
-		qb.And(fmt.Sprintf("U.is_borrower=0"))
-	} else if hclr.Utype == 3 {
+		qb.And(fmt.Sprintf("U.is_borrower=640"))
+	} else if hclr.Utype == 641 {
 		//深圳保胜
-		qb.And(fmt.Sprintf("U.is_borrower=1"))
-	} else if hclr.Utype == 4 {
+		qb.And(fmt.Sprintf("U.is_borrower=641"))
+	} else if hclr.Utype == 642 {
 		//贵州保胜
-		qb.And(fmt.Sprintf("U.is_borrower=2"))
-	} else if hclr.Utype == 5 {
+		qb.And(fmt.Sprintf("U.is_borrower=642"))
+	} else if hclr.Utype == 643 {
 		//广州保胜
-		qb.And(fmt.Sprintf("U.is_borrower=3"))
+		qb.And(fmt.Sprintf("U.is_borrower=643"))
 	}
 
 	if hclr.Status != -1 {

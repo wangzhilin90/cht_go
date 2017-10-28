@@ -79,7 +79,7 @@ service HsLogListThriftService {
 //                $where[] = 'U.is_borrower>0';
 //            }
 //            if(intval($_GET['utype']) == 2){//普通客户
-//                $where['U.is_borrower'] = 0;
+//                $where['U.is_borrower'] = 640;
 //            }
 //        }
 

@@ -32,6 +32,7 @@ func (hcls *hscashlistservice) GetHsCashList(requestObj *HsCashListRequestStruct
 	hclr := new(hcl.HsCashListRequest)
 	hclr.StartTime = requestObj.GetStartTime()
 	hclr.EndTime = requestObj.GetEndTime()
+	hclr.Timetype = requestObj.GetTimetype()
 	hclr.Utype = requestObj.GetUtype()
 	hclr.Type = requestObj.GetType()
 	hclr.Keywords = requestObj.GetKeywords()

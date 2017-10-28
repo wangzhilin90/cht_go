@@ -25,6 +25,7 @@ import (
 	"cht/service/hsloglist"
 	"cht/service/juanzengthriftservice"
 	"cht/service/kefudutyadd"
+	"cht/service/kefudutydelete"
 	"cht/service/kefulist"
 	"cht/service/makeborrowservice"
 	"cht/service/memberhelperlist"
@@ -358,6 +359,11 @@ func main() {
 	go func() {
 		/*开启[后台]客服值班---新增值班服务*/
 		kefudutyadd.StartKeFuDutyAddServer()
+	}()
+
+	go func() {
+		/*开启[后台]客服值班---删除值班服务*/
+		kefudutydelete.StartKeFuDutyDeleteServer()
 	}()
 
 	<-ch

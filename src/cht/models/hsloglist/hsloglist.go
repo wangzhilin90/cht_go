@@ -93,7 +93,7 @@ func GetHsLogTotalNum(hllr *HsLogListRequest) (int32, error) {
 	if hllr.Utype == 1 {
 		qb.And(fmt.Sprintf("U.is_borrower>0"))
 	} else if hllr.Utype == 2 {
-		qb.And(fmt.Sprintf("U.is_borrower=0"))
+		qb.And(fmt.Sprintf("U.is_borrower=640"))
 	}
 
 	sql := qb.String()

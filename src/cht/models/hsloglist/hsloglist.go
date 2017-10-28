@@ -1,11 +1,14 @@
 package hsloglist
 
 import (
-	"bytes"
 	. "cht/common/logger"
 	"fmt"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
+)
+
+const (
+	NEXT_DAY_TIME = 24 * 3600
 )
 
 type HsLogListRequest struct {
@@ -48,18 +51,52 @@ func GetHsLogTotalNum(hllr *HsLogListRequest) (int32, error) {
 	Logger.Debugf("GetHsLogTotalNum input param:%v", hllr)
 	o := orm.NewOrm()
 	o.Using("default")
-	var sql string
+	qb, _ := orm.NewQueryBuilder("mysql")
 	if hllr.StartTime != 0 || hllr.EndTime != 0 || hllr.Type != -1 || (hllr.Type2 != 0 && hllr.Kws != "") || hllr.Utype != 0 {
 		Logger.Debugf("GetHsLogTotalNum query condition is not null")
-		buf := bytes.Buffer{}
-		buf.WriteString("SELECT COUNT(1) FROM jl_hs_log HL LEFT JOIN jl_user U ON HL.user_id=U.id WHERE U.is_borrower > 0")
-		sql = buf.String()
+		qb.Select("COUNT(1)").
+			From("jl_hs_log HL").
+			LeftJoin("jl_user U").On("HL.user_id=U.id").
+			Where("1=1")
 	} else {
 		Logger.Debugf("GetHsLogTotalNum query condition is null")
-		buf := bytes.Buffer{}
-		buf.WriteString("SELECT COUNT(1) FROM jl_hs_log")
-		sql = buf.String()
+		qb.Select("COUNT(1)").
+			From("jl_hs_log").
+			Where("1=1")
 	}
+
+	if hllr.StartTime != 0 {
+		qb.And(fmt.Sprintf("HL.addtime>=%d", hllr.StartTime))
+	}
+
+	if hllr.EndTime != 0 && hllr.StartTime <= hllr.EndTime {
+		//需要加一天
+		qb.And(fmt.Sprintf("HL.addtime<%d", hllr.EndTime+NEXT_DAY_TIME))
+	}
+
+	if hllr.Type != -1 {
+		qb.And(fmt.Sprintf("HL.type=%d", hllr.Type))
+	}
+
+	if hllr.Type2 != 0 && hllr.Kws != "" {
+		if hllr.Type2 == 1 {
+			qb.And(fmt.Sprintf("U.username=\"%s\"", hllr.Kws))
+		} else if hllr.Type2 == 2 {
+			qb.And(fmt.Sprintf("U.realname=\"%s\"", hllr.Kws))
+		} else if hllr.Type2 == 3 {
+			qb.And(fmt.Sprintf("HL.user_id=\"%s\"", hllr.Kws))
+		} else if hllr.Type2 == 4 {
+			qb.And(fmt.Sprintf("HL.orderno=\"%s\"", hllr.Kws))
+		}
+	}
+
+	if hllr.Utype == 1 {
+		qb.And(fmt.Sprintf("U.is_borrower>0"))
+	} else if hllr.Utype == 2 {
+		qb.And(fmt.Sprintf("U.is_borrower=0"))
+	}
+
+	sql := qb.String()
 	Logger.Debugf("GetHsLogTotalNum sql:%v", sql)
 	var totalNum int32
 	err := o.Raw(sql).QueryRow(&totalNum)
@@ -90,7 +127,8 @@ func GetHsLog(hllr *HsLogListRequest) ([]HsLogDetails, error) {
 	}
 
 	if hllr.EndTime != 0 && hllr.StartTime <= hllr.EndTime {
-		qb.And(fmt.Sprintf("HL.addtime<%d", hllr.EndTime))
+		//需要加一天
+		qb.And(fmt.Sprintf("HL.addtime<%d", hllr.EndTime+NEXT_DAY_TIME))
 	}
 
 	if hllr.Type != -1 {

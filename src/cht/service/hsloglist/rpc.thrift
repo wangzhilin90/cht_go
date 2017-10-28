@@ -88,8 +88,8 @@ service HsLogListThriftService {
 //        } else {
 //            $table = '#@_hs_log';
 //        }
-//统计总数:SELECT COUNT(1) FROM jl_hs_log
-//统计总数:SELECT COUNT(1) FROM #@_hs_log HL LEFT JOIN #@_user U ON HL.user_id=U.id WHERE U.is_borrower>0
+//统计总数:SELECT COUNT(1) FROM jl_hs_log where
+//统计总数:SELECT COUNT(1) FROM #@_hs_log HL LEFT JOIN #@_user U ON HL.user_id=U.id WHERE 
 
 //导出：
 //SELECT HL.*,U.username,U.realname,U.addtime AS regtime FROM #@_hs_log HL LEFT JOIN #@_user U ON HL.user_id=U.id  where $where ORDER BY HL.id DESC

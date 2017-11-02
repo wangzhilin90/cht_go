@@ -58,7 +58,7 @@ func StartGetTenderRedBagServer() {
 	ip, _ := zkclient.GetLocalIP()
 	listenAddr := fmt.Sprintf("%s:%s", ip, port)
 
-	servicename := "/cht/GetTenderRedbagThriftService/providers"
+	servicename := "/cht/UserTenderRedbagDestailsThriftService/providers"
 	err = zkclient.RegisterNode(conn, servicename, listenAddr)
 	if err != nil {
 		Logger.Fatalf("RegisterNode %v failed", servicename, err)

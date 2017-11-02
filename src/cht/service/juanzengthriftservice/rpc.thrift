@@ -1,4 +1,5 @@
-namespace go juanzengthriftservice
+namespace php Common.Juanzeng
+namespace go  juanzengthriftservice
 
 struct RequestStruct {
 	1: i32 user_id,
@@ -6,7 +7,7 @@ struct RequestStruct {
 	3: string chengHuiTongTraceLog
 }
 
-// 1 messlistÁôÑÔ ·µ»Ø½á¹¹Ìå
+// 1 messlistç•™è¨€ è¿”å›žç»“æž„ä½“
 struct MesslistResultStruct {
     1: string username,
     2: string avatar,
@@ -17,7 +18,7 @@ struct MesslistResultStruct {
 	7: string up_reply
 }
 
-// 2 fundlist·µ»Ø½á¹¹Ìå
+// 2 fundlistè¿”å›žç»“æž„ä½“
 struct FundlistResultStruct {
     1: i32 type,
 	2: i32 addtime,
@@ -25,7 +26,7 @@ struct FundlistResultStruct {
 	4: string money
 }
 
-// 3 numlist ·µ»Ø½á¹¹Ìå
+// 3 numlist è¿”å›žç»“æž„ä½“
 struct NumlistResultStruct {
 	1: string num,
 	2: string money
@@ -35,10 +36,11 @@ struct JuanzengResponseStruct {
 	1:list<MesslistResultStruct> messlist,
 	2:list<FundlistResultStruct> fundlist,
 	3:NumlistResultStruct numlist,
-	4:string tzr                 
+	4:string tzr
 }
 
 service JuanzengThriftService {
-	JuanzengResponseStruct getInfo(1: RequestStruct requestObj)
+	JuanzengResponseStruct getInfo (1: RequestStruct requestObj)
 	i32 addMess(1: RequestStruct requestObj)
 }
+

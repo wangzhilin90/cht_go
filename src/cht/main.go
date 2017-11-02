@@ -2,6 +2,7 @@ package main
 
 import (
 	_ "cht/initial"
+	"cht/service/accessconfig"
 	"cht/service/advertadd"
 	"cht/service/advertdel"
 	"cht/service/advertdetails"
@@ -26,6 +27,9 @@ import (
 	"cht/service/juanzengthriftservice"
 	"cht/service/kefudutyadd"
 	"cht/service/kefudutydelete"
+	"cht/service/kefudutydetails"
+	"cht/service/kefudutylist"
+	"cht/service/kefudutyupdate"
 	"cht/service/kefulist"
 	"cht/service/makeborrowservice"
 	"cht/service/memberhelperlist"
@@ -364,6 +368,26 @@ func main() {
 	go func() {
 		/*开启[后台]客服值班---删除值班服务*/
 		kefudutydelete.StartKeFuDutyDeleteServer()
+	}()
+
+	go func() {
+		/*开启[后台]客服值班---值班详情服务*/
+		kefudutydetails.StartKeFuDutyDetailsServer()
+	}()
+
+	go func() {
+		/*开启[后台]客服值班---列表服务*/
+		kefudutylist.StartKeFuDutyListServer()
+	}()
+
+	go func() {
+		/*开启[后台]客服值班---修改值班服务*/
+		kefudutyupdate.StartKeFuDutyUpdateServer()
+	}()
+
+	go func() {
+		/*开启[后台]推广名称记录表服务*/
+		accessconfig.StartAccessConfigServer()
 	}()
 
 	<-ch

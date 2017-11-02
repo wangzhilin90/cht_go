@@ -1,3 +1,4 @@
+namespace php Log.UpdateUserLoginLogDetails
 namespace go updateuserloginlogdetails
 
 struct UpdateUserLoginLogDetailsRequestStruct {
@@ -13,5 +14,5 @@ struct UpdateUserLoginLogDetailsResponseStruct  {
 }
 
 service UpdateUserLoginLogDetailsThriftService{
-    UpdateUserLoginLogDetailsResponseStruct UpdateUserLoginLogDetails(1:UpdateUserLoginLogDetailsRequestStructrequestObj)
+    UpdateUserLoginLogDetailsResponseStruct UpdateUserLoginLogDetails(1:UpdateUserLoginLogDetailsRequestStruct requestObj)
 }

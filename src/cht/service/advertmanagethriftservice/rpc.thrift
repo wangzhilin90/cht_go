@@ -1,3 +1,4 @@
+namespace php Common.AdvertManage
 namespace go advertmanagethriftservice
 
 struct AdvertManageRequestStruct {
@@ -8,7 +9,7 @@ struct AdvertManageRequestStruct {
 
 struct AdvertManageStruct {
     1:i32 id,
-    2:i32 type, //¹ã¸æÎ»ÖÃ£º¶ÔÓ¦×Öµä45ÀàÖµ£»£¨Ô­Öµ£º1×¢²á£»2µÇÂ¼£»3Ê×Ò³ÓÒÉÏ½Ç£»4Ê×Ò³ÏÂ·½£»5ÏîÄ¿ÁĞ±í£»6ÏîÄ¿ÏêÇé£»7¸öÈËÖĞĞÄ£©
+    2:i32 type, //å¹¿å‘Šä½ç½®ï¼šå¯¹åº”å­—å…¸45ç±»å€¼ï¼›ï¼ˆåŸå€¼ï¼š1æ³¨å†Œï¼›2ç™»å½•ï¼›3é¦–é¡µå³ä¸Šè§’ï¼›4é¦–é¡µä¸‹æ–¹ï¼›5é¡¹ç›®åˆ—è¡¨ï¼›6é¡¹ç›®è¯¦æƒ…ï¼›7ä¸ªäººä¸­å¿ƒï¼‰
     3:string img,
     4:string adverturl,
     5:string title,
@@ -21,16 +22,17 @@ struct AdvertManageStruct {
 }
 
 struct AdvertManageResponseStruct {
-	1:i32 status
+	1:i32 status  //1000:æŸ¥è¯¢å¹¿å‘ŠæˆåŠŸ 1001:æŸ¥è¯¢å¹¿å‘Šå¤±è´¥
 	2:string msg
     3:list<AdvertManageStruct> advertManageList
 }
 
 service AdvertManageThriftService {
-    AdvertManageResponseStruct getAdvertManage(1:AdvertManageRequestStruct requestObj),
-    //²éÑ¯jl_banner_manage±í
-    //whereÌõ¼ş£ºstarttime <=  time() and endtime >= time() 
-	//type = type
-    //order byÅÅĞò£ºaddtime DESC
-    //Èç¹ûlimit=1È¡Ò»ÌõÊı¾İ£¬·ñÔò°´Ìõ¼şÈ¡ËùÓĞÊı¾İ
+    AdvertManageResponseStruct getAdvertManage(1:AdvertManageRequestStruct requestObj)
 }
+
+//æŸ¥è¯¢ jl_advert_manage è¡¨
+//whereæ¡ä»¶ï¼šstarttime <=  time() and endtime >= time() 
+//type = type
+//order byæ’åºï¼šaddtime DESC
+//å¦‚æœlimit=1å–ä¸€æ¡æ•°æ®ï¼Œå¦åˆ™æŒ‰æ¡ä»¶å–æ‰€æœ‰æ•°æ®

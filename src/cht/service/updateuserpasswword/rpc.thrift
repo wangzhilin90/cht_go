@@ -1,7 +1,7 @@
-//修改登录密码
 namespace go updateuserpasswword
 namespace php User.UpdateUserPasswWord
 
+//修改登录密码
 struct UpdateUserPasswWordRequestStruct {
     1: i32 id,
 	2: string newPassword,

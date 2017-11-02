@@ -5,9 +5,11 @@ import (
 	"testing"
 )
 
-func NewKefuDutyDetailsRequestStruct(id int32) *KefuDutyDetailsRequestStruct {
+func NewKefuDutyDetailsRequestStruct(id int32, customer, holiday_user string) *KefuDutyDetailsRequestStruct {
 	return &KefuDutyDetailsRequestStruct{
-		ID: id,
+		ID:          id,
+		Customer:    customer,
+		HolidayUser: holiday_user,
 	}
 }
 

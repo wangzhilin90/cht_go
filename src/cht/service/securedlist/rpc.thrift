@@ -1,6 +1,7 @@
 namespace php User.SecuredList
 namespace go securedlist
 
+//做标---担保人服务
 struct SecuredListRequestStruct {
 	1:string chengHuiTongTraceLog
 }

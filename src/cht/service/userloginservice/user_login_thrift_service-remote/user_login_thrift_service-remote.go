@@ -22,8 +22,8 @@ func main() {
 	var urlString string
 	var trans thrift.TTransport
 
-	flag.StringVar(&host, "h", "192.168.8.209", "Specify host and port")
-	flag.IntVar(&port, "p", 30003, "Specify port")
+	flag.StringVar(&host, "h", "192.168.8.208", "Specify host and port")
+	flag.IntVar(&port, "p", 30002, "Specify port")
 	flag.StringVar(&protocol, "P", "binary", "Specify the protocol (binary, compact, simplejson, json)")
 	flag.StringVar(&urlString, "u", "", "Specify the url")
 	flag.Parse()

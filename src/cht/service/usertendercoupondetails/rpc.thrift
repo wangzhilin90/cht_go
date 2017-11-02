@@ -1,3 +1,4 @@
+namespace php User.UserTenderCouponDetails
 namespace go usertendercoupondetails
 
 struct UserTenderCouponDetailsRequestStruct  {

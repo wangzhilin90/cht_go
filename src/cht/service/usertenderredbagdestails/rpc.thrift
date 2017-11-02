@@ -1,3 +1,4 @@
+namespace php User.UserTenderRedbagDestails
 namespace go usertenderredbagdestails
 
 struct UserTenderRedbagDestailsRequestStruct {

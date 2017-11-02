@@ -20,7 +20,7 @@ var _ = bytes.Equal
 //  - IP
 //  - Isadmin
 //  - ChengHuiTongTraceLog
-type UserlLoginRequestStruct struct {
+type UserLoginRequestStruct struct {
 	Username             string `thrift:"username,1" db:"username" json:"username"`
 	Password             string `thrift:"password,2" db:"password" json:"password"`
 	IP                   string `thrift:"ip,3" db:"ip" json:"ip"`
@@ -28,36 +28,35 @@ type UserlLoginRequestStruct struct {
 	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,5" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
 }
 
-func NewUserlLoginRequestStruct(username string, password string, loginip string, log string) *UserlLoginRequestStruct {
-	ulr := UserlLoginRequestStruct{
+func NewUserLoginRequestStruct(username string, password string, loginip string, log string) *UserLoginRequestStruct {
+	return &UserLoginRequestStruct{
 		Username:             username,
 		Password:             password,
 		IP:                   loginip,
 		ChengHuiTongTraceLog: log,
 	}
-	return &ulr
 }
 
-func (p *UserlLoginRequestStruct) GetUsername() string {
+func (p *UserLoginRequestStruct) GetUsername() string {
 	return p.Username
 }
 
-func (p *UserlLoginRequestStruct) GetPassword() string {
+func (p *UserLoginRequestStruct) GetPassword() string {
 	return p.Password
 }
 
-func (p *UserlLoginRequestStruct) GetIP() string {
+func (p *UserLoginRequestStruct) GetIP() string {
 	return p.IP
 }
 
-func (p *UserlLoginRequestStruct) GetIsadmin() int32 {
+func (p *UserLoginRequestStruct) GetIsadmin() int32 {
 	return p.Isadmin
 }
 
-func (p *UserlLoginRequestStruct) GetChengHuiTongTraceLog() string {
+func (p *UserLoginRequestStruct) GetChengHuiTongTraceLog() string {
 	return p.ChengHuiTongTraceLog
 }
-func (p *UserlLoginRequestStruct) Read(iprot thrift.TProtocol) error {
+func (p *UserLoginRequestStruct) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -106,7 +105,7 @@ func (p *UserlLoginRequestStruct) Read(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *UserlLoginRequestStruct) ReadField1(iprot thrift.TProtocol) error {
+func (p *UserLoginRequestStruct) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return thrift.PrependError("error reading field 1: ", err)
 	} else {
@@ -115,7 +114,7 @@ func (p *UserlLoginRequestStruct) ReadField1(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *UserlLoginRequestStruct) ReadField2(iprot thrift.TProtocol) error {
+func (p *UserLoginRequestStruct) ReadField2(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return thrift.PrependError("error reading field 2: ", err)
 	} else {
@@ -124,7 +123,7 @@ func (p *UserlLoginRequestStruct) ReadField2(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *UserlLoginRequestStruct) ReadField3(iprot thrift.TProtocol) error {
+func (p *UserLoginRequestStruct) ReadField3(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return thrift.PrependError("error reading field 3: ", err)
 	} else {
@@ -133,7 +132,7 @@ func (p *UserlLoginRequestStruct) ReadField3(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *UserlLoginRequestStruct) ReadField4(iprot thrift.TProtocol) error {
+func (p *UserLoginRequestStruct) ReadField4(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI32(); err != nil {
 		return thrift.PrependError("error reading field 4: ", err)
 	} else {
@@ -142,7 +141,7 @@ func (p *UserlLoginRequestStruct) ReadField4(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *UserlLoginRequestStruct) ReadField5(iprot thrift.TProtocol) error {
+func (p *UserLoginRequestStruct) ReadField5(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return thrift.PrependError("error reading field 5: ", err)
 	} else {
@@ -151,8 +150,8 @@ func (p *UserlLoginRequestStruct) ReadField5(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *UserlLoginRequestStruct) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("UserlLoginRequestStruct"); err != nil {
+func (p *UserLoginRequestStruct) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("UserLoginRequestStruct"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
 	if p != nil {
@@ -181,7 +180,7 @@ func (p *UserlLoginRequestStruct) Write(oprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *UserlLoginRequestStruct) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *UserLoginRequestStruct) writeField1(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("username", thrift.STRING, 1); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:username: ", p), err)
 	}
@@ -194,7 +193,7 @@ func (p *UserlLoginRequestStruct) writeField1(oprot thrift.TProtocol) (err error
 	return err
 }
 
-func (p *UserlLoginRequestStruct) writeField2(oprot thrift.TProtocol) (err error) {
+func (p *UserLoginRequestStruct) writeField2(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("password", thrift.STRING, 2); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:password: ", p), err)
 	}
@@ -207,7 +206,7 @@ func (p *UserlLoginRequestStruct) writeField2(oprot thrift.TProtocol) (err error
 	return err
 }
 
-func (p *UserlLoginRequestStruct) writeField3(oprot thrift.TProtocol) (err error) {
+func (p *UserLoginRequestStruct) writeField3(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("ip", thrift.STRING, 3); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:ip: ", p), err)
 	}
@@ -220,7 +219,7 @@ func (p *UserlLoginRequestStruct) writeField3(oprot thrift.TProtocol) (err error
 	return err
 }
 
-func (p *UserlLoginRequestStruct) writeField4(oprot thrift.TProtocol) (err error) {
+func (p *UserLoginRequestStruct) writeField4(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("isadmin", thrift.I32, 4); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 4:isadmin: ", p), err)
 	}
@@ -233,7 +232,7 @@ func (p *UserlLoginRequestStruct) writeField4(oprot thrift.TProtocol) (err error
 	return err
 }
 
-func (p *UserlLoginRequestStruct) writeField5(oprot thrift.TProtocol) (err error) {
+func (p *UserLoginRequestStruct) writeField5(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("chengHuiTongTraceLog", thrift.STRING, 5); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 5:chengHuiTongTraceLog: ", p), err)
 	}
@@ -246,11 +245,11 @@ func (p *UserlLoginRequestStruct) writeField5(oprot thrift.TProtocol) (err error
 	return err
 }
 
-func (p *UserlLoginRequestStruct) String() string {
+func (p *UserLoginRequestStruct) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("UserlLoginRequestStruct(%+v)", *p)
+	return fmt.Sprintf("UserLoginRequestStruct(%+v)", *p)
 }
 
 // Attributes:
@@ -454,7 +453,7 @@ func (p *UserLoginResponseStruct) String() string {
 type UserLoginThriftService interface {
 	// Parameters:
 	//  - RequestObj
-	GetUserLoginInfo(requestObj *UserlLoginRequestStruct) (r *UserLoginResponseStruct, err error)
+	GetUserLoginInfo(requestObj *UserLoginRequestStruct) (r *UserLoginResponseStruct, err error)
 }
 
 type UserLoginThriftServiceClient struct {
@@ -485,14 +484,14 @@ func NewUserLoginThriftServiceClientProtocol(t thrift.TTransport, iprot thrift.T
 
 // Parameters:
 //  - RequestObj
-func (p *UserLoginThriftServiceClient) GetUserLoginInfo(requestObj *UserlLoginRequestStruct) (r *UserLoginResponseStruct, err error) {
+func (p *UserLoginThriftServiceClient) GetUserLoginInfo(requestObj *UserLoginRequestStruct) (r *UserLoginResponseStruct, err error) {
 	if err = p.sendGetUserLoginInfo(requestObj); err != nil {
 		return
 	}
 	return p.recvGetUserLoginInfo()
 }
 
-func (p *UserLoginThriftServiceClient) sendGetUserLoginInfo(requestObj *UserlLoginRequestStruct) (err error) {
+func (p *UserLoginThriftServiceClient) sendGetUserLoginInfo(requestObj *UserLoginRequestStruct) (err error) {
 	oprot := p.OutputProtocol
 	if oprot == nil {
 		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -657,16 +656,16 @@ func (p *userLoginThriftServiceProcessorGetUserLoginInfo) Process(seqId int32, i
 // Attributes:
 //  - RequestObj
 type UserLoginThriftServiceGetUserLoginInfoArgs struct {
-	RequestObj *UserlLoginRequestStruct `thrift:"requestObj,1" db:"requestObj" json:"requestObj"`
+	RequestObj *UserLoginRequestStruct `thrift:"requestObj,1" db:"requestObj" json:"requestObj"`
 }
 
 func NewUserLoginThriftServiceGetUserLoginInfoArgs() *UserLoginThriftServiceGetUserLoginInfoArgs {
 	return &UserLoginThriftServiceGetUserLoginInfoArgs{}
 }
 
-var UserLoginThriftServiceGetUserLoginInfoArgs_RequestObj_DEFAULT *UserlLoginRequestStruct
+var UserLoginThriftServiceGetUserLoginInfoArgs_RequestObj_DEFAULT *UserLoginRequestStruct
 
-func (p *UserLoginThriftServiceGetUserLoginInfoArgs) GetRequestObj() *UserlLoginRequestStruct {
+func (p *UserLoginThriftServiceGetUserLoginInfoArgs) GetRequestObj() *UserLoginRequestStruct {
 	if !p.IsSetRequestObj() {
 		return UserLoginThriftServiceGetUserLoginInfoArgs_RequestObj_DEFAULT
 	}
@@ -710,7 +709,7 @@ func (p *UserLoginThriftServiceGetUserLoginInfoArgs) Read(iprot thrift.TProtocol
 }
 
 func (p *UserLoginThriftServiceGetUserLoginInfoArgs) ReadField1(iprot thrift.TProtocol) error {
-	p.RequestObj = &UserlLoginRequestStruct{}
+	p.RequestObj = &UserLoginRequestStruct{}
 	if err := p.RequestObj.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.RequestObj), err)
 	}

@@ -16,6 +16,7 @@ func NewBorrowStruct(userID int32) *Borrow {
 		VerifyRemark: "审核",
 		MostAccount:  "2000000",
 		OpenAccount:  23,
+		Subledger:    32,
 	}
 }
 

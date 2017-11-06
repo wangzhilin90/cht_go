@@ -209,7 +209,7 @@ func InsertBorrowTbl(bs *Borrow) (int32, error) {
 	}
 
 	if bs.MortgageFile != "" {
-		str += fmt.Sprintf("MortgageFile=\"%s\",", bs.MortgageFile)
+		str += fmt.Sprintf("mortgage_file=\"%s\",", bs.MortgageFile)
 	}
 
 	if bs.Pwd != "" {
@@ -225,7 +225,7 @@ func InsertBorrowTbl(bs *Borrow) (int32, error) {
 	}
 
 	if bs.Bonus != "" {
-		str += fmt.Sprintf("bonux=\"%s\",", bs.Bonus)
+		str += fmt.Sprintf("bonus=\"%s\",", bs.Bonus)
 	}
 
 	if bs.Addip != "" {
@@ -313,7 +313,7 @@ func InsertBorrowTbl(bs *Borrow) (int32, error) {
 	}
 
 	if bs.OpenZiliao != 0 {
-		str += fmt.Sprintf("open_credit=%d,", bs.OpenZiliao)
+		str += fmt.Sprintf("open_ziliao=%d,", bs.OpenZiliao)
 	}
 
 	if bs.Material != 0 {
@@ -339,7 +339,7 @@ func InsertBorrowTbl(bs *Borrow) (int32, error) {
 	}
 
 	if bs.VerifyTime != 0 {
-		str += fmt.Sprint("verify_time=%d,", bs.VerifyTime)
+		str += fmt.Sprintf("verify_time=%d,", bs.VerifyTime)
 	}
 
 	if bs.ReviewUser != 0 {
@@ -355,11 +355,11 @@ func InsertBorrowTbl(bs *Borrow) (int32, error) {
 	}
 
 	if bs.Huodong != 0 {
-		str += fmt.Sprint("huodong=%d,", bs.Huodong)
+		str += fmt.Sprintf("huodong=%d,", bs.Huodong)
 	}
 
 	if bs.Subledger != 0 {
-		str += fmt.Sprint("subledger=%d,", bs.Subledger)
+		str += fmt.Sprintf("subledger=%d,", bs.Subledger)
 	}
 
 	if bs.RepaySign != 0 {
@@ -379,7 +379,7 @@ func InsertBorrowTbl(bs *Borrow) (int32, error) {
 	}
 
 	if bs.ReviewLock != 0 {
-		str += fmt.Sprintf("is_check=%d,", bs.ReviewLock)
+		str += fmt.Sprintf("review_lock=%d,", bs.ReviewLock)
 	}
 
 	str = strings.TrimSuffix(str, ",")

@@ -320,9 +320,7 @@ func InsertBorrowTbl(bs *Borrow) (int32, error) {
 		str += fmt.Sprintf("material=%d,", bs.Material)
 	}
 
-	if bs.Addtime != 0 {
-		str += fmt.Sprintf("addtime=%d,", time.Now().Unix())
-	}
+	str += fmt.Sprintf("addtime=%d,", time.Now().Unix())
 
 	if bs.Status != 0 {
 		str += fmt.Sprintf("status=%d,", bs.Status)

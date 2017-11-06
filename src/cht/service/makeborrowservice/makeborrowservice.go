@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"strconv"
-	"time"
 )
 
 type borrowservice struct{}
@@ -70,7 +69,7 @@ func NewMakeBorrowRequest(requestObj *MakeBorrowRequestStruct) *makeborrow.Borro
 	mbr.OpenCredit = requestObj.GetOpenCredit()
 	mbr.OpenZiliao = requestObj.GetOpenZiliao()
 	mbr.Material = requestObj.GetMaterial()
-	mbr.Addtime = int32(time.Now().Unix())
+	mbr.Addtime = requestObj.GetAddtime()
 	mbr.Addip = requestObj.GetAddip()
 	mbr.Status = requestObj.GetStatus()
 	mbr.RutenAllnumber = requestObj.GetRutenAllnumber()

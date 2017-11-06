@@ -7,65 +7,24 @@ import (
 
 func NewMakeBorrowRequestStruct(userID int32, borrowtype int32, borrowUse int32) *MakeBorrowRequestStruct {
 	return &MakeBorrowRequestStruct{
-		BorrowType: borrowtype,
-		UserID:     userID,
-		BorrowUse:  borrowUse,
-		Title:      "biaoti",
-		// Title:         ",",
-		// Content:       ",",
-		// Litpic:        ",",
-		// TimeLimit:     1,
-		Account: "1000000.00",
-		// AccountTender: "0.00",
-		// Apr:           "0.0000",
-		// AprAdd:        "0.0000",
-		// MortgageFile:  ",",
-		// VerifyRemark:  ",",
-		// Pwd:           ",",
-		// LowestAccount: "50.00",
-		// MostAccount:   "0.00",
-		// ValidTime:     1,
-		// Bonus:         "0.00",
-		// OpenAccount:   1,
-		// OpenBorrow:    1,
-		// OpenTender:    1,
-		// OpenCredit:    1,
-		// OpenZiliao:    1,
-		// Addip:         ",",
-		// Secured:       "241234",
-		// Zhuanrangren:  ",",
-		// SignDate:      ",",
-		FeeRate: "20.00",
-		// BorrowName:    ",",
+		BorrowType:   borrowtype,
+		UserID:       userID,
+		BorrowUse:    borrowUse,
+		Content:      "后台测试-信3",
+		Title:        "biaoti",
+		FeeRate:      "20",
+		Account:      "20000",
+		VerifyRemark: "审核意见",
+		MostAccount:  "100",
 	}
 }
 
-func TestMakeBorrowNotDepositAccount(t *testing.T) {
-	/*测试存管账户不存在*/
+func TestMakeBorrow(t *testing.T) {
 	brs := NewMakeBorrowRequestStruct(29, 5, 0)
 	bs := borrowservice{}
 	res, _ := bs.makeBorrow(brs)
 	if res.Status != ISSURE_SUCCESS {
-		t.Fatal("TestMakeBorrowNotDepositAccount failed")
+		t.Fatal("TestMakeBorrowNotDepositAccount failed:%v", res)
 	}
+	t.Logf("TestMakeBorrowNotDepositAccount return value:%v", res)
 }
-
-// func TestMakeBorrowAddCredit(t *testing.T) {
-// 	/*测试不是加信贷*/
-// 	brs := NewMakeBorrowRequestStruct(5004, 5, 0, "biaoti")
-// 	bs := borrowservice{}
-// 	res, _ := bs.makeBorrow(brs)
-// 	if res.Status != NOT_DEPOSIT_ACCOUNT {
-// 		t.Fatal("TestmakeBorrow failed")
-// 	}
-// }
-
-// func TestMakeBorrowExceedReditLimit(t *testing.T) {
-// 	/*测试不是加信贷*/
-// 	brs := NewMakeBorrowRequestStruct(5003, 4, 0, "biaoti")
-// 	bs := borrowservice{}
-// 	res, _ := bs.makeBorrow(brs)
-// 	if res.Status != NOT_DEPOSIT_ACCOUNT {
-// 		t.Fatal("TestmakeBorrow failed")
-// 	}
-// }

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"strconv"
+	"time"
 )
 
 type borrowservice struct{}
@@ -38,9 +39,9 @@ func checkAddCredit(borrow_type int32) bool {
 	return false
 }
 
-func NewMakeBorrowRequest(requestObj *MakeBorrowRequestStruct) *makeborrow.MakeBorrowRequest {
-	mbr := new(makeborrow.MakeBorrowRequest)
-	mbr.ID = requestObj.GetID()
+func NewMakeBorrowRequest(requestObj *MakeBorrowRequestStruct) *makeborrow.Borrow {
+	mbr := new(makeborrow.Borrow)
+	mbr.ID, _ = makeborrow.GetLatestBorrowID()
 	mbr.BorrowType = requestObj.GetBorrowType()
 	mbr.UserID = requestObj.GetUserID()
 	mbr.Title = requestObj.GetTitle()
@@ -69,7 +70,7 @@ func NewMakeBorrowRequest(requestObj *MakeBorrowRequestStruct) *makeborrow.MakeB
 	mbr.OpenCredit = requestObj.GetOpenCredit()
 	mbr.OpenZiliao = requestObj.GetOpenZiliao()
 	mbr.Material = requestObj.GetMaterial()
-	mbr.Addtime = requestObj.GetAddtime()
+	mbr.Addtime = int32(time.Now().Unix())
 	mbr.Addip = requestObj.GetAddip()
 	mbr.Status = requestObj.GetStatus()
 	mbr.RutenAllnumber = requestObj.GetRutenAllnumber()
@@ -95,91 +96,8 @@ func NewMakeBorrowRequest(requestObj *MakeBorrowRequestStruct) *makeborrow.MakeB
 	return mbr
 }
 
-func DealTempFunc(mbr *makeborrow.MakeBorrowRequest) *makeborrow.MakeBorrowRequest {
-	if mbr.Title == "" {
-		mbr.Title = " "
-	}
-	if mbr.Content == "" {
-		mbr.Content = " "
-	}
-	if mbr.Litpic == "" {
-		mbr.Litpic = " "
-	}
-	if mbr.TimeLimit == 0 {
-		mbr.TimeLimit = 1
-	}
-	if mbr.Account == "" {
-		mbr.Account = "3000000.00"
-	}
-	if mbr.AccountTender == "" {
-		mbr.AccountTender = "0.00"
-	}
-	if mbr.Apr == "" {
-		mbr.Apr = "0.0000"
-	}
-	if mbr.AprAdd == "" {
-		mbr.AprAdd = "0.0000"
-	}
-	if mbr.MortgageFile == "" {
-		mbr.MortgageFile = " "
-	}
-	if mbr.VerifyRemark == "" {
-		mbr.VerifyRemark = " "
-	}
-	if mbr.Pwd == "" {
-		mbr.Pwd = " "
-	}
-	if mbr.LowestAccount == "" {
-		mbr.LowestAccount = "50.00"
-	}
-	if mbr.MostAccount == "" {
-		mbr.MostAccount = "0.00"
-	}
-	if mbr.ValidTime == 0 {
-		mbr.ValidTime = 1
-	}
-	if mbr.Bonus == "" {
-		mbr.Bonus = "0.00"
-	}
-	if mbr.OpenAccount == 0 {
-		mbr.OpenAccount = 1
-	}
-	if mbr.OpenBorrow == 0 {
-		mbr.OpenBorrow = 1
-	}
-	if mbr.OpenTender == 0 {
-		mbr.OpenTender = 1
-	}
-	if mbr.OpenCredit == 0 {
-		mbr.OpenCredit = 1
-	}
-	if mbr.OpenZiliao == 0 {
-		mbr.OpenZiliao = 1
-	}
-	if mbr.Addip == "" {
-		mbr.Addip = " "
-	}
-	if mbr.Secured == "" {
-		mbr.Secured = " "
-	}
-	if mbr.Zhuanrangren == "" {
-		mbr.Zhuanrangren = " "
-	}
-	if mbr.SignDate == "" {
-		mbr.SignDate = " "
-	}
-	if mbr.FeeRate == "" {
-		mbr.FeeRate = " "
-	}
-	if mbr.BorrowName == "" {
-		mbr.BorrowName = " "
-	}
-	return mbr
-}
-
 func (bs *borrowservice) makeBorrow(requestObj *MakeBorrowRequestStruct) (r *MakeBorrowResponseStruct, err error) {
 	mbr := NewMakeBorrowRequest(requestObj)
-	mbr = DealTempFunc(mbr)
 	Logger.Debug("requestObj:", requestObj)
 	Logger.Debug("NewMakeBorrowRequest:", mbr)
 	bIsDeposit := makeborrow.CheckDepositAccount(mbr.UserID)
@@ -192,12 +110,9 @@ func (bs *borrowservice) makeBorrow(requestObj *MakeBorrowRequestStruct) (r *Mak
 
 	bIsAddCredit := checkAddCredit(mbr.BorrowType)
 	guarantor := makeborrow.GetGuarantor(mbr.UserID)
-	if guarantor == "" {
-		guarantor = " "
-	}
+
 	if bIsAddCredit {
 		mbr.Secured = guarantor
-		mbr.SignDate = ","
 		feeRate := requestObj.GetFeeRate()
 		if feeRate == "" {
 			Logger.Error("get fee rate failed")
@@ -208,7 +123,7 @@ func (bs *borrowservice) makeBorrow(requestObj *MakeBorrowRequestStruct) (r *Mak
 		}
 		formatFeeRate, _ := strconv.ParseFloat(feeRate, 64)
 		Logger.Debug("formatFeeRate:", formatFeeRate)
-		mbr.FeeRate = fmt.Sprintf("%.4f", formatFeeRate/100.0) //后面整改，保留4位小数
+		mbr.FeeRate = fmt.Sprintf("%.4f", formatFeeRate/100.0)
 		Logger.Debug("mbr.FeeRate:", mbr.FeeRate)
 	} else if _, err := strconv.ParseFloat(guarantor, 64); err != nil {
 		mbr.Secured = guarantor
@@ -243,7 +158,7 @@ func (bs *borrowservice) makeBorrow(requestObj *MakeBorrowRequestStruct) (r *Mak
 		}, nil
 	}
 
-	err = makeborrow.InsertBorrowTbl(mbr)
+	_, err = makeborrow.InsertBorrowTbl(mbr)
 	if err != nil {
 		Logger.Error("InsertBorrowTbl failed", err)
 		return &MakeBorrowResponseStruct{

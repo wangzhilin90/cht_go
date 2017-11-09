@@ -23,18 +23,21 @@ func NewUserlLoginRequestStruct(username string, password string, loginip string
 }
 
 func DealJob(i int) {
-	host := "192.168.8.220"
+	host := "192.168.8.209"
 	port := "30002"
-	trans, err := thrift.NewTSocket(net.JoinHostPort(host, port))
+	// trans, err := thrift.NewTSocket(net.JoinHostPort(host, port))
+	trans, err := thrift.NewTSocketTimeout(net.JoinHostPort(host, port), 40*time.Second)
 	if err != nil {
 		fmt.Sprintf("failed to new socket:", err)
 		os.Exit(1)
 	}
 	defer trans.Close()
 
+	// transportFactory := thrift.NewTFramedTransportFactory(thrift.NewTTransportFactory())
+	// transport := transportFactory.GetTransport(trans)
 	protocolFactory := thrift.NewTBinaryProtocolFactoryDefault()
+	// client := userloginservice.NewUserLoginThriftServiceClientFactory(transport, protocolFactory)
 	client := userloginservice.NewUserLoginThriftServiceClientFactory(trans, protocolFactory)
-
 	if err := trans.Open(); err != nil {
 		fmt.Println("Error opening socket to ", host, ":", port, " ", err)
 		os.Exit(1)

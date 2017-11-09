@@ -102,7 +102,7 @@ func GetGuarantor(user_id int32) string {
 	var guarantor string
 	err := o.Raw("SELECT guarantor FROM jl_user_field WHERE user_id=?", user_id).QueryRow(&guarantor)
 	if err != nil {
-		Logger.Error("GetGuarantor query faied")
+		Logger.Debugf("GetGuarantor query faied:%v", err)
 		return ""
 	}
 	Logger.Debugf("GetGuarantor res", guarantor)

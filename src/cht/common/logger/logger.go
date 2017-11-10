@@ -21,10 +21,10 @@ func init() {
 	}
 
 	writer, err := rotatelogs.New(
-		baseLogPath+".%Y%m%d%H%M",
-		rotatelogs.WithLinkName(baseLogPath),
-		rotatelogs.WithMaxAge(time.Hour*24*7*30),
-		rotatelogs.WithRotationTime(time.Hour*24),
+		baseLogPath+"%Y%m%d",
+		rotatelogs.WithLinkName(baseLogPath),      //软连接
+		rotatelogs.WithMaxAge(time.Hour*24*30*7),  //文件最大保存时间
+		rotatelogs.WithRotationTime(time.Hour*24), //文件切割时间
 	)
 	if err != nil {
 		fmt.Errorf("rotatelogs new failed:%v", err)

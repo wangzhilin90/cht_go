@@ -44,7 +44,7 @@ func SaveUserAttestionCardInfo(uacisr *UserAttestionCardInfoSaveRequest) bool {
 	Logger.Debug("SaveUserAttestionCardInfo sql:", sql)
 	res, err := o.Raw(sql).Exec()
 	if err != nil {
-		Logger.Debugf("SaveUserAttestionCardInfo update failed :%v", err)
+		Logger.Errorf("SaveUserAttestionCardInfo update failed :%v", err)
 		return false
 	}
 	num, _ := res.RowsAffected()

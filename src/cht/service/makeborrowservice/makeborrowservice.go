@@ -108,10 +108,8 @@ func (bs *borrowservice) makeBorrow(requestObj *MakeBorrowRequestStruct) (r *Mak
 	}
 
 	bIsAddCredit := checkAddCredit(mbr.BorrowType)
-	guarantor := makeborrow.GetGuarantor(mbr.UserID)
 
 	if bIsAddCredit {
-		mbr.Secured = guarantor
 		feeRate := requestObj.GetFeeRate()
 		if feeRate == "" {
 			Logger.Error("get fee rate failed")

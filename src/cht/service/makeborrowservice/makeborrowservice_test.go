@@ -16,11 +16,12 @@ func NewMakeBorrowRequestStruct(userID int32, borrowtype int32, borrowUse int32)
 		Account:      "20000",
 		VerifyRemark: "审核意见",
 		MostAccount:  "100",
+		Secured:      "23k4",
 	}
 }
 
 func TestMakeBorrow(t *testing.T) {
-	brs := NewMakeBorrowRequestStruct(29, 5, 0)
+	brs := NewMakeBorrowRequestStruct(29, 3, 0)
 	bs := borrowservice{}
 	res, _ := bs.makeBorrow(brs)
 	if res.Status != ISSURE_SUCCESS {

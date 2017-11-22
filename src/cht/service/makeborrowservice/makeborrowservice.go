@@ -124,8 +124,11 @@ func (bs *borrowservice) makeBorrow(requestObj *MakeBorrowRequestStruct) (r *Mak
 		Logger.Debug("formatFeeRate:", formatFeeRate)
 		mbr.FeeRate = fmt.Sprintf("%.4f", formatFeeRate/100.0)
 		Logger.Debug("mbr.FeeRate:", mbr.FeeRate)
-	} else if _, err := strconv.ParseFloat(guarantor, 64); err != nil {
-		mbr.Secured = guarantor
+	} else if mbr.Secured != "" {
+		_, err := strconv.ParseFloat(mbr.Secured, 64)
+		if err == nil { //担保方是数字字符串，需要过滤掉
+			mbr.Secured = ""
+		}
 	}
 
 	limit, err := makeborrow.GetCreditLimit(mbr.UserID)

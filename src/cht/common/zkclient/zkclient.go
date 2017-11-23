@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-var ZkServerAddress = []string{"192.168.8.207:2181", "192.168.8.208:2181", "192.168.8.209:2181"}
+var ZkServerAddress = []string{"192.168.8.222:2181"}
 
 //服务表 key值:服务名，对应永久路径 value:服务ip地址，可以有多个
 type ServiceMap map[string]interface{}

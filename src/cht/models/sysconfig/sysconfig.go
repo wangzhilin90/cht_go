@@ -1,8 +1,11 @@
 package sysconfig
 
 import (
-	"bytes"
+	// "bytes"
 	. "cht/common/logger"
+	"cht/utils"
+	// "fmt"
+	// "github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -24,20 +27,22 @@ type SysConfigStruct struct {
  * @DateTime 2017-09-19T14:58:14+0800
  */
 func GetSysConfig(scrs *SysConfigRequestStruct) ([]SysConfigStruct, error) {
-	o := orm.NewOrm()
-	o.Using("default")
-
-	buf := bytes.Buffer{}
-	buf.WriteString("select  * from jl_sys_config")
-	sql := buf.String()
-	Logger.Debugf("GetSysConfig sql: %v", sql)
-
 	var scs []SysConfigStruct
-	_, err := o.Raw(sql).QueryRows(&scs)
+
+	err := utils.GetCache("sys:config", &scs)
 	if err != nil {
-		Logger.Debugf("GetSysConfig query failed %v", err)
-		return nil, err
+		// cache_expire, _ := beego.AppConfig.Int("cache_expire")
+		// Logger.Debugf("cache_expire:%v", cache_expire)
+		o := orm.NewOrm()
+		o.Using("default")
+		_, err = o.Raw("select  * from jl_sys_config").QueryRows(&scs)
+		if err != nil {
+			Logger.Errorf("GetSysConfig query failed: %v", err)
+			return nil, err
+		}
+		utils.SetCache("sys:config", scs, 60)
 	}
+
 	Logger.Debugf("GetSysConfig res %v", scs)
 	return scs, nil
 }

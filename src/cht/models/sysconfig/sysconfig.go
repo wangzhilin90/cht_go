@@ -35,7 +35,13 @@ func GetSysConfig(scrs *SysConfigRequestStruct) ([]SysConfigStruct, error) {
 		// Logger.Debugf("cache_expire:%v", cache_expire)
 		o := orm.NewOrm()
 		o.Using("default")
-		_, err = o.Raw("select  * from jl_sys_config").QueryRows(&scs)
+		qb, _ := orm.NewQueryBuilder("mysql")
+		qb.Select("*").
+			From("jl_sys_config")
+
+		sql := qb.String()
+		Logger.Debugf("GetSysConfig sql:%v", sql)
+		_, err = o.Raw(sql).QueryRows(&scs)
 		if err != nil {
 			Logger.Errorf("GetSysConfig query failed: %v", err)
 			return nil, err

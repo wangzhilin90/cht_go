@@ -2,14 +2,13 @@ package utils
 
 import (
 	"bytes"
+	. "cht/common/logger"
 	"encoding/gob"
 	"errors"
 	"fmt"
-	"time"
-
-	. "cht/common/logger"
 	"github.com/astaxie/beego/cache"
 	_ "github.com/astaxie/beego/cache/redis"
+	"time"
 )
 
 var cc cache.Cache

@@ -38,29 +38,36 @@ func SaveUserAttestionBaseInfo(uabsr *UserAttestionBaseInfoSaveRequest) bool {
 		str += fmt.Sprintf("video_pic=\"%s\",", uabsr.VideoPic)
 	}
 
-	if uabsr.RealStatus != 0 {
-		str += fmt.Sprintf("real_status=%d,", uabsr.RealStatus)
-	}
+	// if uabsr.RealStatus != 0 {
+	// 	str += fmt.Sprintf("real_status=%d,", uabsr.RealStatus)
+	// }
 
-	if uabsr.EmailStatus != 0 {
-		str += fmt.Sprintf("email_status=%d,", uabsr.EmailStatus)
-	}
+	// if uabsr.EmailStatus != 0 {
+	// 	str += fmt.Sprintf("email_status=%d,", uabsr.EmailStatus)
+	// }
 
-	if uabsr.PhoneStatus != 0 {
-		str += fmt.Sprintf("phone_status=%d,", uabsr.PhoneStatus)
-	}
+	// if uabsr.PhoneStatus != 0 {
+	// 	str += fmt.Sprintf("phone_status=%d,", uabsr.PhoneStatus)
+	// }
 
-	if uabsr.VideoStatus != 0 {
-		str += fmt.Sprintf("video_status=%d,", uabsr.VideoStatus)
-	}
+	// if uabsr.VideoStatus != 0 {
+	// 	str += fmt.Sprintf("video_status=%d,", uabsr.VideoStatus)
+	// }
 
-	if uabsr.SceneStatus != 0 {
-		str += fmt.Sprintf("scene_status=%d,", uabsr.SceneStatus)
-	}
+	// if uabsr.SceneStatus != 0 {
+	// 	str += fmt.Sprintf("scene_status=%d,", uabsr.SceneStatus)
+	// }
 
-	if uabsr.RealPasstime != 0 {
-		str += fmt.Sprintf("real_passtime=%d,", uabsr.RealPasstime)
-	}
+	// if uabsr.RealPasstime != 0 {
+	// 	str += fmt.Sprintf("real_passtime=%d,", uabsr.RealPasstime)
+	// }
+	str += fmt.Sprintf("real_status=%d,", uabsr.RealStatus)
+	str += fmt.Sprintf("email_status=%d,", uabsr.EmailStatus)
+	str += fmt.Sprintf("phone_status=%d,", uabsr.PhoneStatus)
+	str += fmt.Sprintf("video_status=%d,", uabsr.VideoStatus)
+	str += fmt.Sprintf("scene_status=%d,", uabsr.SceneStatus)
+	str += fmt.Sprintf("real_passtime=%d,", uabsr.RealPasstime)
+
 	str = strings.TrimSuffix(str, ",")
 	qb.Set(str)
 	qb.Where(fmt.Sprintf("user_id=%d", uabsr.UserID))

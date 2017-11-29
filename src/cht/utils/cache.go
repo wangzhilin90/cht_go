@@ -2,6 +2,7 @@ package utils
 
 import (
 	"bytes"
+	cf "cht/common/config"
 	. "cht/common/logger"
 	"encoding/gob"
 	"errors"
@@ -23,9 +24,10 @@ func InitRedis() {
 			cc = nil
 		}
 	}()
-
-	// cc, err = cache.NewCache("redis", `{"conn":"`+beego.AppConfig.String("redis_host")+`"}`)
-	cc, err = cache.NewCache("redis", `{"conn":"`+"192.168.8.222:19001"+`"}`)
+	redis_host := cf.BConf.Redis.Host
+	redis_port := cf.BConf.Redis.Port
+	cc, err = cache.NewCache("redis", `{"conn":"`+fmt.Sprintf("%s:%s", redis_host, redis_port)+`"}`)
+	// cc, err = cache.NewCache("redis", `{"conn":"`+"192.168.8.222:19001"+`"}`)
 	if err != nil {
 		Logger.Errorf("errors:%v", err)
 	}

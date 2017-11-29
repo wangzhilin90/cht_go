@@ -1,6 +1,7 @@
 package zkclient
 
 import (
+	cf "cht/common/config"
 	. "cht/common/logger"
 	"fmt"
 	"github.com/samuel/go-zookeeper/zk"
@@ -9,7 +10,15 @@ import (
 	"time"
 )
 
-var ZkServerAddress = []string{"192.168.8.222:2181"}
+var ZkServerAddress = func() []string {
+	if cf.BConf.ZkAddress != nil {
+		Logger.Debugf("zk server address:%v", cf.BConf.ZkAddress)
+		return cf.BConf.ZkAddress
+	} else {
+		Logger.Fatalf("zk server address is null")
+		return nil
+	}
+}()
 
 //服务表 key值:服务名，对应永久路径 value:服务ip地址，可以有多个
 type ServiceMap map[string]interface{}

@@ -1,6 +1,7 @@
 package logger
 
 import (
+	cf "cht/common/config"
 	"fmt"
 	"github.com/lestrrat/go-file-rotatelogs"
 	"github.com/rifflock/lfshook"
@@ -13,7 +14,15 @@ import (
 var Logger *log.Logger
 
 func init() {
-	baseLogPath := "/var/cht/go_backend_service.log"
+	baseLogPath := func() string {
+		if cf.BConf.LogPath != "" {
+			return cf.BConf.LogPath
+		} else {
+			Logger.Fatalf("log file path is null")
+			return ""
+		}
+	}()
+	fmt.Println("log file path is:", baseLogPath)
 	dir, _ := path.Split(baseLogPath)
 	err := os.MkdirAll(dir, 0755)
 	if err != nil {

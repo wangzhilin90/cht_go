@@ -1,0 +1,19 @@
+{
+  "run_mode": "DEV",
+  "mysql": {
+    "user": "cht2_user205",
+    "password": "cht2_user205",
+    "host": "192.168.8.210",
+    "port": "8066",
+    "dbname": "cht2_1"
+  },
+  "zkaddress": [
+    "192.168.8.222:2181"
+  ],
+  "redis": {
+    "host": "192.168.8.222",
+    "port": "19001",
+    "expire_time": 60
+  },
+  "logpath": "/var/cht/go_backend_service.log"
+}

@@ -4,6 +4,7 @@ BUILD_HOME=$(cd `dirname $0`;pwd)
 WORK_HOME=$BUILD_HOME/..
 SOURCE_HOME=$BUILD_HOME/../src/cht
 PACKAGE_HOME=$BUILD_HOME/../dependPackage
+TARGET_BIN=$BUILD_HOME/../release/cht_bin
 
 set +x
 
@@ -30,7 +31,7 @@ function compile()
         echo -e "\033[31m ---------- start compile ---------- \033[0m"
         cd $SOURCE_HOME
         if [ -f main.go ];then
-                go build main.go
+                go build -o $TARGET_BIN
         else
                 echo -e "\033[31m ---------- comile failed,cant't find source file ---------- \033[0m"
                 exit 1

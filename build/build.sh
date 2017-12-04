@@ -28,7 +28,10 @@ function install_go_environment()
 
 function compile()
 {
-		rm  $TARGET_BIN
+		if [ -f $TARGET_BIN ];then 
+			rm  $TARGET_BIN
+		fi
+
         echo -e "\033[31m ---------- start compile ---------- \033[0m"
         cd $SOURCE_HOME
         if [ -f main.go ];then

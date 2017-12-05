@@ -20,6 +20,14 @@ func NewBorrowStruct(userID int32) *Borrow {
 	}
 }
 
+func TestGetReviewAccount(t *testing.T) {
+	res, err := GetReviewAccount(30)
+	if err != nil {
+		t.Fatalf("TestGetReviewAccount failed:%v", err)
+	}
+	t.Logf("TestGetReviewAccount return value:%v", res)
+}
+
 func TestGetLatestBorrowID(t *testing.T) {
 	res, err := GetLatestBorrowID()
 	if err != nil {

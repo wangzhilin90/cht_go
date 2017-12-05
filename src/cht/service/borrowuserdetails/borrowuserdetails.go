@@ -6,6 +6,7 @@ import (
 	"cht/models/borrower"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
+	"strconv"
 )
 
 type borrowerservice struct{}
@@ -41,15 +42,19 @@ func (bs *borrowerservice) GetBorrowUserDetails(requestObj *BorrowUserDetailsReq
 
 	card_id, _ := borrower.GetCardID(borrowInfo.ID)
 	credit_use, _ := borrower.GetCreditUse(borrowInfo.ID)
+	review_account, _ := borrower.GetReviewAccount(borrowInfo.ID)
 	guarantor, _ := borrower.GetGuarantor(borrowInfo.ID)
 	material, _ := borrower.GetMaterialInfo(borrowInfo.ID)
+	format_credit_use, _ := strconv.ParseFloat(credit_use, 64)
+	format_review_account, _ := strconv.ParseFloat(review_account, 64)
 
 	bis := new(BorrowUserDetailsStruct)
 	bis.ID = borrowInfo.ID
 	bis.Realname = borrowInfo.Realname
 	bis.IsBorrower = borrowInfo.IsBorrower
 	bis.CardID = card_id
-	bis.Credit = credit_use
+	bis.Credit = fmt.Sprintf("%.6f", (format_credit_use - format_review_account))
+
 	bis.Guarantor = guarantor
 
 	for _, v := range material {

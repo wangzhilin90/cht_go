@@ -70,6 +70,7 @@ func init() {
 			}
 		}
 	}
+	fmt.Println("confPath:", confPath)
 
 	//读取文件并赋值 conf
 	if err = parseConfig(confPath); err != nil {

@@ -12,7 +12,6 @@ func NewMakeBorrowRequestStruct(userID int32, borrowtype int32, borrowUse int32)
 		BorrowUse:    borrowUse,
 		Content:      "后台测试-信3",
 		Title:        "biaoti",
-		FeeRate:      "20",
 		Account:      "20000",
 		VerifyRemark: "审核意见",
 		MostAccount:  "100",

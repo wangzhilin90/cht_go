@@ -26,7 +26,9 @@ func InitSql() {
 	host := cf.BConf.Mysql.Host
 	port := cf.BConf.Mysql.Port
 	dbname := cf.BConf.Mysql.DbName
+	mysql_info := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8", user, passwd, host, port, dbname)
+	fmt.Println("init mysql info:", mysql_info)
 
 	orm.RegisterDriver("mysql", orm.DRMySQL)
-	orm.RegisterDataBase("default", "mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8", user, passwd, host, port, dbname))
+	orm.RegisterDataBase("default", "mysql", mysql_info)
 }

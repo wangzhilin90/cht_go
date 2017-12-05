@@ -12,23 +12,25 @@ import (
 type borrowservice struct{}
 
 const (
-	NOT_DEPOSIT_ACCOUNT     = 1001
-	EXCEED_REDIT_LIMIT      = 1002
-	GET_REDIT_LIMIT_FAILED  = 1003
-	GET_BORROW_MONEY_FAILED = 1004
-	GET_FEE_RATE_FAILED     = 1005
-	ISSURE_FAILD            = 1006
-	ISSURE_SUCCESS          = 1000
+	NOT_DEPOSIT_ACCOUNT         = 1001
+	EXCEED_REDIT_LIMIT          = 1002
+	GET_REDIT_LIMIT_FAILED      = 1003
+	GET_BORROW_MONEY_FAILED     = 1004
+	GET_FEE_RATE_FAILED         = 1005
+	ISSURE_FAILD                = 1006
+	QUERY_REVIEW_ACCOUNT_FAILED = 1007
+	ISSURE_SUCCESS              = 1000
 )
 
 var Status = map[int]string{
-	NOT_DEPOSIT_ACCOUNT:     "未开通存管账户",
-	GET_REDIT_LIMIT_FAILED:  "获取信用额度失败",
-	GET_BORROW_MONEY_FAILED: "获取借款金额失败",
-	EXCEED_REDIT_LIMIT:      "信誉额度不够",
-	GET_FEE_RATE_FAILED:     "获取利率失败",
-	ISSURE_FAILD:            "发标插入失败",
-	ISSURE_SUCCESS:          "发标成功",
+	NOT_DEPOSIT_ACCOUNT:         "未开通存管账户",
+	GET_REDIT_LIMIT_FAILED:      "获取信用额度失败",
+	GET_BORROW_MONEY_FAILED:     "获取借款金额失败",
+	EXCEED_REDIT_LIMIT:          "信誉额度不够",
+	GET_FEE_RATE_FAILED:         "获取利率失败",
+	ISSURE_FAILD:                "发标插入失败",
+	QUERY_REVIEW_ACCOUNT_FAILED: "查询用户发标待审金额失败",
+	ISSURE_SUCCESS:              "发标成功",
 }
 
 func checkAddCredit(borrow_type int32) bool {
@@ -110,18 +112,7 @@ func (bs *borrowservice) makeBorrow(requestObj *MakeBorrowRequestStruct) (r *Mak
 	bIsAddCredit := checkAddCredit(mbr.BorrowType)
 
 	if bIsAddCredit {
-		feeRate := requestObj.GetFeeRate()
-		if feeRate == "" {
-			Logger.Error("get fee rate failed")
-			return &MakeBorrowResponseStruct{
-				Status: GET_FEE_RATE_FAILED,
-				Msg:    Status[GET_FEE_RATE_FAILED],
-			}, nil
-		}
-		formatFeeRate, _ := strconv.ParseFloat(feeRate, 64)
-		Logger.Debug("formatFeeRate:", formatFeeRate)
-		mbr.FeeRate = fmt.Sprintf("%.4f", formatFeeRate/100.0)
-		Logger.Debug("mbr.FeeRate:", mbr.FeeRate)
+		mbr.SignDate = ""
 	} else if mbr.Secured != "" {
 		_, err := strconv.ParseFloat(mbr.Secured, 64)
 		if err == nil { //担保方是数字字符串，需要过滤掉
@@ -137,8 +128,8 @@ func (bs *borrowservice) makeBorrow(requestObj *MakeBorrowRequestStruct) (r *Mak
 			Msg:    Status[GET_REDIT_LIMIT_FAILED],
 		}, nil
 	}
-
 	formatLimit, _ := strconv.ParseFloat(limit, 64)
+
 	borrow := requestObj.GetAccount()
 	if borrow == "" {
 		Logger.Error("get borrow money failed")
@@ -148,9 +139,20 @@ func (bs *borrowservice) makeBorrow(requestObj *MakeBorrowRequestStruct) (r *Mak
 		}, nil
 	}
 	formatBorrow, _ := strconv.ParseFloat(borrow, 64)
-	Logger.Debugf("formatLimit %v,formatBorrow %v", formatLimit, formatBorrow)
 
-	if formatLimit-formatBorrow < 0 {
+	review_account, err := makeborrow.GetReviewAccount(mbr.UserID)
+	if err != nil {
+		Logger.Errorf("makeBorrow query review_account failed:", err)
+		return &MakeBorrowResponseStruct{
+			Status: QUERY_REVIEW_ACCOUNT_FAILED,
+			Msg:    Status[QUERY_REVIEW_ACCOUNT_FAILED],
+		}, nil
+	}
+	format_account, _ := strconv.ParseFloat(review_account, 64)
+	Logger.Debugf("formatLimit %v,formatBorrow %v,format_account %v", formatLimit, formatBorrow, format_account)
+
+	//如果可用信用额度减去用户发标待审中的金额小于做标金额，返回额度不够错误
+	if formatLimit-format_account-formatBorrow < 0 {
 		Logger.Errorf("exceed_redit_limit,limit:%v,borrow:%v", limit, borrow)
 		return &MakeBorrowResponseStruct{
 			Status: EXCEED_REDIT_LIMIT,

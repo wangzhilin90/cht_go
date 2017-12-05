@@ -1,6 +1,7 @@
 package makeborrow
 
 import (
+	"bytes"
 	. "cht/common/logger"
 	"fmt"
 	"github.com/astaxie/beego/orm"
@@ -128,6 +129,37 @@ func GetCreditLimit(user_id int32) (string, error) {
 	}
 	Logger.Debugf("GetCreditLimit res %v", credit_use)
 	return credit_use, nil
+}
+
+/**
+ * [GetReviewAccount 查询用户发标待审金额]
+ * @param    user_id 用户ID
+ * @return    string 用户发标待审金额 error 查询是否出错
+ * @DateTime 2017-12-04T17:20:11+0800
+ */
+func GetReviewAccount(user_id int32) (string, error) {
+	Logger.Debugf("GetReviewAccount input param: %v", user_id)
+	o := orm.NewOrm()
+	o.Using("default")
+
+	buf := bytes.Buffer{}
+	buf.WriteString("SELECT SUM(account)  FROM jl_borrow WHERE user_id = ? AND status = 0 LIMIT 1")
+	sql := buf.String()
+
+	Logger.Debugf("GetReviewAccount sql: %v", sql)
+
+	var review_account string
+	err := o.Raw(sql, user_id).QueryRow(&review_account)
+	if err != nil {
+		Logger.Errorf("GetReviewAccount query failed %v", err)
+		return "0", err
+	}
+
+	if review_account == "" {
+		return "0", nil
+	}
+	Logger.Debugf("GetReviewAccount return value:%v", review_account)
+	return review_account, nil
 }
 
 /**

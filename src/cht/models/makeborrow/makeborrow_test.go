@@ -12,7 +12,7 @@ func NewBorrowStruct(userID int32) *Borrow {
 		ID:           id,
 		UserID:       userID,
 		Title:        "biaoti1",
-		Content:      "hello",
+		Content:      "<br type=\"_moz\" />\r\n1120测试垫付 - 加信贷",
 		VerifyRemark: "审核",
 		MostAccount:  "2000000",
 		OpenAccount:  23,

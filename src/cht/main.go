@@ -53,6 +53,7 @@ import (
 	"cht/service/talking"
 	"cht/service/updateuserloginlogdetails"
 	"cht/service/updateuserpasswword"
+	"cht/service/userappbank"
 	"cht/service/userattestionbaseinfosave"
 	"cht/service/userattestioncardinfosave"
 	"cht/service/userattestionlist"
@@ -388,6 +389,11 @@ func main() {
 	go func() {
 		/*开启[后台]推广名称记录表服务*/
 		accessconfig.StartAccessConfigServer()
+	}()
+
+	go func() {
+		/*开启app会员银行信息表增、删、改、查服务*/
+		userappbank.StartUserAppBankServer()
 	}()
 
 	<-ch

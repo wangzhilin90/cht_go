@@ -21,6 +21,7 @@ var Status = map[int]string{
 type sysconfigservice struct{}
 
 func (scs *sysconfigservice) GetSysConfig(requestObj *SysConfigRequestStruct) (r *SysConfigResponseStruct, err error) {
+	Logger.Info("GetSysConfig input param:", requestObj)
 	scrs := new(sysconfig.SysConfigRequestStruct)
 	scrs.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	SysConfig, err := sysconfig.GetSysConfig(scrs)

@@ -217,7 +217,7 @@ func InsertBorrowTbl(bs *Borrow) (int32, error) {
 	}
 
 	if bs.Content != "" {
-		str += fmt.Sprintf("content=\"%s\",", bs.Content)
+		str += fmt.Sprintf("content=\"%s\",", strings.Replace(bs.Content, "\"", "'", -1))
 	}
 
 	if bs.Litpic != "" {

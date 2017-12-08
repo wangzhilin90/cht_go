@@ -25,6 +25,7 @@ type CollectionRequest struct {
 	LimitOffset          int32
 	LimitNum             int32
 	Borrowid             string
+	CheckZhuanrangren    int32
 	ChengHuiTongTraceLog string
 }
 
@@ -107,6 +108,10 @@ func GetCollectionInfo(trr *CollectionRequest) ([]CollectionInfoStruct, int32, e
 		Logger.Debugf("GetCollectionInfo Borrowid:", trr.Borrowid)
 		Logger.Debugf("GetCollectionInfo TrimPrefix Borrowid:", strings.TrimPrefix(trr.Borrowid, "CHT"))
 		qb.And(fmt.Sprintf("BC.borrow_id=%s", strings.TrimPrefix(trr.Borrowid, "CHT")))
+	}
+
+	if trr.CheckZhuanrangren > 0 {
+		qb.And(fmt.Sprintf("B.zhuanrangren<>''"))
 	}
 
 	sql := qb.String()

@@ -57,6 +57,7 @@ import (
 	"cht/service/userattestionbaseinfosave"
 	"cht/service/userattestioncardinfosave"
 	"cht/service/userattestionlist"
+	"cht/service/userbank"
 	"cht/service/usercashrecordList"
 	"cht/service/usercollectionlist"
 	"cht/service/usercouponlist"
@@ -394,6 +395,11 @@ func main() {
 	go func() {
 		/*开启app会员银行信息表增、删、改、查服务*/
 		userappbank.StartUserAppBankServer()
+	}()
+
+	go func() {
+		/*开启会员银行信息表服务*/
+		userbank.StartUserBankServer()
 	}()
 
 	<-ch

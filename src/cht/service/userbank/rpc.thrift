@@ -82,7 +82,7 @@ struct UserBankCountResponseStruct {
 }
 
 service UserBankThriftService {
-    UserBankDetailsRequestStruct getUserBankDetails (1:UserBankDetailsResponseStruct requestObj),
+    UserBankDetailsResponseStruct getUserBankDetails (1:UserBankDetailsRequestStruct requestObj),
     UserBankUpdateResponseStruct updateUserBank  (1:UserBankUpdateRequestStruct requestObj),
     UserBankInsertResponseStruct insertUserBank  (1:UserBankInsertRequestStruct requestObj),
     UserBankCountResponseStruct  getUserBankNum  (1:UserBankCountRequestStruct requestObj),

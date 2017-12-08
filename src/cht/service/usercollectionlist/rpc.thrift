@@ -11,7 +11,8 @@ struct UserCollectionListRequestStruct {
 	6:i32 limitOffset,//偏移量
 	7:i32 limitNum,//每页现实多长时间
 	8:string borrowid,//项目编号
-	9:string chengHuiTongTraceLog
+	9:i32 check_zhuanrangren,//检查转让人
+	10:string chengHuiTongTraceLog
 }
 
 struct UserCollectionDetailsStruct {

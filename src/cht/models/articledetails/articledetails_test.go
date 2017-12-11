@@ -21,7 +21,7 @@ func NewNextRequestStruct(id, cateId, reqType, addtime int32) *NextRequestStruct
 }
 
 func TestGetArticleDetails(t *testing.T) {
-	adrs := NewArticleDetailsRequestStruct(641)
+	adrs := NewArticleDetailsRequestStruct(36)
 	res, err := GetArticleDetails(adrs)
 	if err != nil {
 		t.Fatalf("TestGetArticleDetails failed", err)

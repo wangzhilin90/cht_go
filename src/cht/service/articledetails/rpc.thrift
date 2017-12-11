@@ -5,7 +5,9 @@ namespace go articledetails
 //文章内容请求结构体
 struct ArticleDetailsRequestStruct{
 	1:i32 id,
-	2:string chengHuiTongTraceLog
+	2:i32 status=-1,//新增字段查询功能
+	3:string chengHuiTongTraceLog
+
 }
 
 //文章内容返回结构体

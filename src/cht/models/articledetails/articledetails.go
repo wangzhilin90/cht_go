@@ -10,6 +10,7 @@ import (
 
 type ArticleDetailsRequestStruct struct {
 	ID                   int32
+	Status               int32 //默认不传为-1，不用拼接；为0时也需要拼接jl_article表
 	ChengHuiTongTraceLog string
 }
 
@@ -48,9 +49,13 @@ func GetArticleDetails(adrs *ArticleDetailsRequestStruct) (*ArticleDetailsResult
 		From("jl_article A").
 		LeftJoin("jl_article_cate AC").
 		On("A.cateid=AC.id").
-		Where(fmt.Sprintf("A.id=%d", adrs.ID)).
-		Limit(1)
+		Where(fmt.Sprintf("A.id=%d", adrs.ID))
 
+	if adrs.Status != -1 {
+		qb.And(fmt.Sprintf("A.status=%d", adrs.Status))
+	}
+
+	qb.Limit(1)
 	sql := qb.String()
 	Logger.Debug("GetArticleDetails sql:", sql)
 	var adrst ArticleDetailsResultStruct

@@ -10,6 +10,7 @@ import (
 	"cht/service/advertmanagethriftservice"
 	"cht/service/advertupdate"
 	"cht/service/articledetails"
+	"cht/service/borrowrepaymentstatistics"
 	"cht/service/borrowuserdetails"
 	"cht/service/customerlist"
 	"cht/service/customerupdate"
@@ -400,6 +401,11 @@ func main() {
 	go func() {
 		/*开启会员银行信息表服务*/
 		userbank.StartUserBankServer()
+	}()
+
+	go func() {
+		/*开启标分期还款记录表服务*/
+		borrowrepaymentstatistics.StartBorrowRepaymentStatisticsServer()
 	}()
 
 	<-ch

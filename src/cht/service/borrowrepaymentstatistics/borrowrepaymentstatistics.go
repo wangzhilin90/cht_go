@@ -20,15 +20,26 @@ var Borrow_Stat = map[int]string{
 	QUERY_REPAYMENT_FAILED:  "查询标分期还款记录表失败",
 }
 
-func (brss *borrowrepaymentstatisticsservice) GetRepaymentStatisticsDetails(requestObj *RepaymentStatisticsRequestStruct) (r *RepaymentStatisticsResponseStruct, err error) {
-	Logger.Info("GetRepaymentStatisticsDetails request param:", requestObj)
+const (
+	QUERY_TOTAL_REPLAY_SUCCESS = 1000
+	QUERY_TOTAL_REPLAY_FAILED  = 1001
+)
+
+var Total_Stat = map[int]string{
+	QUERY_TOTAL_REPLAY_SUCCESS: "获取总还款金额成功",
+	QUERY_TOTAL_REPLAY_FAILED:  "获取总还款金额失败",
+}
+
+func (brss *borrowrepaymentstatisticsservice) GetRepaymentStatisticsList(requestObj *RepaymentStatisticsRequestStruct) (r *RepaymentStatisticsResponseStruct, err error) {
+	Logger.Info("GetRepaymentStatisticsList request param:", requestObj)
 	rsr := new(brs.RepaymentStatisticsRequest)
 	rsr.UserID = requestObj.GetUserID()
+	rsr.Status = requestObj.GetStatus()
 	rsr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 
-	res, err := brs.GetRepaymentStatisticsDetails(rsr)
+	res, err := brs.GetRepaymentStatisticsList(rsr)
 	if err != nil {
-		Logger.Errorf("GetRepaymentStatisticsDetails query failed:%v", res)
+		Logger.Errorf("GetRepaymentStatisticsList query failed:%v", res)
 		return &RepaymentStatisticsResponseStruct{
 			Status: QUERY_REPAYMENT_FAILED,
 			Msg:    Borrow_Stat[QUERY_REPAYMENT_FAILED],
@@ -46,7 +57,31 @@ func (brss *borrowrepaymentstatisticsservice) GetRepaymentStatisticsDetails(requ
 	}
 	response.Status = QUERY_REPAYMENT_SUCCESS
 	response.Msg = Borrow_Stat[QUERY_REPAYMENT_SUCCESS]
-	Logger.Info("GetRepaymentStatisticsDetails response:%v", response)
+	Logger.Info("GetRepaymentStatisticsList response:%v", response)
+	return &response, nil
+}
+
+func (brss *borrowrepaymentstatisticsservice) GetTotalReplaymentMoney(requestObj *RepaymentStatisticsRequestStruct) (r *TotalReplaymentMoneyResponseStruct, err error) {
+	Logger.Info("GetTotalReplaymentMoney request param:", requestObj)
+	rsr := new(brs.RepaymentStatisticsRequest)
+	rsr.UserID = requestObj.GetUserID()
+	rsr.Status = requestObj.GetStatus()
+	rsr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
+
+	res, err := brs.GetTotalReplaymentMoney(rsr)
+	if err != nil {
+		Logger.Errorf("GetTotalReplaymentMoney query failed:%v", res)
+		return &TotalReplaymentMoneyResponseStruct{
+			Status: QUERY_TOTAL_REPLAY_FAILED,
+			Msg:    Total_Stat[QUERY_TOTAL_REPLAY_FAILED],
+		}, nil
+	}
+
+	var response TotalReplaymentMoneyResponseStruct
+	response.TotalReplaymentMoney = res
+	response.Status = QUERY_TOTAL_REPLAY_SUCCESS
+	response.Msg = Total_Stat[QUERY_TOTAL_REPLAY_SUCCESS]
+	Logger.Debugf("GetTotalReplaymentMoney response:%v", response)
 	return &response, nil
 }
 

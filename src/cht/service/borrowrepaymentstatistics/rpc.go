@@ -16,18 +16,24 @@ var _ = bytes.Equal
 
 // Attributes:
 //  - UserID
+//  - Status
 //  - ChengHuiTongTraceLog
 type RepaymentStatisticsRequestStruct struct {
 	UserID               int32  `thrift:"user_id,1" db:"user_id" json:"user_id"`
-	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,2" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
+	Status               int32  `thrift:"status,2" db:"status" json:"status"`
+	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,3" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
 }
 
 // func NewRepaymentStatisticsRequestStruct() *RepaymentStatisticsRequestStruct {
-//   return &RepaymentStatisticsRequestStruct{}
+// 	return &RepaymentStatisticsRequestStruct{}
 // }
 
 func (p *RepaymentStatisticsRequestStruct) GetUserID() int32 {
 	return p.UserID
+}
+
+func (p *RepaymentStatisticsRequestStruct) GetStatus() int32 {
+	return p.Status
 }
 
 func (p *RepaymentStatisticsRequestStruct) GetChengHuiTongTraceLog() string {
@@ -55,6 +61,10 @@ func (p *RepaymentStatisticsRequestStruct) Read(iprot thrift.TProtocol) error {
 			if err := p.ReadField2(iprot); err != nil {
 				return err
 			}
+		case 3:
+			if err := p.ReadField3(iprot); err != nil {
+				return err
+			}
 		default:
 			if err := iprot.Skip(fieldTypeId); err != nil {
 				return err
@@ -80,8 +90,17 @@ func (p *RepaymentStatisticsRequestStruct) ReadField1(iprot thrift.TProtocol) er
 }
 
 func (p *RepaymentStatisticsRequestStruct) ReadField2(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI32(); err != nil {
 		return thrift.PrependError("error reading field 2: ", err)
+	} else {
+		p.Status = v
+	}
+	return nil
+}
+
+func (p *RepaymentStatisticsRequestStruct) ReadField3(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 3: ", err)
 	} else {
 		p.ChengHuiTongTraceLog = v
 	}
@@ -97,6 +116,9 @@ func (p *RepaymentStatisticsRequestStruct) Write(oprot thrift.TProtocol) error {
 			return err
 		}
 		if err := p.writeField2(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField3(oprot); err != nil {
 			return err
 		}
 	}
@@ -123,14 +145,27 @@ func (p *RepaymentStatisticsRequestStruct) writeField1(oprot thrift.TProtocol) (
 }
 
 func (p *RepaymentStatisticsRequestStruct) writeField2(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("chengHuiTongTraceLog", thrift.STRING, 2); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:chengHuiTongTraceLog: ", p), err)
+	if err := oprot.WriteFieldBegin("status", thrift.I32, 2); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:status: ", p), err)
 	}
-	if err := oprot.WriteString(string(p.ChengHuiTongTraceLog)); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.chengHuiTongTraceLog (2) field write error: ", p), err)
+	if err := oprot.WriteI32(int32(p.Status)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.status (2) field write error: ", p), err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:chengHuiTongTraceLog: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:status: ", p), err)
+	}
+	return err
+}
+
+func (p *RepaymentStatisticsRequestStruct) writeField3(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("chengHuiTongTraceLog", thrift.STRING, 3); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:chengHuiTongTraceLog: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.ChengHuiTongTraceLog)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.chengHuiTongTraceLog (3) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:chengHuiTongTraceLog: ", p), err)
 	}
 	return err
 }
@@ -522,10 +557,176 @@ func (p *RepaymentStatisticsResponseStruct) String() string {
 	return fmt.Sprintf("RepaymentStatisticsResponseStruct(%+v)", *p)
 }
 
+// Attributes:
+//  - Status
+//  - TotalReplaymentMoney
+//  - Msg
+type TotalReplaymentMoneyResponseStruct struct {
+	Status               int32  `thrift:"status,1" db:"status" json:"status"`
+	TotalReplaymentMoney string `thrift:"totalReplaymentMoney,2" db:"totalReplaymentMoney" json:"totalReplaymentMoney"`
+	Msg                  string `thrift:"msg,3" db:"msg" json:"msg"`
+}
+
+func NewTotalReplaymentMoneyResponseStruct() *TotalReplaymentMoneyResponseStruct {
+	return &TotalReplaymentMoneyResponseStruct{}
+}
+
+func (p *TotalReplaymentMoneyResponseStruct) GetStatus() int32 {
+	return p.Status
+}
+
+func (p *TotalReplaymentMoneyResponseStruct) GetTotalReplaymentMoney() string {
+	return p.TotalReplaymentMoney
+}
+
+func (p *TotalReplaymentMoneyResponseStruct) GetMsg() string {
+	return p.Msg
+}
+func (p *TotalReplaymentMoneyResponseStruct) Read(iprot thrift.TProtocol) error {
+	if _, err := iprot.ReadStructBegin(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
+		if err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+		switch fieldId {
+		case 1:
+			if err := p.ReadField1(iprot); err != nil {
+				return err
+			}
+		case 2:
+			if err := p.ReadField2(iprot); err != nil {
+				return err
+			}
+		case 3:
+			if err := p.ReadField3(iprot); err != nil {
+				return err
+			}
+		default:
+			if err := iprot.Skip(fieldTypeId); err != nil {
+				return err
+			}
+		}
+		if err := iprot.ReadFieldEnd(); err != nil {
+			return err
+		}
+	}
+	if err := iprot.ReadStructEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+	}
+	return nil
+}
+
+func (p *TotalReplaymentMoneyResponseStruct) ReadField1(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadI32(); err != nil {
+		return thrift.PrependError("error reading field 1: ", err)
+	} else {
+		p.Status = v
+	}
+	return nil
+}
+
+func (p *TotalReplaymentMoneyResponseStruct) ReadField2(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 2: ", err)
+	} else {
+		p.TotalReplaymentMoney = v
+	}
+	return nil
+}
+
+func (p *TotalReplaymentMoneyResponseStruct) ReadField3(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 3: ", err)
+	} else {
+		p.Msg = v
+	}
+	return nil
+}
+
+func (p *TotalReplaymentMoneyResponseStruct) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("TotalReplaymentMoneyResponseStruct"); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+	}
+	if p != nil {
+		if err := p.writeField1(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField2(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField3(oprot); err != nil {
+			return err
+		}
+	}
+	if err := oprot.WriteFieldStop(); err != nil {
+		return thrift.PrependError("write field stop error: ", err)
+	}
+	if err := oprot.WriteStructEnd(); err != nil {
+		return thrift.PrependError("write struct stop error: ", err)
+	}
+	return nil
+}
+
+func (p *TotalReplaymentMoneyResponseStruct) writeField1(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("status", thrift.I32, 1); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:status: ", p), err)
+	}
+	if err := oprot.WriteI32(int32(p.Status)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.status (1) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 1:status: ", p), err)
+	}
+	return err
+}
+
+func (p *TotalReplaymentMoneyResponseStruct) writeField2(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("totalReplaymentMoney", thrift.STRING, 2); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:totalReplaymentMoney: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.TotalReplaymentMoney)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.totalReplaymentMoney (2) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:totalReplaymentMoney: ", p), err)
+	}
+	return err
+}
+
+func (p *TotalReplaymentMoneyResponseStruct) writeField3(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("msg", thrift.STRING, 3); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:msg: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.Msg)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.msg (3) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:msg: ", p), err)
+	}
+	return err
+}
+
+func (p *TotalReplaymentMoneyResponseStruct) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("TotalReplaymentMoneyResponseStruct(%+v)", *p)
+}
+
 type BorrowRepaymentStatisticsThriftService interface {
 	// Parameters:
 	//  - RequestObj
-	GetRepaymentStatisticsDetails(requestObj *RepaymentStatisticsRequestStruct) (r *RepaymentStatisticsResponseStruct, err error)
+	GetRepaymentStatisticsList(requestObj *RepaymentStatisticsRequestStruct) (r *RepaymentStatisticsResponseStruct, err error)
+	// Parameters:
+	//  - RequestObj
+	GetTotalReplaymentMoney(requestObj *RepaymentStatisticsRequestStruct) (r *TotalReplaymentMoneyResponseStruct, err error)
 }
 
 type BorrowRepaymentStatisticsThriftServiceClient struct {
@@ -556,24 +757,24 @@ func NewBorrowRepaymentStatisticsThriftServiceClientProtocol(t thrift.TTransport
 
 // Parameters:
 //  - RequestObj
-func (p *BorrowRepaymentStatisticsThriftServiceClient) GetRepaymentStatisticsDetails(requestObj *RepaymentStatisticsRequestStruct) (r *RepaymentStatisticsResponseStruct, err error) {
-	if err = p.sendGetRepaymentStatisticsDetails(requestObj); err != nil {
+func (p *BorrowRepaymentStatisticsThriftServiceClient) GetRepaymentStatisticsList(requestObj *RepaymentStatisticsRequestStruct) (r *RepaymentStatisticsResponseStruct, err error) {
+	if err = p.sendGetRepaymentStatisticsList(requestObj); err != nil {
 		return
 	}
-	return p.recvGetRepaymentStatisticsDetails()
+	return p.recvGetRepaymentStatisticsList()
 }
 
-func (p *BorrowRepaymentStatisticsThriftServiceClient) sendGetRepaymentStatisticsDetails(requestObj *RepaymentStatisticsRequestStruct) (err error) {
+func (p *BorrowRepaymentStatisticsThriftServiceClient) sendGetRepaymentStatisticsList(requestObj *RepaymentStatisticsRequestStruct) (err error) {
 	oprot := p.OutputProtocol
 	if oprot == nil {
 		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
 		p.OutputProtocol = oprot
 	}
 	p.SeqId++
-	if err = oprot.WriteMessageBegin("getRepaymentStatisticsDetails", thrift.CALL, p.SeqId); err != nil {
+	if err = oprot.WriteMessageBegin("getRepaymentStatisticsList", thrift.CALL, p.SeqId); err != nil {
 		return
 	}
-	args := BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsArgs{
+	args := BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListArgs{
 		RequestObj: requestObj,
 	}
 	if err = args.Write(oprot); err != nil {
@@ -585,7 +786,7 @@ func (p *BorrowRepaymentStatisticsThriftServiceClient) sendGetRepaymentStatistic
 	return oprot.Flush()
 }
 
-func (p *BorrowRepaymentStatisticsThriftServiceClient) recvGetRepaymentStatisticsDetails() (value *RepaymentStatisticsResponseStruct, err error) {
+func (p *BorrowRepaymentStatisticsThriftServiceClient) recvGetRepaymentStatisticsList() (value *RepaymentStatisticsResponseStruct, err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -595,12 +796,12 @@ func (p *BorrowRepaymentStatisticsThriftServiceClient) recvGetRepaymentStatistic
 	if err != nil {
 		return
 	}
-	if method != "getRepaymentStatisticsDetails" {
-		err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "getRepaymentStatisticsDetails failed: wrong method name")
+	if method != "getRepaymentStatisticsList" {
+		err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "getRepaymentStatisticsList failed: wrong method name")
 		return
 	}
 	if p.SeqId != seqId {
-		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "getRepaymentStatisticsDetails failed: out of sequence response")
+		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "getRepaymentStatisticsList failed: out of sequence response")
 		return
 	}
 	if mTypeId == thrift.EXCEPTION {
@@ -617,10 +818,87 @@ func (p *BorrowRepaymentStatisticsThriftServiceClient) recvGetRepaymentStatistic
 		return
 	}
 	if mTypeId != thrift.REPLY {
-		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "getRepaymentStatisticsDetails failed: invalid message type")
+		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "getRepaymentStatisticsList failed: invalid message type")
 		return
 	}
-	result := BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsResult{}
+	result := BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListResult{}
+	if err = result.Read(iprot); err != nil {
+		return
+	}
+	if err = iprot.ReadMessageEnd(); err != nil {
+		return
+	}
+	value = result.GetSuccess()
+	return
+}
+
+// Parameters:
+//  - RequestObj
+func (p *BorrowRepaymentStatisticsThriftServiceClient) GetTotalReplaymentMoney(requestObj *RepaymentStatisticsRequestStruct) (r *TotalReplaymentMoneyResponseStruct, err error) {
+	if err = p.sendGetTotalReplaymentMoney(requestObj); err != nil {
+		return
+	}
+	return p.recvGetTotalReplaymentMoney()
+}
+
+func (p *BorrowRepaymentStatisticsThriftServiceClient) sendGetTotalReplaymentMoney(requestObj *RepaymentStatisticsRequestStruct) (err error) {
+	oprot := p.OutputProtocol
+	if oprot == nil {
+		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
+		p.OutputProtocol = oprot
+	}
+	p.SeqId++
+	if err = oprot.WriteMessageBegin("getTotalReplaymentMoney", thrift.CALL, p.SeqId); err != nil {
+		return
+	}
+	args := BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyArgs{
+		RequestObj: requestObj,
+	}
+	if err = args.Write(oprot); err != nil {
+		return
+	}
+	if err = oprot.WriteMessageEnd(); err != nil {
+		return
+	}
+	return oprot.Flush()
+}
+
+func (p *BorrowRepaymentStatisticsThriftServiceClient) recvGetTotalReplaymentMoney() (value *TotalReplaymentMoneyResponseStruct, err error) {
+	iprot := p.InputProtocol
+	if iprot == nil {
+		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
+		p.InputProtocol = iprot
+	}
+	method, mTypeId, seqId, err := iprot.ReadMessageBegin()
+	if err != nil {
+		return
+	}
+	if method != "getTotalReplaymentMoney" {
+		err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "getTotalReplaymentMoney failed: wrong method name")
+		return
+	}
+	if p.SeqId != seqId {
+		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "getTotalReplaymentMoney failed: out of sequence response")
+		return
+	}
+	if mTypeId == thrift.EXCEPTION {
+		error3 := thrift.NewTApplicationException(thrift.UNKNOWN_APPLICATION_EXCEPTION, "Unknown Exception")
+		var error4 error
+		error4, err = error3.Read(iprot)
+		if err != nil {
+			return
+		}
+		if err = iprot.ReadMessageEnd(); err != nil {
+			return
+		}
+		err = error4
+		return
+	}
+	if mTypeId != thrift.REPLY {
+		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "getTotalReplaymentMoney failed: invalid message type")
+		return
+	}
+	result := BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyResult{}
 	if err = result.Read(iprot); err != nil {
 		return
 	}
@@ -651,9 +929,10 @@ func (p *BorrowRepaymentStatisticsThriftServiceProcessor) ProcessorMap() map[str
 
 func NewBorrowRepaymentStatisticsThriftServiceProcessor(handler BorrowRepaymentStatisticsThriftService) *BorrowRepaymentStatisticsThriftServiceProcessor {
 
-	self3 := &BorrowRepaymentStatisticsThriftServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
-	self3.processorMap["getRepaymentStatisticsDetails"] = &borrowRepaymentStatisticsThriftServiceProcessorGetRepaymentStatisticsDetails{handler: handler}
-	return self3
+	self5 := &BorrowRepaymentStatisticsThriftServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
+	self5.processorMap["getRepaymentStatisticsList"] = &borrowRepaymentStatisticsThriftServiceProcessorGetRepaymentStatisticsList{handler: handler}
+	self5.processorMap["getTotalReplaymentMoney"] = &borrowRepaymentStatisticsThriftServiceProcessorGetTotalReplaymentMoney{handler: handler}
+	return self5
 }
 
 func (p *BorrowRepaymentStatisticsThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
@@ -666,25 +945,25 @@ func (p *BorrowRepaymentStatisticsThriftServiceProcessor) Process(iprot, oprot t
 	}
 	iprot.Skip(thrift.STRUCT)
 	iprot.ReadMessageEnd()
-	x4 := thrift.NewTApplicationException(thrift.UNKNOWN_METHOD, "Unknown function "+name)
+	x6 := thrift.NewTApplicationException(thrift.UNKNOWN_METHOD, "Unknown function "+name)
 	oprot.WriteMessageBegin(name, thrift.EXCEPTION, seqId)
-	x4.Write(oprot)
+	x6.Write(oprot)
 	oprot.WriteMessageEnd()
 	oprot.Flush()
-	return false, x4
+	return false, x6
 
 }
 
-type borrowRepaymentStatisticsThriftServiceProcessorGetRepaymentStatisticsDetails struct {
+type borrowRepaymentStatisticsThriftServiceProcessorGetRepaymentStatisticsList struct {
 	handler BorrowRepaymentStatisticsThriftService
 }
 
-func (p *borrowRepaymentStatisticsThriftServiceProcessorGetRepaymentStatisticsDetails) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsArgs{}
+func (p *borrowRepaymentStatisticsThriftServiceProcessorGetRepaymentStatisticsList) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("getRepaymentStatisticsDetails", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("getRepaymentStatisticsList", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush()
@@ -692,12 +971,12 @@ func (p *borrowRepaymentStatisticsThriftServiceProcessorGetRepaymentStatisticsDe
 	}
 
 	iprot.ReadMessageEnd()
-	result := BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsResult{}
+	result := BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListResult{}
 	var retval *RepaymentStatisticsResponseStruct
 	var err2 error
-	if retval, err2 = p.handler.GetRepaymentStatisticsDetails(args.RequestObj); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing getRepaymentStatisticsDetails: "+err2.Error())
-		oprot.WriteMessageBegin("getRepaymentStatisticsDetails", thrift.EXCEPTION, seqId)
+	if retval, err2 = p.handler.GetRepaymentStatisticsList(args.RequestObj); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing getRepaymentStatisticsList: "+err2.Error())
+		oprot.WriteMessageBegin("getRepaymentStatisticsList", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush()
@@ -705,7 +984,55 @@ func (p *borrowRepaymentStatisticsThriftServiceProcessorGetRepaymentStatisticsDe
 	} else {
 		result.Success = retval
 	}
-	if err2 = oprot.WriteMessageBegin("getRepaymentStatisticsDetails", thrift.REPLY, seqId); err2 != nil {
+	if err2 = oprot.WriteMessageBegin("getRepaymentStatisticsList", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type borrowRepaymentStatisticsThriftServiceProcessorGetTotalReplaymentMoney struct {
+	handler BorrowRepaymentStatisticsThriftService
+}
+
+func (p *borrowRepaymentStatisticsThriftServiceProcessorGetTotalReplaymentMoney) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("getTotalReplaymentMoney", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush()
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	result := BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyResult{}
+	var retval *TotalReplaymentMoneyResponseStruct
+	var err2 error
+	if retval, err2 = p.handler.GetTotalReplaymentMoney(args.RequestObj); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing getTotalReplaymentMoney: "+err2.Error())
+		oprot.WriteMessageBegin("getTotalReplaymentMoney", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush()
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("getTotalReplaymentMoney", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -727,27 +1054,27 @@ func (p *borrowRepaymentStatisticsThriftServiceProcessorGetRepaymentStatisticsDe
 
 // Attributes:
 //  - RequestObj
-type BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsArgs struct {
+type BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListArgs struct {
 	RequestObj *RepaymentStatisticsRequestStruct `thrift:"requestObj,1" db:"requestObj" json:"requestObj"`
 }
 
-func NewBorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsArgs() *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsArgs {
-	return &BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsArgs{}
+func NewBorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListArgs() *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListArgs {
+	return &BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListArgs{}
 }
 
-var BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsArgs_RequestObj_DEFAULT *RepaymentStatisticsRequestStruct
+var BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListArgs_RequestObj_DEFAULT *RepaymentStatisticsRequestStruct
 
-func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsArgs) GetRequestObj() *RepaymentStatisticsRequestStruct {
+func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListArgs) GetRequestObj() *RepaymentStatisticsRequestStruct {
 	if !p.IsSetRequestObj() {
-		return BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsArgs_RequestObj_DEFAULT
+		return BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListArgs_RequestObj_DEFAULT
 	}
 	return p.RequestObj
 }
-func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsArgs) IsSetRequestObj() bool {
+func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListArgs) IsSetRequestObj() bool {
 	return p.RequestObj != nil
 }
 
-func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsArgs) Read(iprot thrift.TProtocol) error {
+func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListArgs) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -780,7 +1107,7 @@ func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsArgs
 	return nil
 }
 
-func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsArgs) ReadField1(iprot thrift.TProtocol) error {
+func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListArgs) ReadField1(iprot thrift.TProtocol) error {
 	p.RequestObj = &RepaymentStatisticsRequestStruct{}
 	if err := p.RequestObj.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.RequestObj), err)
@@ -788,8 +1115,8 @@ func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsArgs
 	return nil
 }
 
-func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsArgs) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("getRepaymentStatisticsDetails_args"); err != nil {
+func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListArgs) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("getRepaymentStatisticsList_args"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
 	if p != nil {
@@ -806,7 +1133,7 @@ func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsArgs
 	return nil
 }
 
-func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("requestObj", thrift.STRUCT, 1); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:requestObj: ", p), err)
 	}
@@ -819,36 +1146,36 @@ func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsArgs
 	return err
 }
 
-func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsArgs) String() string {
+func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsArgs(%+v)", *p)
+	return fmt.Sprintf("BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListArgs(%+v)", *p)
 }
 
 // Attributes:
 //  - Success
-type BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsResult struct {
+type BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListResult struct {
 	Success *RepaymentStatisticsResponseStruct `thrift:"success,0" db:"success" json:"success,omitempty"`
 }
 
-func NewBorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsResult() *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsResult {
-	return &BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsResult{}
+func NewBorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListResult() *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListResult {
+	return &BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListResult{}
 }
 
-var BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsResult_Success_DEFAULT *RepaymentStatisticsResponseStruct
+var BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListResult_Success_DEFAULT *RepaymentStatisticsResponseStruct
 
-func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsResult) GetSuccess() *RepaymentStatisticsResponseStruct {
+func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListResult) GetSuccess() *RepaymentStatisticsResponseStruct {
 	if !p.IsSetSuccess() {
-		return BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsResult_Success_DEFAULT
+		return BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListResult_Success_DEFAULT
 	}
 	return p.Success
 }
-func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsResult) IsSetSuccess() bool {
+func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsResult) Read(iprot thrift.TProtocol) error {
+func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListResult) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -881,7 +1208,7 @@ func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsResu
 	return nil
 }
 
-func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsResult) ReadField0(iprot thrift.TProtocol) error {
+func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListResult) ReadField0(iprot thrift.TProtocol) error {
 	p.Success = &RepaymentStatisticsResponseStruct{}
 	if err := p.Success.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Success), err)
@@ -889,8 +1216,8 @@ func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsResu
 	return nil
 }
 
-func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsResult) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("getRepaymentStatisticsDetails_result"); err != nil {
+func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListResult) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("getRepaymentStatisticsList_result"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
 	if p != nil {
@@ -907,7 +1234,7 @@ func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsResu
 	return nil
 }
 
-func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err := oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T write field begin error 0:success: ", p), err)
@@ -922,9 +1249,213 @@ func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsResu
 	return err
 }
 
-func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsResult) String() string {
+func (p *BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsDetailsResult(%+v)", *p)
+	return fmt.Sprintf("BorrowRepaymentStatisticsThriftServiceGetRepaymentStatisticsListResult(%+v)", *p)
+}
+
+// Attributes:
+//  - RequestObj
+type BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyArgs struct {
+	RequestObj *RepaymentStatisticsRequestStruct `thrift:"requestObj,1" db:"requestObj" json:"requestObj"`
+}
+
+func NewBorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyArgs() *BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyArgs {
+	return &BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyArgs{}
+}
+
+var BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyArgs_RequestObj_DEFAULT *RepaymentStatisticsRequestStruct
+
+func (p *BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyArgs) GetRequestObj() *RepaymentStatisticsRequestStruct {
+	if !p.IsSetRequestObj() {
+		return BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyArgs_RequestObj_DEFAULT
+	}
+	return p.RequestObj
+}
+func (p *BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyArgs) IsSetRequestObj() bool {
+	return p.RequestObj != nil
+}
+
+func (p *BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyArgs) Read(iprot thrift.TProtocol) error {
+	if _, err := iprot.ReadStructBegin(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
+		if err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+		switch fieldId {
+		case 1:
+			if err := p.ReadField1(iprot); err != nil {
+				return err
+			}
+		default:
+			if err := iprot.Skip(fieldTypeId); err != nil {
+				return err
+			}
+		}
+		if err := iprot.ReadFieldEnd(); err != nil {
+			return err
+		}
+	}
+	if err := iprot.ReadStructEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+	}
+	return nil
+}
+
+func (p *BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyArgs) ReadField1(iprot thrift.TProtocol) error {
+	p.RequestObj = &RepaymentStatisticsRequestStruct{}
+	if err := p.RequestObj.Read(iprot); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.RequestObj), err)
+	}
+	return nil
+}
+
+func (p *BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyArgs) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("getTotalReplaymentMoney_args"); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+	}
+	if p != nil {
+		if err := p.writeField1(oprot); err != nil {
+			return err
+		}
+	}
+	if err := oprot.WriteFieldStop(); err != nil {
+		return thrift.PrependError("write field stop error: ", err)
+	}
+	if err := oprot.WriteStructEnd(); err != nil {
+		return thrift.PrependError("write struct stop error: ", err)
+	}
+	return nil
+}
+
+func (p *BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("requestObj", thrift.STRUCT, 1); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:requestObj: ", p), err)
+	}
+	if err := p.RequestObj.Write(oprot); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", p.RequestObj), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 1:requestObj: ", p), err)
+	}
+	return err
+}
+
+func (p *BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyArgs(%+v)", *p)
+}
+
+// Attributes:
+//  - Success
+type BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyResult struct {
+	Success *TotalReplaymentMoneyResponseStruct `thrift:"success,0" db:"success" json:"success,omitempty"`
+}
+
+func NewBorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyResult() *BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyResult {
+	return &BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyResult{}
+}
+
+var BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyResult_Success_DEFAULT *TotalReplaymentMoneyResponseStruct
+
+func (p *BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyResult) GetSuccess() *TotalReplaymentMoneyResponseStruct {
+	if !p.IsSetSuccess() {
+		return BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyResult) Read(iprot thrift.TProtocol) error {
+	if _, err := iprot.ReadStructBegin(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
+		if err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+		switch fieldId {
+		case 0:
+			if err := p.ReadField0(iprot); err != nil {
+				return err
+			}
+		default:
+			if err := iprot.Skip(fieldTypeId); err != nil {
+				return err
+			}
+		}
+		if err := iprot.ReadFieldEnd(); err != nil {
+			return err
+		}
+	}
+	if err := iprot.ReadStructEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+	}
+	return nil
+}
+
+func (p *BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyResult) ReadField0(iprot thrift.TProtocol) error {
+	p.Success = &TotalReplaymentMoneyResponseStruct{}
+	if err := p.Success.Read(iprot); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Success), err)
+	}
+	return nil
+}
+
+func (p *BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyResult) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("getTotalReplaymentMoney_result"); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+	}
+	if p != nil {
+		if err := p.writeField0(oprot); err != nil {
+			return err
+		}
+	}
+	if err := oprot.WriteFieldStop(); err != nil {
+		return thrift.PrependError("write field stop error: ", err)
+	}
+	if err := oprot.WriteStructEnd(); err != nil {
+		return thrift.PrependError("write struct stop error: ", err)
+	}
+	return nil
+}
+
+func (p *BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err := oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T write field begin error 0:success: ", p), err)
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", p.Success), err)
+		}
+		if err := oprot.WriteFieldEnd(); err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T write field end error 0:success: ", p), err)
+		}
+	}
+	return err
+}
+
+func (p *BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("BorrowRepaymentStatisticsThriftServiceGetTotalReplaymentMoneyResult(%+v)", *p)
 }

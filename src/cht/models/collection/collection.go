@@ -104,6 +104,11 @@ func GetCollectionInfo(trr *CollectionRequest) ([]CollectionInfoStruct, int32, e
 		qb.And(fmt.Sprintf("BC.status=%d", 1)).OrderBy("BC.status ASC , BC.repay_time DESC , BC.id ASC")
 	}
 
+	//当state不是2，默认排序规则
+	if trr.State != 2 {
+		qb.OrderBy("BC.status ASC,BC.repay_time ASC,BC.id ASC")
+	}
+
 	if trr.Borrowid != "" {
 		Logger.Debugf("GetCollectionInfo Borrowid:", trr.Borrowid)
 		Logger.Debugf("GetCollectionInfo TrimPrefix Borrowid:", strings.TrimPrefix(trr.Borrowid, "CHT"))

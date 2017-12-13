@@ -9,6 +9,7 @@ import (
 	"cht/service/advertlist"
 	"cht/service/advertmanagethriftservice"
 	"cht/service/advertupdate"
+	"cht/service/articlecate"
 	"cht/service/articledetails"
 	"cht/service/borrowrepaymentstatistics"
 	"cht/service/borrowuserdetails"
@@ -412,6 +413,11 @@ func main() {
 	go func() {
 		/*开启用户设置提醒服务*/
 		setmsg.StartSetMsgServer()
+	}()
+
+	go func() {
+		/*开启文章分类表服务*/
+		articlecate.StartArticleCateServer()
 	}()
 
 	<-ch

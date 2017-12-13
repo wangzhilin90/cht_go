@@ -44,6 +44,7 @@ import (
 	"cht/service/roleedit"
 	"cht/service/rolerightset"
 	"cht/service/securedlist"
+	"cht/service/setmsg"
 	"cht/service/subledgerlist"
 	"cht/service/sysconfigthriftservice"
 	"cht/service/sysuseradd"
@@ -406,6 +407,11 @@ func main() {
 	go func() {
 		/*开启标分期还款记录表服务*/
 		borrowrepaymentstatistics.StartBorrowRepaymentStatisticsServer()
+	}()
+
+	go func() {
+		/*开启用户设置提醒服务*/
+		setmsg.StartSetMsgServer()
 	}()
 
 	<-ch

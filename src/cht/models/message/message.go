@@ -3,6 +3,7 @@ package message
 import (
 	"bytes"
 	. "cht/common/logger"
+	"fmt"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -32,6 +33,13 @@ type MessageInfoStruct struct {
 type UserInfoStruct struct {
 	ID    int32  `orm:"column(id)"`
 	Phone string `orm:"column(phone)`
+}
+
+type MessageUpdateRequest struct {
+	ToUser               int32
+	IsPushFlagOld        int32
+	IsPushFlagNew        int32
+	ChengHuiTongTraceLog string
 }
 
 /**
@@ -114,4 +122,30 @@ func GetUserInfo(mr *MessageRequest) (*UserInfoStruct, error) {
 
 	Logger.Debugf("GetUserInfo res %v", uis)
 	return &uis, nil
+}
+
+/*更新站内信信息*/
+func UpdateMessage(mur *MessageUpdateRequest) bool {
+	Logger.Debugf("UpdateMessage input param:%v", mur)
+	o := orm.NewOrm()
+	o.Using("default")
+	qb, _ := orm.NewQueryBuilder("mysql")
+	qb.Update("jl_message").
+		Set(fmt.Sprintf("is_push_flag=%d", mur.IsPushFlagNew)).
+		Where(fmt.Sprintf("is_push_flag=%d", mur.IsPushFlagOld)).
+		And(fmt.Sprintf("to_user=%d", mur.ToUser))
+
+	sql := qb.String()
+	Logger.Debugf("UpdateMessage sql:%v", mur)
+	res, err := o.Raw(sql).Exec()
+	if err != nil {
+		Logger.Errorf("UpdateMessage failed:%v", err)
+		return false
+	}
+
+	num, _ := res.RowsAffected()
+	if num == 0 {
+		return false
+	}
+	return true
 }

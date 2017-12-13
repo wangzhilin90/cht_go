@@ -27,6 +27,9 @@ const (
 
 	QUERY_USER_INFO_SUCCESS = 1000
 	QUERY_USER_INFO_FAILED  = 1003
+
+	UPDATE_MES_SUCCESS = 1000
+	UPDATE_MES_FAILED  = 1001
 )
 
 var MesInfoStatus = map[int]string{
@@ -42,6 +45,11 @@ var MesCountStatus = map[int]string{
 var UserInfoStatus = map[int]string{
 	QUERY_USER_INFO_SUCCESS: "查询用户信息成功",
 	QUERY_USER_INFO_FAILED:  "查询用户信息失败",
+}
+
+var Update_Stat = map[int]string{
+	UPDATE_MES_SUCCESS: "更新站内信信息成功",
+	UPDATE_MES_FAILED:  "更新站内信信息失败",
 }
 
 /*获取短信详情*/
@@ -129,6 +137,28 @@ func (ms *messageservice) GetUserDetials(requestObj *MessageRequestStruct) (r *U
 	uirs.Msg = UserInfoStatus[QUERY_USER_INFO_SUCCESS]
 	uirs.UserDetails = uis
 	return uirs, nil
+}
+
+func (ms *messageservice) UpdateMessage(requestObj *MessageUpdateRequestStruct) (r *MessageUpdateResponseStruct, err error) {
+	mur := new(message.MessageUpdateRequest)
+	mur.ToUser = requestObj.GetToUser()
+	mur.IsPushFlagOld = requestObj.GetIsPushFlagOld()
+	mur.IsPushFlagNew = requestObj.GetIsPushFlagNew()
+	mur.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
+
+	b := message.UpdateMessage(mur)
+	if b == false {
+		Logger.Errorf("UpdateMessage failed")
+		return &MessageUpdateResponseStruct{
+			Status: UPDATE_MES_FAILED,
+			Msg:    Update_Stat[UPDATE_MES_FAILED],
+		}, nil
+	}
+
+	return &MessageUpdateResponseStruct{
+		Status: UPDATE_MES_SUCCESS,
+		Msg:    Update_Stat[UPDATE_MES_SUCCESS],
+	}, nil
 }
 
 /**

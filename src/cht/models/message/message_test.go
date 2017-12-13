@@ -14,6 +14,14 @@ func NewMessageRequest(smsid int32, phone string, addtime string, mesType int32)
 	}
 }
 
+func NewMessageUpdateRequest(toUser, oldValue, newValue int32) *MessageUpdateRequest {
+	return &MessageUpdateRequest{
+		ToUser:        toUser,
+		IsPushFlagOld: oldValue,
+		IsPushFlagNew: newValue,
+	}
+}
+
 func TestGetMessageInfo(t *testing.T) {
 	mr := NewMessageRequest(2332084, "13066008147", "1497542521", 0)
 	res, err := GetMessageInfo(mr)
@@ -39,4 +47,12 @@ func TestGetUserInfo(t *testing.T) {
 		t.Fatalf("TestGetUserInfo failed %v", err)
 	}
 	t.Log("TestGetUserInfo res %v", res)
+}
+
+func TestUpdateMessage(t *testing.T) {
+	mur := NewMessageUpdateRequest(9738, 1, 2)
+	b := UpdateMessage(mur)
+	if b == false {
+		t.Fatalf("TestUpdateMessage failed")
+	}
 }

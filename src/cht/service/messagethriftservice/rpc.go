@@ -29,7 +29,7 @@ type MessageRequestStruct struct {
 }
 
 // func NewMessageRequestStruct() *MessageRequestStruct {
-//   return &MessageRequestStruct{}
+// 	return &MessageRequestStruct{}
 // }
 
 func (p *MessageRequestStruct) GetSmsid() int32 {
@@ -273,9 +273,9 @@ type MessageDetailsStruct struct {
 	Status     int32  `thrift:"status,11" db:"status" json:"status"`
 }
 
-// func NewMessageDetailsStruct() *MessageDetailsStruct {
-//   return &MessageDetailsStruct{}
-// }
+func NewMessageDetailsStruct() *MessageDetailsStruct {
+	return &MessageDetailsStruct{}
+}
 
 func (p *MessageDetailsStruct) GetID() int32 {
 	return p.ID
@@ -1323,6 +1323,336 @@ func (p *UserDetailsResponseStruct) String() string {
 	return fmt.Sprintf("UserDetailsResponseStruct(%+v)", *p)
 }
 
+// Attributes:
+//  - ToUser
+//  - IsPushFlagOld
+//  - IsPushFlagNew
+//  - ChengHuiTongTraceLog
+type MessageUpdateRequestStruct struct {
+	ToUser               int32  `thrift:"to_user,1" db:"to_user" json:"to_user"`
+	IsPushFlagOld        int32  `thrift:"is_push_flag_old,2" db:"is_push_flag_old" json:"is_push_flag_old"`
+	IsPushFlagNew        int32  `thrift:"is_push_flag_new,3" db:"is_push_flag_new" json:"is_push_flag_new"`
+	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,4" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
+}
+
+// func NewMessageUpdateRequestStruct() *MessageUpdateRequestStruct {
+// 	return &MessageUpdateRequestStruct{
+// 		IsPushFlagOld: -1,
+
+// 		IsPushFlagNew: -1,
+// 	}
+// }
+
+func (p *MessageUpdateRequestStruct) GetToUser() int32 {
+	return p.ToUser
+}
+
+func (p *MessageUpdateRequestStruct) GetIsPushFlagOld() int32 {
+	return p.IsPushFlagOld
+}
+
+func (p *MessageUpdateRequestStruct) GetIsPushFlagNew() int32 {
+	return p.IsPushFlagNew
+}
+
+func (p *MessageUpdateRequestStruct) GetChengHuiTongTraceLog() string {
+	return p.ChengHuiTongTraceLog
+}
+func (p *MessageUpdateRequestStruct) Read(iprot thrift.TProtocol) error {
+	if _, err := iprot.ReadStructBegin(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
+		if err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+		switch fieldId {
+		case 1:
+			if err := p.ReadField1(iprot); err != nil {
+				return err
+			}
+		case 2:
+			if err := p.ReadField2(iprot); err != nil {
+				return err
+			}
+		case 3:
+			if err := p.ReadField3(iprot); err != nil {
+				return err
+			}
+		case 4:
+			if err := p.ReadField4(iprot); err != nil {
+				return err
+			}
+		default:
+			if err := iprot.Skip(fieldTypeId); err != nil {
+				return err
+			}
+		}
+		if err := iprot.ReadFieldEnd(); err != nil {
+			return err
+		}
+	}
+	if err := iprot.ReadStructEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+	}
+	return nil
+}
+
+func (p *MessageUpdateRequestStruct) ReadField1(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadI32(); err != nil {
+		return thrift.PrependError("error reading field 1: ", err)
+	} else {
+		p.ToUser = v
+	}
+	return nil
+}
+
+func (p *MessageUpdateRequestStruct) ReadField2(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadI32(); err != nil {
+		return thrift.PrependError("error reading field 2: ", err)
+	} else {
+		p.IsPushFlagOld = v
+	}
+	return nil
+}
+
+func (p *MessageUpdateRequestStruct) ReadField3(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadI32(); err != nil {
+		return thrift.PrependError("error reading field 3: ", err)
+	} else {
+		p.IsPushFlagNew = v
+	}
+	return nil
+}
+
+func (p *MessageUpdateRequestStruct) ReadField4(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 4: ", err)
+	} else {
+		p.ChengHuiTongTraceLog = v
+	}
+	return nil
+}
+
+func (p *MessageUpdateRequestStruct) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("MessageUpdateRequestStruct"); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+	}
+	if p != nil {
+		if err := p.writeField1(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField2(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField3(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField4(oprot); err != nil {
+			return err
+		}
+	}
+	if err := oprot.WriteFieldStop(); err != nil {
+		return thrift.PrependError("write field stop error: ", err)
+	}
+	if err := oprot.WriteStructEnd(); err != nil {
+		return thrift.PrependError("write struct stop error: ", err)
+	}
+	return nil
+}
+
+func (p *MessageUpdateRequestStruct) writeField1(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("to_user", thrift.I32, 1); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:to_user: ", p), err)
+	}
+	if err := oprot.WriteI32(int32(p.ToUser)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.to_user (1) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 1:to_user: ", p), err)
+	}
+	return err
+}
+
+func (p *MessageUpdateRequestStruct) writeField2(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("is_push_flag_old", thrift.I32, 2); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:is_push_flag_old: ", p), err)
+	}
+	if err := oprot.WriteI32(int32(p.IsPushFlagOld)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.is_push_flag_old (2) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:is_push_flag_old: ", p), err)
+	}
+	return err
+}
+
+func (p *MessageUpdateRequestStruct) writeField3(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("is_push_flag_new", thrift.I32, 3); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:is_push_flag_new: ", p), err)
+	}
+	if err := oprot.WriteI32(int32(p.IsPushFlagNew)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.is_push_flag_new (3) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:is_push_flag_new: ", p), err)
+	}
+	return err
+}
+
+func (p *MessageUpdateRequestStruct) writeField4(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("chengHuiTongTraceLog", thrift.STRING, 4); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 4:chengHuiTongTraceLog: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.ChengHuiTongTraceLog)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.chengHuiTongTraceLog (4) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 4:chengHuiTongTraceLog: ", p), err)
+	}
+	return err
+}
+
+func (p *MessageUpdateRequestStruct) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("MessageUpdateRequestStruct(%+v)", *p)
+}
+
+// Attributes:
+//  - Status
+//  - Msg
+type MessageUpdateResponseStruct struct {
+	Status int32  `thrift:"status,1" db:"status" json:"status"`
+	Msg    string `thrift:"msg,2" db:"msg" json:"msg"`
+}
+
+func NewMessageUpdateResponseStruct() *MessageUpdateResponseStruct {
+	return &MessageUpdateResponseStruct{}
+}
+
+func (p *MessageUpdateResponseStruct) GetStatus() int32 {
+	return p.Status
+}
+
+func (p *MessageUpdateResponseStruct) GetMsg() string {
+	return p.Msg
+}
+func (p *MessageUpdateResponseStruct) Read(iprot thrift.TProtocol) error {
+	if _, err := iprot.ReadStructBegin(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
+		if err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+		switch fieldId {
+		case 1:
+			if err := p.ReadField1(iprot); err != nil {
+				return err
+			}
+		case 2:
+			if err := p.ReadField2(iprot); err != nil {
+				return err
+			}
+		default:
+			if err := iprot.Skip(fieldTypeId); err != nil {
+				return err
+			}
+		}
+		if err := iprot.ReadFieldEnd(); err != nil {
+			return err
+		}
+	}
+	if err := iprot.ReadStructEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+	}
+	return nil
+}
+
+func (p *MessageUpdateResponseStruct) ReadField1(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadI32(); err != nil {
+		return thrift.PrependError("error reading field 1: ", err)
+	} else {
+		p.Status = v
+	}
+	return nil
+}
+
+func (p *MessageUpdateResponseStruct) ReadField2(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 2: ", err)
+	} else {
+		p.Msg = v
+	}
+	return nil
+}
+
+func (p *MessageUpdateResponseStruct) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("MessageUpdateResponseStruct"); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+	}
+	if p != nil {
+		if err := p.writeField1(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField2(oprot); err != nil {
+			return err
+		}
+	}
+	if err := oprot.WriteFieldStop(); err != nil {
+		return thrift.PrependError("write field stop error: ", err)
+	}
+	if err := oprot.WriteStructEnd(); err != nil {
+		return thrift.PrependError("write struct stop error: ", err)
+	}
+	return nil
+}
+
+func (p *MessageUpdateResponseStruct) writeField1(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("status", thrift.I32, 1); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:status: ", p), err)
+	}
+	if err := oprot.WriteI32(int32(p.Status)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.status (1) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 1:status: ", p), err)
+	}
+	return err
+}
+
+func (p *MessageUpdateResponseStruct) writeField2(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("msg", thrift.STRING, 2); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:msg: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.Msg)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.msg (2) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:msg: ", p), err)
+	}
+	return err
+}
+
+func (p *MessageUpdateResponseStruct) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("MessageUpdateResponseStruct(%+v)", *p)
+}
+
 type MessageThriftService interface {
 	// Parameters:
 	//  - RequestObj
@@ -1333,6 +1663,9 @@ type MessageThriftService interface {
 	// Parameters:
 	//  - RequestObj
 	GetUserDetials(requestObj *MessageRequestStruct) (r *UserDetailsResponseStruct, err error)
+	// Parameters:
+	//  - RequestObj
+	UpdateMessage(requestObj *MessageUpdateRequestStruct) (r *MessageUpdateResponseStruct, err error)
 }
 
 type MessageThriftServiceClient struct {
@@ -1592,6 +1925,83 @@ func (p *MessageThriftServiceClient) recvGetUserDetials() (value *UserDetailsRes
 	return
 }
 
+// Parameters:
+//  - RequestObj
+func (p *MessageThriftServiceClient) UpdateMessage(requestObj *MessageUpdateRequestStruct) (r *MessageUpdateResponseStruct, err error) {
+	if err = p.sendUpdateMessage(requestObj); err != nil {
+		return
+	}
+	return p.recvUpdateMessage()
+}
+
+func (p *MessageThriftServiceClient) sendUpdateMessage(requestObj *MessageUpdateRequestStruct) (err error) {
+	oprot := p.OutputProtocol
+	if oprot == nil {
+		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
+		p.OutputProtocol = oprot
+	}
+	p.SeqId++
+	if err = oprot.WriteMessageBegin("updateMessage", thrift.CALL, p.SeqId); err != nil {
+		return
+	}
+	args := MessageThriftServiceUpdateMessageArgs{
+		RequestObj: requestObj,
+	}
+	if err = args.Write(oprot); err != nil {
+		return
+	}
+	if err = oprot.WriteMessageEnd(); err != nil {
+		return
+	}
+	return oprot.Flush()
+}
+
+func (p *MessageThriftServiceClient) recvUpdateMessage() (value *MessageUpdateResponseStruct, err error) {
+	iprot := p.InputProtocol
+	if iprot == nil {
+		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
+		p.InputProtocol = iprot
+	}
+	method, mTypeId, seqId, err := iprot.ReadMessageBegin()
+	if err != nil {
+		return
+	}
+	if method != "updateMessage" {
+		err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "updateMessage failed: wrong method name")
+		return
+	}
+	if p.SeqId != seqId {
+		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "updateMessage failed: out of sequence response")
+		return
+	}
+	if mTypeId == thrift.EXCEPTION {
+		error6 := thrift.NewTApplicationException(thrift.UNKNOWN_APPLICATION_EXCEPTION, "Unknown Exception")
+		var error7 error
+		error7, err = error6.Read(iprot)
+		if err != nil {
+			return
+		}
+		if err = iprot.ReadMessageEnd(); err != nil {
+			return
+		}
+		err = error7
+		return
+	}
+	if mTypeId != thrift.REPLY {
+		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "updateMessage failed: invalid message type")
+		return
+	}
+	result := MessageThriftServiceUpdateMessageResult{}
+	if err = result.Read(iprot); err != nil {
+		return
+	}
+	if err = iprot.ReadMessageEnd(); err != nil {
+		return
+	}
+	value = result.GetSuccess()
+	return
+}
+
 type MessageThriftServiceProcessor struct {
 	processorMap map[string]thrift.TProcessorFunction
 	handler      MessageThriftService
@@ -1612,11 +2022,12 @@ func (p *MessageThriftServiceProcessor) ProcessorMap() map[string]thrift.TProces
 
 func NewMessageThriftServiceProcessor(handler MessageThriftService) *MessageThriftServiceProcessor {
 
-	self6 := &MessageThriftServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
-	self6.processorMap["getMessageDetails"] = &messageThriftServiceProcessorGetMessageDetails{handler: handler}
-	self6.processorMap["getMessageCount"] = &messageThriftServiceProcessorGetMessageCount{handler: handler}
-	self6.processorMap["getUserDetials"] = &messageThriftServiceProcessorGetUserDetials{handler: handler}
-	return self6
+	self8 := &MessageThriftServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
+	self8.processorMap["getMessageDetails"] = &messageThriftServiceProcessorGetMessageDetails{handler: handler}
+	self8.processorMap["getMessageCount"] = &messageThriftServiceProcessorGetMessageCount{handler: handler}
+	self8.processorMap["getUserDetials"] = &messageThriftServiceProcessorGetUserDetials{handler: handler}
+	self8.processorMap["updateMessage"] = &messageThriftServiceProcessorUpdateMessage{handler: handler}
+	return self8
 }
 
 func (p *MessageThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
@@ -1629,12 +2040,12 @@ func (p *MessageThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol) (
 	}
 	iprot.Skip(thrift.STRUCT)
 	iprot.ReadMessageEnd()
-	x7 := thrift.NewTApplicationException(thrift.UNKNOWN_METHOD, "Unknown function "+name)
+	x9 := thrift.NewTApplicationException(thrift.UNKNOWN_METHOD, "Unknown function "+name)
 	oprot.WriteMessageBegin(name, thrift.EXCEPTION, seqId)
-	x7.Write(oprot)
+	x9.Write(oprot)
 	oprot.WriteMessageEnd()
 	oprot.Flush()
-	return false, x7
+	return false, x9
 
 }
 
@@ -1765,6 +2176,54 @@ func (p *messageThriftServiceProcessorGetUserDetials) Process(seqId int32, iprot
 		result.Success = retval
 	}
 	if err2 = oprot.WriteMessageBegin("getUserDetials", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type messageThriftServiceProcessorUpdateMessage struct {
+	handler MessageThriftService
+}
+
+func (p *messageThriftServiceProcessorUpdateMessage) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := MessageThriftServiceUpdateMessageArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("updateMessage", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush()
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	result := MessageThriftServiceUpdateMessageResult{}
+	var retval *MessageUpdateResponseStruct
+	var err2 error
+	if retval, err2 = p.handler.UpdateMessage(args.RequestObj); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing updateMessage: "+err2.Error())
+		oprot.WriteMessageBegin("updateMessage", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush()
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("updateMessage", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -2394,4 +2853,212 @@ func (p *MessageThriftServiceGetUserDetialsResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("MessageThriftServiceGetUserDetialsResult(%+v)", *p)
+}
+
+// Attributes:
+//  - RequestObj
+type MessageThriftServiceUpdateMessageArgs struct {
+	RequestObj *MessageUpdateRequestStruct `thrift:"requestObj,1" db:"requestObj" json:"requestObj"`
+}
+
+func NewMessageThriftServiceUpdateMessageArgs() *MessageThriftServiceUpdateMessageArgs {
+	return &MessageThriftServiceUpdateMessageArgs{}
+}
+
+var MessageThriftServiceUpdateMessageArgs_RequestObj_DEFAULT *MessageUpdateRequestStruct
+
+func (p *MessageThriftServiceUpdateMessageArgs) GetRequestObj() *MessageUpdateRequestStruct {
+	if !p.IsSetRequestObj() {
+		return MessageThriftServiceUpdateMessageArgs_RequestObj_DEFAULT
+	}
+	return p.RequestObj
+}
+func (p *MessageThriftServiceUpdateMessageArgs) IsSetRequestObj() bool {
+	return p.RequestObj != nil
+}
+
+func (p *MessageThriftServiceUpdateMessageArgs) Read(iprot thrift.TProtocol) error {
+	if _, err := iprot.ReadStructBegin(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
+		if err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+		switch fieldId {
+		case 1:
+			if err := p.ReadField1(iprot); err != nil {
+				return err
+			}
+		default:
+			if err := iprot.Skip(fieldTypeId); err != nil {
+				return err
+			}
+		}
+		if err := iprot.ReadFieldEnd(); err != nil {
+			return err
+		}
+	}
+	if err := iprot.ReadStructEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+	}
+	return nil
+}
+
+func (p *MessageThriftServiceUpdateMessageArgs) ReadField1(iprot thrift.TProtocol) error {
+	p.RequestObj = &MessageUpdateRequestStruct{
+		IsPushFlagOld: -1,
+
+		IsPushFlagNew: -1,
+	}
+	if err := p.RequestObj.Read(iprot); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.RequestObj), err)
+	}
+	return nil
+}
+
+func (p *MessageThriftServiceUpdateMessageArgs) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("updateMessage_args"); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+	}
+	if p != nil {
+		if err := p.writeField1(oprot); err != nil {
+			return err
+		}
+	}
+	if err := oprot.WriteFieldStop(); err != nil {
+		return thrift.PrependError("write field stop error: ", err)
+	}
+	if err := oprot.WriteStructEnd(); err != nil {
+		return thrift.PrependError("write struct stop error: ", err)
+	}
+	return nil
+}
+
+func (p *MessageThriftServiceUpdateMessageArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("requestObj", thrift.STRUCT, 1); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:requestObj: ", p), err)
+	}
+	if err := p.RequestObj.Write(oprot); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", p.RequestObj), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 1:requestObj: ", p), err)
+	}
+	return err
+}
+
+func (p *MessageThriftServiceUpdateMessageArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("MessageThriftServiceUpdateMessageArgs(%+v)", *p)
+}
+
+// Attributes:
+//  - Success
+type MessageThriftServiceUpdateMessageResult struct {
+	Success *MessageUpdateResponseStruct `thrift:"success,0" db:"success" json:"success,omitempty"`
+}
+
+func NewMessageThriftServiceUpdateMessageResult() *MessageThriftServiceUpdateMessageResult {
+	return &MessageThriftServiceUpdateMessageResult{}
+}
+
+var MessageThriftServiceUpdateMessageResult_Success_DEFAULT *MessageUpdateResponseStruct
+
+func (p *MessageThriftServiceUpdateMessageResult) GetSuccess() *MessageUpdateResponseStruct {
+	if !p.IsSetSuccess() {
+		return MessageThriftServiceUpdateMessageResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *MessageThriftServiceUpdateMessageResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *MessageThriftServiceUpdateMessageResult) Read(iprot thrift.TProtocol) error {
+	if _, err := iprot.ReadStructBegin(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
+		if err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+		switch fieldId {
+		case 0:
+			if err := p.ReadField0(iprot); err != nil {
+				return err
+			}
+		default:
+			if err := iprot.Skip(fieldTypeId); err != nil {
+				return err
+			}
+		}
+		if err := iprot.ReadFieldEnd(); err != nil {
+			return err
+		}
+	}
+	if err := iprot.ReadStructEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+	}
+	return nil
+}
+
+func (p *MessageThriftServiceUpdateMessageResult) ReadField0(iprot thrift.TProtocol) error {
+	p.Success = &MessageUpdateResponseStruct{}
+	if err := p.Success.Read(iprot); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Success), err)
+	}
+	return nil
+}
+
+func (p *MessageThriftServiceUpdateMessageResult) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("updateMessage_result"); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+	}
+	if p != nil {
+		if err := p.writeField0(oprot); err != nil {
+			return err
+		}
+	}
+	if err := oprot.WriteFieldStop(); err != nil {
+		return thrift.PrependError("write field stop error: ", err)
+	}
+	if err := oprot.WriteStructEnd(); err != nil {
+		return thrift.PrependError("write struct stop error: ", err)
+	}
+	return nil
+}
+
+func (p *MessageThriftServiceUpdateMessageResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err := oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T write field begin error 0:success: ", p), err)
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", p.Success), err)
+		}
+		if err := oprot.WriteFieldEnd(); err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T write field end error 0:success: ", p), err)
+		}
+	}
+	return err
+}
+
+func (p *MessageThriftServiceUpdateMessageResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("MessageThriftServiceUpdateMessageResult(%+v)", *p)
 }

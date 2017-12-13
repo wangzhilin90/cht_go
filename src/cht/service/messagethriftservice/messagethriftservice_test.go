@@ -14,6 +14,14 @@ func NewMessageRequestStruct(smsid int32, phone string, addtime string, mesType 
 	}
 }
 
+func NewMessageUpdateRequestStruct(toUser, oldValue, newValue int32) *MessageUpdateRequestStruct {
+	return &MessageUpdateRequestStruct{
+		ToUser:        toUser,
+		IsPushFlagOld: oldValue,
+		IsPushFlagNew: newValue,
+	}
+}
+
 func TestGetMessageDetails(t *testing.T) {
 	mirs := NewMessageRequestStruct(2332084, "13066008147", "1497542521", 0)
 	ms := &messageservice{}
@@ -42,4 +50,13 @@ func TestGetUserDetials(t *testing.T) {
 		t.Fatalf("TestGetUserInfo failed %v", err)
 	}
 	t.Log("TestGetUserInfo res %v", res)
+}
+
+func TestUpdateMessage(t *testing.T) {
+	mur := NewMessageUpdateRequestStruct(9738, 2, 1)
+	ms := &messageservice{}
+	res, _ := ms.UpdateMessage(mur)
+	if res.Status != UPDATE_MES_SUCCESS {
+		t.Fatalf("TestUpdateMessage failed")
+	}
 }

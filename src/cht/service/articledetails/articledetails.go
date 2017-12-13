@@ -43,6 +43,7 @@ type articledetailsservice struct{}
 func (ads *articledetailsservice) GetArticleDetails(requestObj *ArticleDetailsRequestStruct) (r *ArticleDetailsResultStruct, err error) {
 	adrs := new(articledetails.ArticleDetailsRequestStruct)
 	adrs.ID = requestObj.GetID()
+	adrs.Status = requestObj.GetStatus()
 	adrs.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	res, err := articledetails.GetArticleDetails(adrs)
 	if err != nil {

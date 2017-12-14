@@ -30,6 +30,9 @@ func (cs *collectionservice) GetUserCollectionList(requestObj *UserCollectionLis
 	cr.LimitOffset = requestObj.GetLimitOffset()
 	cr.LimitNum = requestObj.GetLimitNum()
 	cr.Borrowid = requestObj.GetBorrowid()
+	cr.CheckZhuanrangren = requestObj.GetCheckZhuanrangren()
+	cr.TenderID = requestObj.GetTenderID()
+	cr.CheckOldUserID = requestObj.GetCheckOldUserID()
 	cr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 
 	res, num, err := collection.GetCollectionInfo(cr)

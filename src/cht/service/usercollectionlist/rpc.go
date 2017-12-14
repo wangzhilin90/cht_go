@@ -24,6 +24,8 @@ var _ = bytes.Equal
 //  - LimitNum
 //  - Borrowid
 //  - CheckZhuanrangren
+//  - TenderID
+//  - CheckOldUserID
 //  - ChengHuiTongTraceLog
 type UserCollectionListRequestStruct struct {
 	UserID               int32  `thrift:"user_id,1" db:"user_id" json:"user_id"`
@@ -35,7 +37,9 @@ type UserCollectionListRequestStruct struct {
 	LimitNum             int32  `thrift:"limitNum,7" db:"limitNum" json:"limitNum"`
 	Borrowid             string `thrift:"borrowid,8" db:"borrowid" json:"borrowid"`
 	CheckZhuanrangren    int32  `thrift:"check_zhuanrangren,9" db:"check_zhuanrangren" json:"check_zhuanrangren"`
-	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,10" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
+	TenderID             int32  `thrift:"tender_id,10" db:"tender_id" json:"tender_id"`
+	CheckOldUserID       int32  `thrift:"check_old_user_id,11" db:"check_old_user_id" json:"check_old_user_id"`
+	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,12" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
 }
 
 func NewUserCollectionListRequestStruct() *UserCollectionListRequestStruct {
@@ -76,6 +80,14 @@ func (p *UserCollectionListRequestStruct) GetBorrowid() string {
 
 func (p *UserCollectionListRequestStruct) GetCheckZhuanrangren() int32 {
 	return p.CheckZhuanrangren
+}
+
+func (p *UserCollectionListRequestStruct) GetTenderID() int32 {
+	return p.TenderID
+}
+
+func (p *UserCollectionListRequestStruct) GetCheckOldUserID() int32 {
+	return p.CheckOldUserID
 }
 
 func (p *UserCollectionListRequestStruct) GetChengHuiTongTraceLog() string {
@@ -133,6 +145,14 @@ func (p *UserCollectionListRequestStruct) Read(iprot thrift.TProtocol) error {
 			}
 		case 10:
 			if err := p.ReadField10(iprot); err != nil {
+				return err
+			}
+		case 11:
+			if err := p.ReadField11(iprot); err != nil {
+				return err
+			}
+		case 12:
+			if err := p.ReadField12(iprot); err != nil {
 				return err
 			}
 		default:
@@ -232,8 +252,26 @@ func (p *UserCollectionListRequestStruct) ReadField9(iprot thrift.TProtocol) err
 }
 
 func (p *UserCollectionListRequestStruct) ReadField10(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI32(); err != nil {
 		return thrift.PrependError("error reading field 10: ", err)
+	} else {
+		p.TenderID = v
+	}
+	return nil
+}
+
+func (p *UserCollectionListRequestStruct) ReadField11(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadI32(); err != nil {
+		return thrift.PrependError("error reading field 11: ", err)
+	} else {
+		p.CheckOldUserID = v
+	}
+	return nil
+}
+
+func (p *UserCollectionListRequestStruct) ReadField12(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 12: ", err)
 	} else {
 		p.ChengHuiTongTraceLog = v
 	}
@@ -273,6 +311,12 @@ func (p *UserCollectionListRequestStruct) Write(oprot thrift.TProtocol) error {
 			return err
 		}
 		if err := p.writeField10(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField11(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField12(oprot); err != nil {
 			return err
 		}
 	}
@@ -403,14 +447,40 @@ func (p *UserCollectionListRequestStruct) writeField9(oprot thrift.TProtocol) (e
 }
 
 func (p *UserCollectionListRequestStruct) writeField10(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("chengHuiTongTraceLog", thrift.STRING, 10); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 10:chengHuiTongTraceLog: ", p), err)
+	if err := oprot.WriteFieldBegin("tender_id", thrift.I32, 10); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 10:tender_id: ", p), err)
 	}
-	if err := oprot.WriteString(string(p.ChengHuiTongTraceLog)); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.chengHuiTongTraceLog (10) field write error: ", p), err)
+	if err := oprot.WriteI32(int32(p.TenderID)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.tender_id (10) field write error: ", p), err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 10:chengHuiTongTraceLog: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 10:tender_id: ", p), err)
+	}
+	return err
+}
+
+func (p *UserCollectionListRequestStruct) writeField11(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("check_old_user_id", thrift.I32, 11); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 11:check_old_user_id: ", p), err)
+	}
+	if err := oprot.WriteI32(int32(p.CheckOldUserID)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.check_old_user_id (11) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 11:check_old_user_id: ", p), err)
+	}
+	return err
+}
+
+func (p *UserCollectionListRequestStruct) writeField12(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("chengHuiTongTraceLog", thrift.STRING, 12); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 12:chengHuiTongTraceLog: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.ChengHuiTongTraceLog)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.chengHuiTongTraceLog (12) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 12:chengHuiTongTraceLog: ", p), err)
 	}
 	return err
 }

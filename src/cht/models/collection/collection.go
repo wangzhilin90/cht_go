@@ -16,7 +16,7 @@ const (
 	TWO_MONTH_QUANTUM = int64(24 * 3600 * 60)
 )
 
-type CollectionRequest struct {
+type UserCollectionListRequest struct {
 	UserID               int32
 	Starttime            int32
 	Endtime              int32
@@ -26,6 +26,8 @@ type CollectionRequest struct {
 	LimitNum             int32
 	Borrowid             string
 	CheckZhuanrangren    int32
+	TenderID             int32
+	CheckOldUserID       int32
 	ChengHuiTongTraceLog string
 }
 
@@ -58,7 +60,7 @@ type CollectionInfoStruct struct {
  * @return   int32 返回没有limit的查询总数
  * @DateTime 2017-09-08T11:37:23+0800
  */
-func GetCollectionInfo(trr *CollectionRequest) ([]CollectionInfoStruct, int32, error) {
+func GetCollectionInfo(trr *UserCollectionListRequest) ([]CollectionInfoStruct, int32, error) {
 	Logger.Debugf("GetCollectionInfo input param: %v", trr)
 	o := orm.NewOrm()
 	o.Using("default")
@@ -69,6 +71,22 @@ func GetCollectionInfo(trr *CollectionRequest) ([]CollectionInfoStruct, int32, e
 		LeftJoin("jl_user U").On("B.user_id=U.id").
 		LeftJoin("jl_borrow_tender BT").On("BC.tender_id=BT.id").
 		Where(fmt.Sprintf("BC.user_id=%d", trr.UserID))
+
+	if trr.Borrowid != "" {
+		qb.And(fmt.Sprintf("BC.borrow_id=%s", strings.TrimPrefix(trr.Borrowid, "CHT")))
+	}
+
+	if trr.CheckZhuanrangren > 0 {
+		qb.And(fmt.Sprintf("B.zhuanrangren<>''"))
+	}
+
+	if trr.TenderID != 0 {
+		qb.And(fmt.Sprintf("BC.tender_id=%d", trr.TenderID))
+	}
+
+	if trr.CheckOldUserID > 0 {
+		qb.And(fmt.Sprintf("BC.old_user_id>0"))
+	}
 
 	//0：查全部,1:近7天，2:1个月，3:2个月
 	switch {
@@ -109,23 +127,13 @@ func GetCollectionInfo(trr *CollectionRequest) ([]CollectionInfoStruct, int32, e
 		qb.OrderBy("BC.status ASC,BC.repay_time ASC,BC.id ASC")
 	}
 
-	if trr.Borrowid != "" {
-		Logger.Debugf("GetCollectionInfo Borrowid:", trr.Borrowid)
-		Logger.Debugf("GetCollectionInfo TrimPrefix Borrowid:", strings.TrimPrefix(trr.Borrowid, "CHT"))
-		qb.And(fmt.Sprintf("BC.borrow_id=%s", strings.TrimPrefix(trr.Borrowid, "CHT")))
-	}
-
-	if trr.CheckZhuanrangren > 0 {
-		qb.And(fmt.Sprintf("B.zhuanrangren<>''"))
-	}
-
 	sql := qb.String()
 	Logger.Debugf("GetCollectionInfo origin sql:", sql)
 
 	var cis1 []CollectionInfoStruct
 	totalnum, err := o.Raw(sql).QueryRows(&cis1)
 	if err != nil {
-		Logger.Debug("GetCollectionInfo query failed:", err)
+		Logger.Error("GetCollectionInfo query failed:", err)
 		return nil, 0, err
 	}
 	/*得到总的查询数*/
@@ -144,7 +152,7 @@ func GetCollectionInfo(trr *CollectionRequest) ([]CollectionInfoStruct, int32, e
 	var cis []CollectionInfoStruct
 	_, err = o.Raw(sql).QueryRows(&cis)
 	if err != nil {
-		Logger.Debug("GetCollectionInfo queryrows failed")
+		Logger.Error("GetCollectionInfo queryrows failed")
 		return nil, 0, err
 	}
 	Logger.Debugf("GetCollectionInfo res:%v %d", cis, totalnum)

@@ -12,7 +12,9 @@ struct UserCollectionListRequestStruct {
 	7:i32 limitNum,//每页现实多长时间
 	8:string borrowid,//项目编号
 	9:i32 check_zhuanrangren,//检查转让人
-	10:string chengHuiTongTraceLog
+    10:i32 tender_id,//投标记录id
+    11:i32 check_old_user_id,//check_old_user_id > 0 => old_user_id > 0
+	12:string chengHuiTongTraceLog
 }
 
 struct UserCollectionDetailsStruct {

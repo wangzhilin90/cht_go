@@ -25,6 +25,7 @@ struct ArticleDetailsStruct {
 	12:i32 isbanner,
 	13:i32 type,
 	14:string name,
+	15:i32 read_num
 }
 
 //文章内容返回结构体

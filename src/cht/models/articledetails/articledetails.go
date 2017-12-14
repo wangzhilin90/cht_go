@@ -29,6 +29,7 @@ type ArticleDetailsStruct struct {
 	Isbanner    int32  `orm:"column(isbanner)"`
 	Type        int32  `orm:"column(type)"`
 	Name        string `orm:"column(name)"`
+	ReadNum     int32  `orm:"column(read_num)"`
 }
 
 type NextRequestStruct struct {

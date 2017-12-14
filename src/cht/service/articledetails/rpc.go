@@ -194,6 +194,7 @@ func (p *ArticleDetailsRequestStruct) String() string {
 //  - Isbanner
 //  - Type
 //  - Name
+//  - ReadNum
 type ArticleDetailsStruct struct {
 	ID          int32  `thrift:"id,1" db:"id" json:"id"`
 	Cateid      int32  `thrift:"cateid,2" db:"cateid" json:"cateid"`
@@ -209,6 +210,7 @@ type ArticleDetailsStruct struct {
 	Isbanner    int32  `thrift:"isbanner,12" db:"isbanner" json:"isbanner"`
 	Type        int32  `thrift:"type,13" db:"type" json:"type"`
 	Name        string `thrift:"name,14" db:"name" json:"name"`
+	ReadNum     int32  `thrift:"read_num,15" db:"read_num" json:"read_num"`
 }
 
 func NewArticleDetailsStruct() *ArticleDetailsStruct {
@@ -269,6 +271,10 @@ func (p *ArticleDetailsStruct) GetType() int32 {
 
 func (p *ArticleDetailsStruct) GetName() string {
 	return p.Name
+}
+
+func (p *ArticleDetailsStruct) GetReadNum() int32 {
+	return p.ReadNum
 }
 func (p *ArticleDetailsStruct) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
@@ -338,6 +344,10 @@ func (p *ArticleDetailsStruct) Read(iprot thrift.TProtocol) error {
 			}
 		case 14:
 			if err := p.ReadField14(iprot); err != nil {
+				return err
+			}
+		case 15:
+			if err := p.ReadField15(iprot); err != nil {
 				return err
 			}
 		default:
@@ -481,6 +491,15 @@ func (p *ArticleDetailsStruct) ReadField14(iprot thrift.TProtocol) error {
 	return nil
 }
 
+func (p *ArticleDetailsStruct) ReadField15(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadI32(); err != nil {
+		return thrift.PrependError("error reading field 15: ", err)
+	} else {
+		p.ReadNum = v
+	}
+	return nil
+}
+
 func (p *ArticleDetailsStruct) Write(oprot thrift.TProtocol) error {
 	if err := oprot.WriteStructBegin("ArticleDetailsStruct"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
@@ -526,6 +545,9 @@ func (p *ArticleDetailsStruct) Write(oprot thrift.TProtocol) error {
 			return err
 		}
 		if err := p.writeField14(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField15(oprot); err != nil {
 			return err
 		}
 	}
@@ -716,6 +738,19 @@ func (p *ArticleDetailsStruct) writeField14(oprot thrift.TProtocol) (err error) 
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field end error 14:name: ", p), err)
+	}
+	return err
+}
+
+func (p *ArticleDetailsStruct) writeField15(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("read_num", thrift.I32, 15); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 15:read_num: ", p), err)
+	}
+	if err := oprot.WriteI32(int32(p.ReadNum)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.read_num (15) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 15:read_num: ", p), err)
 	}
 	return err
 }

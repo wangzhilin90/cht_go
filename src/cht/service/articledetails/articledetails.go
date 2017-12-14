@@ -69,6 +69,7 @@ func (ads *articledetailsservice) GetArticleDetails(requestObj *ArticleDetailsRe
 		adst.Isbanner = res.Isbanner
 		adst.Type = res.Type
 		adst.Name = res.Name
+		adst.ReadNum = res.ReadNum
 		response.ArticleDetails = adst
 	}
 	response.Status = QUERY_ARTICLE_DETAILS_SUCCESS
@@ -121,6 +122,7 @@ func (ads *articledetailsservice) PrevArticle(requestObj *NextRequestStruct) (r 
 		adst.Isbanner = res.Isbanner
 		adst.Type = res.Type
 		adst.Name = res.Name
+		adst.ReadNum = res.ReadNum
 		response.ArticleDetails = adst
 	}
 	response.Status = QUERY_PREV_ARTICLE_SUCCESS
@@ -135,6 +137,9 @@ func (ads *articledetailsservice) NextArticle(requestObj *NextRequestStruct) (r 
 	nrs.Cateid = requestObj.GetCateid()
 	nrs.Type = requestObj.GetType()
 	nrs.Addtime = requestObj.GetAddtime()
+	nrs.Sort = requestObj.GetSort()
+	nrs.Prefix = requestObj.GetPrefix()
+	nrs.IsApp = requestObj.GetIsApp()
 	nrs.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	res, err := articledetails.GetNextArticle(nrs)
 	if err != nil {
@@ -161,6 +166,7 @@ func (ads *articledetailsservice) NextArticle(requestObj *NextRequestStruct) (r 
 		adst.Isbanner = res.Isbanner
 		adst.Type = res.Type
 		adst.Name = res.Name
+		adst.ReadNum = res.ReadNum
 		response.ArticleDetails = adst
 	}
 	response.Status = QUERY_NEXT_ARTICLE_SUCCESS

@@ -69,6 +69,7 @@ import (
 	"cht/service/userrechargerecordlist"
 	"cht/service/usertendercoupondetails"
 	"cht/service/usertenderredbagdestails"
+	"cht/service/usertimes"
 	"cht/service/vipcustomerloglist"
 	"cht/service/vipmemberranklist"
 )
@@ -418,6 +419,11 @@ func main() {
 	go func() {
 		/*开启文章分类表服务*/
 		articlecate.StartArticleCateServer()
+	}()
+
+	go func() {
+		/*开启会员登陆次数限制表服务*/
+		usertimes.StartUserTimesServer()
 	}()
 
 	<-ch

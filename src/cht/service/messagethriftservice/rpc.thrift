@@ -48,8 +48,28 @@ struct UserDetailsResponseStruct {
 	3:UserDetailsStruct userDetails,
 }
 
+//更新站内信信息
+struct MessageUpdateRequestStruct {
+	1:i32 to_user ,//接收人id  where条件1
+	2:i32 is_push_flag_old=-1,//推送标识旧 where条件2
+	3:i32 is_push_flag_new=-1 ,//推送标识新,更新字段
+	4:string chengHuiTongTraceLog
+}
+
+//更新站内信信息
+struct MessageUpdateResponseStruct {
+    1:i32 status,
+    2:string msg
+}
+
 service MessageThriftService {
     MessageDetailsResponseStruct getMessageDetails(1:MessageRequestStruct requestObj)
-	MessageCountResponseStruct   getMessageCount(1:MessageRequestStruct requestObj)
-	UserDetailsResponseStruct    getUserDetials(1:MessageRequestStruct requestObj)
+	MessageCountResponseStruct   getMessageCount  (1:MessageRequestStruct requestObj)
+	UserDetailsResponseStruct    getUserDetials   (1:MessageRequestStruct requestObj)
+	MessageUpdateResponseStruct    updateMessage    (1:MessageUpdateRequestStruct requestObj)
 }
+
+//update jl_message set is_push_flag = $is_push_flag_new where is_push_flag = $is_push_flag_old and to_user = $user_id;
+
+
+

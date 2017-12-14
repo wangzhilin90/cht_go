@@ -40,34 +40,38 @@ var NextArticleStatus = map[int]string{
 
 type articledetailsservice struct{}
 
-func (ads *articledetailsservice) GetArticleDetails(requestObj *ArticleDetailsRequestStruct) (r *ArticleDetailsResultStruct, err error) {
+func (ads *articledetailsservice) GetArticleDetails(requestObj *ArticleDetailsRequestStruct) (r *ArticleDetailsResponseStruct, err error) {
 	adrs := new(articledetails.ArticleDetailsRequestStruct)
 	adrs.ID = requestObj.GetID()
 	adrs.Status = requestObj.GetStatus()
 	adrs.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	res, err := articledetails.GetArticleDetails(adrs)
 	if err != nil {
-		return &ArticleDetailsResultStruct{
-			ResultStatus: QUERY_ARTICLE_DETAILS_FAILED,
-			Msg:          ArticleStatus[QUERY_ARTICLE_DETAILS_FAILED],
+		return &ArticleDetailsResponseStruct{
+			Status: QUERY_ARTICLE_DETAILS_FAILED,
+			Msg:    ArticleStatus[QUERY_ARTICLE_DETAILS_FAILED],
 		}, nil
 	}
-	var response ArticleDetailsResultStruct
-	response.ID = res.ID
-	response.Cateid = res.Cateid
-	response.Title = res.Title
-	response.Content = res.Content
-	response.Keywords = res.Keywords
-	response.Description = res.Description
-	response.ImgURL = res.ImgURL
-	response.Sort = res.Sort
-	response.Status = res.Status
-	response.Addtime = res.Addtime
-	response.BannerURL = res.BannerURL
-	response.Isbanner = res.Isbanner
-	response.Type = res.Type
-	response.Name = res.Name
-	response.ResultStatus = QUERY_ARTICLE_DETAILS_SUCCESS
+	var response ArticleDetailsResponseStruct
+	if res != nil {
+		adst := new(ArticleDetailsStruct)
+		adst.ID = res.ID
+		adst.Cateid = res.Cateid
+		adst.Title = res.Title
+		adst.Content = res.Content
+		adst.Keywords = res.Keywords
+		adst.Description = res.Description
+		adst.ImgURL = res.ImgURL
+		adst.Sort = res.Sort
+		adst.Status = res.Status
+		adst.Addtime = res.Addtime
+		adst.BannerURL = res.BannerURL
+		adst.Isbanner = res.Isbanner
+		adst.Type = res.Type
+		adst.Name = res.Name
+		response.ArticleDetails = adst
+	}
+	response.Status = QUERY_ARTICLE_DETAILS_SUCCESS
 	response.Msg = ArticleStatus[QUERY_ARTICLE_DETAILS_SUCCESS]
 	Logger.Debugf("GetArticleDetails response:%v", response)
 	return &response, nil
@@ -82,43 +86,50 @@ func (ads *articledetailsservice) UpdateReadNum(requestObj *ArticleDetailsReques
 	return res, nil
 }
 
-func (ads *articledetailsservice) PrevArticle(requestObj *NextRequestStruct) (r *ArticleDetailsResultStruct, err error) {
+func (ads *articledetailsservice) PrevArticle(requestObj *NextRequestStruct) (r *ArticleDetailsResponseStruct, err error) {
 	nrs := new(articledetails.NextRequestStruct)
 	nrs.ID = requestObj.GetID()
 	nrs.Cateid = requestObj.GetCateid()
 	nrs.Type = requestObj.GetType()
 	nrs.Addtime = requestObj.GetAddtime()
+	nrs.Sort = requestObj.GetSort()
+	nrs.Prefix = requestObj.GetPrefix()
+	nrs.IsApp = requestObj.GetIsApp()
 	nrs.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	res, err := articledetails.GetPrevArticle(nrs)
 	if err != nil {
-		return &ArticleDetailsResultStruct{
-			ResultStatus: QUERY_PREV_ARTICLE_FAILED,
-			Msg:          PrevArticleStatus[QUERY_PREV_ARTICLE_FAILED],
+		return &ArticleDetailsResponseStruct{
+			Status: QUERY_PREV_ARTICLE_FAILED,
+			Msg:    PrevArticleStatus[QUERY_PREV_ARTICLE_FAILED],
 		}, nil
 	}
 
-	var response ArticleDetailsResultStruct
-	response.ID = res.ID
-	response.Cateid = res.Cateid
-	response.Title = res.Title
-	response.Content = res.Content
-	response.Keywords = res.Keywords
-	response.Description = res.Description
-	response.ImgURL = res.ImgURL
-	response.Sort = res.Sort
-	response.Status = res.Status
-	response.Addtime = res.Addtime
-	response.BannerURL = res.BannerURL
-	response.Isbanner = res.Isbanner
-	response.Type = res.Type
-	response.Name = res.Name
-	response.ResultStatus = QUERY_PREV_ARTICLE_SUCCESS
+	var response ArticleDetailsResponseStruct
+	if res != nil {
+		adst := new(ArticleDetailsStruct)
+		adst.ID = res.ID
+		adst.Cateid = res.Cateid
+		adst.Title = res.Title
+		adst.Content = res.Content
+		adst.Keywords = res.Keywords
+		adst.Description = res.Description
+		adst.ImgURL = res.ImgURL
+		adst.Sort = res.Sort
+		adst.Status = res.Status
+		adst.Addtime = res.Addtime
+		adst.BannerURL = res.BannerURL
+		adst.Isbanner = res.Isbanner
+		adst.Type = res.Type
+		adst.Name = res.Name
+		response.ArticleDetails = adst
+	}
+	response.Status = QUERY_PREV_ARTICLE_SUCCESS
 	response.Msg = PrevArticleStatus[QUERY_PREV_ARTICLE_SUCCESS]
 	Logger.Debugf("PrevArticle response:%v", response)
 	return &response, nil
 }
 
-func (ads *articledetailsservice) NextArticle(requestObj *NextRequestStruct) (r *ArticleDetailsResultStruct, err error) {
+func (ads *articledetailsservice) NextArticle(requestObj *NextRequestStruct) (r *ArticleDetailsResponseStruct, err error) {
 	nrs := new(articledetails.NextRequestStruct)
 	nrs.ID = requestObj.GetID()
 	nrs.Cateid = requestObj.GetCateid()
@@ -127,28 +138,32 @@ func (ads *articledetailsservice) NextArticle(requestObj *NextRequestStruct) (r 
 	nrs.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	res, err := articledetails.GetNextArticle(nrs)
 	if err != nil {
-		return &ArticleDetailsResultStruct{
+		return &ArticleDetailsResponseStruct{
 			Status: QUERY_NEXT_ARTICLE_FAILED,
 			Msg:    NextArticleStatus[QUERY_NEXT_ARTICLE_FAILED],
 		}, nil
 	}
 
-	var response ArticleDetailsResultStruct
-	response.ID = res.ID
-	response.Cateid = res.Cateid
-	response.Title = res.Title
-	response.Content = res.Content
-	response.Keywords = res.Keywords
-	response.Description = res.Description
-	response.ImgURL = res.ImgURL
-	response.Sort = res.Sort
-	response.Status = res.Status
-	response.Addtime = res.Addtime
-	response.BannerURL = res.BannerURL
-	response.Isbanner = res.Isbanner
-	response.Type = res.Type
-	response.Name = res.Name
-	response.ResultStatus = QUERY_NEXT_ARTICLE_SUCCESS
+	var response ArticleDetailsResponseStruct
+	if res != nil {
+		adst := new(ArticleDetailsStruct)
+		adst.ID = res.ID
+		adst.Cateid = res.Cateid
+		adst.Title = res.Title
+		adst.Content = res.Content
+		adst.Keywords = res.Keywords
+		adst.Description = res.Description
+		adst.ImgURL = res.ImgURL
+		adst.Sort = res.Sort
+		adst.Status = res.Status
+		adst.Addtime = res.Addtime
+		adst.BannerURL = res.BannerURL
+		adst.Isbanner = res.Isbanner
+		adst.Type = res.Type
+		adst.Name = res.Name
+		response.ArticleDetails = adst
+	}
+	response.Status = QUERY_NEXT_ARTICLE_SUCCESS
 	response.Msg = NextArticleStatus[QUERY_NEXT_ARTICLE_SUCCESS]
 	Logger.Debugf("NextArticle response:%v", response)
 	return &response, nil

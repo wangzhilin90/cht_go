@@ -11,17 +11,20 @@ func NewArticleDetailsRequestStruct(id int32) *ArticleDetailsRequestStruct {
 	}
 }
 
-func NewNextRequestStruct(id, cateId, reqType, addtime int32) *NextRequestStruct {
+func NewNextRequestStruct(id, cateId, reqType, addtime int32, sort int32, prefix string, isApp int32) *NextRequestStruct {
 	return &NextRequestStruct{
 		ID:      id,
 		Cateid:  cateId,
 		Type:    reqType,
 		Addtime: addtime,
+		Sort:    sort,
+		Prefix:  prefix,
+		IsApp:   isApp,
 	}
 }
 
 func TestGetArticleDetails(t *testing.T) {
-	adrs := NewArticleDetailsRequestStruct(2526)
+	adrs := NewArticleDetailsRequestStruct(36)
 	ads := articledetailsservice{}
 	res, err := ads.GetArticleDetails(adrs)
 	if err != nil {
@@ -41,7 +44,7 @@ func TestUpdateReadNum(t *testing.T) {
 }
 
 func TestGetPrevArticle(t *testing.T) {
-	adrs := NewNextRequestStruct(2589, 8, 1, 1484550650)
+	adrs := NewNextRequestStruct(2589, 5, 1, 1484550650, 1, "wz", 1)
 	ads := articledetailsservice{}
 	res, err := ads.PrevArticle(adrs)
 	if err != nil {
@@ -51,7 +54,7 @@ func TestGetPrevArticle(t *testing.T) {
 }
 
 func TestGetNextArticle(t *testing.T) {
-	adrs := NewNextRequestStruct(2495, 8, 1, 1413881500)
+	adrs := NewNextRequestStruct(2495, 8, 1, 1413881500, 1, "wz", 1)
 	ads := articledetailsservice{}
 	res, err := ads.NextArticle(adrs)
 	if err != nil {

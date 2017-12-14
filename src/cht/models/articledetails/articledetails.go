@@ -14,7 +14,7 @@ type ArticleDetailsRequestStruct struct {
 	ChengHuiTongTraceLog string
 }
 
-type ArticleDetailsResultStruct struct {
+type ArticleDetailsStruct struct {
 	ID          int32  `orm:"column(id)"`
 	Cateid      int32  `orm:"column(cateid)"`
 	Title       string `orm:"column(title)"`
@@ -36,11 +36,14 @@ type NextRequestStruct struct {
 	Cateid               int32
 	Type                 int32
 	Addtime              int32
+	Sort                 int32
+	Prefix               string
+	IsApp                int32 //请求上、下页接口是先判断此参数,如果is_app=1则为app端请求，请按下述APP文章上、下页逻辑判断
 	ChengHuiTongTraceLog string
 }
 
 /*获取指定文章内容详情*/
-func GetArticleDetails(adrs *ArticleDetailsRequestStruct) (*ArticleDetailsResultStruct, error) {
+func GetArticleDetails(adrs *ArticleDetailsRequestStruct) (*ArticleDetailsStruct, error) {
 	o := orm.NewOrm()
 	o.Using("default")
 	Logger.Debug("GetArticleDetails input param:", adrs)
@@ -58,10 +61,12 @@ func GetArticleDetails(adrs *ArticleDetailsRequestStruct) (*ArticleDetailsResult
 	qb.Limit(1)
 	sql := qb.String()
 	Logger.Debug("GetArticleDetails sql:", sql)
-	var adrst ArticleDetailsResultStruct
+	var adrst ArticleDetailsStruct
 	err := o.Raw(sql).QueryRow(&adrst)
-	if err != nil {
-		Logger.Debugf("GetArticleDetails query failed %v", err)
+	if err == orm.ErrNoRows {
+		return nil, nil
+	} else if err != nil {
+		Logger.Errorf("GetArticleDetails query failed %v", err)
 		return nil, err
 	}
 	Logger.Debugf("GetArticleDetails res %v", adrst)
@@ -96,110 +101,174 @@ func UpdateReadNum(adrs *ArticleDetailsRequestStruct) (int32, error) {
 }
 
 /*上一篇文章*/
-func GetPrevArticle(nrs *NextRequestStruct) (*ArticleDetailsResultStruct, error) {
+func GetPrevArticle(nrs *NextRequestStruct) (*ArticleDetailsStruct, error) {
 	Logger.Debugf("PrevArticle input param:%v", nrs)
 	o := orm.NewOrm()
 	o.Using("default")
-
-	if nrs.Cateid == 10 {
-		//SELECT A.*,AC.name FROM #@_article A LEFT JOIN #@_article_cate AC ON A.cateid=AC.id WHERE A.cateid=5 AND A.status=1 AND A.addtime<{addtime} ORDER BY A.addtime desc
-		qb, _ := orm.NewQueryBuilder("mysql")
-		qb.Select("A.*,AC.name").
-			From("jl_article A").
-			LeftJoin("jl_article_cate AC").
-			On("A.cateid=AC.id").
-			Where(fmt.Sprintf("A.cateid=%d", nrs.Cateid)).
-			And("A.status=1").
-			And(fmt.Sprintf("A.addtime<%d", nrs.Addtime)).
-			OrderBy("A.addtime").
-			Desc().
-			Limit(1)
-
-		sql := qb.String()
-		Logger.Debugf("PrevArticle sql: %v", sql)
-		var adrs ArticleDetailsResultStruct
-		err := o.Raw(sql).QueryRow(&adrs)
-		if err != nil {
-			Logger.Debugf("PrevArticle query failed %v", err)
-			return nil, err
+	var qb, _ = orm.NewQueryBuilder("mysql")
+	//pc端逻辑
+	if nrs.IsApp == 0 {
+		if nrs.Cateid == 10 {
+			//SELECT A.*,AC.name FROM #@_article A LEFT JOIN #@_article_cate AC ON A.cateid=AC.id WHERE A.cateid=5 AND A.status=1 AND A.addtime<{addtime} ORDER BY A.addtime desc
+			qb.Select("A.*,AC.name").
+				From("jl_article A").
+				LeftJoin("jl_article_cate AC").
+				On("A.cateid=AC.id").
+				Where(fmt.Sprintf("A.cateid=%d", nrs.Cateid)).
+				And("A.status=1").
+				And(fmt.Sprintf("A.addtime<%d", nrs.Addtime)).
+				OrderBy("A.addtime").
+				Desc().
+				Limit(1)
+		} else {
+			//SELECT A.*,AC.name FROM #@_article A LEFT JOIN #@_article_cate AC ON A.cateid=AC.id WHERE A.cateid=5 AND A.status=1 AND A.id<3195 AND type=1 ORDER BY A.id desc
+			qb.Select("A.*,AC.name").
+				From("jl_article A").
+				LeftJoin("jl_article_cate AC").
+				On("A.cateid=AC.id").
+				Where(fmt.Sprintf("A.cateid=%d", nrs.Cateid)).
+				And(fmt.Sprintf("A.status=1")).
+				And(fmt.Sprintf("A.id<%d", nrs.ID)).
+				And(fmt.Sprintf("type=%d", nrs.Type)).
+				OrderBy("A.id").Desc().
+				Limit(1)
 		}
-		Logger.Debugf("PrevArticle return value: %v", adrs)
-		return &adrs, nil
-	} else {
-		//SELECT A.*,AC.name FROM #@_article A LEFT JOIN #@_article_cate AC ON A.cateid=AC.id WHERE A.cateid=5 AND A.status=1 AND A.id<3195 AND type=1 ORDER BY A.id desc
-		qb, _ := orm.NewQueryBuilder("mysql")
-		qb.Select("A.*,AC.name").
-			From("jl_article A").
-			LeftJoin("jl_article_cate AC").
-			On("A.cateid=AC.id").
-			Where(fmt.Sprintf("A.cateid=%d", nrs.Cateid)).
-			And(fmt.Sprintf("A.status=1")).
-			And(fmt.Sprintf("A.id<%d", nrs.ID)).
-			And(fmt.Sprintf("type=%d", nrs.Type)).
-			OrderBy("A.id").Desc().
-			Limit(1)
-
-		sql := qb.String()
-		Logger.Debugf("PrevArticle sql: %v", sql)
-		var adrs ArticleDetailsResultStruct
-		err := o.Raw(sql).QueryRow(&adrs)
-		if err != nil {
-			Logger.Debugf("PrevArticle query failed %v", err)
-			return nil, err
+	} else if nrs.IsApp == 1 { //app端逻辑
+		switch nrs.Cateid {
+		case 4:
+			//$prevWhere = "status=1 AND cateid={$cateid} AND ((sort={$sort} AND addtime>{$addtime}) OR sort<{$sort})";
+			//$prevOrder = 'sort DESC, addtime ASC';
+			qb.Select("A.*,AC.name").
+				From("jl_article A").
+				LeftJoin("jl_article_cate AC").
+				On("A.cateid=AC.id").
+				Where(fmt.Sprintf("A.status=1")).
+				And(fmt.Sprintf("A.cateid=%d", nrs.Cateid)).
+				And(fmt.Sprintf("((A.sort=%d AND A.addtime > %d) OR A.sort < %d)", nrs.Sort, nrs.Addtime, nrs.Sort)).
+				OrderBy("sort DESC, addtime ASC").
+				Limit(1)
+		case 5:
+			//$prevWhere = "status=1 AND cateid={$cateid} AND ((sort={$sort} AND id>{$id}) OR sort<{$sort})";
+			//$prevOrder = 'sort DESC, id ASC';
+			qb.Select("A.*,AC.name").
+				From("jl_article A").
+				LeftJoin("jl_article_cate AC").
+				On("A.cateid=AC.id").
+				Where(fmt.Sprintf("A.status=1")).
+				And(fmt.Sprintf("A.cateid=%d", nrs.Cateid)).
+				And(fmt.Sprintf("((A.sort=%d AND A.id > %d) OR A.sort < %d)", nrs.Sort, nrs.ID, nrs.Sort)).
+				OrderBy("sort DESC, id ASC").
+				Limit(1)
+		case 8:
+			//$prevWhere = "status=1 AND cateid={$cateid} AND title LIKE '{$prefix}%' AND ((sort={$sort} AND id>{$id}) OR sort<{$sort})";
+			//$prevOrder = 'sort DESC, id ASC';
+			qb.Select("A.*,AC.name").
+				From("jl_article A").
+				LeftJoin("jl_article_cate AC").
+				On("A.cateid=AC.id").
+				Where(fmt.Sprintf("A.status=1")).
+				And(fmt.Sprintf("A.cateid=%d", nrs.Cateid)).
+				And(fmt.Sprintf("A.title LIKE \"%s%%\"", nrs.Prefix)).
+				And(fmt.Sprintf("((A.sort=%d AND A.id > %d) OR A.sort < %d)", nrs.Sort, nrs.ID, nrs.Sort)).
+				OrderBy("sort DESC, id ASC").
+				Limit(1)
 		}
-		Logger.Debugf("PrevArticle return value: %v", adrs)
-		return &adrs, nil
 	}
+	sql := qb.String()
+	Logger.Debugf("PrevArticle sql: %v", sql)
+	var adrs ArticleDetailsStruct
+	err := o.Raw(sql).QueryRow(&adrs)
+	if err == orm.ErrNoRows {
+		return nil, nil
+	} else if err != nil {
+		Logger.Errorf("PrevArticle query failed %v", err)
+		return nil, err
+	}
+	Logger.Debugf("PrevArticle return value: %v", adrs)
+	return &adrs, nil
 }
 
 /*下一篇文章*/
-func GetNextArticle(nrs *NextRequestStruct) (*ArticleDetailsResultStruct, error) {
+func GetNextArticle(nrs *NextRequestStruct) (*ArticleDetailsStruct, error) {
 	Logger.Debugf("NextArticle input param:%v", nrs)
 	o := orm.NewOrm()
 	o.Using("default")
+	var qb, _ = orm.NewQueryBuilder("mysql")
 
-	if nrs.Cateid == 10 {
-		//SELECT A.*,AC.name FROM #@_article A LEFT JOIN #@_article_cate AC ON A.cateid=AC.id WHERE A.cateid=5 and A.status=1 AND A.addtime>{addtime}
-		qb, _ := orm.NewQueryBuilder("mysql")
-		qb.Select("A.*,AC.name").
-			From("jl_article A").
-			LeftJoin("jl_article_cate AC").
-			On("A.cateid=AC.id").
-			Where(fmt.Sprintf("A.cateid=%d", nrs.Cateid)).
-			And("A.status=1").
-			And(fmt.Sprintf("A.addtime>%d", nrs.Addtime)).
-			Limit(1)
-		sql := qb.String()
-		Logger.Debugf("NextArticle sql: %v", sql)
-		var adrs ArticleDetailsResultStruct
-		err := o.Raw(sql).QueryRow(&adrs)
-		if err != nil {
-			Logger.Debugf("NextArticle query failed %v", err)
-			return nil, err
+	if nrs.IsApp == 0 {
+		if nrs.Cateid == 10 {
+			//SELECT A.*,AC.name FROM #@_article A LEFT JOIN #@_article_cate AC ON A.cateid=AC.id WHERE A.cateid=5 and A.status=1 AND A.addtime>{addtime}
+			qb.Select("A.*,AC.name").
+				From("jl_article A").
+				LeftJoin("jl_article_cate AC").
+				On("A.cateid=AC.id").
+				Where(fmt.Sprintf("A.cateid=%d", nrs.Cateid)).
+				And("A.status=1").
+				And(fmt.Sprintf("A.addtime>%d", nrs.Addtime)).
+				Limit(1)
+		} else {
+			//SELECT A.*,AC.name FROM #@_article A LEFT JOIN #@_article_cate AC ON A.cateid=AC.id WHERE A.cateid=5 and A.status=1 AND A.id>3195 AND type=1
+			qb.Select("A.*,AC.name").
+				From("jl_article A").
+				LeftJoin("jl_article_cate AC").
+				On("A.cateid=AC.id").
+				Where(fmt.Sprintf("A.cateid=%d", nrs.Cateid)).
+				And(fmt.Sprintf("A.status=1")).
+				And(fmt.Sprintf("A.id>%d", nrs.ID)).
+				And(fmt.Sprintf("type=%d", nrs.Type)).
+				Limit(1)
 		}
-		Logger.Debugf("NextArticle return value: %v", adrs)
-		return &adrs, nil
-	} else {
-		//SELECT A.*,AC.name FROM #@_article A LEFT JOIN #@_article_cate AC ON A.cateid=AC.id WHERE A.cateid=5 and A.status=1 AND A.id>3195 AND type=1
-		qb, _ := orm.NewQueryBuilder("mysql")
-		qb.Select("A.*,AC.name").
-			From("jl_article A").
-			LeftJoin("jl_article_cate AC").
-			On("A.cateid=AC.id").
-			Where(fmt.Sprintf("A.cateid=%d", nrs.Cateid)).
-			And(fmt.Sprintf("A.status=1")).
-			And(fmt.Sprintf("A.id>%d", nrs.ID)).
-			And(fmt.Sprintf("type=%d", nrs.Type)).
-			Limit(1)
-		sql := qb.String()
-		Logger.Debugf("NextArticle sql: %v", sql)
-		var adrs ArticleDetailsResultStruct
-		err := o.Raw(sql).QueryRow(&adrs)
-		if err != nil {
-			Logger.Debugf("NextArticle query failed %v", err)
-			return nil, err
+	} else if nrs.IsApp == 1 {
+		switch nrs.Cateid {
+		case 4:
+			//$nextWhere = "status=1 AND cateid={$cateid} AND ((sort={$sort} AND addtime<{$addtime}) OR sort>{$sort})";
+			//$nextOrder = 'sort ASC, addtime DESC';
+			qb.Select("A.*,AC.name").
+				From("jl_article A").
+				LeftJoin("jl_article_cate AC").
+				On("A.cateid=AC.id").
+				Where(fmt.Sprintf("A.status=1")).
+				And(fmt.Sprintf("A.cateid=%d", nrs.Cateid)).
+				And(fmt.Sprintf("((A.sort=%d AND A.addtime < %d) OR A.sort > %d)", nrs.Sort, nrs.Addtime, nrs.Sort)).
+				OrderBy("sort ASC, addtime DESC").
+				Limit(1)
+		case 5:
+			//$nextWhere = "status=1 AND cateid={$cateid} AND ((sort={$sort} AND id<{$id}) OR sort>{$sort})";
+			//$nextOrder = 'sort ASC, id DESC';
+			qb.Select("A.*,AC.name").
+				From("jl_article A").
+				LeftJoin("jl_article_cate AC").
+				On("A.cateid=AC.id").
+				Where(fmt.Sprintf("A.status=1")).
+				And(fmt.Sprintf("A.cateid=%d", nrs.Cateid)).
+				And(fmt.Sprintf("((A.sort=%d AND A.id < %d) OR A.sort > %d)", nrs.Sort, nrs.ID, nrs.Sort)).
+				OrderBy("sort ASC, id DESC").
+				Limit(1)
+		case 8:
+			//$nextWhere = "status=1 AND cateid={$cateid} AND title LIKE '{$prefix}%' AND ((sort={$sort} AND id<{$id}) OR sort>{$sort})";
+			//$nextOrder = 'sort ASC, id DESC';
+			qb.Select("A.*,AC.name").
+				From("jl_article A").
+				LeftJoin("jl_article_cate AC").
+				On("A.cateid=AC.id").
+				Where(fmt.Sprintf("A.status=1")).
+				And(fmt.Sprintf("A.cateid=%d", nrs.Cateid)).
+				And(fmt.Sprintf("A.title LIKE \"%s%%\"", nrs.Prefix)).
+				And(fmt.Sprintf("((A.sort=%d AND A.id < %d) OR A.sort > %d)", nrs.Sort, nrs.ID, nrs.Sort)).
+				OrderBy("sort ASC, id DESC").
+				Limit(1)
 		}
-		Logger.Debugf("NextArticle return value: %v", adrs)
-		return &adrs, nil
 	}
+	sql := qb.String()
+	Logger.Debugf("NextArticle sql: %v", sql)
+	var adrs ArticleDetailsStruct
+	err := o.Raw(sql).QueryRow(&adrs)
+	if err == orm.ErrNoRows {
+		return nil, nil
+	} else if err != nil {
+		Logger.Errorf("NextArticle query failed %v", err)
+		return nil, err
+	}
+	Logger.Debugf("NextArticle return value: %v", adrs)
+	return &adrs, nil
 }

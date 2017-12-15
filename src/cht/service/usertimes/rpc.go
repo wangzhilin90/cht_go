@@ -25,7 +25,7 @@ type UserTimesDetailsRequestStruct struct {
 }
 
 // func NewUserTimesDetailsRequestStruct() *UserTimesDetailsRequestStruct {
-//   return &UserTimesDetailsRequestStruct{}
+// 	return &UserTimesDetailsRequestStruct{}
 // }
 
 func (p *UserTimesDetailsRequestStruct) GetUsername() string {
@@ -598,7 +598,7 @@ type UserTimesUpdateRequestStruct struct {
 }
 
 // func NewUserTimesUpdateRequestStruct() *UserTimesUpdateRequestStruct {
-//   return &UserTimesUpdateRequestStruct{}
+// 	return &UserTimesUpdateRequestStruct{}
 // }
 
 func (p *UserTimesUpdateRequestStruct) GetUsername() string {
@@ -994,7 +994,7 @@ type UserTimesInsertRequestStruct struct {
 }
 
 // func NewUserTimesInsertRequestStruct() *UserTimesInsertRequestStruct {
-//   return &UserTimesInsertRequestStruct{}
+// 	return &UserTimesInsertRequestStruct{}
 // }
 
 func (p *UserTimesInsertRequestStruct) GetUsername() string {
@@ -1373,6 +1373,262 @@ func (p *UserTimesInsertResponseStruct) String() string {
 	return fmt.Sprintf("UserTimesInsertResponseStruct(%+v)", *p)
 }
 
+// Attributes:
+//  - Username
+//  - ChengHuiTongTraceLog
+type UserTimesDeleteRequestStruct struct {
+	Username             string `thrift:"username,1" db:"username" json:"username"`
+	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,2" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
+}
+
+// func NewUserTimesDeleteRequestStruct() *UserTimesDeleteRequestStruct {
+// 	return &UserTimesDeleteRequestStruct{}
+// }
+
+func (p *UserTimesDeleteRequestStruct) GetUsername() string {
+	return p.Username
+}
+
+func (p *UserTimesDeleteRequestStruct) GetChengHuiTongTraceLog() string {
+	return p.ChengHuiTongTraceLog
+}
+func (p *UserTimesDeleteRequestStruct) Read(iprot thrift.TProtocol) error {
+	if _, err := iprot.ReadStructBegin(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
+		if err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+		switch fieldId {
+		case 1:
+			if err := p.ReadField1(iprot); err != nil {
+				return err
+			}
+		case 2:
+			if err := p.ReadField2(iprot); err != nil {
+				return err
+			}
+		default:
+			if err := iprot.Skip(fieldTypeId); err != nil {
+				return err
+			}
+		}
+		if err := iprot.ReadFieldEnd(); err != nil {
+			return err
+		}
+	}
+	if err := iprot.ReadStructEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+	}
+	return nil
+}
+
+func (p *UserTimesDeleteRequestStruct) ReadField1(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 1: ", err)
+	} else {
+		p.Username = v
+	}
+	return nil
+}
+
+func (p *UserTimesDeleteRequestStruct) ReadField2(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 2: ", err)
+	} else {
+		p.ChengHuiTongTraceLog = v
+	}
+	return nil
+}
+
+func (p *UserTimesDeleteRequestStruct) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("UserTimesDeleteRequestStruct"); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+	}
+	if p != nil {
+		if err := p.writeField1(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField2(oprot); err != nil {
+			return err
+		}
+	}
+	if err := oprot.WriteFieldStop(); err != nil {
+		return thrift.PrependError("write field stop error: ", err)
+	}
+	if err := oprot.WriteStructEnd(); err != nil {
+		return thrift.PrependError("write struct stop error: ", err)
+	}
+	return nil
+}
+
+func (p *UserTimesDeleteRequestStruct) writeField1(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("username", thrift.STRING, 1); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:username: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.Username)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.username (1) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 1:username: ", p), err)
+	}
+	return err
+}
+
+func (p *UserTimesDeleteRequestStruct) writeField2(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("chengHuiTongTraceLog", thrift.STRING, 2); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:chengHuiTongTraceLog: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.ChengHuiTongTraceLog)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.chengHuiTongTraceLog (2) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:chengHuiTongTraceLog: ", p), err)
+	}
+	return err
+}
+
+func (p *UserTimesDeleteRequestStruct) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UserTimesDeleteRequestStruct(%+v)", *p)
+}
+
+// Attributes:
+//  - Status
+//  - Msg
+type UserTimesDeleteResponseStruct struct {
+	Status int32  `thrift:"status,1" db:"status" json:"status"`
+	Msg    string `thrift:"msg,2" db:"msg" json:"msg"`
+}
+
+func NewUserTimesDeleteResponseStruct() *UserTimesDeleteResponseStruct {
+	return &UserTimesDeleteResponseStruct{}
+}
+
+func (p *UserTimesDeleteResponseStruct) GetStatus() int32 {
+	return p.Status
+}
+
+func (p *UserTimesDeleteResponseStruct) GetMsg() string {
+	return p.Msg
+}
+func (p *UserTimesDeleteResponseStruct) Read(iprot thrift.TProtocol) error {
+	if _, err := iprot.ReadStructBegin(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
+		if err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+		switch fieldId {
+		case 1:
+			if err := p.ReadField1(iprot); err != nil {
+				return err
+			}
+		case 2:
+			if err := p.ReadField2(iprot); err != nil {
+				return err
+			}
+		default:
+			if err := iprot.Skip(fieldTypeId); err != nil {
+				return err
+			}
+		}
+		if err := iprot.ReadFieldEnd(); err != nil {
+			return err
+		}
+	}
+	if err := iprot.ReadStructEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+	}
+	return nil
+}
+
+func (p *UserTimesDeleteResponseStruct) ReadField1(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadI32(); err != nil {
+		return thrift.PrependError("error reading field 1: ", err)
+	} else {
+		p.Status = v
+	}
+	return nil
+}
+
+func (p *UserTimesDeleteResponseStruct) ReadField2(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 2: ", err)
+	} else {
+		p.Msg = v
+	}
+	return nil
+}
+
+func (p *UserTimesDeleteResponseStruct) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("UserTimesDeleteResponseStruct"); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+	}
+	if p != nil {
+		if err := p.writeField1(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField2(oprot); err != nil {
+			return err
+		}
+	}
+	if err := oprot.WriteFieldStop(); err != nil {
+		return thrift.PrependError("write field stop error: ", err)
+	}
+	if err := oprot.WriteStructEnd(); err != nil {
+		return thrift.PrependError("write struct stop error: ", err)
+	}
+	return nil
+}
+
+func (p *UserTimesDeleteResponseStruct) writeField1(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("status", thrift.I32, 1); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:status: ", p), err)
+	}
+	if err := oprot.WriteI32(int32(p.Status)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.status (1) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 1:status: ", p), err)
+	}
+	return err
+}
+
+func (p *UserTimesDeleteResponseStruct) writeField2(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("msg", thrift.STRING, 2); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:msg: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.Msg)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.msg (2) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:msg: ", p), err)
+	}
+	return err
+}
+
+func (p *UserTimesDeleteResponseStruct) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UserTimesDeleteResponseStruct(%+v)", *p)
+}
+
 type UserTimesThriftService interface {
 	// Parameters:
 	//  - RequestObj
@@ -1383,6 +1639,9 @@ type UserTimesThriftService interface {
 	// Parameters:
 	//  - RequestObj
 	InsertUserTimes(requestObj *UserTimesInsertRequestStruct) (r *UserTimesInsertResponseStruct, err error)
+	// Parameters:
+	//  - RequestObj
+	DeleteUserTimes(requestObj *UserTimesDeleteRequestStruct) (r *UserTimesDeleteResponseStruct, err error)
 }
 
 type UserTimesThriftServiceClient struct {
@@ -1642,6 +1901,83 @@ func (p *UserTimesThriftServiceClient) recvInsertUserTimes() (value *UserTimesIn
 	return
 }
 
+// Parameters:
+//  - RequestObj
+func (p *UserTimesThriftServiceClient) DeleteUserTimes(requestObj *UserTimesDeleteRequestStruct) (r *UserTimesDeleteResponseStruct, err error) {
+	if err = p.sendDeleteUserTimes(requestObj); err != nil {
+		return
+	}
+	return p.recvDeleteUserTimes()
+}
+
+func (p *UserTimesThriftServiceClient) sendDeleteUserTimes(requestObj *UserTimesDeleteRequestStruct) (err error) {
+	oprot := p.OutputProtocol
+	if oprot == nil {
+		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
+		p.OutputProtocol = oprot
+	}
+	p.SeqId++
+	if err = oprot.WriteMessageBegin("deleteUserTimes", thrift.CALL, p.SeqId); err != nil {
+		return
+	}
+	args := UserTimesThriftServiceDeleteUserTimesArgs{
+		RequestObj: requestObj,
+	}
+	if err = args.Write(oprot); err != nil {
+		return
+	}
+	if err = oprot.WriteMessageEnd(); err != nil {
+		return
+	}
+	return oprot.Flush()
+}
+
+func (p *UserTimesThriftServiceClient) recvDeleteUserTimes() (value *UserTimesDeleteResponseStruct, err error) {
+	iprot := p.InputProtocol
+	if iprot == nil {
+		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
+		p.InputProtocol = iprot
+	}
+	method, mTypeId, seqId, err := iprot.ReadMessageBegin()
+	if err != nil {
+		return
+	}
+	if method != "deleteUserTimes" {
+		err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "deleteUserTimes failed: wrong method name")
+		return
+	}
+	if p.SeqId != seqId {
+		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "deleteUserTimes failed: out of sequence response")
+		return
+	}
+	if mTypeId == thrift.EXCEPTION {
+		error6 := thrift.NewTApplicationException(thrift.UNKNOWN_APPLICATION_EXCEPTION, "Unknown Exception")
+		var error7 error
+		error7, err = error6.Read(iprot)
+		if err != nil {
+			return
+		}
+		if err = iprot.ReadMessageEnd(); err != nil {
+			return
+		}
+		err = error7
+		return
+	}
+	if mTypeId != thrift.REPLY {
+		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "deleteUserTimes failed: invalid message type")
+		return
+	}
+	result := UserTimesThriftServiceDeleteUserTimesResult{}
+	if err = result.Read(iprot); err != nil {
+		return
+	}
+	if err = iprot.ReadMessageEnd(); err != nil {
+		return
+	}
+	value = result.GetSuccess()
+	return
+}
+
 type UserTimesThriftServiceProcessor struct {
 	processorMap map[string]thrift.TProcessorFunction
 	handler      UserTimesThriftService
@@ -1662,11 +1998,12 @@ func (p *UserTimesThriftServiceProcessor) ProcessorMap() map[string]thrift.TProc
 
 func NewUserTimesThriftServiceProcessor(handler UserTimesThriftService) *UserTimesThriftServiceProcessor {
 
-	self6 := &UserTimesThriftServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
-	self6.processorMap["getUserTimesDetails"] = &userTimesThriftServiceProcessorGetUserTimesDetails{handler: handler}
-	self6.processorMap["updateUserTimes"] = &userTimesThriftServiceProcessorUpdateUserTimes{handler: handler}
-	self6.processorMap["insertUserTimes"] = &userTimesThriftServiceProcessorInsertUserTimes{handler: handler}
-	return self6
+	self8 := &UserTimesThriftServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
+	self8.processorMap["getUserTimesDetails"] = &userTimesThriftServiceProcessorGetUserTimesDetails{handler: handler}
+	self8.processorMap["updateUserTimes"] = &userTimesThriftServiceProcessorUpdateUserTimes{handler: handler}
+	self8.processorMap["insertUserTimes"] = &userTimesThriftServiceProcessorInsertUserTimes{handler: handler}
+	self8.processorMap["deleteUserTimes"] = &userTimesThriftServiceProcessorDeleteUserTimes{handler: handler}
+	return self8
 }
 
 func (p *UserTimesThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
@@ -1679,12 +2016,12 @@ func (p *UserTimesThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol)
 	}
 	iprot.Skip(thrift.STRUCT)
 	iprot.ReadMessageEnd()
-	x7 := thrift.NewTApplicationException(thrift.UNKNOWN_METHOD, "Unknown function "+name)
+	x9 := thrift.NewTApplicationException(thrift.UNKNOWN_METHOD, "Unknown function "+name)
 	oprot.WriteMessageBegin(name, thrift.EXCEPTION, seqId)
-	x7.Write(oprot)
+	x9.Write(oprot)
 	oprot.WriteMessageEnd()
 	oprot.Flush()
-	return false, x7
+	return false, x9
 
 }
 
@@ -1815,6 +2152,54 @@ func (p *userTimesThriftServiceProcessorInsertUserTimes) Process(seqId int32, ip
 		result.Success = retval
 	}
 	if err2 = oprot.WriteMessageBegin("insertUserTimes", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type userTimesThriftServiceProcessorDeleteUserTimes struct {
+	handler UserTimesThriftService
+}
+
+func (p *userTimesThriftServiceProcessorDeleteUserTimes) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := UserTimesThriftServiceDeleteUserTimesArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("deleteUserTimes", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush()
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	result := UserTimesThriftServiceDeleteUserTimesResult{}
+	var retval *UserTimesDeleteResponseStruct
+	var err2 error
+	if retval, err2 = p.handler.DeleteUserTimes(args.RequestObj); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing deleteUserTimes: "+err2.Error())
+		oprot.WriteMessageBegin("deleteUserTimes", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush()
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("deleteUserTimes", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -2444,4 +2829,208 @@ func (p *UserTimesThriftServiceInsertUserTimesResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserTimesThriftServiceInsertUserTimesResult(%+v)", *p)
+}
+
+// Attributes:
+//  - RequestObj
+type UserTimesThriftServiceDeleteUserTimesArgs struct {
+	RequestObj *UserTimesDeleteRequestStruct `thrift:"requestObj,1" db:"requestObj" json:"requestObj"`
+}
+
+func NewUserTimesThriftServiceDeleteUserTimesArgs() *UserTimesThriftServiceDeleteUserTimesArgs {
+	return &UserTimesThriftServiceDeleteUserTimesArgs{}
+}
+
+var UserTimesThriftServiceDeleteUserTimesArgs_RequestObj_DEFAULT *UserTimesDeleteRequestStruct
+
+func (p *UserTimesThriftServiceDeleteUserTimesArgs) GetRequestObj() *UserTimesDeleteRequestStruct {
+	if !p.IsSetRequestObj() {
+		return UserTimesThriftServiceDeleteUserTimesArgs_RequestObj_DEFAULT
+	}
+	return p.RequestObj
+}
+func (p *UserTimesThriftServiceDeleteUserTimesArgs) IsSetRequestObj() bool {
+	return p.RequestObj != nil
+}
+
+func (p *UserTimesThriftServiceDeleteUserTimesArgs) Read(iprot thrift.TProtocol) error {
+	if _, err := iprot.ReadStructBegin(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
+		if err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+		switch fieldId {
+		case 1:
+			if err := p.ReadField1(iprot); err != nil {
+				return err
+			}
+		default:
+			if err := iprot.Skip(fieldTypeId); err != nil {
+				return err
+			}
+		}
+		if err := iprot.ReadFieldEnd(); err != nil {
+			return err
+		}
+	}
+	if err := iprot.ReadStructEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+	}
+	return nil
+}
+
+func (p *UserTimesThriftServiceDeleteUserTimesArgs) ReadField1(iprot thrift.TProtocol) error {
+	p.RequestObj = &UserTimesDeleteRequestStruct{}
+	if err := p.RequestObj.Read(iprot); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.RequestObj), err)
+	}
+	return nil
+}
+
+func (p *UserTimesThriftServiceDeleteUserTimesArgs) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("deleteUserTimes_args"); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+	}
+	if p != nil {
+		if err := p.writeField1(oprot); err != nil {
+			return err
+		}
+	}
+	if err := oprot.WriteFieldStop(); err != nil {
+		return thrift.PrependError("write field stop error: ", err)
+	}
+	if err := oprot.WriteStructEnd(); err != nil {
+		return thrift.PrependError("write struct stop error: ", err)
+	}
+	return nil
+}
+
+func (p *UserTimesThriftServiceDeleteUserTimesArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("requestObj", thrift.STRUCT, 1); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:requestObj: ", p), err)
+	}
+	if err := p.RequestObj.Write(oprot); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", p.RequestObj), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 1:requestObj: ", p), err)
+	}
+	return err
+}
+
+func (p *UserTimesThriftServiceDeleteUserTimesArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UserTimesThriftServiceDeleteUserTimesArgs(%+v)", *p)
+}
+
+// Attributes:
+//  - Success
+type UserTimesThriftServiceDeleteUserTimesResult struct {
+	Success *UserTimesDeleteResponseStruct `thrift:"success,0" db:"success" json:"success,omitempty"`
+}
+
+func NewUserTimesThriftServiceDeleteUserTimesResult() *UserTimesThriftServiceDeleteUserTimesResult {
+	return &UserTimesThriftServiceDeleteUserTimesResult{}
+}
+
+var UserTimesThriftServiceDeleteUserTimesResult_Success_DEFAULT *UserTimesDeleteResponseStruct
+
+func (p *UserTimesThriftServiceDeleteUserTimesResult) GetSuccess() *UserTimesDeleteResponseStruct {
+	if !p.IsSetSuccess() {
+		return UserTimesThriftServiceDeleteUserTimesResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *UserTimesThriftServiceDeleteUserTimesResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *UserTimesThriftServiceDeleteUserTimesResult) Read(iprot thrift.TProtocol) error {
+	if _, err := iprot.ReadStructBegin(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
+		if err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+		switch fieldId {
+		case 0:
+			if err := p.ReadField0(iprot); err != nil {
+				return err
+			}
+		default:
+			if err := iprot.Skip(fieldTypeId); err != nil {
+				return err
+			}
+		}
+		if err := iprot.ReadFieldEnd(); err != nil {
+			return err
+		}
+	}
+	if err := iprot.ReadStructEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+	}
+	return nil
+}
+
+func (p *UserTimesThriftServiceDeleteUserTimesResult) ReadField0(iprot thrift.TProtocol) error {
+	p.Success = &UserTimesDeleteResponseStruct{}
+	if err := p.Success.Read(iprot); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Success), err)
+	}
+	return nil
+}
+
+func (p *UserTimesThriftServiceDeleteUserTimesResult) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("deleteUserTimes_result"); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+	}
+	if p != nil {
+		if err := p.writeField0(oprot); err != nil {
+			return err
+		}
+	}
+	if err := oprot.WriteFieldStop(); err != nil {
+		return thrift.PrependError("write field stop error: ", err)
+	}
+	if err := oprot.WriteStructEnd(); err != nil {
+		return thrift.PrependError("write struct stop error: ", err)
+	}
+	return nil
+}
+
+func (p *UserTimesThriftServiceDeleteUserTimesResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err := oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T write field begin error 0:success: ", p), err)
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", p.Success), err)
+		}
+		if err := oprot.WriteFieldEnd(); err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T write field end error 0:success: ", p), err)
+		}
+	}
+	return err
+}
+
+func (p *UserTimesThriftServiceDeleteUserTimesResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UserTimesThriftServiceDeleteUserTimesResult(%+v)", *p)
 }

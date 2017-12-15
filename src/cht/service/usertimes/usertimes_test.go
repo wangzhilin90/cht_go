@@ -30,6 +30,12 @@ func NewUserTimesInsertRequestStruct(username string, isAdmin int32, times int32
 	}
 }
 
+func NewUserTimesDeleteRequestStruct(username string) *UserTimesDeleteRequestStruct {
+	return &UserTimesDeleteRequestStruct{
+		Username: username,
+	}
+}
+
 func TestGetUserTimesDetails(t *testing.T) {
 	utdr := NewUserTimesDetailsRequestStruct("wzl", 0)
 	uts := usertimesservice{}
@@ -50,10 +56,19 @@ func TestUpdateUserTimes(t *testing.T) {
 }
 
 func TestInsertUserTimes(t *testing.T) {
-	utir := NewUserTimesInsertRequestStruct("wzl1", 1, 1, "192.168.8.209")
+	utir := NewUserTimesInsertRequestStruct("wzl", 1, 1, "192.168.8.209")
 	uts := usertimesservice{}
 	res, _ := uts.InsertUserTimes(utir)
 	if res.Status != INSERT_USER_TIMES_SUCCESS {
 		t.Fatalf("TestInsertUserTimes failed")
+	}
+}
+
+func TestDeleteUserTimes(t *testing.T) {
+	utdrs := NewUserTimesDeleteRequestStruct("wzl")
+	uts := usertimesservice{}
+	res, _ := uts.DeleteUserTimes(utdrs)
+	if res.Status != DELETE_USER_TIMES_SUCCESS {
+		t.Fatalf("TestDeleteUserTimes failed")
 	}
 }

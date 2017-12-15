@@ -24,21 +24,26 @@ type UserTimesDetails struct {
 }
 
 type UserTimesUpdateRequest struct {
-	Username             string `thrift:"username,1" db:"username" json:"username"`
-	IP                   string `thrift:"ip,2" db:"ip" json:"ip"`
-	Logintime            int32  `thrift:"logintime,3" db:"logintime" json:"logintime"`
-	Times                int32  `thrift:"times,4" db:"times" json:"times"`
-	Isadmin              int32  `thrift:"isadmin,5" db:"isadmin" json:"isadmin"`
-	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,6" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
+	Username             string
+	IP                   string
+	Logintime            int32
+	Times                int32
+	Isadmin              int32
+	ChengHuiTongTraceLog string
 }
 
 type UserTimesInsertRequest struct {
-	Username             string `thrift:"username,1" db:"username" json:"username"`
-	IP                   string `thrift:"ip,2" db:"ip" json:"ip"`
-	Logintime            int32  `thrift:"logintime,3" db:"logintime" json:"logintime"`
-	Times                int32  `thrift:"times,4" db:"times" json:"times"`
-	Isadmin              int32  `thrift:"isadmin,5" db:"isadmin" json:"isadmin"`
-	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,6" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
+	Username             string
+	IP                   string
+	Logintime            int32
+	Times                int32
+	Isadmin              int32
+	ChengHuiTongTraceLog string
+}
+
+type UserTimesDeleteRequest struct {
+	Username             string
+	ChengHuiTongTraceLog string
 }
 
 func GetUserTimesDetails(utdr *UserTimesDetailsRequest) (*UserTimesDetails, error) {
@@ -137,5 +142,29 @@ func InsertUserTimes(utir *UserTimesInsertRequest) bool {
 		return false
 	}
 	Logger.Debugf("InsertUserTimes insert last id:%v", last_id)
+	return true
+}
+
+func DeleteUserTimes(utdr *UserTimesDeleteRequest) bool {
+	Logger.Debugf("DeleteUserTimes input param:%v", utdr)
+	o := orm.NewOrm()
+	o.Using("default")
+
+	buf := bytes.Buffer{}
+	buf.WriteString("DELETE FROM jl_user_times WHERE username=?")
+	sql := buf.String()
+
+	Logger.Debugf("DeleteUserTimes sql:%v", sql)
+	res, err := o.Raw(sql, utdr.Username).Exec()
+	if err != nil {
+		Logger.Errorf("DeleteUserTimes query failed:%v", err)
+		return false
+	}
+
+	num, _ := res.RowsAffected()
+	if num == 0 {
+		return false
+	}
+	Logger.Debugf("DeleteUserTimes affect num:%v", num)
 	return true
 }

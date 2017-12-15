@@ -17,6 +17,9 @@ const (
 
 	INSERT_USER_TIMES_SUCCESS = 1000
 	INSERT_USER_TIEMS_FAILED  = 1001
+
+	DELETE_USER_TIMES_SUCCESS = 1000
+	DELETE_USER_TIMES_FAILED  = 10001
 )
 
 var Query_Stat = map[int]string{
@@ -32,6 +35,11 @@ var Update_Stat = map[int]string{
 var Insert_Stat = map[int]string{
 	INSERT_USER_TIMES_SUCCESS: "新增会员登陆次数限制表成功",
 	INSERT_USER_TIEMS_FAILED:  "新增会员登陆次数限制表失败",
+}
+
+var Delete_Stat = map[int]string{
+	DELETE_USER_TIMES_SUCCESS: "删除会员登陆次数限制表成功",
+	DELETE_USER_TIMES_FAILED:  "删除会员登陆次数限制表失败",
 }
 
 type usertimesservice struct{}
@@ -112,6 +120,26 @@ func (uts *usertimesservice) InsertUserTimes(requestObj *UserTimesInsertRequestS
 	return &UserTimesInsertResponseStruct{
 		Status: INSERT_USER_TIMES_SUCCESS,
 		Msg:    Insert_Stat[INSERT_USER_TIMES_SUCCESS],
+	}, nil
+}
+
+func (uts *usertimesservice) DeleteUserTimes(requestObj *UserTimesDeleteRequestStruct) (r *UserTimesDeleteResponseStruct, err error) {
+	utdr := new(ut.UserTimesDeleteRequest)
+	utdr.Username = requestObj.GetUsername()
+	utdr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
+
+	b := ut.DeleteUserTimes(utdr)
+	if b == false {
+		Logger.Errorf("DeleteUserTimes failed")
+		return &UserTimesDeleteResponseStruct{
+			Status: DELETE_USER_TIMES_FAILED,
+			Msg:    Delete_Stat[DELETE_USER_TIMES_FAILED],
+		}, nil
+	}
+
+	return &UserTimesDeleteResponseStruct{
+		Status: DELETE_USER_TIMES_SUCCESS,
+		Msg:    Delete_Stat[DELETE_USER_TIMES_SUCCESS],
 	}, nil
 }
 

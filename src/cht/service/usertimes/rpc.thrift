@@ -5,7 +5,7 @@ namespace go  usertimes
 struct UserTimesDetailsRequestStruct {
     1:string username,
     2:i32 isadmin,
-	3:string chengHuiTongTraceLog
+    3:string chengHuiTongTraceLog
 }
 
 struct UserTimesDetailsStruct {
@@ -29,7 +29,7 @@ struct UserTimesUpdateRequestStruct {
     3:i32 logintime,
     4:i32 times,
     5:i32 isadmin
-	6:string chengHuiTongTraceLog
+    6:string chengHuiTongTraceLog
 }
 
 struct UserTimesUpdateResponseStruct {
@@ -44,7 +44,7 @@ struct UserTimesInsertRequestStruct {
     3:i32 logintime,
     4:i32 times,
     5:i32 isadmin
-	6:string chengHuiTongTraceLog
+    6:string chengHuiTongTraceLog
 }
 
 struct UserTimesInsertResponseStruct {
@@ -52,8 +52,19 @@ struct UserTimesInsertResponseStruct {
     2:string msg
 }
 
+//用户登陆次数删除
+struct UserTimesDeleteRequestStruct {
+    1:string username,
+    2:string chengHuiTongTraceLog
+}
+struct UserTimesDeleteResponseStruct {
+    1:i32 status,
+    2:string msg
+}
+
 service UserTimesThriftService {
-	UserTimesDetailsResponseStruct getUserTimesDetails (1:UserTimesDetailsRequestStruct requestObj)//基于username获取详情
-	UserTimesUpdateResponseStruct  updateUserTimes     (1:UserTimesUpdateRequestStruct requestObj)//基于username更新
-	UserTimesInsertResponseStruct  insertUserTimes     (1:UserTimesInsertRequestStruct requestObj)
+    UserTimesDetailsResponseStruct getUserTimesDetails (1:UserTimesDetailsRequestStruct requestObj)//基于username获取详情
+    UserTimesUpdateResponseStruct  updateUserTimes     (1:UserTimesUpdateRequestStruct requestObj)//基于username更新
+    UserTimesInsertResponseStruct  insertUserTimes     (1:UserTimesInsertRequestStruct requestObj)
+    UserTimesDeleteResponseStruct  deleteUserTimes     (1:UserTimesDeleteRequestStruct requestObj)//基于username删除
 }

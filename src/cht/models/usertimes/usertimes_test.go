@@ -30,6 +30,12 @@ func NewUserTimesInsertRequest(username string, isAdmin int32, times int32, ip s
 	}
 }
 
+func NewUserTimesDeleteRequest(username string) *UserTimesDeleteRequest {
+	return &UserTimesDeleteRequest{
+		Username: username,
+	}
+}
+
 func TestGetUserTimesDetails(t *testing.T) {
 	utdr := NewUserTimesDetailsRequest("wzl", 0)
 	res, err := GetUserTimesDetails(utdr)
@@ -52,5 +58,13 @@ func TestInsertUserTimes(t *testing.T) {
 	b := InsertUserTimes(utir)
 	if b == false {
 		t.Fatalf("TestInsertUserTimes failed")
+	}
+}
+
+func TestDeleteUserTimes(t *testing.T) {
+	utdr := NewUserTimesDeleteRequest("wzl")
+	b := DeleteUserTimes(utdr)
+	if b == false {
+		t.Fatalf("TestDeleteUserTimes failed")
 	}
 }

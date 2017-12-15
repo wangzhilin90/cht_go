@@ -54,7 +54,7 @@ func GetArticleCateList(aclr *ArticleCateListRequest) ([]ArticleCateDetails, err
 		qb.And(fmt.Sprintf("description like \"%%%s%%\"", aclr.Description))
 	}
 
-	if aclr.Pid != 0 {
+	if aclr.Pid != -1 {
 		qb.And(fmt.Sprintf("pid=%d", aclr.Pid))
 	}
 

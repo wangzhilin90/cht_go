@@ -40,8 +40,10 @@ func GetAccessConfig(acr *AccessConfigRequest) (*AccessConfigStruct, error) {
 
 	var acs AccessConfigStruct
 	err := o.Raw(sql).QueryRow(&acs)
-	if err != nil {
-		Logger.Debugf("GetAccessConfig query failed:%v", err)
+	if err == orm.ErrNoRows {
+		return nil, nil
+	} else if err != nil {
+		Logger.Errorf("GetAccessConfig query failed:%v", err)
 		return nil, err
 	}
 	Logger.Debugf("GetAccessConfig res %v", acs)

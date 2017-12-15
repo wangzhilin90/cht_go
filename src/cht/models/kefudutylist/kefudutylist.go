@@ -62,8 +62,10 @@ func GetKefuDutyListTotalNum(kdlr *KefuDutyListRequest) (int32, error) {
 	Logger.Debugf("GetKefuDutyListTotalNum sql:%v", sql)
 	var totalNum int32
 	err := o.Raw(sql).QueryRow(&totalNum)
-	if err != nil {
-		Logger.Debugf("GetKefuDutyListTotalNum query failed :%v", err)
+	if err == orm.ErrNoRows {
+		return 0, nil
+	} else if err != nil {
+		Logger.Errorf("GetKefuDutyListTotalNum query failed :%v", err)
 		return 0, err
 	}
 	Logger.Debugf("GetKefuDutyListTotalNum return num:%v", totalNum)
@@ -111,7 +113,7 @@ func GetKefuDutyList(kdlr *KefuDutyListRequest) ([]KefuDutyListResult, error) {
 	var kdl []KefuDutyListResult
 	_, err := o.Raw(sql).QueryRows(&kdl)
 	if err != nil {
-		Logger.Debugf("GetKefuDutyList query failed :%v", err)
+		Logger.Errorf("GetKefuDutyList query failed :%v", err)
 		return nil, err
 	}
 	Logger.Debugf("GetKefuDutyList return value:%v", kdl)

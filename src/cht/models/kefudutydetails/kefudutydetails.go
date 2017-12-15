@@ -41,8 +41,10 @@ func GetKefuDutyDetails(kddr *KefuDutyDetailsRequest) (*KefuDutyDetails, error) 
 
 	var kdd KefuDutyDetails
 	err := o.Raw(sql, kddr.ID).QueryRow(&kdd)
-	if err != nil {
-		Logger.Debugf("GetKefuDutyDetails query failed %v", err)
+	if err == orm.ErrNoRows {
+		return nil, nil
+	} else if err != nil {
+		Logger.Errorf("GetKefuDutyDetails query failed:%v", err)
 		return nil, err
 	}
 	Logger.Debugf("GetKefuDutyDetails return value %v", kdd)

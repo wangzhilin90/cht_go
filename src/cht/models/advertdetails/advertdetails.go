@@ -41,8 +41,10 @@ func GetAdvertDetails(adr *AdvertDetailsRequest) (*AdvertDetails, error) {
 
 	var ad AdvertDetails
 	err := o.Raw(sql).QueryRow(&ad)
-	if err != nil {
-		Logger.Debugf("GetAdvertDetails query failed:%v", err)
+	if err == orm.ErrNoRows {
+		return nil, nil
+	} else if err != nil {
+		Logger.Errorf("GetAdvertDetails query failed:%v", err)
 		return nil, err
 	}
 	Logger.Debugf("GetAdvertDetails res %v", ad)

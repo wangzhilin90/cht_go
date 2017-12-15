@@ -33,25 +33,27 @@ func (suds *sysuserdetailsservice) GetSysUserDetails(requestObj *SysUserDetailsR
 	}
 
 	var response SysUserDetailsResponseStruct
-	sud := new(SysUserDetailsStruct)
-	sud.ID = res.ID
-	sud.RoleID = res.RoleID
-	sud.Account = res.Account
-	sud.Realname = res.Realname
-	sud.Password = res.Password
-	sud.Mobile = res.Mobile
-	sud.Qq = res.Qq
-	sud.Lastloginip = res.Lastloginip
-	sud.Lastlogintime = res.Lastlogintime
-	sud.CreateTime = res.CreateTime
-	sud.Status = res.Status
-	sud.Views = res.Views
-	sud.CustomerType = res.CustomerType
+	if res != nil {
+		sud := new(SysUserDetailsStruct)
+		sud.ID = res.ID
+		sud.RoleID = res.RoleID
+		sud.Account = res.Account
+		sud.Realname = res.Realname
+		sud.Password = res.Password
+		sud.Mobile = res.Mobile
+		sud.Qq = res.Qq
+		sud.Lastloginip = res.Lastloginip
+		sud.Lastlogintime = res.Lastlogintime
+		sud.CreateTime = res.CreateTime
+		sud.Status = res.Status
+		sud.Views = res.Views
+		sud.CustomerType = res.CustomerType
+		response.SysUserDetails = sud
+	}
 
-	response.SysUserDetails = sud
 	response.Status = QUERY_SYS_USER_DETAILS_SUCCESS
 	response.Msg = Stat[QUERY_SYS_USER_DETAILS_SUCCESS]
-	Logger.Debugf("GetSysUserDetails return value:%v", response)
+	Logger.Debugf("GetSysUserDetails response:%v", response)
 	return &response, nil
 }
 

@@ -79,7 +79,9 @@ func GetUserBankDetails(ubdr *UserBankDetailsRequest) (*UserBankDetailsStruct, e
 	Logger.Info("GetUserBankDetails sql:", sql)
 	var ubds UserBankDetailsStruct
 	err := o.Raw(sql).QueryRow(&ubds)
-	if err != nil {
+	if err == orm.ErrNoRows {
+		return nil, nil
+	} else if err != nil {
 		Logger.Errorf("GetUserBankDetails query failed:%v", err)
 		return nil, err
 	}

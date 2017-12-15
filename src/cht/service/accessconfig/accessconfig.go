@@ -33,17 +33,19 @@ func (acs *accessconfigservice) GetAccessConfig(requestObj *AccessConfigRequestS
 		}, nil
 	}
 
-	acst := new(AccessConfigStruct)
-	acst.ID = res.ID
-	acst.Name = res.Name
-	acst.Source = res.Source
-	acst.Addtime = res.Addtime
-
-	return &AccessConfigResponseStruct{
-		Status:       QUERY_ACCESS_CONFIG_SUCCESS,
-		Msg:          Stat[QUERY_ACCESS_CONFIG_SUCCESS],
-		AccessConfig: acst,
-	}, nil
+	var response AccessConfigResponseStruct
+	if res != nil {
+		acst := new(AccessConfigStruct)
+		acst.ID = res.ID
+		acst.Name = res.Name
+		acst.Source = res.Source
+		acst.Addtime = res.Addtime
+		response.AccessConfig = acst
+	}
+	response.Status = QUERY_ACCESS_CONFIG_SUCCESS
+	response.Msg = Stat[QUERY_ACCESS_CONFIG_SUCCESS]
+	Logger.Debugf("GetAccessConfig response:%v", response)
+	return &response, nil
 }
 
 /**

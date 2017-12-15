@@ -25,25 +25,28 @@ func (rdss *roledetailsservice) GetRoleDetails(requestObj *RoleDetailsRequestStr
 	rdrs.RoleID = requestObj.GetRoleID()
 	res, err := roledetails.GetRoleDetails(rdrs)
 	if err != nil {
-		Logger.Debugf("GetRoleDetails query failed", err)
+		Logger.Errorf("GetRoleDetails query failed:%v", err)
 		return &RoleDetailsResponseStruct{
 			Status: ROLE_DETAILS_FAILED,
 			Msg:    Status[ROLE_DETAILS_FAILED],
 		}, nil
 	}
 
-	rds := new(RoleDetailsStruct)
-	rds.ID = res.ID
-	rds.RoleName = res.RoleName
-	rds.Remark = res.Remark
-	rds.PowerConfig = res.PowerConfig
-	rds.CreateTime = res.CreateTime
-
 	var response RoleDetailsResponseStruct
+	if res != nil {
+		rds := new(RoleDetailsStruct)
+		rds.ID = res.ID
+		rds.RoleName = res.RoleName
+		rds.Remark = res.Remark
+		rds.PowerConfig = res.PowerConfig
+		rds.CreateTime = res.CreateTime
+		response.RoleDetails = rds
+	}
+
 	response.Status = ROLE_DETAILS_SUCCESS
 	response.Msg = Status[ROLE_DETAILS_SUCCESS]
-	response.RoleDetails = rds
-	Logger.Debugf("GetRoleDetails return value %v", response)
+
+	Logger.Debugf("GetRoleDetails response:%v", response)
 	return &response, nil
 }
 

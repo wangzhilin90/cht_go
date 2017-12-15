@@ -43,25 +43,19 @@ func GetBorrowInfo(lulr *LogUserlLoginRequest) (*UserBorrowInfo, error) {
 	o.Using("default")
 	var ubi UserBorrowInfo
 	err := o.Raw("SELECT user_id,id,account_act,addtime FROM  jl_borrow_tender where user_id=? order by id desc limit 1", lulr.UserID).QueryRow(&ubi)
-	if err != nil {
-		Logger.Debugf("GetBorrowInfo query failed", err)
-		return &UserBorrowInfo{
-			AccountAct: "0.00",
-		}, nil
+	if err == orm.ErrNoRows {
+		return nil, nil
+	} else if err != nil {
+		Logger.Errorf("GetBorrowInfo query failed:%v", err)
+		return nil, err
 	}
 	return &ubi, nil
 }
 
 func UpdateLogUserlLogin(lulr *LogUserlLoginRequest) (bool, error) {
-	if lulr == nil {
-		Logger.Errorf("input param nil")
-		err := fmt.Errorf("input param nil")
-		return false, err
-	}
 	Logger.Debugf("UpdateLogUserlLogin input param", lulr)
-
 	res, err := GetBorrowInfo(lulr)
-	if err != nil {
+	if err != nil || res == nil {
 		Logger.Error("GetBorrowInfo failed", err)
 		return false, err
 	}

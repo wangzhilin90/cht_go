@@ -48,10 +48,8 @@ func (js *juanzengservice) GetInfo(requestObj *RequestStruct) (r *JuanzengRespon
 		}
 	}
 
-	numlistResult, err := juanzeng.GetNumlistResult(rs)
-	if err != nil {
-		response.Numlist = nil
-	} else {
+	numlistResult, _ := juanzeng.GetNumlistResult(rs)
+	if numlistResult != nil {
 		nrs := new(NumlistResultStruct)
 		nrs.Num = numlistResult.Num
 		nrs.Money = numlistResult.Money

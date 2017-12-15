@@ -31,6 +31,7 @@ func (gts *gettendercouponservice) GetUserTenderCouponDetails(requestObj *UserTe
 
 	res, err := gettendercoupon.GetTenderCoupon(tcr)
 	if err != nil {
+		Logger.Errorf("GetUserTenderCouponDetails query failed:%v", err)
 		return &UserTenderCouponDetailsResponseStruct{
 			Status: QUERY_COUPON_FAILED,
 			Msg:    Status[QUERY_COUPON_SUCCESS],

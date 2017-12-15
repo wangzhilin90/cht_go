@@ -31,6 +31,7 @@ func (gts *gettenderredservice) GetUserTenderRedbagDestails(requestObj *UserTend
 
 	res, err := gettenderredbag.GetRedBagMoney(trr)
 	if err != nil {
+		Logger.Errorf("GetUserTenderRedbagDestails qeury failed:%v", err)
 		return &UserTenderRedbagDestailsResponseStruct{
 			Status: QUERY_RED_BAG_FAILED,
 			Msg:    Status[QUERY_RED_BAG_FAILED],

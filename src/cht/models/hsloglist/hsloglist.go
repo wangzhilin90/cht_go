@@ -100,8 +100,10 @@ func GetHsLogTotalNum(hllr *HsLogListRequest) (int32, error) {
 	Logger.Debugf("GetHsLogTotalNum sql:%v", sql)
 	var totalNum int32
 	err := o.Raw(sql).QueryRow(&totalNum)
-	if err != nil {
-		Logger.Debugf("GetHelpList query failed :%v", err)
+	if err == orm.ErrNoRows {
+		return 0, nil
+	} else if err != nil {
+		Logger.Errorf("GetHelpList query failed :%v", err)
 		return 0, err
 	}
 	Logger.Debugf("GetHsLogTotalNum return num:%v", totalNum)

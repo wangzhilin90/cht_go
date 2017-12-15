@@ -27,34 +27,36 @@ func (uds *userdetailsbynamepasswordservice) GetUseDetailsrByNamePassword(reques
 	udbr.Password = requestObj.GetPassword()
 	userDetails, err := userdetailsbynamepassword.GetUseDetailsrByNamePassword(udbr)
 	if err != nil {
-		Logger.Debugf("GetUseDetailsrByNamePassword failed %v", err)
+		Logger.Errorf("GetUseDetailsrByNamePassword failed %v", err)
 		return &UserDetailsByNamePasswordResponseStruct{
-			Status:         QUERY_USER_DETAILS_FAILED,
-			Msg:            Status[QUERY_USER_DETAILS_FAILED],
-			SysUserDetails: nil,
+			Status: QUERY_USER_DETAILS_FAILED,
+			Msg:    Status[QUERY_USER_DETAILS_FAILED],
 		}, nil
 	}
-	sud := new(SysUserDetailsStruct)
-	sud.ID = userDetails.ID
-	sud.RoleID = userDetails.RoleID
-	sud.Account = userDetails.Account
-	sud.Realname = userDetails.Realname
-	sud.Password = userDetails.Password
-	sud.Mobile = userDetails.Mobile
-	sud.Qq = userDetails.Qq
-	sud.Lastloginip = userDetails.Lastloginip
-	sud.Lastlogintime = userDetails.Lastlogintime
-	sud.CreateTime = userDetails.CreateTime
-	sud.Status = userDetails.Status
-	sud.Views = userDetails.Views
-	sud.CustomerType = userDetails.CustomerType
+
+	var response UserDetailsByNamePasswordResponseStruct
+	if userDetails != nil {
+		sud := new(SysUserDetailsStruct)
+		sud.ID = userDetails.ID
+		sud.RoleID = userDetails.RoleID
+		sud.Account = userDetails.Account
+		sud.Realname = userDetails.Realname
+		sud.Password = userDetails.Password
+		sud.Mobile = userDetails.Mobile
+		sud.Qq = userDetails.Qq
+		sud.Lastloginip = userDetails.Lastloginip
+		sud.Lastlogintime = userDetails.Lastlogintime
+		sud.CreateTime = userDetails.CreateTime
+		sud.Status = userDetails.Status
+		sud.Views = userDetails.Views
+		sud.CustomerType = userDetails.CustomerType
+		response.SysUserDetails = sud
+	}
+	response.Status = QUERY_USER_DETAILS_SUCCESS
+	response.Msg = Status[QUERY_USER_DETAILS_SUCCESS]
 
 	Logger.Debugf("GetUseDetailsrByNamePassword query res:%v", userDetails)
-	return &UserDetailsByNamePasswordResponseStruct{
-		Status:         QUERY_USER_DETAILS_SUCCESS,
-		Msg:            Status[QUERY_USER_DETAILS_SUCCESS],
-		SysUserDetails: sud,
-	}, nil
+	return &response, nil
 }
 
 func StartUseDetailsrServer() {

@@ -40,7 +40,9 @@ func getBorrowType(tcr *TenderCouponRequest) (int32, error) {
 	Logger.Debug("getBorrowType sql:", sql)
 	var bs borrowStruct
 	err := o.Raw(sql).QueryRow(&bs)
-	if err != nil {
+	if err == orm.ErrNoRows {
+		return 0, nil
+	} else if err != nil {
 		Logger.Error("GetBorrowType query failed:", err)
 		return 0, err
 	}
@@ -68,16 +70,16 @@ func GetTenderCoupon(tcr *TenderCouponRequest) (string, error) {
 	o := orm.NewOrm()
 	o.Using("default")
 
-	sql := bytes.Buffer{}
-	sql.WriteString("SELECT apr FROM jl_apr_coupon WHERE ")
-	sql.WriteString("user_id=? and id=? and status=1 ") //status=1为可用红包
-	sql.WriteString("and min_tender<=? and (max_tender=0 OR max_tender>=?) ")
-	sql.WriteString(" and FIND_IN_SET(?, time_limit) ")
-	sql.WriteString(" and FIND_IN_SET(?, borrow_type) ")
-	sql.WriteString(" LIMIT 1")
-	Logger.Debug("GetTenderCoupon sql:", sql.String())
-	Logger.Debug("user_id ", tcr.UserId)
-	Logger.Debug("coupon_id ", tcr.CouponId)
+	buf := bytes.Buffer{}
+	buf.WriteString("SELECT apr FROM jl_apr_coupon WHERE ")
+	buf.WriteString("user_id=? and id=? and status=1 ") //status=1为可用红包
+	buf.WriteString("and min_tender<=? and (max_tender=0 OR max_tender>=?) ")
+	buf.WriteString(" and FIND_IN_SET(?, time_limit) ")
+	buf.WriteString(" and FIND_IN_SET(?, borrow_type) ")
+	buf.WriteString(" LIMIT 1")
+
+	sql := buf.String()
+	Logger.Debug("GetTenderCoupon sql:", sql)
 
 	//用户投资时间大于18个月，当18个月时间投资
 	if tcr.TimeLimit > 18 {
@@ -85,7 +87,7 @@ func GetTenderCoupon(tcr *TenderCouponRequest) (string, error) {
 	}
 
 	var cs CouponStruct
-	err = o.Raw(sql.String(),
+	err = o.Raw(sql,
 		tcr.UserId,
 		tcr.CouponId,
 		tcr.TenderMoney,
@@ -93,7 +95,9 @@ func GetTenderCoupon(tcr *TenderCouponRequest) (string, error) {
 		tcr.TimeLimit,
 		borrowType,
 	).QueryRow(&cs)
-	if err != nil {
+	if err == orm.ErrNoRows {
+		return "", nil
+	} else if err != nil {
 		Logger.Errorf("GetTenderCoupon query failed ", err)
 		return "", err
 	}

@@ -101,9 +101,11 @@ func GetNumlistResult(rs *RequestStruct) (*NumlistResultStruct, error) {
 
 	var nlrs NumlistResultStruct
 	err := o.Raw(sql).QueryRow(&nlrs)
-	if err != nil {
-		Logger.Debugf("GetNumlistResult query failed :%v", err)
+	if err == orm.ErrNoRows {
 		return nil, nil
+	} else if err != nil {
+		Logger.Errorf("GetNumlistResult query failed :%v", err)
+		return nil, err
 	}
 
 	Logger.Debugf("GetNumlistResult res :%v", nlrs)

@@ -27,28 +27,29 @@ func (ads *advertdetailsservice) GetAdvertDetails(requestObj *AdvertDetailsReque
 
 	res, err := adDetails.GetAdvertDetails(adr)
 	if err != nil {
-		Logger.Debugf("GetAdvertDetails get details failed:%v", err)
+		Logger.Errorf("GetAdvertDetails get details failed:%v", err)
 		return &AdvertDetailsReponseStruct{
 			Status: GET_ADVERT_DETAILS_FAILED,
 			Msg:    Stat[GET_ADVERT_DETAILS_FAILED],
 		}, nil
 	}
 
-	adst := new(AdvertDetailsStruct)
-	adst.ID = res.ID
-	adst.Type = res.Type
-	adst.Img = res.Img
-	adst.Adverturl = res.Adverturl
-	adst.Title = res.Title
-	adst.Addtime = res.Addtime
-	adst.Adduser = res.Adduser
-	adst.Status = res.Status
-	adst.Fid = res.Fid
-	adst.Starttime = res.Starttime
-	adst.Endtime = res.Endtime
-
 	var response AdvertDetailsReponseStruct
-	response.AdvertDetails = adst
+	if err != nil {
+		adst := new(AdvertDetailsStruct)
+		adst.ID = res.ID
+		adst.Type = res.Type
+		adst.Img = res.Img
+		adst.Adverturl = res.Adverturl
+		adst.Title = res.Title
+		adst.Addtime = res.Addtime
+		adst.Adduser = res.Adduser
+		adst.Status = res.Status
+		adst.Fid = res.Fid
+		adst.Starttime = res.Starttime
+		adst.Endtime = res.Endtime
+		response.AdvertDetails = adst
+	}
 	response.Status = GET_ADVERT_DETAILS_SUCCESS
 	response.Msg = Stat[GET_ADVERT_DETAILS_SUCCESS]
 	Logger.Debugf("GetAdvertDetails response:%v", response)

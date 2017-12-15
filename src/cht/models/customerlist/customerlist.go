@@ -100,8 +100,10 @@ func GetCustomerListTotalNum(clr *CustomerListRequest) (int32, error) {
 
 	var totalNum int32
 	err := o.Raw(sql).QueryRow(&totalNum)
-	if err != nil {
-		Logger.Debugf("GetCustomerListTotalNum query failed %v", err)
+	if err == orm.ErrNoRows {
+		return 0, nil
+	} else if err != nil {
+		Logger.Errorf("GetCustomerListTotalNum query failed %v", err)
 		return 0, err
 	}
 	Logger.Debugf("GetCustomerListTotalNum res %v", totalNum)

@@ -43,8 +43,10 @@ func GetUseDetailsrByNamePassword(udbpr *UserDetailsByNamePasswordRequest) (*Sys
 	Logger.Debugf("GetUseDetailsrByNamePassword sql", sql)
 	var surs SysUserDetailsStruct
 	err := o.Raw(sql).QueryRow(&surs)
-	if err != nil {
-		Logger.Debugf("GetUseDetailsrByNamePassword query failed:%v", err)
+	if err == orm.ErrNoRows {
+		return nil, nil
+	} else if err != nil {
+		Logger.Errorf("GetUseDetailsrByNamePassword query failed:%v", err)
 		return nil, err
 	}
 	Logger.Debugf("GetUseDetailsrByNamePassword res:%v", surs)

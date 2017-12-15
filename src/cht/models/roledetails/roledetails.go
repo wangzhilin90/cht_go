@@ -39,8 +39,10 @@ func GetRoleDetails(rdrs *RoleDetailsRequestStruct) (*RoleDetailsStruct, error) 
 
 	var rds RoleDetailsStruct
 	err := o.Raw(sql, rdrs.RoleID).QueryRow(&rds)
-	if err != nil {
-		Logger.Debugf("GetRoleDetails query failed %v", err)
+	if err == orm.ErrNoRows {
+		return nil, nil
+	} else if err != nil {
+		Logger.Errorf("GetRoleDetails query failed %v", err)
 		return nil, err
 	}
 	Logger.Debugf("GetRoleDetails return value %v", rds)

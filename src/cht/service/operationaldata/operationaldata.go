@@ -47,10 +47,8 @@ func (ods *operationaldataservice) GetOperationalData(requestObj *OperationalDat
 	tdr, err := operationaldata.GetThirtyDaysResult(odrs)
 	if err != nil {
 		return &OperationalDataResponseStruct{
-			Status:    QUERY_THIRTYDAYS_RESULT_FAILED,
-			Msg:       Stat[QUERY_THIRTYDAYS_RESULT_FAILED],
-			OldSum:    "0",
-			Repayment: "0",
+			Status: QUERY_THIRTYDAYS_RESULT_FAILED,
+			Msg:    Stat[QUERY_THIRTYDAYS_RESULT_FAILED],
 		}, nil
 	}
 
@@ -65,10 +63,8 @@ func (ods *operationaldataservice) GetOperationalData(requestObj *OperationalDat
 	tmr, err := operationaldata.GetTwelveMonthResult(odrs)
 	if err != nil {
 		return &OperationalDataResponseStruct{
-			Status:    QUERY_TWELVE_MONTH_RESULT_FAILED,
-			Msg:       Stat[QUERY_TWELVE_MONTH_RESULT_FAILED],
-			OldSum:    "0",
-			Repayment: "0",
+			Status: QUERY_TWELVE_MONTH_RESULT_FAILED,
+			Msg:    Stat[QUERY_TWELVE_MONTH_RESULT_FAILED],
 		}, nil
 	}
 
@@ -83,10 +79,8 @@ func (ods *operationaldataservice) GetOperationalData(requestObj *OperationalDat
 	omr, err := operationaldata.GetOneMonthResult(odrs)
 	if err != nil {
 		return &OperationalDataResponseStruct{
-			Status:    QUERY_TWELVE_MONTH_RESULT_FAILED,
-			Msg:       Stat[QUERY_TWELVE_MONTH_RESULT_FAILED],
-			OldSum:    "0",
-			Repayment: "0",
+			Status: QUERY_TWELVE_MONTH_RESULT_FAILED,
+			Msg:    Stat[QUERY_TWELVE_MONTH_RESULT_FAILED],
 		}, nil
 	}
 
@@ -101,10 +95,8 @@ func (ods *operationaldataservice) GetOperationalData(requestObj *OperationalDat
 	pr, err := operationaldata.GetPeriodResult(odrs)
 	if err != nil {
 		return &OperationalDataResponseStruct{
-			Status:    QUERY_PERIOD_RESULT_FAILED,
-			Msg:       Stat[QUERY_PERIOD_RESULT_FAILED],
-			OldSum:    "0",
-			Repayment: "0",
+			Status: QUERY_PERIOD_RESULT_FAILED,
+			Msg:    Stat[QUERY_PERIOD_RESULT_FAILED],
 		}, nil
 	}
 
@@ -119,29 +111,27 @@ func (ods *operationaldataservice) GetOperationalData(requestObj *OperationalDat
 	ir, err := operationaldata.GetInvestResult(odrs)
 	if err != nil {
 		return &OperationalDataResponseStruct{
-			Status:    QUERY_INVEST_RESULT_FAILED,
-			Msg:       Stat[QUERY_INVEST_RESULT_FAILED],
-			OldSum:    "0",
-			Repayment: "0",
+			Status: QUERY_INVEST_RESULT_FAILED,
+			Msg:    Stat[QUERY_INVEST_RESULT_FAILED],
 		}, nil
 	}
 
-	irs := new(InvestResultStruct)
-	irs.A1 = ir.A1
-	irs.A2 = ir.A2
-	irs.A3 = ir.A3
-	irs.A4 = ir.A4
-	irs.A5 = ir.A5
-	response.InvestAccount = irs
+	if ir != nil {
+		irs := new(InvestResultStruct)
+		irs.A1 = ir.A1
+		irs.A2 = ir.A2
+		irs.A3 = ir.A3
+		irs.A4 = ir.A4
+		irs.A5 = ir.A5
+		response.InvestAccount = irs
+	}
 
 	/*得到标的比例结果*/
 	br, err := operationaldata.GetBidResult(odrs)
 	if err != nil {
 		return &OperationalDataResponseStruct{
-			Status:    QUERY_BID_RESULT_FAILED,
-			Msg:       Stat[QUERY_BID_RESULT_FAILED],
-			OldSum:    "0",
-			Repayment: "0",
+			Status: QUERY_BID_RESULT_FAILED,
+			Msg:    Stat[QUERY_BID_RESULT_FAILED],
 		}, nil
 	}
 
@@ -156,10 +146,8 @@ func (ods *operationaldataservice) GetOperationalData(requestObj *OperationalDat
 	wr, err := operationaldata.GetWaitResult(odrs)
 	if err != nil {
 		return &OperationalDataResponseStruct{
-			Status:    QUERY_WAITRESULT_FAILED,
-			Msg:       Stat[QUERY_WAITRESULT_FAILED],
-			OldSum:    "0",
-			Repayment: "0",
+			Status: QUERY_WAITRESULT_FAILED,
+			Msg:    Stat[QUERY_WAITRESULT_FAILED],
 		}, nil
 	}
 
@@ -174,10 +162,8 @@ func (ods *operationaldataservice) GetOperationalData(requestObj *OperationalDat
 	tmtn, err := operationaldata.GetTwelveMonthTotalNum(odrs)
 	if err != nil {
 		return &OperationalDataResponseStruct{
-			Status:    QUERY_TWELVE_MONTH_TOTALNUM_FAILED,
-			Msg:       Stat[QUERY_TWELVE_MONTH_TOTALNUM_FAILED],
-			OldSum:    "0",
-			Repayment: "0",
+			Status: QUERY_TWELVE_MONTH_TOTALNUM_FAILED,
+			Msg:    Stat[QUERY_TWELVE_MONTH_TOTALNUM_FAILED],
 		}, nil
 	}
 	response.OldSum = tmtn
@@ -186,10 +172,8 @@ func (ods *operationaldataservice) GetOperationalData(requestObj *OperationalDat
 	tr, err := operationaldata.GetTotalRepayment(odrs)
 	if err != nil {
 		return &OperationalDataResponseStruct{
-			Status:    QUERY_TOTALREPAYMENT_FAILED,
-			Msg:       Stat[QUERY_TOTALREPAYMENT_FAILED],
-			OldSum:    "0",
-			Repayment: "0",
+			Status: QUERY_TOTALREPAYMENT_FAILED,
+			Msg:    Stat[QUERY_TOTALREPAYMENT_FAILED],
 		}, nil
 	}
 

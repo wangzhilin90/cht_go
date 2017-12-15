@@ -41,8 +41,10 @@ func GetDutyDetails(ddrs *DutyDetailsRequestStruct) (*DutyDetailsStruct, error) 
 	Logger.Debug("GetDutyDetails sql:", sql)
 	var dds DutyDetailsStruct
 	err := o.Raw(sql).QueryRow(&dds)
-	if err != nil {
-		Logger.Debugf("GetDutyDetails query failed %v", err)
+	if err == orm.ErrNoRows {
+		return nil, nil
+	} else if err != nil {
+		Logger.Errorf("GetDutyDetails query failed %v", err)
 		return nil, err
 	}
 	Logger.Debugf("GetDutyDetails res :%v", dds)

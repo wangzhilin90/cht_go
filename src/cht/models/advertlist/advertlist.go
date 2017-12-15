@@ -33,21 +33,23 @@ type AdvertList struct {
 func GetAdvertListTatalNum(alr *AdvertListRequest) (int32, error) {
 	o := orm.NewOrm()
 	o.Using("default")
-	Logger.Debug("GetAdvertDetails input param:", alr)
+	Logger.Debug("GetAdvertListTatalNum input param:", alr)
 	qb, _ := orm.NewQueryBuilder("mysql")
 	qb.Select("count(*)").
 		From("jl_advert_manage")
 
 	sql := qb.String()
-	Logger.Debug("GetAdvertDetails sql:", sql)
+	Logger.Debug("GetAdvertListTatalNum sql:", sql)
 
 	var totalNum int32
 	err := o.Raw(sql).QueryRow(&totalNum)
-	if err != nil {
-		Logger.Debugf("GetAdvertDetails query failed:%v", err)
+	if err == orm.ErrNoRows {
+		return 0, nil
+	} else if err != nil {
+		Logger.Errorf("GetAdvertListTatalNum query failed:%v", err)
 		return 0, err
 	}
-	Logger.Debugf("GetAdvertDetails res:%v", totalNum)
+	Logger.Debugf("GetAdvertListTatalNum res:%v", totalNum)
 	return totalNum, nil
 }
 
@@ -60,20 +62,20 @@ func GetAdvertListTatalNum(alr *AdvertListRequest) (int32, error) {
 func GetAdvertList(alr *AdvertListRequest) ([]AdvertList, error) {
 	o := orm.NewOrm()
 	o.Using("default")
-	Logger.Debug("GetAdvertDetails input param:", alr)
+	Logger.Debug("GetAdvertList input param:", alr)
 	qb, _ := orm.NewQueryBuilder("mysql")
 	qb.Select("*").
 		From("jl_advert_manage")
 
 	sql := qb.String()
-	Logger.Debug("GetAdvertDetails sql:", sql)
+	Logger.Debug("GetAdvertList sql:", sql)
 
 	var al []AdvertList
 	_, err := o.Raw(sql).QueryRows(&al)
 	if err != nil {
-		Logger.Errorf("GetAdvertDetails query failed:%v", err)
+		Logger.Errorf("GetAdvertList query failed:%v", err)
 		return nil, err
 	}
-	Logger.Debugf("GetAdvertDetails res:%v", al)
+	Logger.Debugf("GetAdvertList res:%v", al)
 	return al, nil
 }

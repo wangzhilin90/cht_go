@@ -152,7 +152,7 @@ func GetCollectionInfo(trr *UserCollectionListRequest) ([]CollectionInfoStruct, 
 	var cis []CollectionInfoStruct
 	_, err = o.Raw(sql).QueryRows(&cis)
 	if err != nil {
-		Logger.Error("GetCollectionInfo queryrows failed")
+		Logger.Errorf("GetCollectionInfo queryrows failed:%v", err)
 		return nil, 0, err
 	}
 	Logger.Debugf("GetCollectionInfo res:%v %d", cis, totalnum)

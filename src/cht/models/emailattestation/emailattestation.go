@@ -57,8 +57,10 @@ func CheckEmailUse(ceurs *CheckEmailUseRequestStruct) int32 {
 	Logger.Debug("CheckEmailUse sql:", sql)
 	var id int32
 	err := o.Raw(sql).QueryRow(&id)
-	if err != nil {
-		Logger.Debugf("CheckEmailUse query failed %v", err)
+	if err == orm.ErrNoRows {
+		return 0
+	} else if err != nil {
+		Logger.Errorf("CheckEmailUse query failed %v", err)
 		return 0
 	}
 	Logger.Debugf("CheckEmailUse used")
@@ -100,7 +102,11 @@ func UpdateUserAttestation(uesrs *UserAttestationSaveStruct) error {
 		email_passtime = time.Now().Unix()
 	}
 
-	res, _ := o.Raw(sql, uesrs.EmailStatus, email_passtime, uesrs.UserID).Exec()
+	res, err := o.Raw(sql, uesrs.EmailStatus, email_passtime, uesrs.UserID).Exec()
+	if err != nil {
+		Logger.Errorf("UpdateUserAttestation update failed:%v", err)
+		return err
+	}
 	num, _ := res.RowsAffected()
 	if num == 0 {
 		err := fmt.Errorf("UpdateUserAttestation update failed")
@@ -155,7 +161,11 @@ func UserEmailSave(uesrs *UserEmailSaveRequestStruct) int32 {
 	sql := buf.String()
 	Logger.Debugf("UserEmailSave sql: %v", sql)
 
-	res, _ := o.Raw(sql, uesrs.Email, uesrs.UserID).Exec()
+	res, err := o.Raw(sql, uesrs.Email, uesrs.UserID).Exec()
+	if err != nil {
+		Logger.Errorf("UserEmailSave update failed:%v", err)
+		return 0
+	}
 	num, _ := res.RowsAffected()
 	if num == 0 {
 		Logger.Errorf("UserEmailSave update failed")
@@ -188,12 +198,12 @@ func InsertEmailLog(sers *SendEmailRequestStruct) (int32, error) {
 		sers.IP,
 	).Exec()
 	if err != nil {
-		Logger.Errorf("InsertEmailLog insert failed", err)
+		Logger.Errorf("InsertEmailLog insert failed:%v", err)
 		return 0, err
 	}
 
 	num, _ := res.LastInsertId()
-	Logger.Debugf("InsertEmailLog success, last insert num %d", num)
+	Logger.Debugf("InsertEmailLog last insert num:%v", num)
 	return int32(num), nil
 }
 
@@ -205,14 +215,17 @@ func UpdateEmailLog(lastInsertNum int32) error {
 	sql := buf.String()
 	Logger.Debugf("UpdateEmailLog sql: %v", sql)
 
-	res, _ := o.Raw(sql, time.Now().Unix(), lastInsertNum).Exec()
+	res, err := o.Raw(sql, time.Now().Unix(), lastInsertNum).Exec()
+	if err != nil {
+		Logger.Errorf("UpdateEmailLog update failed:%v", err)
+		return err
+	}
 	num, _ := res.RowsAffected()
 	if num == 0 {
 		err := fmt.Errorf("UpdateEmailLog update failed")
 		Logger.Errorf("UpdateEmailLog update failed")
 		return err
 	}
-	Logger.Debugf("UpdateEmailLog success")
 	return nil
 }
 

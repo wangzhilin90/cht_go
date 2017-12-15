@@ -37,14 +37,17 @@ func GetGoodsDetails(gdr *GoodsDetailsRequest) (*GoodsDetailsStruct, error) {
 	qb, _ := orm.NewQueryBuilder("mysql")
 	qb.Select("*").
 		From("jl_point_goods").
-		Where(fmt.Sprintf("id=%d", gdr.ID))
+		Where(fmt.Sprintf("id=%d", gdr.ID)).
+		Limit(1)
 
 	sql := qb.String()
 	Logger.Debug("GetGoodsDetails sql:", sql)
 	var gds GoodsDetailsStruct
 	err := o.Raw(sql).QueryRow(&gds)
-	if err != nil {
-		Logger.Debugf("GetGoodsDetails query failed:", err)
+	if err == orm.ErrNoRows {
+		return nil, nil
+	} else if err != nil {
+		Logger.Errorf("GetGoodsDetails query failed:%v", err)
 		return nil, err
 	}
 	Logger.Debugf("GetGoodsDetails res:%v", gds)

@@ -28,7 +28,7 @@ func (als *advertlistservice) GetAdvertList(requestObj *AdvertListRequestStruct)
 
 	tatalNum, err := adList.GetAdvertListTatalNum(alr)
 	if err != nil {
-		Logger.Debugf("GetAdvertList get totalNUm failed:%v", err)
+		Logger.Errorf("GetAdvertList get totalNUm failed:%v", err)
 		return &AdvertListResponseStruct{
 			Status: QUERY_ADVERT_LIST_TOTAL_NUM_FAILED,
 			Msg:    Stat[QUERY_ADVERT_LIST_TOTAL_NUM_FAILED],

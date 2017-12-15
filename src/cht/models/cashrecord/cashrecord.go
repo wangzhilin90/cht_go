@@ -67,12 +67,12 @@ func GetCashStats(crrs *CashRecordRequestStruct) (*CashStats, error) {
 	Logger.Debug("GetCashStats sql:", sql)
 	var cs CashStats
 	err := o.Raw(sql).QueryRow(&cs)
-	if err != nil {
+	if err == orm.ErrNoRows {
+		return nil, nil
+	} else if err != nil {
 		Logger.Error("GetCashStats query failed:", err)
 		return nil, err
 	}
-	Logger.Debugf("GetCashStats res Money", cs.Money)
-	Logger.Debugf("GetCashStats res Fee", cs.Fee)
 	return &cs, nil
 }
 
@@ -135,7 +135,7 @@ func GetCashRecord(crrs *CashRecordRequestStruct) ([]CashRecordStruct, *CashStat
 	var crs1 []CashRecordStruct
 	totalnum, err := o.Raw(sql).QueryRows(&crs1)
 	if err != nil {
-		Logger.Error("GetCashRecord query failed:", err)
+		Logger.Errorf("GetCashRecord query failed:%v", err)
 		return nil, nil, 0, err
 	}
 	/*得到总的查询数*/
@@ -154,7 +154,7 @@ func GetCashRecord(crrs *CashRecordRequestStruct) ([]CashRecordStruct, *CashStat
 	var crs []CashRecordStruct
 	_, err = o.Raw(sql).QueryRows(&crs)
 	if err != nil {
-		Logger.Debug("GetCashRecord queryrows failed")
+		Logger.Errorf("GetCashRecord queryrows failed:%v", err)
 		return nil, nil, 0, err
 	}
 

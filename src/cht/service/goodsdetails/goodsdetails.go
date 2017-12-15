@@ -26,31 +26,33 @@ func (gds *goodsdetailsservice) GetGoodsDetails(requestObj *GoodsDetailsRequestS
 	gdr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	res, err := gd.GetGoodsDetails(gdr)
 	if err != nil {
+		Logger.Errorf("GetGoodsDetails query failed:v", err)
 		return &GoodsDetailsResponseStruct{
 			Status: QUERY_GOODS_DETAILS_FAILED,
 			Msg:    Stat[QUERY_GOODS_DETAILS_FAILED],
 		}, nil
 	}
 
-	gdss := new(GoodsDetailsStruct)
-	gdss.ID = res.ID
-	gdss.Addtime = res.Addtime
-	gdss.ShowTime = res.ShowTime
-	gdss.CloseTime = res.CloseTime
-	gdss.IsTimer = res.IsTimer
-	gdss.Category = res.Category
-	gdss.RedbagMoney = res.RedbagMoney
-	gdss.OriginalPoint = res.OriginalPoint
-	gdss.CurrentPoint = res.CurrentPoint
-	gdss.TotalNum = res.TotalNum
-	gdss.SoldNum = res.SoldNum
-	gdss.SingleNum = res.SingleNum
-	gdss.Name = res.Name
-	gdss.Litpic = res.Litpic
-	gdss.Content = res.Content
-
 	var response GoodsDetailsResponseStruct
-	response.GoodsDetails = gdss
+	if err != nil {
+		gdss := new(GoodsDetailsStruct)
+		gdss.ID = res.ID
+		gdss.Addtime = res.Addtime
+		gdss.ShowTime = res.ShowTime
+		gdss.CloseTime = res.CloseTime
+		gdss.IsTimer = res.IsTimer
+		gdss.Category = res.Category
+		gdss.RedbagMoney = res.RedbagMoney
+		gdss.OriginalPoint = res.OriginalPoint
+		gdss.CurrentPoint = res.CurrentPoint
+		gdss.TotalNum = res.TotalNum
+		gdss.SoldNum = res.SoldNum
+		gdss.SingleNum = res.SingleNum
+		gdss.Name = res.Name
+		gdss.Litpic = res.Litpic
+		gdss.Content = res.Content
+		response.GoodsDetails = gdss
+	}
 	response.Status = QUERY_GOODS_DETAILS_SUCCESS
 	response.Msg = Stat[QUERY_GOODS_DETAILS_SUCCESS]
 	Logger.Debugf("GetGoodsDetails response:%v", response)

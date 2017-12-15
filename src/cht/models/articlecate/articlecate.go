@@ -8,13 +8,13 @@ import (
 )
 
 type ArticleCateListRequest struct {
-	ID                   int32  `thrift:"id,1" db:"id" json:"id"`
-	Name                 string `thrift:"name,2" db:"name" json:"name"`
-	Keywords             string `thrift:"keywords,3" db:"keywords" json:"keywords"`
-	Description          string `thrift:"description,4" db:"description" json:"description"`
-	Pid                  int32  `thrift:"pid,5" db:"pid" json:"pid"`
-	Status               int32  `thrift:"status,6" db:"status" json:"status"`
-	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,7" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
+	ID                   int32
+	Name                 string
+	Keywords             string
+	Description          string
+	Pid                  int32
+	Status               int32
+	ChengHuiTongTraceLog string
 }
 
 type ArticleCateDetails struct {

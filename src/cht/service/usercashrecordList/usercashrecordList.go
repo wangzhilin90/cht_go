@@ -33,9 +33,8 @@ func (cs *cashrecordservice) GetUserCashRecordList(requestObj *UserCashRecordLis
 	res, CashStat, num, err := cashrecord.GetCashRecord(crrs)
 	if err != nil {
 		return &UserCashRecordListResponseStruct{
-			Status:   QUERY_CASHRECORD_FAILED,
-			Msg:      Status[QUERY_CASHRECORD_FAILED],
-			Totalnum: 0,
+			Status: QUERY_CASHRECORD_FAILED,
+			Msg:    Status[QUERY_CASHRECORD_FAILED],
 		}, err
 	}
 
@@ -58,13 +57,15 @@ func (cs *cashrecordservice) GetUserCashRecordList(requestObj *UserCashRecordLis
 		response.UserCashRecordList = append(response.UserCashRecordList, crs)
 	}
 
-	css := new(UserCashStatsStruct)
-	css.Fee = CashStat.Fee
-	css.Money = CashStat.Money
+	if CashStat != nil {
+		css := new(UserCashStatsStruct)
+		css.Fee = CashStat.Fee
+		css.Money = CashStat.Money
+		response.UserCashStruct = css
+	}
 	response.Status = QUERY_CASHRECORD_SUCCESS
 	response.Msg = Status[QUERY_CASHRECORD_SUCCESS]
 	response.Totalnum = num
-	response.UserCashStruct = css
 
 	Logger.Debug("getUserCashRecordList res:", response)
 	return &response, nil

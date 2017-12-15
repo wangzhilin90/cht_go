@@ -44,7 +44,7 @@ type BorrowerUID struct {
 func GetBorrowerUID(birs *BorrowerInfoRequest) (*BorrowerUID, error) {
 	o := orm.NewOrm()
 	o.Using("default")
-	Logger.Debug("getBorrowerUID input param:", birs)
+	Logger.Debug("GetBorrowerUID input param:", birs)
 	qb, _ := orm.NewQueryBuilder("mysql")
 	qb.Select("id,realname,is_borrower").
 		From("jl_user").
@@ -52,14 +52,16 @@ func GetBorrowerUID(birs *BorrowerInfoRequest) (*BorrowerUID, error) {
 		Limit(1)
 
 	sql := qb.String()
-	Logger.Debug("getBorrowerUID sql:", sql)
+	Logger.Debug("GetBorrowerUID sql:", sql)
 	var bu BorrowerUID
 	err := o.Raw(sql).QueryRow(&bu)
-	if err != nil {
-		Logger.Error("getBorrowerUID query failed:", err)
+	if err == orm.ErrNoRows {
+		return nil, nil
+	} else if err != nil {
+		Logger.Error("GetBorrowerUID query failed:", err)
 		return nil, err
 	}
-	Logger.Debugf("getBorrowerUID res :%v", bu)
+	Logger.Debugf("GetBorrowerUID res :%v", bu)
 	return &bu, nil
 }
 

@@ -115,8 +115,10 @@ func GetUserInfo(mr *MessageRequest) (*UserInfoStruct, error) {
 
 	var uis UserInfoStruct
 	err := o.Raw(sql, mr.Phone).QueryRow(&uis)
-	if err != nil {
-		Logger.Error("GetUserInfo  query failed:", err)
+	if err == orm.ErrNoRows {
+		return nil, nil
+	} else if err != nil {
+		Logger.Errorf("GetUserInfo  query failed:%v", err)
 		return nil, err
 	}
 

@@ -32,7 +32,6 @@ func (uls *UserLoginService) GetUserLoginInfo(requestObj *UserLoginRequestStruct
 	ulr.Password = requestObj.GetPassword()
 	ulr.IP = requestObj.GetIP()
 	ulr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
-	Logger.Debug("GetUserLoginInfo input param:", requestObj)
 
 	var v UserLoginResponseStruct
 	var max_retry_times int32 = 5

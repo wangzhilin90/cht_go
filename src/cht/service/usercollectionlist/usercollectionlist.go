@@ -69,10 +69,10 @@ func (cs *collectionservice) GetUserCollectionList(requestObj *UserCollectionLis
 		response.UserCollectionList = append(response.UserCollectionList, cis)
 	}
 
-	Logger.Debug("GetUserCollectionList res ", res)
 	response.Status = QUERY_COLLECTION_SUCCESS
 	response.Msg = Status[QUERY_COLLECTION_SUCCESS]
 	response.TotalNum = num
+	Logger.Debugf("GetUserCollectionList response:%v", response)
 	return &response, nil
 }
 

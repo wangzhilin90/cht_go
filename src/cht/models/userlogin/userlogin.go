@@ -74,7 +74,9 @@ func CheckLoginUserExists(ulr *UserlLoginRequest) (*UserInfoResult, bool, error)
 
 	var uir UserInfoResult
 	err := o.Raw("SELECT id,username,password,email,islock FROM  jl_user where username=? or email=? or phone=?", ulr.Username, ulr.Username, ulr.Username).QueryRow(&uir)
-	if err != nil {
+	if err == orm.ErrNoRows {
+		return nil, false, nil
+	} else if err != nil {
 		Logger.Error("CheckLoginUserExists query failed", err.Error())
 		return nil, false, err
 	}

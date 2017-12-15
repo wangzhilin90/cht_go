@@ -71,7 +71,7 @@ type UserAppBankDeleteRequest struct {
  * @DateTime 2017-12-06T13:37:20+0800
  */
 func GetUserAppBankDetails(uabdr *UserAppBankDetailsRequest) (*UserAppBankDetailsStruct, error) {
-	Logger.Info("GetUserAppBankDetails input param:", uabdr)
+	Logger.Debugf("GetUserAppBankDetails input param:", uabdr)
 	o := orm.NewOrm()
 	o.Using("default")
 
@@ -85,11 +85,13 @@ func GetUserAppBankDetails(uabdr *UserAppBankDetailsRequest) (*UserAppBankDetail
 	Logger.Info("GetUserAppBankDetails sql:", sql)
 	var uabds UserAppBankDetailsStruct
 	err := o.Raw(sql).QueryRow(&uabds)
-	if err != nil {
+	if err == orm.ErrNoRows {
+		return nil, nil
+	} else if err != nil {
 		Logger.Errorf("GetUserAppBankDetails query failed:%v", err)
 		return nil, err
 	}
-	Logger.Info("GetUserAppBankDetails return value:", uabds)
+	Logger.Debugf("GetUserAppBankDetails return value:", uabds)
 	return &uabds, nil
 }
 

@@ -25,7 +25,7 @@ func (ddss *dutydetailsservice) GetDutyDetails(requestObj *DutyDetailsRequestStr
 	ddrs.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	res, err := dutydetails.GetDutyDetails(ddrs)
 	if err != nil {
-		Logger.Debugf("GetDutyDetails query failed %v", err)
+		Logger.Errorf("GetDutyDetails query failed %v", err)
 		return &DutyDetailsResponseStruct{
 			Status: QUERY_DUTY_DETAILS_FAILED,
 			Msg:    Status[QUERY_DUTY_DETAILS_FAILED],
@@ -33,20 +33,22 @@ func (ddss *dutydetailsservice) GetDutyDetails(requestObj *DutyDetailsRequestStr
 	}
 
 	var response DutyDetailsResponseStruct
-	dds := new(DutyDetailsStruct)
-	dds.ID = res.ID
-	dds.Customer = res.Customer
-	dds.IsRest = res.IsRest
-	dds.DutyTime = res.DutyTime
-	dds.HolidayUser = res.HolidayUser
-	dds.StartTime = res.StartTime
-	dds.EndTime = res.EndTime
-	dds.Addtime = res.Addtime
+	if res != nil {
+		dds := new(DutyDetailsStruct)
+		dds.ID = res.ID
+		dds.Customer = res.Customer
+		dds.IsRest = res.IsRest
+		dds.DutyTime = res.DutyTime
+		dds.HolidayUser = res.HolidayUser
+		dds.StartTime = res.StartTime
+		dds.EndTime = res.EndTime
+		dds.Addtime = res.Addtime
+		response.DutyDetails = dds
+	}
 
-	response.DutyDetails = dds
 	response.Status = QUERY_DUTY_DETAILS_SUCCESS
 	response.Msg = Status[QUERY_DUTY_DETAILS_SUCCESS]
-	Logger.Debugf("GetDutyDetails return value %v", response)
+	Logger.Debugf("GetDutyDetails response:%v", response)
 	return &response, nil
 }
 

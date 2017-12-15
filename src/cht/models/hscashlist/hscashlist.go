@@ -115,8 +115,10 @@ func GetHsCashListTotalNum(hclr *HsCashListRequest) (int32, error) {
 	Logger.Debugf("GetHsCashListTotalNum sql:%v", sql)
 	var totalNum int32
 	err := o.Raw(sql).QueryRow(&totalNum)
-	if err != nil {
-		Logger.Debugf("GetHsCashListTotalNum query failed :%v", err)
+	if err == orm.ErrNoRows {
+		return 0, nil
+	} else if err != nil {
+		Logger.Errorf("GetHsCashListTotalNum query failed :%v", err)
 		return 0, err
 	}
 	Logger.Debugf("GetHsCashListTotalNum return num:%v", totalNum)

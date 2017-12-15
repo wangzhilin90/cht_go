@@ -32,7 +32,7 @@ func (bs *borrowerservice) GetBorrowUserDetails(requestObj *BorrowUserDetailsReq
 	bir.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 
 	borrowInfo, err := borrower.GetBorrowerUID(bir)
-	if err != nil {
+	if err != nil || borrowInfo == nil {
 		Logger.Errorf("GetBorrowUserDetails query failed", err)
 		return &BorrowUserDetailsResponseStruct{
 			Status: QUERY_USER_ID_FAILED,
@@ -54,25 +54,20 @@ func (bs *borrowerservice) GetBorrowUserDetails(requestObj *BorrowUserDetailsReq
 	bis.IsBorrower = borrowInfo.IsBorrower
 	bis.CardID = card_id
 	bis.Credit = fmt.Sprintf("%.6f", (format_credit_use - format_review_account))
-
 	bis.Guarantor = guarantor
 
 	for _, v := range material {
-		Logger.Debugf("GetBorrowUserDetails material %v", v)
 		m := new(MaterialInfoStruct)
 		m.ID = v.ID
 		m.Name = v.Name
 		bis.MaterialList = append(bis.MaterialList, m)
 	}
 
-	Logger.Debugf("GetBorrowUserDetails res:%v", bis)
-	Logger.Debugf("GetBorrowUserDetails res:%v", bis.MaterialList)
-
 	response := new(BorrowUserDetailsResponseStruct)
 	response.BorrowUserDetails = bis
 	response.Status = QUERY_BORROW_INFO_SUCCESS
 	response.Msg = Status[QUERY_BORROW_INFO_SUCCESS]
-	Logger.Debugf("GetBorrowUserDetails res:%v", response)
+	Logger.Debugf("GetBorrowUserDetails response:%v", response)
 	return response, nil
 }
 

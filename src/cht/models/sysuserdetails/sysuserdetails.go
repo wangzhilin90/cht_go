@@ -47,8 +47,10 @@ func GetSysUserDetails(sudr *SysUserDetailsRequest) (*SysUserDetails, error) {
 	Logger.Debug("GetSysUserDetails sql:", sql)
 	var sud SysUserDetails
 	err := o.Raw(sql).QueryRow(&sud)
-	if err != nil {
-		Logger.Debugf("GetSysUserDetails query failed %v", err)
+	if err == orm.ErrNoRows {
+		return nil, nil
+	} else if err != nil {
+		Logger.Errorf("GetSysUserDetails query failed %v", err)
 		return nil, err
 	}
 	Logger.Debugf("GetSysUserDetails res %v", sud)

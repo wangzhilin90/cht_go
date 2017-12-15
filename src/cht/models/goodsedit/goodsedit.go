@@ -95,11 +95,10 @@ func EditGoods(ger *GoodsEditRequest) bool {
 	Logger.Debug("EditGoods sql:", sql)
 	res, err := o.Raw(sql).Exec()
 	if err != nil {
-		Logger.Debugf("EditGoods update failed :%v", err)
+		Logger.Errorf("EditGoods update failed :%v", err)
 		return false
 	}
 	num, _ := res.RowsAffected()
-	Logger.Debugf("EditGoods change num :%v", num)
 	if num == 0 {
 		return false
 	}

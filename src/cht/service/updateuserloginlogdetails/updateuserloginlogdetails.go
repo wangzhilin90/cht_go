@@ -42,7 +42,7 @@ func (luls *LogUserLoginService) UpdateUserLoginLogDetails(requestObj *UpdateUse
 			Msg:    Stat[UPDATE_LOG_FAILED],
 		}, nil
 	}
-	Logger.Debug("UpdateUserLoginLogDetails success")
+
 	return &UpdateUserLoginLogDetailsResponseStruct{
 		Status: UPDATE_LOG_SUCCESS,
 		Msg:    Stat[UPDATE_LOG_SUCCESS],

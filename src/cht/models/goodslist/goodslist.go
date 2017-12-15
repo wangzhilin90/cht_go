@@ -55,8 +55,10 @@ func GetGoodsListTotalNum(glr *GoodsListRequest) (int32, error) {
 	Logger.Debugf("GetGoodsListTotalNum sql:%v", sql)
 	var totalNum int32
 	err := o.Raw(sql).QueryRow(&totalNum)
-	if err != nil {
-		Logger.Debugf("GetGoodsListTotalNum query failed :%v", err)
+	if err == orm.ErrNoRows {
+		return 0, nil
+	} else if err != nil {
+		Logger.Errorf("GetGoodsListTotalNum query failed :%v", err)
 		return 0, err
 	}
 	Logger.Debugf("GetGoodsListTotalNum return num:%v", totalNum)

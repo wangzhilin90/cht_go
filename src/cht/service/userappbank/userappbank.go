@@ -65,20 +65,21 @@ func (uabs *userappbankservice) GetUserAppBankDetails(requestObj *UserAppBankDet
 	}
 
 	var response UserAppBankDetailsResponseStruct
-	uabd := new(UserAppBankDetailsStruct)
-	uabd.ID = res.ID
-	uabd.UserID = res.UserID
-	uabd.Name = res.Name
-	uabd.Account = res.Account
-	uabd.Bank = res.Bank
-	uabd.Branch = res.Branch
-	uabd.Province = res.Province
-	uabd.City = res.City
-	uabd.Area = res.Area
-	uabd.Addtime = res.Addtime
-	uabd.Addip = res.Addip
-	response.UserAppBankDetails = uabd
-
+	if res != nil {
+		uabd := new(UserAppBankDetailsStruct)
+		uabd.ID = res.ID
+		uabd.UserID = res.UserID
+		uabd.Name = res.Name
+		uabd.Account = res.Account
+		uabd.Bank = res.Bank
+		uabd.Branch = res.Branch
+		uabd.Province = res.Province
+		uabd.City = res.City
+		uabd.Area = res.Area
+		uabd.Addtime = res.Addtime
+		uabd.Addip = res.Addip
+		response.UserAppBankDetails = uabd
+	}
 	response.Status = QUERY_USER_BANK_DETAILS_SUCCESS
 	response.Msg = Details_Stat[QUERY_USER_BANK_DETAILS_SUCCESS]
 	Logger.Debugf("GetUserAppBankDetails response:%v", response)

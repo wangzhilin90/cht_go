@@ -34,17 +34,18 @@ func (kfdds *kefudutydetailsservice) GetKefuDutyDetails(requestObj *KefuDutyDeta
 		}, nil
 	}
 
-	kdds := new(KefuDutyDetailsStruct)
-	kdds.ID = res.ID
-	kdds.Customer = res.Customer
-	kdds.DutyTime = res.DutyTime
-	kdds.HolidayUser = res.HolidayUser
-	kdds.IsRest = res.IsRest
-	kdds.Starttime = res.Starttime
-	kdds.Endtime = res.Endtime
-
 	var response KefuDutyDetailsResponseStruct
-	response.KefuDutyDetails = kdds
+	if res != nil {
+		kdds := new(KefuDutyDetailsStruct)
+		kdds.ID = res.ID
+		kdds.Customer = res.Customer
+		kdds.DutyTime = res.DutyTime
+		kdds.HolidayUser = res.HolidayUser
+		kdds.IsRest = res.IsRest
+		kdds.Starttime = res.Starttime
+		kdds.Endtime = res.Endtime
+		response.KefuDutyDetails = kdds
+	}
 	response.Status = QUERY_KEFU_DUTY_DETAILS_SUCCESS
 	response.Msg = Stat[QUERY_KEFU_DUTY_DETAILS_SUCCESS]
 	Logger.Debugf("GetKefuDutyDetails response:%v", response)

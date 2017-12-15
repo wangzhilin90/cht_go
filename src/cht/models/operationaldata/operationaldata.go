@@ -174,9 +174,11 @@ func GetInvestResult(odrs *OperationalDataRequestStruct) (*InvestResult, error) 
 
 	var ir InvestResult
 	err := o.Raw(sql).QueryRow(&ir)
-	if err != nil {
-		Logger.Debugf("GetInvestResult query failed %v", err)
+	if err == orm.ErrNoRows {
 		return nil, nil
+	} else if err != nil {
+		Logger.Errorf("GetInvestResult query failed %v", err)
+		return nil, err
 	}
 	Logger.Debugf("GetInvestResult return value:%v", ir)
 	return &ir, nil

@@ -19,13 +19,12 @@ func ForgetPassword(fpw *ForgetPasswordRequest) bool {
 	Logger.Debug("ForgetPassword input param:", fpw)
 	res, err := o.Raw("update jl_user set password=? where id=?", fpw.Password, fpw.ID).Exec()
 	if err != nil {
-		Logger.Error("ForgetPassword update failed")
+		Logger.Errorf("ForgetPassword update failed:%v", err)
 		return false
 	}
 	num, _ := res.RowsAffected()
 	if num == 0 {
 		return false
 	}
-	Logger.Debug("rows effect", num)
 	return true
 }

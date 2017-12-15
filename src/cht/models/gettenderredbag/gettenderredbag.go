@@ -40,7 +40,9 @@ func getBorrowType(trr *TenderRedbagRequest) (int32, error) {
 	Logger.Debug("getBorrowType sql:", sql)
 	var bs borrowStruct
 	err := o.Raw(sql).QueryRow(&bs)
-	if err != nil {
+	if err == orm.ErrNoRows {
+		return 0, nil
+	} else if err != nil {
 		Logger.Error("GetBorrowType query failed:", err)
 		return 0, err
 	}
@@ -68,16 +70,16 @@ func GetRedBagMoney(trr *TenderRedbagRequest) (string, error) {
 	o := orm.NewOrm()
 	o.Using("default")
 
-	sql := bytes.Buffer{}
-	sql.WriteString("SELECT money FROM jl_three_redbag WHERE ")
-	sql.WriteString("user_id=? and id=? and status=1 ")
-	sql.WriteString("and min_tender<=? and (max_tender=0 OR max_tender>=?) ")
-	sql.WriteString(" and FIND_IN_SET(?, time_limit) ")
-	sql.WriteString(" and FIND_IN_SET(?, borrow_type) ")
-	sql.WriteString(" LIMIT 1")
-	Logger.Debug("GetRedBagMoney sql:", sql.String())
-	Logger.Debug("user_id", trr.UserId)
-	Logger.Debug("red_id", trr.RedId)
+	buf := bytes.Buffer{}
+	buf.WriteString("SELECT money FROM jl_three_redbag WHERE ")
+	buf.WriteString("user_id=? and id=? and status=1 ")
+	buf.WriteString("and min_tender<=? and (max_tender=0 OR max_tender>=?) ")
+	buf.WriteString(" and FIND_IN_SET(?, time_limit) ")
+	buf.WriteString(" and FIND_IN_SET(?, borrow_type) ")
+	buf.WriteString(" LIMIT 1")
+
+	sql := buf.String()
+	Logger.Debug("GetRedBagMoney sql:", sql)
 
 	//用户投资时间大于18个月，当18个月时间投资
 	if trr.TimeLimit > 18 {
@@ -85,7 +87,7 @@ func GetRedBagMoney(trr *TenderRedbagRequest) (string, error) {
 	}
 
 	var ms MoneyStruct
-	err = o.Raw(sql.String(),
+	err = o.Raw(sql,
 		trr.UserId,
 		trr.RedId,
 		trr.TenderMoney,
@@ -93,8 +95,10 @@ func GetRedBagMoney(trr *TenderRedbagRequest) (string, error) {
 		trr.TimeLimit,
 		borrowType,
 	).QueryRow(&ms)
-	if err != nil {
-		Logger.Errorf("GetRedBagMoney query failed ", err)
+	if err == orm.ErrNoRows {
+		return "", err
+	} else if err != nil {
+		Logger.Errorf("GetRedBagMoney query failed:%v", err)
 		return "", err
 	}
 	Logger.Debugf("GetBorrowType res ", ms.Money)

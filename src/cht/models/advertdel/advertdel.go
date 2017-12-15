@@ -35,7 +35,7 @@ func GetAdvertFid(adr *AdvertDelRequest) (int32, error) {
 	var fid int32
 	err := o.Raw(sql).QueryRow(&fid)
 	if err == orm.ErrNoRows {
-		return nil, nil
+		return 0, nil
 	} else if err != nil {
 		Logger.Errorf("GetAdvertFid query failed %v", err)
 		return 0, err

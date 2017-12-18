@@ -138,7 +138,7 @@ func UpdateMessage(mur *MessageUpdateRequest) bool {
 		And(fmt.Sprintf("to_user=%d", mur.ToUser))
 
 	sql := qb.String()
-	Logger.Debugf("UpdateMessage sql:%v", mur)
+	Logger.Debugf("UpdateMessage sql:%v", sql)
 	res, err := o.Raw(sql).Exec()
 	if err != nil {
 		Logger.Errorf("UpdateMessage failed:%v", err)

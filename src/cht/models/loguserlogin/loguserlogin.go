@@ -65,7 +65,7 @@ func UpdateLogUserlLogin(lulr *LogUserlLoginRequest) (bool, error) {
 	var addTime int64
 	if res != nil {
 		accountAct = res.AccountAct
-		addTime = res.Addtime
+		addTime = int64(res.Addtime)
 	} else {
 		accountAct = "0.00"
 		addTime = 0

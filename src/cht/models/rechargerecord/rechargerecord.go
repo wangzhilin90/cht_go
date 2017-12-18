@@ -76,6 +76,7 @@ func GetRechargeTotalMoney(rrr *RechargeRecordRequest) (string, error) {
  * @DateTime 2017-09-04T17:02:40+0800
  */
 func GetRechargeRecord(rrr *RechargeRecordRequest) ([]RechargeRecordStruct, int32, string, error) {
+	Logger.Debugf("GetRechargeRecord input param:%v", rrr)
 	money, err := GetRechargeTotalMoney(rrr)
 	if err != nil || money == "" {
 		money = "0.00"

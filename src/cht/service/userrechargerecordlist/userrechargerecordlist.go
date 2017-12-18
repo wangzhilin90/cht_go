@@ -27,7 +27,8 @@ func (rrs *rechargerecordservice) GetUserRechargeRecordList(requestObj *UserRech
 	rrr.EndTime = requestObj.GetEndTime()
 	rrr.QueryTime = requestObj.GetQueryTime()
 	rrr.RechargeStatus = requestObj.GetRechargeStatus()
-	rrr.LimitOffset = requestObj.GetLimitNum()
+	rrr.LimitNum = requestObj.GetLimitNum()
+	rrr.LimitOffset = requestObj.GetLimitOffset()
 	rrr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 
 	res, num, money, err := rechargerecord.GetRechargeRecord(rrr)

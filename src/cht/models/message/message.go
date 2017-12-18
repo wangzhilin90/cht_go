@@ -147,6 +147,7 @@ func UpdateMessage(mur *MessageUpdateRequest) bool {
 
 	num, _ := res.RowsAffected()
 	if num == 0 {
+		Logger.Errorf("UpdateMessage affect num:%v", num)
 		return false
 	}
 	return true

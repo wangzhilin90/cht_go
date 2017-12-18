@@ -1,6 +1,7 @@
 package loguserlogin
 
 import (
+	"bytes"
 	. "cht/common/logger"
 	"fmt"
 	"github.com/astaxie/beego/orm"
@@ -55,15 +56,36 @@ func GetBorrowInfo(lulr *LogUserlLoginRequest) (*UserBorrowInfo, error) {
 func UpdateLogUserlLogin(lulr *LogUserlLoginRequest) (bool, error) {
 	Logger.Debugf("UpdateLogUserlLogin input param", lulr)
 	res, err := GetBorrowInfo(lulr)
-	if err != nil || res == nil {
-		Logger.Error("GetBorrowInfo failed", err)
+	if err != nil {
+		Logger.Error("GetBorrowInfo failed:", err)
 		return false, err
 	}
 	Logger.Debug("GetBorrowInfo res:", res)
+	var accountAct string
+	var addTime int64
+	if res != nil {
+		accountAct = res.AccountAct
+		addTime = res.Addtime
+	} else {
+		accountAct = "0.00"
+		addTime = 0
+	}
+
+	buf := bytes.Buffer{}
+	buf.WriteString("insert into jl_user_login_log (id,user_id,login_time,login_style,login_ip,tender_money,tender_time) values(next VALUE FOR MYCATSEQ_USER_LOGIN_LOG,?,?,?,?,?,?)")
+	sql := buf.String()
+	Logger.Debugf("UpdateLogUserlLogin sql:%v", sql)
 
 	o := orm.NewOrm()
 	o.Using("default")
-	_, err = o.Raw("insert into jl_user_login_log (id,user_id,login_time,login_style,login_ip,tender_money,tender_time) values(next VALUE FOR MYCATSEQ_USER_LOGIN_LOG,?,?,?,?,?,?)", lulr.UserID, time.Now().Unix(), lulr.LoginStyle, lulr.LoginIP, res.AccountAct, res.Addtime).Exec()
+
+	_, err = o.Raw(sql,
+		lulr.UserID,
+		time.Now().Unix(),
+		lulr.LoginStyle,
+		lulr.LoginIP,
+		accountAct,
+		addTime).Exec()
 	if err != nil {
 		Logger.Error("insert mysql failed", err)
 		return false, err

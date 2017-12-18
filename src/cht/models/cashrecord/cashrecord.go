@@ -84,6 +84,7 @@ func GetCashStats(crrs *CashRecordRequestStruct) (*CashStats, error) {
  * @DateTime 2017-09-04T17:02:40+0800
  */
 func GetCashRecord(crrs *CashRecordRequestStruct) ([]CashRecordStruct, *CashStats, int32, error) {
+	Logger.Debugf("GetCashRecord input param:%v", crrs)
 	o := orm.NewOrm()
 	o.Using("default")
 	qb, _ := orm.NewQueryBuilder("mysql")

@@ -27,7 +27,8 @@ func (cs *cashrecordservice) GetUserCashRecordList(requestObj *UserCashRecordLis
 	crrs.EndTime = requestObj.GetEndTime()
 	crrs.QueryTime = requestObj.GetQueryTime()
 	crrs.RechargeStatus = requestObj.GetRechargeStatus()
-	crrs.LimitOffset = requestObj.GetLimitNum()
+	crrs.LimitOffset = requestObj.GetLimitOffset()
+	crrs.LimitNum = requestObj.GetLimitNum()
 	crrs.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 
 	res, CashStat, num, err := cashrecord.GetCashRecord(crrs)

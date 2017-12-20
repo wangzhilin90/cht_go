@@ -23,6 +23,21 @@ type UserBorrowInfo struct {
 	Addtime    int32  `orm:"column(addtime)"`
 }
 
+type UserLoginLogDetailsRequest struct {
+	UserID               int32
+	ChengHuiTongTraceLog string
+}
+
+type UserLoginLogDetails struct {
+	ID          int32  `orm:"column(id)"`
+	UserID      int32  `orm:"column(user_id)"`
+	LoginTime   int32  `orm:"column(login_time)"`
+	LoginStyle  int32  `orm:"column(login_style)"`
+	LoginIP     string `orm:"column(login_ip)"`
+	TenderMoney string `orm:"column(tender_money)"`
+	TenderTime  int32  `orm:"column(tender_time)"`
+}
+
 // func init() {
 // 	orm.Debug = true
 // 	orm.RegisterDriver("mysql", orm.DRMySQL)
@@ -91,4 +106,33 @@ func UpdateLogUserlLogin(lulr *LogUserlLoginRequest) (bool, error) {
 		return false, err
 	}
 	return true, nil
+}
+
+func GetUserLoginLogDetails(ulldr *UserLoginLogDetailsRequest) (*UserLoginLogDetails, error) {
+	Logger.Debugf("GetUserLoginLogDetails input param:%v", ulldr)
+	o := orm.NewOrm()
+	o.Using("default")
+	qb, _ := orm.NewQueryBuilder("mysql")
+	qb.Select("*").
+		From("jl_user_login_log").
+		Where("1=1")
+
+	if ulldr.UserID != 0 {
+		qb.And(fmt.Sprintf("user_id=%d", ulldr.UserID))
+	}
+	qb.OrderBy("id").Desc().Limit(1)
+
+	sql := qb.String()
+	Logger.Debugf("GetUserLoginLogDetails sql:%v", sql)
+	var ulld UserLoginLogDetails
+	err := o.Raw(sql).QueryRow(&ulld)
+	if err == orm.ErrNoRows {
+		return nil, nil
+	} else if err != nil {
+		Logger.Errorf("GetUserLoginLogDetails query failed:%v", err)
+		return nil, err
+	}
+
+	Logger.Debugf("GetUserLoginLogDetails return value:%v", ulld)
+	return &ulld, nil
 }

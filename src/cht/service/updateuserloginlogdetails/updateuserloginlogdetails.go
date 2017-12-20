@@ -20,11 +20,19 @@ type LogUserLoginService struct{}
 const (
 	UPDATE_LOG_FAILED  = 1001
 	UPDATE_LOG_SUCCESS = 1000
+
+	QUERY_USER_LOGIN_LOG_SUCCESS = 1000
+	QUERY_USER_LOGIN_LOG_FAILED  = 1001
 )
 
 var Stat = map[int]string{
 	UPDATE_LOG_FAILED:  "更新登录日志失败",
 	UPDATE_LOG_SUCCESS: "更新登录日志成功",
+}
+
+var Query_Stat = map[int]string{
+	QUERY_USER_LOGIN_LOG_SUCCESS: "查询登录日志详情成功",
+	QUERY_USER_LOGIN_LOG_FAILED:  "查询登录日志详情失败",
 }
 
 func (luls *LogUserLoginService) UpdateUserLoginLogDetails(requestObj *UpdateUserLoginLogDetailsRequestStruct) (r *UpdateUserLoginLogDetailsResponseStruct, err error) {
@@ -47,6 +55,38 @@ func (luls *LogUserLoginService) UpdateUserLoginLogDetails(requestObj *UpdateUse
 		Status: UPDATE_LOG_SUCCESS,
 		Msg:    Stat[UPDATE_LOG_SUCCESS],
 	}, nil
+}
+
+func (luls *LogUserLoginService) GetUserLoginLogDetails(requestObj *UserLoginLogDetailsRequestStruct) (r *UserLoginLogDetailsResponseStruct, err error) {
+	ulldr := new(loguserlogin.UserLoginLogDetailsRequest)
+	ulldr.UserID = requestObj.GetUserID()
+	ulldr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
+
+	res, err := loguserlogin.GetUserLoginLogDetails(ulldr)
+	if err != nil {
+		Logger.Errorf("GetUserLoginLogDetails failed:%v", err)
+		return &UserLoginLogDetailsResponseStruct{
+			Status: QUERY_USER_LOGIN_LOG_FAILED,
+			Msg:    Query_Stat[QUERY_USER_LOGIN_LOG_FAILED],
+		}, nil
+	}
+
+	var response UserLoginLogDetailsResponseStruct
+	if res != nil {
+		ullds := new(UserLoginLogDetailsStruct)
+		ullds.ID = res.ID
+		ullds.UserID = res.UserID
+		ullds.LoginTime = res.LoginTime
+		ullds.LoginStyle = res.LoginStyle
+		ullds.LoginIP = res.LoginIP
+		ullds.TenderMoney = res.TenderMoney
+		ullds.TenderTime = res.TenderTime
+		response.UserLoginLogDetails = ullds
+	}
+	response.Status = QUERY_USER_LOGIN_LOG_SUCCESS
+	response.Msg = Query_Stat[QUERY_USER_LOGIN_LOG_SUCCESS]
+	Logger.Debugf("GetUserLoginLogDetails response:%v", response)
+	return &response, nil
 }
 
 /**

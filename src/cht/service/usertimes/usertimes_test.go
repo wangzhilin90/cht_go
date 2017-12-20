@@ -5,39 +5,41 @@ import (
 	"testing"
 )
 
-func NewUserTimesDetailsRequestStruct(username string, isAdmin int32) *UserTimesDetailsRequestStruct {
+func NewUserTimesDetailsRequestStruct(username string, isAdmin int32, type1 int32) *UserTimesDetailsRequestStruct {
 	return &UserTimesDetailsRequestStruct{
 		Username: username,
 		Isadmin:  isAdmin,
+		Type:     type1,
 	}
 }
 
-func NewUserTimesUpdateRequestStruct(username string, isAdmin int32, times int32, ip string) *UserTimesUpdateRequestStruct {
+func NewUserTimesUpdateRequestStruct(username string, isAdmin int32, ip string, type1 int32) *UserTimesUpdateRequestStruct {
 	return &UserTimesUpdateRequestStruct{
 		Username: username,
 		Isadmin:  isAdmin,
-		Times:    times,
 		IP:       ip,
+		Type:     type1,
 	}
 }
 
-func NewUserTimesInsertRequestStruct(username string, isAdmin int32, times int32, ip string) *UserTimesInsertRequestStruct {
+func NewUserTimesInsertRequestStruct(username string, isAdmin int32, ip string, type1 int32) *UserTimesInsertRequestStruct {
 	return &UserTimesInsertRequestStruct{
 		Username: username,
 		Isadmin:  isAdmin,
-		Times:    times,
 		IP:       ip,
+		Type:     type1,
 	}
 }
 
-func NewUserTimesDeleteRequestStruct(username string) *UserTimesDeleteRequestStruct {
+func NewUserTimesDeleteRequestStruct(username string, type1 int32) *UserTimesDeleteRequestStruct {
 	return &UserTimesDeleteRequestStruct{
 		Username: username,
+		Type:     type1,
 	}
 }
 
 func TestGetUserTimesDetails(t *testing.T) {
-	utdr := NewUserTimesDetailsRequestStruct("wzl", 0)
+	utdr := NewUserTimesDetailsRequestStruct("wzl", 0, 1)
 	uts := usertimesservice{}
 	res, _ := uts.GetUserTimesDetails(utdr)
 	if res.Status != QUERY_USER_TIMES_SUCCESS {
@@ -47,7 +49,7 @@ func TestGetUserTimesDetails(t *testing.T) {
 }
 
 func TestUpdateUserTimes(t *testing.T) {
-	utur := NewUserTimesUpdateRequestStruct("wzl", 1, 3, "192.168.8.208")
+	utur := NewUserTimesUpdateRequestStruct("wzl", 1, "192.168.8.208", 1)
 	uts := usertimesservice{}
 	res, _ := uts.UpdateUserTimes(utur)
 	if res.Status != UPDATE_USER_TIMES_SUCCESS {
@@ -56,7 +58,7 @@ func TestUpdateUserTimes(t *testing.T) {
 }
 
 func TestInsertUserTimes(t *testing.T) {
-	utir := NewUserTimesInsertRequestStruct("wzl", 1, 1, "192.168.8.209")
+	utir := NewUserTimesInsertRequestStruct("wzl", 1, "192.168.8.209", 1)
 	uts := usertimesservice{}
 	res, _ := uts.InsertUserTimes(utir)
 	if res.Status != INSERT_USER_TIMES_SUCCESS {
@@ -65,7 +67,7 @@ func TestInsertUserTimes(t *testing.T) {
 }
 
 func TestDeleteUserTimes(t *testing.T) {
-	utdrs := NewUserTimesDeleteRequestStruct("wzl")
+	utdrs := NewUserTimesDeleteRequestStruct("wzl", 1)
 	uts := usertimesservice{}
 	res, _ := uts.DeleteUserTimes(utdrs)
 	if res.Status != DELETE_USER_TIMES_SUCCESS {

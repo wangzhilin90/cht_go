@@ -7,11 +7,13 @@ import (
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 	"strings"
+	"time"
 )
 
 type UserTimesDetailsRequest struct {
 	Username             string
 	Isadmin              int32
+	Type                 int32
 	ChengHuiTongTraceLog string
 }
 
@@ -21,28 +23,28 @@ type UserTimesDetails struct {
 	Logintime int32  `orm:"column(logintime)"`
 	Times     int32  `orm:"column(times)"`
 	Isadmin   int32  `orm:"column(isadmin)"`
+	Type      int32  `orm:"column(type)"`
 }
 
 type UserTimesUpdateRequest struct {
 	Username             string
 	IP                   string
-	Logintime            int32
-	Times                int32
 	Isadmin              int32
+	Type                 int32
 	ChengHuiTongTraceLog string
 }
 
 type UserTimesInsertRequest struct {
 	Username             string
 	IP                   string
-	Logintime            int32
-	Times                int32
 	Isadmin              int32
+	Type                 int32
 	ChengHuiTongTraceLog string
 }
 
 type UserTimesDeleteRequest struct {
 	Username             string
+	Type                 int32
 	ChengHuiTongTraceLog string
 }
 
@@ -53,7 +55,8 @@ func GetUserTimesDetails(utdr *UserTimesDetailsRequest) (*UserTimesDetails, erro
 	qb, _ := orm.NewQueryBuilder("mysql")
 	qb.Select("*").
 		From("jl_user_times").
-		Where("1=1")
+		Where("1=1").
+		And(fmt.Sprintf("type=%d", utdr.Type))
 
 	if utdr.Username != "" {
 		qb.And(fmt.Sprintf("username=\"%s\"", utdr.Username))
@@ -91,21 +94,17 @@ func UpdateUserTimes(udur *UserTimesUpdateRequest) bool {
 		str += fmt.Sprintf("ip=\"%s\",", udur.IP)
 	}
 
-	if udur.Logintime != 0 {
-		str += fmt.Sprintf("logintime=%d,", udur.Logintime)
-	}
-
-	if udur.Times != 0 {
-		str += fmt.Sprintf("times=%d,", udur.Times)
-	}
-
-	if udur.Isadmin != 0 {
-		str += fmt.Sprintf("isadmin=%d,", udur.Isadmin)
-	}
+	str += fmt.Sprintf("logintime=%d,", time.Now().Unix())
+	str += fmt.Sprintf("times=times+1,")
 
 	str = strings.TrimSuffix(str, ",")
 	qb.Set(str)
 	qb.Where(fmt.Sprintf("username=\"%s\"", udur.Username))
+	qb.And(fmt.Sprintf("type=%d", udur.Type))
+	if udur.Isadmin != 0 {
+		qb.And(fmt.Sprintf("isadmin=%d", udur.Isadmin))
+	}
+
 	sql := qb.String()
 	Logger.Debugf("UpdateUserTimes sql:%v", sql)
 	res, err := o.Raw(sql).Exec()
@@ -127,16 +126,17 @@ func InsertUserTimes(utir *UserTimesInsertRequest) bool {
 	o.Using("default")
 
 	buf := bytes.Buffer{}
-	buf.WriteString("insert into jl_user_times (username,ip,logintime,times,isadmin) ")
-	buf.WriteString("values (?,?,?,?,?)")
+	buf.WriteString("insert into jl_user_times (username,ip,logintime,times,isadmin,type) ")
+	buf.WriteString("values (?,?,?,?,?,?)")
 
 	sql := buf.String()
 	last_id, err := o.Raw(sql,
 		utir.Username,
 		utir.IP,
-		utir.Logintime,
-		utir.Times,
-		utir.Isadmin).Exec()
+		time.Now().Unix(),
+		1,
+		utir.Isadmin,
+		utir.Type).Exec()
 	if err != nil {
 		Logger.Errorf("InsertUserTimes failed:%v", err)
 		return false
@@ -151,11 +151,11 @@ func DeleteUserTimes(utdr *UserTimesDeleteRequest) bool {
 	o.Using("default")
 
 	buf := bytes.Buffer{}
-	buf.WriteString("DELETE FROM jl_user_times WHERE username=?")
+	buf.WriteString("DELETE FROM jl_user_times WHERE username=? AND type=?")
 	sql := buf.String()
 
 	Logger.Debugf("DeleteUserTimes sql:%v", sql)
-	res, err := o.Raw(sql, utdr.Username).Exec()
+	res, err := o.Raw(sql, utdr.Username, utdr.Type).Exec()
 	if err != nil {
 		Logger.Errorf("DeleteUserTimes query failed:%v", err)
 		return false

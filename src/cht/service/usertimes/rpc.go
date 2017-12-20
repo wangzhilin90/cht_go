@@ -17,15 +17,19 @@ var _ = bytes.Equal
 // Attributes:
 //  - Username
 //  - Isadmin
+//  - Type
 //  - ChengHuiTongTraceLog
 type UserTimesDetailsRequestStruct struct {
 	Username             string `thrift:"username,1" db:"username" json:"username"`
 	Isadmin              int32  `thrift:"isadmin,2" db:"isadmin" json:"isadmin"`
-	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,3" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
+	Type                 int32  `thrift:"type,3" db:"type" json:"type"`
+	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,4" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
 }
 
 // func NewUserTimesDetailsRequestStruct() *UserTimesDetailsRequestStruct {
-// 	return &UserTimesDetailsRequestStruct{}
+//   return &UserTimesDetailsRequestStruct{
+// Type: 1,
+// }
 // }
 
 func (p *UserTimesDetailsRequestStruct) GetUsername() string {
@@ -34,6 +38,10 @@ func (p *UserTimesDetailsRequestStruct) GetUsername() string {
 
 func (p *UserTimesDetailsRequestStruct) GetIsadmin() int32 {
 	return p.Isadmin
+}
+
+func (p *UserTimesDetailsRequestStruct) GetType() int32 {
+	return p.Type
 }
 
 func (p *UserTimesDetailsRequestStruct) GetChengHuiTongTraceLog() string {
@@ -63,6 +71,10 @@ func (p *UserTimesDetailsRequestStruct) Read(iprot thrift.TProtocol) error {
 			}
 		case 3:
 			if err := p.ReadField3(iprot); err != nil {
+				return err
+			}
+		case 4:
+			if err := p.ReadField4(iprot); err != nil {
 				return err
 			}
 		default:
@@ -99,8 +111,17 @@ func (p *UserTimesDetailsRequestStruct) ReadField2(iprot thrift.TProtocol) error
 }
 
 func (p *UserTimesDetailsRequestStruct) ReadField3(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI32(); err != nil {
 		return thrift.PrependError("error reading field 3: ", err)
+	} else {
+		p.Type = v
+	}
+	return nil
+}
+
+func (p *UserTimesDetailsRequestStruct) ReadField4(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 4: ", err)
 	} else {
 		p.ChengHuiTongTraceLog = v
 	}
@@ -119,6 +140,9 @@ func (p *UserTimesDetailsRequestStruct) Write(oprot thrift.TProtocol) error {
 			return err
 		}
 		if err := p.writeField3(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField4(oprot); err != nil {
 			return err
 		}
 	}
@@ -158,14 +182,27 @@ func (p *UserTimesDetailsRequestStruct) writeField2(oprot thrift.TProtocol) (err
 }
 
 func (p *UserTimesDetailsRequestStruct) writeField3(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("chengHuiTongTraceLog", thrift.STRING, 3); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:chengHuiTongTraceLog: ", p), err)
+	if err := oprot.WriteFieldBegin("type", thrift.I32, 3); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:type: ", p), err)
 	}
-	if err := oprot.WriteString(string(p.ChengHuiTongTraceLog)); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.chengHuiTongTraceLog (3) field write error: ", p), err)
+	if err := oprot.WriteI32(int32(p.Type)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.type (3) field write error: ", p), err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:chengHuiTongTraceLog: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:type: ", p), err)
+	}
+	return err
+}
+
+func (p *UserTimesDetailsRequestStruct) writeField4(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("chengHuiTongTraceLog", thrift.STRING, 4); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 4:chengHuiTongTraceLog: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.ChengHuiTongTraceLog)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.chengHuiTongTraceLog (4) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 4:chengHuiTongTraceLog: ", p), err)
 	}
 	return err
 }
@@ -183,12 +220,14 @@ func (p *UserTimesDetailsRequestStruct) String() string {
 //  - Logintime
 //  - Times
 //  - Isadmin
+//  - Type
 type UserTimesDetailsStruct struct {
 	Username  string `thrift:"username,1" db:"username" json:"username"`
 	IP        string `thrift:"ip,2" db:"ip" json:"ip"`
 	Logintime int32  `thrift:"logintime,3" db:"logintime" json:"logintime"`
 	Times     int32  `thrift:"times,4" db:"times" json:"times"`
 	Isadmin   int32  `thrift:"isadmin,5" db:"isadmin" json:"isadmin"`
+	Type      int32  `thrift:"type,6" db:"type" json:"type"`
 }
 
 func NewUserTimesDetailsStruct() *UserTimesDetailsStruct {
@@ -213,6 +252,10 @@ func (p *UserTimesDetailsStruct) GetTimes() int32 {
 
 func (p *UserTimesDetailsStruct) GetIsadmin() int32 {
 	return p.Isadmin
+}
+
+func (p *UserTimesDetailsStruct) GetType() int32 {
+	return p.Type
 }
 func (p *UserTimesDetailsStruct) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
@@ -246,6 +289,10 @@ func (p *UserTimesDetailsStruct) Read(iprot thrift.TProtocol) error {
 			}
 		case 5:
 			if err := p.ReadField5(iprot); err != nil {
+				return err
+			}
+		case 6:
+			if err := p.ReadField6(iprot); err != nil {
 				return err
 			}
 		default:
@@ -308,6 +355,15 @@ func (p *UserTimesDetailsStruct) ReadField5(iprot thrift.TProtocol) error {
 	return nil
 }
 
+func (p *UserTimesDetailsStruct) ReadField6(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadI32(); err != nil {
+		return thrift.PrependError("error reading field 6: ", err)
+	} else {
+		p.Type = v
+	}
+	return nil
+}
+
 func (p *UserTimesDetailsStruct) Write(oprot thrift.TProtocol) error {
 	if err := oprot.WriteStructBegin("UserTimesDetailsStruct"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
@@ -326,6 +382,9 @@ func (p *UserTimesDetailsStruct) Write(oprot thrift.TProtocol) error {
 			return err
 		}
 		if err := p.writeField5(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField6(oprot); err != nil {
 			return err
 		}
 	}
@@ -399,6 +458,19 @@ func (p *UserTimesDetailsStruct) writeField5(oprot thrift.TProtocol) (err error)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field end error 5:isadmin: ", p), err)
+	}
+	return err
+}
+
+func (p *UserTimesDetailsStruct) writeField6(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("type", thrift.I32, 6); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 6:type: ", p), err)
+	}
+	if err := oprot.WriteI32(int32(p.Type)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.type (6) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 6:type: ", p), err)
 	}
 	return err
 }
@@ -584,21 +656,21 @@ func (p *UserTimesDetailsResponseStruct) String() string {
 // Attributes:
 //  - Username
 //  - IP
-//  - Logintime
-//  - Times
+//  - Type
 //  - Isadmin
 //  - ChengHuiTongTraceLog
 type UserTimesUpdateRequestStruct struct {
 	Username             string `thrift:"username,1" db:"username" json:"username"`
 	IP                   string `thrift:"ip,2" db:"ip" json:"ip"`
-	Logintime            int32  `thrift:"logintime,3" db:"logintime" json:"logintime"`
-	Times                int32  `thrift:"times,4" db:"times" json:"times"`
-	Isadmin              int32  `thrift:"isadmin,5" db:"isadmin" json:"isadmin"`
-	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,6" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
+	Type                 int32  `thrift:"type,3" db:"type" json:"type"`
+	Isadmin              int32  `thrift:"isadmin,4" db:"isadmin" json:"isadmin"`
+	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,5" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
 }
 
 // func NewUserTimesUpdateRequestStruct() *UserTimesUpdateRequestStruct {
-// 	return &UserTimesUpdateRequestStruct{}
+//   return &UserTimesUpdateRequestStruct{
+// Type: 1,
+// }
 // }
 
 func (p *UserTimesUpdateRequestStruct) GetUsername() string {
@@ -609,12 +681,8 @@ func (p *UserTimesUpdateRequestStruct) GetIP() string {
 	return p.IP
 }
 
-func (p *UserTimesUpdateRequestStruct) GetLogintime() int32 {
-	return p.Logintime
-}
-
-func (p *UserTimesUpdateRequestStruct) GetTimes() int32 {
-	return p.Times
+func (p *UserTimesUpdateRequestStruct) GetType() int32 {
+	return p.Type
 }
 
 func (p *UserTimesUpdateRequestStruct) GetIsadmin() int32 {
@@ -658,10 +726,6 @@ func (p *UserTimesUpdateRequestStruct) Read(iprot thrift.TProtocol) error {
 			if err := p.ReadField5(iprot); err != nil {
 				return err
 			}
-		case 6:
-			if err := p.ReadField6(iprot); err != nil {
-				return err
-			}
 		default:
 			if err := iprot.Skip(fieldTypeId); err != nil {
 				return err
@@ -699,7 +763,7 @@ func (p *UserTimesUpdateRequestStruct) ReadField3(iprot thrift.TProtocol) error 
 	if v, err := iprot.ReadI32(); err != nil {
 		return thrift.PrependError("error reading field 3: ", err)
 	} else {
-		p.Logintime = v
+		p.Type = v
 	}
 	return nil
 }
@@ -708,23 +772,14 @@ func (p *UserTimesUpdateRequestStruct) ReadField4(iprot thrift.TProtocol) error 
 	if v, err := iprot.ReadI32(); err != nil {
 		return thrift.PrependError("error reading field 4: ", err)
 	} else {
-		p.Times = v
-	}
-	return nil
-}
-
-func (p *UserTimesUpdateRequestStruct) ReadField5(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI32(); err != nil {
-		return thrift.PrependError("error reading field 5: ", err)
-	} else {
 		p.Isadmin = v
 	}
 	return nil
 }
 
-func (p *UserTimesUpdateRequestStruct) ReadField6(iprot thrift.TProtocol) error {
+func (p *UserTimesUpdateRequestStruct) ReadField5(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
-		return thrift.PrependError("error reading field 6: ", err)
+		return thrift.PrependError("error reading field 5: ", err)
 	} else {
 		p.ChengHuiTongTraceLog = v
 	}
@@ -749,9 +804,6 @@ func (p *UserTimesUpdateRequestStruct) Write(oprot thrift.TProtocol) error {
 			return err
 		}
 		if err := p.writeField5(oprot); err != nil {
-			return err
-		}
-		if err := p.writeField6(oprot); err != nil {
 			return err
 		}
 	}
@@ -791,53 +843,40 @@ func (p *UserTimesUpdateRequestStruct) writeField2(oprot thrift.TProtocol) (err 
 }
 
 func (p *UserTimesUpdateRequestStruct) writeField3(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("logintime", thrift.I32, 3); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:logintime: ", p), err)
+	if err := oprot.WriteFieldBegin("type", thrift.I32, 3); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:type: ", p), err)
 	}
-	if err := oprot.WriteI32(int32(p.Logintime)); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.logintime (3) field write error: ", p), err)
+	if err := oprot.WriteI32(int32(p.Type)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.type (3) field write error: ", p), err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:logintime: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:type: ", p), err)
 	}
 	return err
 }
 
 func (p *UserTimesUpdateRequestStruct) writeField4(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("times", thrift.I32, 4); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 4:times: ", p), err)
+	if err := oprot.WriteFieldBegin("isadmin", thrift.I32, 4); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 4:isadmin: ", p), err)
 	}
-	if err := oprot.WriteI32(int32(p.Times)); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.times (4) field write error: ", p), err)
+	if err := oprot.WriteI32(int32(p.Isadmin)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.isadmin (4) field write error: ", p), err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 4:times: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 4:isadmin: ", p), err)
 	}
 	return err
 }
 
 func (p *UserTimesUpdateRequestStruct) writeField5(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("isadmin", thrift.I32, 5); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 5:isadmin: ", p), err)
-	}
-	if err := oprot.WriteI32(int32(p.Isadmin)); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.isadmin (5) field write error: ", p), err)
-	}
-	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 5:isadmin: ", p), err)
-	}
-	return err
-}
-
-func (p *UserTimesUpdateRequestStruct) writeField6(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("chengHuiTongTraceLog", thrift.STRING, 6); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 6:chengHuiTongTraceLog: ", p), err)
+	if err := oprot.WriteFieldBegin("chengHuiTongTraceLog", thrift.STRING, 5); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 5:chengHuiTongTraceLog: ", p), err)
 	}
 	if err := oprot.WriteString(string(p.ChengHuiTongTraceLog)); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.chengHuiTongTraceLog (6) field write error: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T.chengHuiTongTraceLog (5) field write error: ", p), err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 6:chengHuiTongTraceLog: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 5:chengHuiTongTraceLog: ", p), err)
 	}
 	return err
 }
@@ -980,21 +1019,21 @@ func (p *UserTimesUpdateResponseStruct) String() string {
 // Attributes:
 //  - Username
 //  - IP
-//  - Logintime
-//  - Times
 //  - Isadmin
+//  - Type
 //  - ChengHuiTongTraceLog
 type UserTimesInsertRequestStruct struct {
 	Username             string `thrift:"username,1" db:"username" json:"username"`
 	IP                   string `thrift:"ip,2" db:"ip" json:"ip"`
-	Logintime            int32  `thrift:"logintime,3" db:"logintime" json:"logintime"`
-	Times                int32  `thrift:"times,4" db:"times" json:"times"`
-	Isadmin              int32  `thrift:"isadmin,5" db:"isadmin" json:"isadmin"`
-	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,6" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
+	Isadmin              int32  `thrift:"isadmin,3" db:"isadmin" json:"isadmin"`
+	Type                 int32  `thrift:"type,4" db:"type" json:"type"`
+	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,5" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
 }
 
 // func NewUserTimesInsertRequestStruct() *UserTimesInsertRequestStruct {
-// 	return &UserTimesInsertRequestStruct{}
+//   return &UserTimesInsertRequestStruct{
+// Type: 1,
+// }
 // }
 
 func (p *UserTimesInsertRequestStruct) GetUsername() string {
@@ -1005,16 +1044,12 @@ func (p *UserTimesInsertRequestStruct) GetIP() string {
 	return p.IP
 }
 
-func (p *UserTimesInsertRequestStruct) GetLogintime() int32 {
-	return p.Logintime
-}
-
-func (p *UserTimesInsertRequestStruct) GetTimes() int32 {
-	return p.Times
-}
-
 func (p *UserTimesInsertRequestStruct) GetIsadmin() int32 {
 	return p.Isadmin
+}
+
+func (p *UserTimesInsertRequestStruct) GetType() int32 {
+	return p.Type
 }
 
 func (p *UserTimesInsertRequestStruct) GetChengHuiTongTraceLog() string {
@@ -1054,10 +1089,6 @@ func (p *UserTimesInsertRequestStruct) Read(iprot thrift.TProtocol) error {
 			if err := p.ReadField5(iprot); err != nil {
 				return err
 			}
-		case 6:
-			if err := p.ReadField6(iprot); err != nil {
-				return err
-			}
 		default:
 			if err := iprot.Skip(fieldTypeId); err != nil {
 				return err
@@ -1095,7 +1126,7 @@ func (p *UserTimesInsertRequestStruct) ReadField3(iprot thrift.TProtocol) error 
 	if v, err := iprot.ReadI32(); err != nil {
 		return thrift.PrependError("error reading field 3: ", err)
 	} else {
-		p.Logintime = v
+		p.Isadmin = v
 	}
 	return nil
 }
@@ -1104,23 +1135,14 @@ func (p *UserTimesInsertRequestStruct) ReadField4(iprot thrift.TProtocol) error 
 	if v, err := iprot.ReadI32(); err != nil {
 		return thrift.PrependError("error reading field 4: ", err)
 	} else {
-		p.Times = v
+		p.Type = v
 	}
 	return nil
 }
 
 func (p *UserTimesInsertRequestStruct) ReadField5(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI32(); err != nil {
-		return thrift.PrependError("error reading field 5: ", err)
-	} else {
-		p.Isadmin = v
-	}
-	return nil
-}
-
-func (p *UserTimesInsertRequestStruct) ReadField6(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
-		return thrift.PrependError("error reading field 6: ", err)
+		return thrift.PrependError("error reading field 5: ", err)
 	} else {
 		p.ChengHuiTongTraceLog = v
 	}
@@ -1145,9 +1167,6 @@ func (p *UserTimesInsertRequestStruct) Write(oprot thrift.TProtocol) error {
 			return err
 		}
 		if err := p.writeField5(oprot); err != nil {
-			return err
-		}
-		if err := p.writeField6(oprot); err != nil {
 			return err
 		}
 	}
@@ -1187,53 +1206,40 @@ func (p *UserTimesInsertRequestStruct) writeField2(oprot thrift.TProtocol) (err 
 }
 
 func (p *UserTimesInsertRequestStruct) writeField3(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("logintime", thrift.I32, 3); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:logintime: ", p), err)
+	if err := oprot.WriteFieldBegin("isadmin", thrift.I32, 3); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:isadmin: ", p), err)
 	}
-	if err := oprot.WriteI32(int32(p.Logintime)); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.logintime (3) field write error: ", p), err)
+	if err := oprot.WriteI32(int32(p.Isadmin)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.isadmin (3) field write error: ", p), err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:logintime: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:isadmin: ", p), err)
 	}
 	return err
 }
 
 func (p *UserTimesInsertRequestStruct) writeField4(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("times", thrift.I32, 4); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 4:times: ", p), err)
+	if err := oprot.WriteFieldBegin("type", thrift.I32, 4); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 4:type: ", p), err)
 	}
-	if err := oprot.WriteI32(int32(p.Times)); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.times (4) field write error: ", p), err)
+	if err := oprot.WriteI32(int32(p.Type)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.type (4) field write error: ", p), err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 4:times: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 4:type: ", p), err)
 	}
 	return err
 }
 
 func (p *UserTimesInsertRequestStruct) writeField5(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("isadmin", thrift.I32, 5); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 5:isadmin: ", p), err)
-	}
-	if err := oprot.WriteI32(int32(p.Isadmin)); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.isadmin (5) field write error: ", p), err)
-	}
-	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 5:isadmin: ", p), err)
-	}
-	return err
-}
-
-func (p *UserTimesInsertRequestStruct) writeField6(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("chengHuiTongTraceLog", thrift.STRING, 6); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 6:chengHuiTongTraceLog: ", p), err)
+	if err := oprot.WriteFieldBegin("chengHuiTongTraceLog", thrift.STRING, 5); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 5:chengHuiTongTraceLog: ", p), err)
 	}
 	if err := oprot.WriteString(string(p.ChengHuiTongTraceLog)); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.chengHuiTongTraceLog (6) field write error: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T.chengHuiTongTraceLog (5) field write error: ", p), err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 6:chengHuiTongTraceLog: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 5:chengHuiTongTraceLog: ", p), err)
 	}
 	return err
 }
@@ -1375,18 +1381,24 @@ func (p *UserTimesInsertResponseStruct) String() string {
 
 // Attributes:
 //  - Username
+//  - Type
 //  - ChengHuiTongTraceLog
 type UserTimesDeleteRequestStruct struct {
 	Username             string `thrift:"username,1" db:"username" json:"username"`
-	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,2" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
+	Type                 int32  `thrift:"type,2" db:"type" json:"type"`
+	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,3" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
 }
 
 // func NewUserTimesDeleteRequestStruct() *UserTimesDeleteRequestStruct {
-// 	return &UserTimesDeleteRequestStruct{}
+//   return &UserTimesDeleteRequestStruct{}
 // }
 
 func (p *UserTimesDeleteRequestStruct) GetUsername() string {
 	return p.Username
+}
+
+func (p *UserTimesDeleteRequestStruct) GetType() int32 {
+	return p.Type
 }
 
 func (p *UserTimesDeleteRequestStruct) GetChengHuiTongTraceLog() string {
@@ -1414,6 +1426,10 @@ func (p *UserTimesDeleteRequestStruct) Read(iprot thrift.TProtocol) error {
 			if err := p.ReadField2(iprot); err != nil {
 				return err
 			}
+		case 3:
+			if err := p.ReadField3(iprot); err != nil {
+				return err
+			}
 		default:
 			if err := iprot.Skip(fieldTypeId); err != nil {
 				return err
@@ -1439,8 +1455,17 @@ func (p *UserTimesDeleteRequestStruct) ReadField1(iprot thrift.TProtocol) error 
 }
 
 func (p *UserTimesDeleteRequestStruct) ReadField2(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI32(); err != nil {
 		return thrift.PrependError("error reading field 2: ", err)
+	} else {
+		p.Type = v
+	}
+	return nil
+}
+
+func (p *UserTimesDeleteRequestStruct) ReadField3(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 3: ", err)
 	} else {
 		p.ChengHuiTongTraceLog = v
 	}
@@ -1456,6 +1481,9 @@ func (p *UserTimesDeleteRequestStruct) Write(oprot thrift.TProtocol) error {
 			return err
 		}
 		if err := p.writeField2(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField3(oprot); err != nil {
 			return err
 		}
 	}
@@ -1482,14 +1510,27 @@ func (p *UserTimesDeleteRequestStruct) writeField1(oprot thrift.TProtocol) (err 
 }
 
 func (p *UserTimesDeleteRequestStruct) writeField2(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("chengHuiTongTraceLog", thrift.STRING, 2); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:chengHuiTongTraceLog: ", p), err)
+	if err := oprot.WriteFieldBegin("type", thrift.I32, 2); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:type: ", p), err)
 	}
-	if err := oprot.WriteString(string(p.ChengHuiTongTraceLog)); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.chengHuiTongTraceLog (2) field write error: ", p), err)
+	if err := oprot.WriteI32(int32(p.Type)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.type (2) field write error: ", p), err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:chengHuiTongTraceLog: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:type: ", p), err)
+	}
+	return err
+}
+
+func (p *UserTimesDeleteRequestStruct) writeField3(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("chengHuiTongTraceLog", thrift.STRING, 3); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:chengHuiTongTraceLog: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.ChengHuiTongTraceLog)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.chengHuiTongTraceLog (3) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:chengHuiTongTraceLog: ", p), err)
 	}
 	return err
 }
@@ -2275,7 +2316,9 @@ func (p *UserTimesThriftServiceGetUserTimesDetailsArgs) Read(iprot thrift.TProto
 }
 
 func (p *UserTimesThriftServiceGetUserTimesDetailsArgs) ReadField1(iprot thrift.TProtocol) error {
-	p.RequestObj = &UserTimesDetailsRequestStruct{}
+	p.RequestObj = &UserTimesDetailsRequestStruct{
+		Type: 1,
+	}
 	if err := p.RequestObj.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.RequestObj), err)
 	}
@@ -2479,7 +2522,9 @@ func (p *UserTimesThriftServiceUpdateUserTimesArgs) Read(iprot thrift.TProtocol)
 }
 
 func (p *UserTimesThriftServiceUpdateUserTimesArgs) ReadField1(iprot thrift.TProtocol) error {
-	p.RequestObj = &UserTimesUpdateRequestStruct{}
+	p.RequestObj = &UserTimesUpdateRequestStruct{
+		Type: 1,
+	}
 	if err := p.RequestObj.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.RequestObj), err)
 	}
@@ -2683,7 +2728,9 @@ func (p *UserTimesThriftServiceInsertUserTimesArgs) Read(iprot thrift.TProtocol)
 }
 
 func (p *UserTimesThriftServiceInsertUserTimesArgs) ReadField1(iprot thrift.TProtocol) error {
-	p.RequestObj = &UserTimesInsertRequestStruct{}
+	p.RequestObj = &UserTimesInsertRequestStruct{
+		Type: 1,
+	}
 	if err := p.RequestObj.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.RequestObj), err)
 	}

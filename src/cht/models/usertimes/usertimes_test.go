@@ -5,39 +5,41 @@ import (
 	"testing"
 )
 
-func NewUserTimesDetailsRequest(username string, isAdmin int32) *UserTimesDetailsRequest {
+func NewUserTimesDetailsRequest(username string, isAdmin int32, type1 int32) *UserTimesDetailsRequest {
 	return &UserTimesDetailsRequest{
 		Username: username,
 		Isadmin:  isAdmin,
+		Type:     type1,
 	}
 }
 
-func NewUserTimesUpdateRequest(username string, isAdmin int32, times int32, ip string) *UserTimesUpdateRequest {
+func NewUserTimesUpdateRequest(username string, isAdmin int32, ip string, type1 int32) *UserTimesUpdateRequest {
 	return &UserTimesUpdateRequest{
 		Username: username,
 		Isadmin:  isAdmin,
-		Times:    times,
 		IP:       ip,
+		Type:     type1,
 	}
 }
 
-func NewUserTimesInsertRequest(username string, isAdmin int32, times int32, ip string) *UserTimesInsertRequest {
+func NewUserTimesInsertRequest(username string, isAdmin int32, ip string, type1 int32) *UserTimesInsertRequest {
 	return &UserTimesInsertRequest{
 		Username: username,
 		Isadmin:  isAdmin,
-		Times:    times,
 		IP:       ip,
+		Type:     type1,
 	}
 }
 
-func NewUserTimesDeleteRequest(username string) *UserTimesDeleteRequest {
+func NewUserTimesDeleteRequest(username string, type1 int32) *UserTimesDeleteRequest {
 	return &UserTimesDeleteRequest{
 		Username: username,
+		Type:     type1,
 	}
 }
 
 func TestGetUserTimesDetails(t *testing.T) {
-	utdr := NewUserTimesDetailsRequest("wzl", 0)
+	utdr := NewUserTimesDetailsRequest("wzl", 0, 1)
 	res, err := GetUserTimesDetails(utdr)
 	if err != nil {
 		t.Fatalf("TestGetUserTimesDetails failed:%v", err)
@@ -46,7 +48,7 @@ func TestGetUserTimesDetails(t *testing.T) {
 }
 
 func TestUpdateUserTimes(t *testing.T) {
-	utur := NewUserTimesUpdateRequest("wzl", 1, 3, "192.168.8.208")
+	utur := NewUserTimesUpdateRequest("wzl", 1, "192.168.8.208", 1)
 	b := UpdateUserTimes(utur)
 	if b == false {
 		t.Fatalf("TestUpdateUserTimes failed")
@@ -54,7 +56,7 @@ func TestUpdateUserTimes(t *testing.T) {
 }
 
 func TestInsertUserTimes(t *testing.T) {
-	utir := NewUserTimesInsertRequest("wzl", 1, 1, "192.168.8.209")
+	utir := NewUserTimesInsertRequest("wzl", 1, "192.168.8.209", 1)
 	b := InsertUserTimes(utir)
 	if b == false {
 		t.Fatalf("TestInsertUserTimes failed")
@@ -62,7 +64,7 @@ func TestInsertUserTimes(t *testing.T) {
 }
 
 func TestDeleteUserTimes(t *testing.T) {
-	utdr := NewUserTimesDeleteRequest("wzl")
+	utdr := NewUserTimesDeleteRequest("wzl", 1)
 	b := DeleteUserTimes(utdr)
 	if b == false {
 		t.Fatalf("TestDeleteUserTimes failed")

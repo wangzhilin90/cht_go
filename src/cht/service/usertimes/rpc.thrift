@@ -5,7 +5,8 @@ namespace go  usertimes
 struct UserTimesDetailsRequestStruct {
     1:string username,
     2:i32 isadmin,
-    3:string chengHuiTongTraceLog
+    3:i32 type = 1,
+    4:string chengHuiTongTraceLog
 }
 
 struct UserTimesDetailsStruct {
@@ -13,7 +14,8 @@ struct UserTimesDetailsStruct {
     2:string ip,
     3:i32 logintime,
     4:i32 times,
-    5:i32 isadmin
+    5:i32 isadmin,
+    6:i32 type
 }
 
 struct UserTimesDetailsResponseStruct {
@@ -26,10 +28,9 @@ struct UserTimesDetailsResponseStruct {
 struct UserTimesUpdateRequestStruct {
     1:string username,
     2:string ip,
-    3:i32 logintime,
-    4:i32 times,
-    5:i32 isadmin
-    6:string chengHuiTongTraceLog
+    3:i32 type = 1,
+    4:i32 isadmin,
+    5:string chengHuiTongTraceLog
 }
 
 struct UserTimesUpdateResponseStruct {
@@ -41,10 +42,9 @@ struct UserTimesUpdateResponseStruct {
 struct UserTimesInsertRequestStruct {
     1:string username,
     2:string ip,
-    3:i32 logintime,
-    4:i32 times,
-    5:i32 isadmin
-    6:string chengHuiTongTraceLog
+    3:i32 isadmin,
+    4:i32 type = 1,
+    5:string chengHuiTongTraceLog
 }
 
 struct UserTimesInsertResponseStruct {
@@ -55,7 +55,8 @@ struct UserTimesInsertResponseStruct {
 //用户登陆次数删除
 struct UserTimesDeleteRequestStruct {
     1:string username,
-    2:string chengHuiTongTraceLog
+    2:i32 type,
+    3:string chengHuiTongTraceLog
 }
 struct UserTimesDeleteResponseStruct {
     1:i32 status,
@@ -63,8 +64,8 @@ struct UserTimesDeleteResponseStruct {
 }
 
 service UserTimesThriftService {
-    UserTimesDetailsResponseStruct getUserTimesDetails (1:UserTimesDetailsRequestStruct requestObj)//基于username获取详情
-    UserTimesUpdateResponseStruct  updateUserTimes     (1:UserTimesUpdateRequestStruct requestObj)//基于username更新
+    UserTimesDetailsResponseStruct getUserTimesDetails (1:UserTimesDetailsRequestStruct requestObj)//基于username和type获取详情
+    UserTimesUpdateResponseStruct  updateUserTimes     (1:UserTimesUpdateRequestStruct requestObj)//基于username和type更新
     UserTimesInsertResponseStruct  insertUserTimes     (1:UserTimesInsertRequestStruct requestObj)
-    UserTimesDeleteResponseStruct  deleteUserTimes     (1:UserTimesDeleteRequestStruct requestObj)//基于username删除
+    UserTimesDeleteResponseStruct  deleteUserTimes     (1:UserTimesDeleteRequestStruct requestObj)//基于username和type删除
 }

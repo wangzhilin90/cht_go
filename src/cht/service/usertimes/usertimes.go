@@ -15,11 +15,13 @@ const (
 	UPDATE_USER_TIMES_SUCCESS = 1000
 	UPDATE_USER_TIMES_FAILED  = 1001
 
-	INSERT_USER_TIMES_SUCCESS = 1000
-	INSERT_USER_TIEMS_FAILED  = 1001
+	INSERT_USER_TIMES_SUCCESS       = 1000
+	QUERY_USER_TIMES_DETAILS_FAILED = 1001
+	UPDATE_USER_TIMES_TABLE_FAILED  = 1002
+	INSERT_USER_TIEMS_FAILED        = 1003
 
 	DELETE_USER_TIMES_SUCCESS = 1000
-	DELETE_USER_TIMES_FAILED  = 10001
+	DELETE_USER_TIMES_FAILED  = 1001
 )
 
 var Query_Stat = map[int]string{
@@ -33,8 +35,10 @@ var Update_Stat = map[int]string{
 }
 
 var Insert_Stat = map[int]string{
-	INSERT_USER_TIMES_SUCCESS: "新增会员登陆次数限制表成功",
-	INSERT_USER_TIEMS_FAILED:  "新增会员登陆次数限制表失败",
+	INSERT_USER_TIMES_SUCCESS:       "新增会员登陆次数限制表成功",
+	QUERY_USER_TIMES_DETAILS_FAILED: "查询会员登陆次数限制表失败",
+	UPDATE_USER_TIMES_TABLE_FAILED:  "更新会员登陆次数限制表失败",
+	INSERT_USER_TIEMS_FAILED:        "新增会员登陆次数限制表失败",
 }
 
 var Delete_Stat = map[int]string{
@@ -48,6 +52,7 @@ func (uts *usertimesservice) GetUserTimesDetails(requestObj *UserTimesDetailsReq
 	utdr := new(ut.UserTimesDetailsRequest)
 	utdr.Username = requestObj.GetUsername()
 	utdr.Isadmin = requestObj.GetIsadmin()
+	utdr.Type = requestObj.GetType()
 	utdr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 
 	res, err := ut.GetUserTimesDetails(utdr)
@@ -67,6 +72,7 @@ func (uts *usertimesservice) GetUserTimesDetails(requestObj *UserTimesDetailsReq
 		utds.Logintime = res.Logintime
 		utds.Times = res.Times
 		utds.Isadmin = res.Isadmin
+		utds.Type = res.Type
 		response.UserTimesDetails = utds
 	}
 	response.Status = QUERY_USER_TIMES_SUCCESS
@@ -79,8 +85,7 @@ func (uts *usertimesservice) UpdateUserTimes(requestObj *UserTimesUpdateRequestS
 	utur := new(ut.UserTimesUpdateRequest)
 	utur.Username = requestObj.GetUsername()
 	utur.IP = requestObj.GetIP()
-	utur.Logintime = requestObj.GetLogintime()
-	utur.Times = requestObj.GetTimes()
+	utur.Type = requestObj.GetType()
 	utur.Isadmin = requestObj.GetIsadmin()
 	utur.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 
@@ -100,21 +105,50 @@ func (uts *usertimesservice) UpdateUserTimes(requestObj *UserTimesUpdateRequestS
 }
 
 func (uts *usertimesservice) InsertUserTimes(requestObj *UserTimesInsertRequestStruct) (r *UserTimesInsertResponseStruct, err error) {
-	utir := new(ut.UserTimesInsertRequest)
-	utir.Username = requestObj.GetUsername()
-	utir.IP = requestObj.GetIP()
-	utir.Logintime = requestObj.GetLogintime()
-	utir.Times = requestObj.GetTimes()
-	utir.Isadmin = requestObj.GetIsadmin()
-	utir.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
+	Logger.Debugf("InsertUserTimes requestObj:%v", requestObj)
+	utdr := new(ut.UserTimesDetailsRequest)
+	utdr.Username = requestObj.GetUsername()
+	utdr.Isadmin = requestObj.GetIsadmin()
+	utdr.Type = requestObj.GetType()
+	utdr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 
-	b := ut.InsertUserTimes(utir)
-	if b == false {
-		Logger.Errorf("InsertUserTimes failed")
+	res, err := ut.GetUserTimesDetails(utdr)
+	if err != nil {
+		Logger.Errorf("InsertUserTimes query failed:%v", err)
 		return &UserTimesInsertResponseStruct{
-			Status: INSERT_USER_TIEMS_FAILED,
-			Msg:    Insert_Stat[INSERT_USER_TIEMS_FAILED],
+			Status: QUERY_USER_TIMES_DETAILS_FAILED,
+			Msg:    Insert_Stat[QUERY_USER_TIMES_DETAILS_FAILED],
 		}, nil
+	}
+
+	if res != nil {
+		utur := new(ut.UserTimesUpdateRequest)
+		utur.Username = requestObj.GetUsername()
+		utur.IP = requestObj.GetIP()
+		utur.Type = requestObj.GetType()
+		utur.Isadmin = requestObj.GetIsadmin()
+		utur.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
+		b := ut.UpdateUserTimes(utur)
+		if b == false {
+			return &UserTimesInsertResponseStruct{
+				Status: UPDATE_USER_TIMES_TABLE_FAILED,
+				Msg:    Insert_Stat[UPDATE_USER_TIMES_TABLE_FAILED],
+			}, nil
+		}
+	} else {
+		utir := new(ut.UserTimesInsertRequest)
+		utir.Username = requestObj.GetUsername()
+		utir.IP = requestObj.GetIP()
+		utir.Type = requestObj.GetType()
+		utir.Isadmin = requestObj.GetIsadmin()
+		utir.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
+		b := ut.InsertUserTimes(utir)
+		if b == false {
+			return &UserTimesInsertResponseStruct{
+				Status: INSERT_USER_TIEMS_FAILED,
+				Msg:    Insert_Stat[INSERT_USER_TIEMS_FAILED],
+			}, nil
+		}
 	}
 
 	return &UserTimesInsertResponseStruct{
@@ -126,6 +160,7 @@ func (uts *usertimesservice) InsertUserTimes(requestObj *UserTimesInsertRequestS
 func (uts *usertimesservice) DeleteUserTimes(requestObj *UserTimesDeleteRequestStruct) (r *UserTimesDeleteResponseStruct, err error) {
 	utdr := new(ut.UserTimesDeleteRequest)
 	utdr.Username = requestObj.GetUsername()
+	utdr.Type = requestObj.GetType()
 	utdr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 
 	b := ut.DeleteUserTimes(utdr)

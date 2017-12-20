@@ -19,23 +19,22 @@ var _ = bytes.Equal
 //  - Password
 //  - IP
 //  - Isadmin
+//  - Type
 //  - ChengHuiTongTraceLog
 type UserLoginRequestStruct struct {
 	Username             string `thrift:"username,1" db:"username" json:"username"`
 	Password             string `thrift:"password,2" db:"password" json:"password"`
 	IP                   string `thrift:"ip,3" db:"ip" json:"ip"`
 	Isadmin              int32  `thrift:"isadmin,4" db:"isadmin" json:"isadmin"`
-	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,5" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
+	Type                 int32  `thrift:"type,5" db:"type" json:"type"`
+	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,6" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
 }
 
-func NewUserLoginRequestStruct(username string, password string, loginip string, log string) *UserLoginRequestStruct {
-	return &UserLoginRequestStruct{
-		Username:             username,
-		Password:             password,
-		IP:                   loginip,
-		ChengHuiTongTraceLog: log,
-	}
-}
+// func NewUserLoginRequestStruct() *UserLoginRequestStruct {
+// 	return &UserLoginRequestStruct{
+// 		Type: 1,
+// 	}
+// }
 
 func (p *UserLoginRequestStruct) GetUsername() string {
 	return p.Username
@@ -51,6 +50,10 @@ func (p *UserLoginRequestStruct) GetIP() string {
 
 func (p *UserLoginRequestStruct) GetIsadmin() int32 {
 	return p.Isadmin
+}
+
+func (p *UserLoginRequestStruct) GetType() int32 {
+	return p.Type
 }
 
 func (p *UserLoginRequestStruct) GetChengHuiTongTraceLog() string {
@@ -88,6 +91,10 @@ func (p *UserLoginRequestStruct) Read(iprot thrift.TProtocol) error {
 			}
 		case 5:
 			if err := p.ReadField5(iprot); err != nil {
+				return err
+			}
+		case 6:
+			if err := p.ReadField6(iprot); err != nil {
 				return err
 			}
 		default:
@@ -142,8 +149,17 @@ func (p *UserLoginRequestStruct) ReadField4(iprot thrift.TProtocol) error {
 }
 
 func (p *UserLoginRequestStruct) ReadField5(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI32(); err != nil {
 		return thrift.PrependError("error reading field 5: ", err)
+	} else {
+		p.Type = v
+	}
+	return nil
+}
+
+func (p *UserLoginRequestStruct) ReadField6(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 6: ", err)
 	} else {
 		p.ChengHuiTongTraceLog = v
 	}
@@ -168,6 +184,9 @@ func (p *UserLoginRequestStruct) Write(oprot thrift.TProtocol) error {
 			return err
 		}
 		if err := p.writeField5(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField6(oprot); err != nil {
 			return err
 		}
 	}
@@ -233,14 +252,27 @@ func (p *UserLoginRequestStruct) writeField4(oprot thrift.TProtocol) (err error)
 }
 
 func (p *UserLoginRequestStruct) writeField5(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("chengHuiTongTraceLog", thrift.STRING, 5); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 5:chengHuiTongTraceLog: ", p), err)
+	if err := oprot.WriteFieldBegin("type", thrift.I32, 5); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 5:type: ", p), err)
 	}
-	if err := oprot.WriteString(string(p.ChengHuiTongTraceLog)); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.chengHuiTongTraceLog (5) field write error: ", p), err)
+	if err := oprot.WriteI32(int32(p.Type)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.type (5) field write error: ", p), err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 5:chengHuiTongTraceLog: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 5:type: ", p), err)
+	}
+	return err
+}
+
+func (p *UserLoginRequestStruct) writeField6(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("chengHuiTongTraceLog", thrift.STRING, 6); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 6:chengHuiTongTraceLog: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.ChengHuiTongTraceLog)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.chengHuiTongTraceLog (6) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 6:chengHuiTongTraceLog: ", p), err)
 	}
 	return err
 }
@@ -709,7 +741,9 @@ func (p *UserLoginThriftServiceGetUserLoginInfoArgs) Read(iprot thrift.TProtocol
 }
 
 func (p *UserLoginThriftServiceGetUserLoginInfoArgs) ReadField1(iprot thrift.TProtocol) error {
-	p.RequestObj = &UserLoginRequestStruct{}
+	p.RequestObj = &UserLoginRequestStruct{
+		Type: 1,
+	}
 	if err := p.RequestObj.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.RequestObj), err)
 	}

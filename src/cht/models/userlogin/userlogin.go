@@ -1,6 +1,7 @@
 package userlogin
 
 import (
+	"bytes"
 	. "cht/common/logger"
 	"fmt"
 	"github.com/astaxie/beego/orm"
@@ -24,6 +25,7 @@ type UserlLoginRequest struct {
 	Password             string
 	IP                   string
 	Isadmin              int32
+	Type                 int32
 	ChengHuiTongTraceLog string
 }
 
@@ -179,4 +181,34 @@ func DeleteUserTimesTb(ulr *UserlLoginRequest) (bool, error) {
 		return false, err
 	}
 	return true, nil
+}
+
+func InsertLoginLog(ulr *UserlLoginRequest) bool {
+	Logger.Debugf("InsertLoginLog input param:%v", ulr)
+	o := orm.NewOrm()
+	o.Using("default")
+
+	buf := bytes.Buffer{}
+	buf.WriteString("insert into jl_login_log (id,account,addtime,type,ip,window,status) values ")
+	buf.WriteString("(next VALUE FOR MYCATSEQ_LOGIN_LOG,?,?,?,?,?,?) ")
+	sql := buf.String()
+
+	Logger.Debugf("InsertLoginLog sql:%v", sql)
+	res, err := o.Raw(sql,
+		ulr.Username,
+		time.Now().Unix(),
+		ulr.Type,
+		ulr.IP,
+		1, 0).Exec()
+
+	if err != nil {
+		Logger.Errorf("InsertLoginLog failed:%v", err)
+		return false
+	}
+
+	num, _ := res.RowsAffected()
+	if num == 0 {
+		return false
+	}
+	return true
 }

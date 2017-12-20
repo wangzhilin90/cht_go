@@ -31,12 +31,15 @@ func (uls *UserLoginService) GetUserLoginInfo(requestObj *UserLoginRequestStruct
 	ulr.Username = requestObj.GetUsername()
 	ulr.Password = requestObj.GetPassword()
 	ulr.IP = requestObj.GetIP()
+	ulr.Isadmin = requestObj.GetIsadmin()
+	ulr.Type = requestObj.GetType()
 	ulr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 
 	var v UserLoginResponseStruct
 	var max_retry_times int32 = 5
 	times, err := userlogin.GetLoginFailedTimes(ulr)
 	if times >= max_retry_times {
+		userlogin.InsertLoginLog(ulr)
 		v = UserLoginResponseStruct{
 			Status: RETRY_TOO_MUCH,
 			Msg:    Status[RETRY_TOO_MUCH],
@@ -46,6 +49,7 @@ func (uls *UserLoginService) GetUserLoginInfo(requestObj *UserLoginRequestStruct
 
 	res, bExists, _ := userlogin.CheckLoginUserExists(ulr)
 	if bExists == false {
+		userlogin.InsertLoginLog(ulr)
 		v = UserLoginResponseStruct{
 			Status: ACCOUNT_NOT_EXIST,
 			Msg:    Status[ACCOUNT_NOT_EXIST],
@@ -54,6 +58,7 @@ func (uls *UserLoginService) GetUserLoginInfo(requestObj *UserLoginRequestStruct
 	}
 
 	if res.Islock == true {
+		userlogin.InsertLoginLog(ulr)
 		v = UserLoginResponseStruct{
 			UserID: res.ID,
 			Status: ACCOUNT_LOCKED,
@@ -63,6 +68,7 @@ func (uls *UserLoginService) GetUserLoginInfo(requestObj *UserLoginRequestStruct
 	}
 	bl := userlogin.Checkpassword(ulr)
 	if bl == false {
+		userlogin.InsertLoginLog(ulr)
 		b2, _ := userlogin.CheckUserTimesTbExist(ulr)
 		if b2 == false {
 			userlogin.InsertUserTimesTb(ulr)

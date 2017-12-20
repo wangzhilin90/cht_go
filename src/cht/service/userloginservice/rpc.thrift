@@ -7,7 +7,8 @@ struct UserLoginRequestStruct {
     2:string password, //加密后的password
     3:string ip,       //用户当前登录ip
     4:i32  isadmin,   //是否为后台，默认是0前台登录
-    5:string chengHuiTongTraceLog,
+    5:i32 type = 1,     //1pc , 2app , 3wap
+    6:string chengHuiTongTraceLog,
 }
 
 struct UserLoginResponseStruct {

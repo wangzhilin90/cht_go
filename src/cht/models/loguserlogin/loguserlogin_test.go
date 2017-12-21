@@ -15,9 +15,10 @@ func NewLogUserlLoginRequest(userID int32, loginIP string, loginstyle int32, log
 	return lulr
 }
 
-func NewUserLoginLogDetailsRequest(user_id int32) *UserLoginLogDetailsRequest {
+func NewUserLoginLogDetailsRequest(user_id int32, login_style string) *UserLoginLogDetailsRequest {
 	return &UserLoginLogDetailsRequest{
-		UserID: user_id,
+		UserID:     user_id,
+		LoginStyle: login_style,
 	}
 }
 
@@ -39,7 +40,7 @@ func TestUpdateLogUserlLogin(t *testing.T) {
 }
 
 func TestGetUserLoginLogDetails(t *testing.T) {
-	ulldr := NewUserLoginLogDetailsRequest(44428)
+	ulldr := NewUserLoginLogDetailsRequest(44428, "0,3,4")
 	res, err := GetUserLoginLogDetails(ulldr)
 	if err != nil {
 		t.Fatalf("TestGetUserLoginLogDetails failed:%v", err)

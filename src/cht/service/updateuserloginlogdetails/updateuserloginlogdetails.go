@@ -60,6 +60,7 @@ func (luls *LogUserLoginService) UpdateUserLoginLogDetails(requestObj *UpdateUse
 func (luls *LogUserLoginService) GetUserLoginLogDetails(requestObj *UserLoginLogDetailsRequestStruct) (r *UserLoginLogDetailsResponseStruct, err error) {
 	ulldr := new(loguserlogin.UserLoginLogDetailsRequest)
 	ulldr.UserID = requestObj.GetUserID()
+	ulldr.LoginStyle = requestObj.GetLoginStyle()
 	ulldr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 
 	res, err := loguserlogin.GetUserLoginLogDetails(ulldr)

@@ -342,10 +342,12 @@ func (p *UpdateUserLoginLogDetailsResponseStruct) String() string {
 
 // Attributes:
 //  - UserID
+//  - LoginStyle
 //  - ChengHuiTongTraceLog
 type UserLoginLogDetailsRequestStruct struct {
 	UserID               int32  `thrift:"user_id,1" db:"user_id" json:"user_id"`
-	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,2" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
+	LoginStyle           string `thrift:"login_style,2" db:"login_style" json:"login_style"`
+	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,3" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
 }
 
 // func NewUserLoginLogDetailsRequestStruct() *UserLoginLogDetailsRequestStruct {
@@ -354,6 +356,10 @@ type UserLoginLogDetailsRequestStruct struct {
 
 func (p *UserLoginLogDetailsRequestStruct) GetUserID() int32 {
 	return p.UserID
+}
+
+func (p *UserLoginLogDetailsRequestStruct) GetLoginStyle() string {
+	return p.LoginStyle
 }
 
 func (p *UserLoginLogDetailsRequestStruct) GetChengHuiTongTraceLog() string {
@@ -379,6 +385,10 @@ func (p *UserLoginLogDetailsRequestStruct) Read(iprot thrift.TProtocol) error {
 			}
 		case 2:
 			if err := p.ReadField2(iprot); err != nil {
+				return err
+			}
+		case 3:
+			if err := p.ReadField3(iprot); err != nil {
 				return err
 			}
 		default:
@@ -409,6 +419,15 @@ func (p *UserLoginLogDetailsRequestStruct) ReadField2(iprot thrift.TProtocol) er
 	if v, err := iprot.ReadString(); err != nil {
 		return thrift.PrependError("error reading field 2: ", err)
 	} else {
+		p.LoginStyle = v
+	}
+	return nil
+}
+
+func (p *UserLoginLogDetailsRequestStruct) ReadField3(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 3: ", err)
+	} else {
 		p.ChengHuiTongTraceLog = v
 	}
 	return nil
@@ -423,6 +442,9 @@ func (p *UserLoginLogDetailsRequestStruct) Write(oprot thrift.TProtocol) error {
 			return err
 		}
 		if err := p.writeField2(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField3(oprot); err != nil {
 			return err
 		}
 	}
@@ -449,14 +471,27 @@ func (p *UserLoginLogDetailsRequestStruct) writeField1(oprot thrift.TProtocol) (
 }
 
 func (p *UserLoginLogDetailsRequestStruct) writeField2(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("chengHuiTongTraceLog", thrift.STRING, 2); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:chengHuiTongTraceLog: ", p), err)
+	if err := oprot.WriteFieldBegin("login_style", thrift.STRING, 2); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:login_style: ", p), err)
 	}
-	if err := oprot.WriteString(string(p.ChengHuiTongTraceLog)); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.chengHuiTongTraceLog (2) field write error: ", p), err)
+	if err := oprot.WriteString(string(p.LoginStyle)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.login_style (2) field write error: ", p), err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:chengHuiTongTraceLog: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:login_style: ", p), err)
+	}
+	return err
+}
+
+func (p *UserLoginLogDetailsRequestStruct) writeField3(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("chengHuiTongTraceLog", thrift.STRING, 3); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:chengHuiTongTraceLog: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.ChengHuiTongTraceLog)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.chengHuiTongTraceLog (3) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:chengHuiTongTraceLog: ", p), err)
 	}
 	return err
 }
@@ -486,9 +521,9 @@ type UserLoginLogDetailsStruct struct {
 	TenderTime  int32  `thrift:"tender_time,7" db:"tender_time" json:"tender_time"`
 }
 
-func NewUserLoginLogDetailsStruct() *UserLoginLogDetailsStruct {
-	return &UserLoginLogDetailsStruct{}
-}
+// func NewUserLoginLogDetailsStruct() *UserLoginLogDetailsStruct {
+// 	return &UserLoginLogDetailsStruct{}
+// }
 
 func (p *UserLoginLogDetailsStruct) GetID() int32 {
 	return p.ID

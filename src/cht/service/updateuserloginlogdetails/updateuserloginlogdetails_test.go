@@ -5,9 +5,10 @@ import (
 	"testing"
 )
 
-func NewUserLoginLogDetailsRequestStruct(user_id int32) *UserLoginLogDetailsRequestStruct {
+func NewUserLoginLogDetailsRequestStruct(user_id int32, login_style string) *UserLoginLogDetailsRequestStruct {
 	return &UserLoginLogDetailsRequestStruct{
-		UserID: user_id,
+		UserID:     user_id,
+		LoginStyle: login_style,
 	}
 }
 
@@ -27,7 +28,7 @@ func TestUpdateUserLoginLogDetails(t *testing.T) {
 }
 
 func TestGetUserLoginLogDetails(t *testing.T) {
-	ulldr := NewUserLoginLogDetailsRequestStruct(44428)
+	ulldr := NewUserLoginLogDetailsRequestStruct(44428, "0,1,3")
 	luls := LogUserLoginService{}
 	res, _ := luls.GetUserLoginLogDetails(ulldr)
 	if res.Status != QUERY_USER_LOGIN_LOG_SUCCESS {

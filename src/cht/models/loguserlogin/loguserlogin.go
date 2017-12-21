@@ -25,6 +25,7 @@ type UserBorrowInfo struct {
 
 type UserLoginLogDetailsRequest struct {
 	UserID               int32
+	LoginStyle           string
 	ChengHuiTongTraceLog string
 }
 
@@ -119,6 +120,10 @@ func GetUserLoginLogDetails(ulldr *UserLoginLogDetailsRequest) (*UserLoginLogDet
 
 	if ulldr.UserID != 0 {
 		qb.And(fmt.Sprintf("user_id=%d", ulldr.UserID))
+	}
+
+	if ulldr.LoginStyle != "" {
+		qb.And(fmt.Sprintf("login_style in (%s)", ulldr.LoginStyle))
 	}
 	qb.OrderBy("id").Desc().Limit(1)
 

@@ -6,6 +6,7 @@ import (
 	hcl "cht/models/hscashlist"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
+	"time"
 )
 
 const (
@@ -111,6 +112,14 @@ func StartHSCashListServer() {
 	if err != nil {
 		Logger.Fatalf("RegisterNode %v failed", servicename, err)
 	}
+
+	go func() {
+		time.Sleep(time.Second * 2)
+		err = zkclient.WatchNode(conn, servicename, listenAddr)
+		if err != nil {
+			Logger.Fatalf("WatchNode %v failed:%v", servicename, err)
+		}
+	}()
 
 	serverTransport, err := thrift.NewTServerSocket(listenAddr)
 	if err != nil {

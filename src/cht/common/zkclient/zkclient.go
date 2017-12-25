@@ -87,31 +87,33 @@ func RegisterNode(conn *zk.Conn, path string, listenAddr string) error {
 }
 
 /**
- * [WatchNode :watch临时节点]
- * @param    conn       *zk.Conn    [zk客户端句柄]
- * @param    path       string      [服务名]
- * @param    servicemap 服务表
- * @DateTime 2017-08-23T17:23:28+0800
+ * [Watch 监听临时节点变化]
+ * @param    conn  *zk.Conn客户端句柄
+ * @param    key   对应服务名,如/cht/service/provider
+ * @param    value 对应ip地址
+ * @DateTime 2017-12-25T14:43:40+0800
  */
-func WatchNode(conn *zk.Conn, path string, servicemap ServiceMap) error {
-	for {
-		_, _, ch, err := conn.ChildrenW(path)
+func WatchNode(conn *zk.Conn, key, value string) error {
+	path := fmt.Sprintf("%v/%v", key, value)
+	Logger.Debugf("WatchNode listening:%v", path)
+	_, _, ch, err := conn.ChildrenW(path)
+	if err != nil {
+		Logger.Errorf("ChildrenW failed:%v", err)
+		return err
+	}
+
+	event := <-ch
+	//临时节点被删除时，重新注册节点，再重新watch
+	if event.Type == zk.EventNodeDeleted {
+		err := RegisterNode(conn, key, value)
 		if err != nil {
-			fmt.Println("childrenW failed", err)
+			Logger.Errorf("RegisterNode %v failed:%v", path, err)
 			return err
 		}
-		event := <-ch
-		fmt.Println(event.Type)
-		if event.Type == zk.EventNodeChildrenChanged {
-			value, _, err := conn.Children(path)
-			if err != nil {
-				fmt.Println("children failed", err)
-				return err
-			}
-			servicemap[path] = value
-			fmt.Println("after watchNode servicemap:", servicemap)
-		}
+		Logger.Debugf("WatchNode %v again success!", path)
+		WatchNode(conn, key, value)
 	}
+	return nil
 }
 
 /**

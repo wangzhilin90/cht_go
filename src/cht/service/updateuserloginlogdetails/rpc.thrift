@@ -16,7 +16,7 @@ struct UpdateUserLoginLogDetailsResponseStruct  {
 
 struct UserLoginLogDetailsRequestStruct {
     1:i32 user_id,    //用户ID
-    2:string login_style,  //(3,4) 或者 (0)
+    2:string login_style,  //"3,4" 或者 "0"
     3:string chengHuiTongTraceLog,
 }
 

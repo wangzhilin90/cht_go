@@ -22,6 +22,7 @@ var Status = map[int]string{
 }
 
 func (ddss *dutydetailsservice) GetDutyDetails(requestObj *DutyDetailsRequestStruct) (r *DutyDetailsResponseStruct, err error) {
+	Logger.Infof("GetDutyDetails requestObj:%v", requestObj)
 	ddrs := new(dutydetails.DutyDetailsRequestStruct)
 	ddrs.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	res, err := dutydetails.GetDutyDetails(ddrs)

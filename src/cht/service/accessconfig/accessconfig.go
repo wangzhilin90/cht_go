@@ -22,6 +22,7 @@ var Stat = map[int]string{
 type accessconfigservice struct{}
 
 func (acs *accessconfigservice) GetAccessConfig(requestObj *AccessConfigRequestStruct) (r *AccessConfigResponseStruct, err error) {
+	Logger.Infof("GetAccessConfig requestObj:%v", requestObj)
 	acr := new(ac.AccessConfigRequest)
 	acr.Source = requestObj.GetSource()
 	acr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()

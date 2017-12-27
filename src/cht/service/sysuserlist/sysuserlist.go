@@ -22,6 +22,7 @@ var Stat = map[int]string{
 type sysuserlistservice struct{}
 
 func (suls *sysuserlistservice) GetSysUserList(requestObj *SysUserListRequestStruct) (r *SysUserListResponseStruct, err error) {
+	Logger.Infof("GetSysUserList requestObj:%v", requestObj)
 	sulr := new(userlist.SysUserListRequest)
 	sulr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	res, err := userlist.GetSysUserList(sulr)

@@ -22,6 +22,7 @@ var Stat = map[int]string{
 type sysusereditservice struct{}
 
 func (sues *sysusereditservice) EditSysUser(requestObj *SysUserEditRequestStruct) (r *SysUserEditResponseStruct, err error) {
+	Logger.Infof("EditSysUser requestObj:%v", requestObj)
 	suer := new(useredit.SysUserEditRequest)
 	suer.Account = requestObj.GetAccount()
 	suer.Password = requestObj.GetPassword()

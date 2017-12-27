@@ -12,18 +12,13 @@ import (
 type CouponService struct{}
 
 func (cps *CouponService) GetUserCouponList(requestObj *UserCouponListRequestStruct) (r *UserCouponListResponseStruct, err error) {
-	Logger.Debugf("GetUserCouponList start")
-	if requestObj == nil {
-		Logger.Fatal("input param nil")
-	}
-
+	Logger.Info("GetUserCouponList requestObj:", requestObj)
 	req := new(rateroupon.CouponRequest)
 	req.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	req.Limit = requestObj.GetLimit()
 	req.OrderBy = requestObj.GetOrderBy()
 	req.Status = requestObj.GetStatus()
 	req.UserID = requestObj.GetUserID()
-	Logger.Debug("GetUserCouponList input param", req)
 
 	res, err := rateroupon.GetRateRoupon(req)
 	if err != nil {

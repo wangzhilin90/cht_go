@@ -22,6 +22,7 @@ var Stat = map[int]string{
 type userattestioncardinfosaveservice struct{}
 
 func (uis *userattestioncardinfosaveservice) SaveUserAttestionCardInfo(requestObj *UserAttestionCardInfoSaveRequestStruct) (r *UserAttestionCardInfoSaveResponseStruct, err error) {
+	Logger.Infof("SaveUserAttestionCardInfo requestObj:%v", requestObj)
 	uacisr := new(uacis.UserAttestionCardInfoSaveRequest)
 	uacisr.UserID = requestObj.GetUserID()
 	uacisr.CardType = requestObj.GetCardType()

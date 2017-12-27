@@ -94,7 +94,8 @@ func RegisterNode(conn *zk.Conn, path string, listenAddr string) error {
  * @DateTime 2017-12-25T14:43:40+0800
  */
 func WatchNode(conn *zk.Conn, key, value string) error {
-	path := fmt.Sprintf("%v/%v", key, value)
+	var path string
+	path = fmt.Sprintf("%v/%v", key, value)
 	Logger.Debugf("WatchNode listening:%v", path)
 	_, _, ch, err := conn.ChildrenW(path)
 	if err != nil {
@@ -103,6 +104,7 @@ func WatchNode(conn *zk.Conn, key, value string) error {
 	}
 
 	event := <-ch
+	Logger.Debugf("WatchNode event:%v", event)
 	//临时节点被删除时，重新注册节点，再重新watch
 	if event.Type == zk.EventNodeDeleted {
 		err := RegisterNode(conn, key, value)
@@ -113,6 +115,7 @@ func WatchNode(conn *zk.Conn, key, value string) error {
 		Logger.Debugf("WatchNode %v again success!", path)
 		WatchNode(conn, key, value)
 	}
+
 	return nil
 }
 

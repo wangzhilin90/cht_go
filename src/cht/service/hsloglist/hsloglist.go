@@ -24,6 +24,7 @@ var Stat = map[int]string{
 type hsloglistservice struct{}
 
 func (hlls *hsloglistservice) GetHslogList(requestObj *HsLogListRequestStruct) (r *HsLogListReponseStruct, err error) {
+	Logger.Infof("GetHslogList requestObj:%v", requestObj)
 	hlr := new(hl.HsLogListRequest)
 	hlr.StartTime = requestObj.GetStartTime()
 	hlr.EndTime = requestObj.GetEndTime()

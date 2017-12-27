@@ -22,6 +22,7 @@ var Stat = map[int]string{
 type advertupdateservice struct{}
 
 func (aus *advertupdateservice) UpdateAdvert(requestObj *AdvertUpdateRequestStruct) (r *AdvertUpdateResponseStruct, err error) {
+	Logger.Infof("UpdateAdvert requestObj:%v", requestObj)
 	aur := new(adup.AdvertUpdateRequest)
 	aur.ID = requestObj.GetID()
 	aur.Type = requestObj.GetType()

@@ -23,6 +23,7 @@ var Status = map[int]string{
 }
 
 func (ss *securedservice) GetSecuredList(requestObj *SecuredListRequestStruct) (r *SecuredListResponseStruct, err error) {
+	Logger.Infof("GetSecuredList requestObj:%v", requestObj)
 	srs := new(secured.SecuredRequestStruct)
 	srs.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	securedList, err := secured.GetSecuredList(srs)

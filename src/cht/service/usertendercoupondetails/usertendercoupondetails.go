@@ -22,6 +22,7 @@ var Status = map[int]string{
 }
 
 func (gts *gettendercouponservice) GetUserTenderCouponDetails(requestObj *UserTenderCouponDetailsRequestStruct) (r *UserTenderCouponDetailsResponseStruct, err error) {
+	Logger.Info("GetUserTenderCouponDetails requestObj:", requestObj)
 	tcr := new(gettendercoupon.TenderCouponRequest)
 	tcr.UserId = requestObj.GetUserId()
 	tcr.TenderId = requestObj.GetTenderId()

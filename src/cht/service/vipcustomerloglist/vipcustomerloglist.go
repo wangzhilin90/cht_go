@@ -24,6 +24,7 @@ var Stat = map[int]string{
 type vipcustomerloglistservice struct{}
 
 func (vclls *vipcustomerloglistservice) GetVipCustomerLogList(requestObj *VipCustomerLogListRequestStruct) (r *VipCustomerLogListResponseStruct, err error) {
+	Logger.Info("GetVipCustomerLogList requestObj:", requestObj)
 	vcllr := new(vcll.VipCustomerLogListRequest)
 	vcllr.StartTime = requestObj.GetStartTime()
 	vcllr.EndTime = requestObj.GetEndTime()

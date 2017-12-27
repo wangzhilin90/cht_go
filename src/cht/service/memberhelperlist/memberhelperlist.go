@@ -24,6 +24,7 @@ var Stat = map[int]string{
 type memberhelperlistservice struct{}
 
 func (mhls *memberhelperlistservice) GetMemberHelperList(requestObj *MemberHelperListRequestStruct) (r *MemberHelperListResponseStruct, err error) {
+	Logger.Infof("GetMemberHelperList requestObj:%v", requestObj)
 	mhlr := new(mhl.MemberHelperListRequest)
 	mhlr.Type = requestObj.GetType()
 	mhlr.Keywords = requestObj.GetKeywords()

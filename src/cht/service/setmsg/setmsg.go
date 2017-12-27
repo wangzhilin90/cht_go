@@ -42,6 +42,7 @@ var Insert_Stat = map[int]string{
 type setmsgservice struct{}
 
 func (sms *setmsgservice) GetSetMsgDetails(requestObj *SetMsgDetailsRequestStruct) (r *SetMsgDetailsResponseStruct, err error) {
+	Logger.Infof("GetSetMsgDetails requestObj:%v", requestObj)
 	smdr := new(sm.SetMsgDetailsRequest)
 	smdr.UserID = requestObj.GetUserID()
 	smdr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
@@ -80,6 +81,7 @@ func (sms *setmsgservice) GetSetMsgDetails(requestObj *SetMsgDetailsRequestStruc
 }
 
 func (sms *setmsgservice) UpdateSetMsgDetails(requestObj *SetMsgDealRequestStruct) (r *SetMsgDealResponseStruct, err error) {
+	Logger.Infof("UpdateSetMsgDetails requestObj:%v", requestObj)
 	smdr := new(sm.SetMsgDealRequest)
 	smdr.UserID = requestObj.GetUserID()
 	smdr.Addtime = requestObj.GetAddtime()
@@ -108,6 +110,7 @@ func (sms *setmsgservice) UpdateSetMsgDetails(requestObj *SetMsgDealRequestStruc
 }
 
 func (sms *setmsgservice) InsertSetMsgDetails(requestObj *SetMsgDealRequestStruct) (r *SetMsgDealResponseStruct, err error) {
+	Logger.Infof("InsertSetMsgDetails requestObj:%v", requestObj)
 	smdr := new(sm.SetMsgDealRequest)
 	smdr.UserID = requestObj.GetUserID()
 	smdr.Addtime = requestObj.GetAddtime()

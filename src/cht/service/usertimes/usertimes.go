@@ -50,6 +50,7 @@ var Delete_Stat = map[int]string{
 type usertimesservice struct{}
 
 func (uts *usertimesservice) GetUserTimesDetails(requestObj *UserTimesDetailsRequestStruct) (r *UserTimesDetailsResponseStruct, err error) {
+	Logger.Info("GetUserTimesDetails requestObj:", requestObj)
 	utdr := new(ut.UserTimesDetailsRequest)
 	utdr.Username = requestObj.GetUsername()
 	utdr.Isadmin = requestObj.GetIsadmin()
@@ -83,6 +84,7 @@ func (uts *usertimesservice) GetUserTimesDetails(requestObj *UserTimesDetailsReq
 }
 
 func (uts *usertimesservice) UpdateUserTimes(requestObj *UserTimesUpdateRequestStruct) (r *UserTimesUpdateResponseStruct, err error) {
+	Logger.Info("UpdateUserTimes requestObj:", requestObj)
 	utur := new(ut.UserTimesUpdateRequest)
 	utur.Username = requestObj.GetUsername()
 	utur.IP = requestObj.GetIP()
@@ -106,7 +108,7 @@ func (uts *usertimesservice) UpdateUserTimes(requestObj *UserTimesUpdateRequestS
 }
 
 func (uts *usertimesservice) InsertUserTimes(requestObj *UserTimesInsertRequestStruct) (r *UserTimesInsertResponseStruct, err error) {
-	Logger.Debugf("InsertUserTimes requestObj:%v", requestObj)
+	Logger.Infof("InsertUserTimes requestObj:%v", requestObj)
 	utdr := new(ut.UserTimesDetailsRequest)
 	utdr.Username = requestObj.GetUsername()
 	utdr.Isadmin = requestObj.GetIsadmin()
@@ -159,6 +161,7 @@ func (uts *usertimesservice) InsertUserTimes(requestObj *UserTimesInsertRequestS
 }
 
 func (uts *usertimesservice) DeleteUserTimes(requestObj *UserTimesDeleteRequestStruct) (r *UserTimesDeleteResponseStruct, err error) {
+	Logger.Info("DeleteUserTimes requestObj:", requestObj)
 	utdr := new(ut.UserTimesDeleteRequest)
 	utdr.Username = requestObj.GetUsername()
 	utdr.Type = requestObj.GetType()

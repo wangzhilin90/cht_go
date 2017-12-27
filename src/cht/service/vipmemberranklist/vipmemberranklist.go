@@ -24,6 +24,7 @@ var Stat = map[int]string{
 type vipmemberranklistservice struct{}
 
 func (vmrls *vipmemberranklistservice) GetVipMemberRankList(requestObj *VipMemberRankListRequestStruct) (r *VipMemberRankListReponseStruct, err error) {
+	Logger.Info("GetVipMemberRankList requestObj:", requestObj)
 	vmrlr := new(vmrl.VipMemberRankListRequest)
 	vmrlr.Type = requestObj.GetType()
 	vmrlr.Keywords = requestObj.GetKeywords()

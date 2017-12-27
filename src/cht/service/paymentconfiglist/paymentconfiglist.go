@@ -22,6 +22,7 @@ var Stat = map[int]string{
 type paymentconfiglistservice struct{}
 
 func (pcls *paymentconfiglistservice) GetPaymentConfigList(requestObj *PaymentConfigListRequestStruct) (r *PaymentConfigListResponseStruct, err error) {
+	Logger.Infof("GetPaymentConfigList requestObj:%v", requestObj)
 	pclr := new(pcl.PaymentConfigListRequest)
 	pclr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 

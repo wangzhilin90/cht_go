@@ -24,6 +24,7 @@ var Stat = map[int]string{
 type advertlistservice struct{}
 
 func (als *advertlistservice) GetAdvertList(requestObj *AdvertListRequestStruct) (r *AdvertListResponseStruct, err error) {
+	Logger.Infof("GetAdvertList requestObj:%v", requestObj)
 	alr := new(adList.AdvertListRequest)
 	alr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 

@@ -22,6 +22,7 @@ var Status = map[int]string{
 type subledgerservice struct{}
 
 func (ss *subledgerservice) GetSubledgerList(requestObj *SubledgerListRequestStruct) (r *SubledgerListResponseStruct, err error) {
+	Logger.Infof("GetSubledgerList requestObj:%v", requestObj)
 	sr := new(subledger.SubledgerRequest)
 	sr.HsZhuanrangrenStr = requestObj.GetHsZhuanrangrenStr()
 	sr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()

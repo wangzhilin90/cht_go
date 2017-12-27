@@ -30,6 +30,7 @@ type hscashlistservice struct{}
  * @DateTime 2017-10-23T11:20:59+0800
  */
 func (hcls *hscashlistservice) GetHsCashList(requestObj *HsCashListRequestStruct) (r *HsCashListResponseStruct, err error) {
+	Logger.Infof("GetHsCashList requestObj:%v", requestObj)
 	hclr := new(hcl.HsCashListRequest)
 	hclr.StartTime = requestObj.GetStartTime()
 	hclr.EndTime = requestObj.GetEndTime()

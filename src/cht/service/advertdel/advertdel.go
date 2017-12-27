@@ -24,6 +24,7 @@ var Stat = map[int]string{
 type advertdelservice struct{}
 
 func (ads *advertdelservice) DelAdvert(requestObj *AdvertDelRequestStruct) (r *AdvertDelResponseStruct, err error) {
+	Logger.Infof("DelAdvert requestObj:%v", requestObj)
 	adr := new(adDel.AdvertDelRequest)
 	adr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	adr.ID = requestObj.GetID()

@@ -38,6 +38,7 @@ var Stat = map[int]string{
 type operationaldataservice struct{}
 
 func (ods *operationaldataservice) GetOperationalData(requestObj *OperationalDataRequestStruct) (r *OperationalDataResponseStruct, err error) {
+	Logger.Infof("GetOperationalData requestObj:%v", requestObj)
 	odrs := new(operationaldata.OperationalDataRequestStruct)
 	odrs.Start = requestObj.GetStart()
 	odrs.StartMonth = requestObj.GetStartMonth()

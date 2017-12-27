@@ -12,6 +12,7 @@ import (
 type emailattestationservice struct{}
 
 func (eas *emailattestationservice) CheckEmailUse(requestObj *CheckEmailUseRequestStruct) (r int32, err error) {
+	Logger.Infof("CheckEmailUse requestObj:%v", requestObj)
 	eurs := new(emailattestation.CheckEmailUseRequestStruct)
 	eurs.Email = requestObj.GetEmail()
 	eurs.UserID = requestObj.GetUserID()
@@ -21,6 +22,7 @@ func (eas *emailattestationservice) CheckEmailUse(requestObj *CheckEmailUseReque
 }
 
 func (eas *emailattestationservice) UserAttestationSave(requestObj *UserAttestationSaveStruct) (r int32, err error) {
+	Logger.Infof("UserAttestationSave requestObj:%v", requestObj)
 	uass := new(emailattestation.UserAttestationSaveStruct)
 	uass.UserID = requestObj.GetUserID()
 	uass.EmailStatus = requestObj.GetEmailStatus()
@@ -30,6 +32,7 @@ func (eas *emailattestationservice) UserAttestationSave(requestObj *UserAttestat
 }
 
 func (eas *emailattestationservice) UserEmailSave(requestObj *UserEmailSaveRequestStruct) (r int32, err error) {
+	Logger.Infof("UserEmailSave requestObj:%v", requestObj)
 	uesrs := new(emailattestation.UserEmailSaveRequestStruct)
 	uesrs.Email = requestObj.GetEmail()
 	uesrs.UserID = requestObj.GetUserID()
@@ -39,6 +42,7 @@ func (eas *emailattestationservice) UserEmailSave(requestObj *UserEmailSaveReque
 }
 
 func (eas *emailattestationservice) SendEmail(requestObj *SendEmailRequestStruct) (r int32, err error) {
+	Logger.Infof("SendEmail requestObj:%v", requestObj)
 	sers := new(emailattestation.SendEmailRequestStruct)
 	sers.UserID = requestObj.GetUserID()
 	sers.SendTo = requestObj.GetSendTo()

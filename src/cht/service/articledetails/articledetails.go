@@ -42,6 +42,7 @@ var NextArticleStatus = map[int]string{
 type articledetailsservice struct{}
 
 func (ads *articledetailsservice) GetArticleDetails(requestObj *ArticleDetailsRequestStruct) (r *ArticleDetailsResponseStruct, err error) {
+	Logger.Infof("GetArticleDetails requestObj:%v", requestObj)
 	adrs := new(articledetails.ArticleDetailsRequestStruct)
 	adrs.ID = requestObj.GetID()
 	adrs.Status = requestObj.GetStatus()
@@ -80,6 +81,7 @@ func (ads *articledetailsservice) GetArticleDetails(requestObj *ArticleDetailsRe
 }
 
 func (ads *articledetailsservice) UpdateReadNum(requestObj *ArticleDetailsRequestStruct) (r int32, err error) {
+	Logger.Infof("UpdateReadNum requestObj:%v", requestObj)
 	adrs := new(articledetails.ArticleDetailsRequestStruct)
 	adrs.ID = requestObj.GetID()
 	adrs.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
@@ -89,6 +91,7 @@ func (ads *articledetailsservice) UpdateReadNum(requestObj *ArticleDetailsReques
 }
 
 func (ads *articledetailsservice) PrevArticle(requestObj *NextRequestStruct) (r *ArticleDetailsResponseStruct, err error) {
+	Logger.Infof("PrevArticle requestObj:%v", requestObj)
 	nrs := new(articledetails.NextRequestStruct)
 	nrs.ID = requestObj.GetID()
 	nrs.Cateid = requestObj.GetCateid()
@@ -133,6 +136,7 @@ func (ads *articledetailsservice) PrevArticle(requestObj *NextRequestStruct) (r 
 }
 
 func (ads *articledetailsservice) NextArticle(requestObj *NextRequestStruct) (r *ArticleDetailsResponseStruct, err error) {
+	Logger.Infof("NextArticle requestObj:%v", requestObj)
 	nrs := new(articledetails.NextRequestStruct)
 	nrs.ID = requestObj.GetID()
 	nrs.Cateid = requestObj.GetCateid()

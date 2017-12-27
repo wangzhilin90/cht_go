@@ -22,6 +22,7 @@ var Stat = map[int]string{
 type advertaddservice struct{}
 
 func (aas *advertaddservice) AddAdvert(requestObj *AdvertAddRequestStruct) (r *AdvertAddResponseStruct, err error) {
+	Logger.Infof("AddAdvert requestObj:%v", requestObj)
 	aar := new(adAdd.AdvertAddRequest)
 	aar.Type = requestObj.GetType()
 	aar.Img = requestObj.GetImg()

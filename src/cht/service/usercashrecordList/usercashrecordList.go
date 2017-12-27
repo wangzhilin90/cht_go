@@ -22,6 +22,7 @@ var Status = map[int]string{
 }
 
 func (cs *cashrecordservice) GetUserCashRecordList(requestObj *UserCashRecordListRequestStruct) (r *UserCashRecordListResponseStruct, err error) {
+	Logger.Infof("GetUserCashRecordList requestObj:%v", requestObj)
 	crrs := new(cashrecord.CashRecordRequestStruct)
 	crrs.UserID = requestObj.GetUserID()
 	crrs.StartTime = requestObj.GetStartTime()

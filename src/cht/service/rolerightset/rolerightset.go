@@ -22,6 +22,7 @@ var Status = map[int]string{
 }
 
 func (rrss *rolerightsetservice) SetRoleRight(requestObj *RoleRightSetRequestStruct) (r *RoleRightSetResponseStruct, err error) {
+	Logger.Infof("SetRoleRight requestObj:%v", requestObj)
 	rrsrs := new(rolerightset.RoleRightSetRequestStruct)
 	rrsrs.RoleID = requestObj.GetRoleID()
 	rrsrs.PowerConfig = requestObj.GetPowerConfig()

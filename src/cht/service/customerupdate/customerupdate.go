@@ -22,6 +22,7 @@ var Stat = map[int]string{
 type customerupdateservice struct{}
 
 func (cus *customerupdateservice) UpdateCustomer(requestObj *CustomerUpdateRequestStruct) (r *CustomerUpdateResponseStruct, err error) {
+	Logger.Infof("UpdateCustomer requestObj:%v", requestObj)
 	cur := new(cu.CustomerUpdateRequest)
 	cur.ID = requestObj.GetID()
 	cur.Islock = requestObj.GetIslock()

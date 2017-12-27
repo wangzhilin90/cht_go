@@ -22,6 +22,7 @@ var Status = map[int]string{
 }
 
 func (rdss *roledetailsservice) GetRoleDetails(requestObj *RoleDetailsRequestStruct) (r *RoleDetailsResponseStruct, err error) {
+	Logger.Infof("GetRoleDetails requestObj:%v", requestObj)
 	rdrs := new(roledetails.RoleDetailsRequestStruct)
 	rdrs.RoleID = requestObj.GetRoleID()
 	res, err := roledetails.GetRoleDetails(rdrs)

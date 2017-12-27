@@ -22,6 +22,7 @@ var Stat = map[int]string{
 type sysuserdetailsservice struct{}
 
 func (suds *sysuserdetailsservice) GetSysUserDetails(requestObj *SysUserDetailsRequestStruct) (r *SysUserDetailsResponseStruct, err error) {
+	Logger.Infof("GetSysUserDetails requestObj:%v", requestObj)
 	sudr := new(userdetails.SysUserDetailsRequest)
 	sudr.UserID = requestObj.GetUserID()
 	sudr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()

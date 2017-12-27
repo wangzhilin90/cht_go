@@ -12,6 +12,7 @@ import (
 type helplistservice struct{}
 
 func (hs *helplistservice) GetHelpList(requestObj *HelpListRequestStruct) (r *HelpListResponseStrcut, err error) {
+	Logger.Infof("GetHelpList requestObj:%v", requestObj)
 	hr := new(helplist.HelpListRequest)
 	hr.Status = requestObj.GetStatus()
 	hr.Cateid = requestObj.GetCateid()

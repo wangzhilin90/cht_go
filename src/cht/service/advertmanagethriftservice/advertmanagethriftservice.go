@@ -22,6 +22,7 @@ var Status = map[int]string{
 type advertmanageservice struct{}
 
 func (ams *advertmanageservice) GetAdvertManage(requestObj *AdvertManageRequestStruct) (r *AdvertManageResponseStruct, err error) {
+	Logger.Infof("GetAdvertManage requestObj:%v", requestObj)
 	amr := new(advertmanage.AdvertManageRequest)
 	amr.Type = requestObj.GetType()
 	amr.Limit = requestObj.GetLimit()

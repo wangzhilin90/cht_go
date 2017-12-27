@@ -22,6 +22,7 @@ var Status = map[int]string{
 }
 
 func (uds *userdetailsbynamepasswordservice) GetUseDetailsrByNamePassword(requestObj *UserDetailsByNamePasswordRequestStruct) (r *UserDetailsByNamePasswordResponseStruct, err error) {
+	Logger.Info("GetUseDetailsrByNamePassword requestObj:", requestObj)
 	udbr := new(userdetailsbynamepassword.UserDetailsByNamePasswordRequest)
 	udbr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	udbr.Name = requestObj.GetName()

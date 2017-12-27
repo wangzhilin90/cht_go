@@ -24,6 +24,7 @@ var Stat = map[int]string{
 type userattestionlistservice struct{}
 
 func (uals *userattestionlistservice) UserAttestionList(requestObj *UserAttestionListRequestStruct) (r *UserAttestionListResponseStruct, err error) {
+	Logger.Infof("UserAttestionList requestObj:%v", requestObj)
 	ualr := new(ual.UserAttestionListRequest)
 	ualr.Username = requestObj.GetUsername()
 	ualr.Realname = requestObj.GetRealname()

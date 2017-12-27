@@ -22,6 +22,7 @@ var Status = map[int]string{
 }
 
 func (res *roleeditservice) EditRole(requestObj *RoleEditRequestStruct) (r *RoleEditResponseStruct, err error) {
+	Logger.Infof("EditRole requestObj:%v", requestObj)
 	rers := new(roleedit.RoleEditRequestStruct)
 	rers.Remark = requestObj.GetRemark()
 	rers.RoleID = requestObj.GetRoleID()

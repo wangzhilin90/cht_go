@@ -26,6 +26,7 @@ var Status = map[int]string{
 }
 
 func (ups *updatepasswdservice) UpdateUserPasswWord(requestObj *UpdateUserPasswWordRequestStruct) (r *UpdateUserPasswWordResponseStruct, err error) {
+	Logger.Infof("UpdateUserPasswWord requestObj:%v", requestObj)
 	upr := new(up.UpdatePasswdRequest)
 	upr.ID = requestObj.GetID()
 	upr.NewPassword_ = requestObj.GetNewPassword_()

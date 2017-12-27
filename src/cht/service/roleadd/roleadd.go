@@ -22,6 +22,7 @@ var Status = map[int]string{
 }
 
 func (rs *roleaddservice) AddRole(requestObj *RoleAddRequestStruct) (r *RoleAddResponseStruct, err error) {
+	Logger.Infof("AddRole requestObj:%v", requestObj)
 	rars := new(roleadd.RoleAddRequestStruct)
 	rars.Remark = requestObj.GetRemark()
 	rars.RoleName = requestObj.GetRoleName()

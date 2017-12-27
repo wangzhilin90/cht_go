@@ -52,7 +52,7 @@ var Count_Stat = map[int]string{
 }
 
 func (ubs *userbankservice) GetUserBankDetails(requestObj *UserBankDetailsRequestStruct) (r *UserBankDetailsResponseStruct, err error) {
-	Logger.Info("GetUserBankDetails input param:", requestObj)
+	Logger.Info("GetUserBankDetails requestObj:", requestObj)
 	ubd := new(ub.UserBankDetailsRequest)
 	ubd.UserID = requestObj.GetUserID()
 	ubd.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
@@ -88,6 +88,7 @@ func (ubs *userbankservice) GetUserBankDetails(requestObj *UserBankDetailsReques
 }
 
 func (ubs *userbankservice) UpdateUserBank(requestObj *UserBankUpdateRequestStruct) (r *UserBankUpdateResponseStruct, err error) {
+	Logger.Infof("UpdateUserBank requestObj:%v", requestObj)
 	ubur := new(ub.UserBankUpdateRequest)
 	ubur.ID = requestObj.GetID()
 	ubur.UserID = requestObj.GetUserID()
@@ -117,7 +118,7 @@ func (ubs *userbankservice) UpdateUserBank(requestObj *UserBankUpdateRequestStru
 }
 
 func (ubs *userbankservice) InsertUserBank(requestObj *UserBankInsertRequestStruct) (r *UserBankInsertResponseStruct, err error) {
-	Logger.Info("InsertUserBank input param:", requestObj)
+	Logger.Info("InsertUserBank requestObj:", requestObj)
 	ubir := new(ub.UserBankInsertRequest)
 	ubir.ID = requestObj.GetID()
 	ubir.UserID = requestObj.GetUserID()
@@ -147,7 +148,7 @@ func (ubs *userbankservice) InsertUserBank(requestObj *UserBankInsertRequestStru
 }
 
 func (ubs *userbankservice) GetUserBankNum(requestObj *UserBankCountRequestStruct) (r *UserBankCountResponseStruct, err error) {
-	Logger.Info("GetUserBankNum input param:", requestObj)
+	Logger.Info("GetUserBankNum requestObj:", requestObj)
 	ubcr := new(ub.UserBankCountRequest)
 	ubcr.UserID = requestObj.GetUserID()
 	ubcr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()

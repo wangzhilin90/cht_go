@@ -22,6 +22,7 @@ var Status = map[int]string{
 }
 
 func (rds *roledeleteservice) DeleteRole(requestObj *RoleDeleteRequestStruct) (r *RoleDeleteResponseStruct, err error) {
+	Logger.Infof("DeleteRole requestObj:%v", requestObj)
 	rdrs := new(roledelete.RoleDeleteRequestStruct)
 	rdrs.RoleIDStr = requestObj.GetRoleIDStr()
 	b := roledelete.DeleteRole(rdrs)

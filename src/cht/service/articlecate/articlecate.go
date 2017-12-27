@@ -22,7 +22,7 @@ var Stat = map[int]string{
 type articlecateservice struct{}
 
 func (acs *articlecateservice) GetArticleCateList(requestObj *ArticleCateListRequestStruct) (r *ArticleCateListResponseStruct, err error) {
-	Logger.Debugf("GetArticleCateList requestObj:%v", requestObj)
+	Logger.Infof("GetArticleCateList requestObj:%v", requestObj)
 	aclr := new(ac.ArticleCateListRequest)
 	aclr.ID = requestObj.GetID()
 	aclr.Name = requestObj.GetName()

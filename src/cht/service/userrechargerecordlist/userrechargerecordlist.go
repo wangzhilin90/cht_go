@@ -22,6 +22,7 @@ var Status = map[int]string{
 }
 
 func (rrs *rechargerecordservice) GetUserRechargeRecordList(requestObj *UserRechargeRecordListRequestStruct) (r *UserRechargeRecordListResponseStruct, err error) {
+	Logger.Info("GetUserRechargeRecordList requestObj:", requestObj)
 	rrr := new(rechargerecord.RechargeRecordRequest)
 	rrr.UserID = requestObj.GetUserID()
 	rrr.StartTime = requestObj.GetStartTime()

@@ -23,6 +23,7 @@ type userattestionbaseinfosaveservice struct{}
 
 /*保存用户认证信息*/
 func (uabss *userattestionbaseinfosaveservice) SaveUserAttestionBaseInfo(requestObj *UserAttestionBaseInfoSaveRequestStruct) (r *UserAttestionBaseInfoSaveResponseStruct, err error) {
+	Logger.Infof("SaveUserAttestionBaseInfo requestObj:%v", requestObj)
 	usr := new(uabs.UserAttestionBaseInfoSaveRequest)
 	usr.UserID = requestObj.GetUserID()
 	usr.VideoPic = requestObj.GetVideoPic()

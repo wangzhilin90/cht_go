@@ -28,6 +28,7 @@ type BorrowerInfoRequest struct {
 }
 
 func (bs *borrowerservice) GetBorrowUserDetails(requestObj *BorrowUserDetailsRequestStruct) (r *BorrowUserDetailsResponseStruct, err error) {
+	Logger.Infof("GetBorrowUserDetails requestObj:%v", requestObj)
 	bir := new(borrower.BorrowerInfoRequest)
 	bir.Name = requestObj.GetName()
 	bir.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()

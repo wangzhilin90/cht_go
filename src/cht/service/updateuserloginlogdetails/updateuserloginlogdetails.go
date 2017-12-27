@@ -37,6 +37,7 @@ var Query_Stat = map[int]string{
 }
 
 func (luls *LogUserLoginService) UpdateUserLoginLogDetails(requestObj *UpdateUserLoginLogDetailsRequestStruct) (r *UpdateUserLoginLogDetailsResponseStruct, err error) {
+	Logger.Infof("UpdateUserLoginLogDetails requestObj:%v", requestObj)
 	llr := new(loguserlogin.LogUserlLoginRequest)
 	llr.UserID = requestObj.GetUserID()
 	llr.LoginIP = requestObj.GetLoginIP()
@@ -59,6 +60,7 @@ func (luls *LogUserLoginService) UpdateUserLoginLogDetails(requestObj *UpdateUse
 }
 
 func (luls *LogUserLoginService) GetUserLoginLogDetails(requestObj *UserLoginLogDetailsRequestStruct) (r *UserLoginLogDetailsResponseStruct, err error) {
+	Logger.Infof("GetUserLoginLogDetails requestObj:%v", requestObj)
 	ulldr := new(loguserlogin.UserLoginLogDetailsRequest)
 	ulldr.UserID = requestObj.GetUserID()
 	ulldr.LoginStyle = requestObj.GetLoginStyle()

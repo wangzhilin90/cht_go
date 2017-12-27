@@ -24,6 +24,7 @@ var Stat = map[int]string{
 type customerlistservice struct{}
 
 func (cls *customerlistservice) GetCustomerList(requestObj *CustomerListRequestStruct) (r *CustomerListResponseStruct, err error) {
+	Logger.Infof("GetCustomerList requestObj:%v", requestObj)
 	clr := new(cl.CustomerListRequest)
 	clr.Customer = requestObj.GetCustomer()
 	clr.StartTime = requestObj.GetStartTime()

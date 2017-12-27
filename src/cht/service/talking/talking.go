@@ -12,6 +12,7 @@ import (
 type talkingservcie struct{}
 
 func (ts *talkingservcie) GetTalkingList(requestObj *TalkingRequestStruct) (r *TalkingResponseStruct, err error) {
+	Logger.Infof("GetTalkingList requestObj:%v", requestObj)
 	tr := new(talking.TalkingRequest)
 	tr.Cateid = requestObj.GetCateid()
 	tr.Status = requestObj.GetStatus()

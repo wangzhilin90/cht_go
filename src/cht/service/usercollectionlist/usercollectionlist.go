@@ -22,6 +22,7 @@ var Status = map[int]string{
 }
 
 func (cs *collectionservice) GetUserCollectionList(requestObj *UserCollectionListRequestStruct) (r *UserCollectionListResponseStruct, err error) {
+	Logger.Infof("GetUserCollectionList requestObj:%v", requestObj)
 	cr := new(collection.UserCollectionListRequest)
 	cr.UserID = requestObj.GetUserID()
 	cr.Starttime = requestObj.GetStarttime()

@@ -28,6 +28,7 @@ var Status = map[int]string{
 type UserLoginService struct{}
 
 func (uls *UserLoginService) GetUserLoginInfo(requestObj *UserLoginRequestStruct) (r *UserLoginResponseStruct, err error) {
+	Logger.Info("GetUserLoginInfo requestObj:%v", requestObj)
 	ulr := new(userlogin.UserlLoginRequest)
 	ulr.Username = requestObj.GetUsername()
 	ulr.Password = requestObj.GetPassword()

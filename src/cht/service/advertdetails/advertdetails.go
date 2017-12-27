@@ -22,6 +22,7 @@ var Stat = map[int]string{
 type advertdetailsservice struct{}
 
 func (ads *advertdetailsservice) GetAdvertDetails(requestObj *AdvertDetailsRequestStruct) (r *AdvertDetailsReponseStruct, err error) {
+	Logger.Infof("GetAdvertDetails requestObj:%v", requestObj)
 	adr := new(adDetails.AdvertDetailsRequest)
 	adr.ID = requestObj.GetID()
 	adr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()

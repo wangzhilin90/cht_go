@@ -22,6 +22,7 @@ var Stat = map[int]string{
 type forgetpasswordservice struct{}
 
 func (fps *forgetpasswordservice) ForgetPassword(requestObj *ForgetPasswordRequestStruct) (r *ForgetPasswordResponseStruct, err error) {
+	Logger.Infof("ForgetPassword requestObj:%v", requestObj)
 	fpr := new(fp.ForgetPasswordRequest)
 	fpr.ID = requestObj.GetID()
 	fpr.Password = requestObj.GetPassword()

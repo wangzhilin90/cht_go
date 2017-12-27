@@ -17,6 +17,7 @@ const (
 )
 
 func (pts *phoneattestationservice) CheckPhoneUse(requestObj *CheckPhoneUseRequestStruct) (string, error) {
+	Logger.Infof("CheckPhoneUse requestObj:%v", requestObj)
 	cpur := new(phoneattestation.CheckPhoneUseRequest)
 	cpur.Phone = requestObj.GetPhone()
 	cpur.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
@@ -31,6 +32,7 @@ func (pts *phoneattestationservice) CheckPhoneUse(requestObj *CheckPhoneUseReque
 }
 
 func (pts *phoneattestationservice) GetUserIdByhsid(requestObj *GetUserIdByhsidRequestStruct) (int32, error) {
+	Logger.Infof("GetUserIdByhsid requestObj:%v", requestObj)
 	gibr := new(phoneattestation.GetUserIdByhsidRequest)
 	gibr.Hsid = requestObj.GetHsid()
 	gibr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
@@ -43,6 +45,7 @@ func (pts *phoneattestationservice) GetUserIdByhsid(requestObj *GetUserIdByhsidR
 }
 
 func (pts *phoneattestationservice) UpdatePhone(requestObj *UpdatePhoneRequestStruct) (string, error) {
+	Logger.Infof("UpdatePhone requestObj:%v", requestObj)
 	upr := new(phoneattestation.UpdatePhoneRequest)
 	upr.Phone = requestObj.GetPhone()
 	upr.UserID = requestObj.GetUserID()

@@ -52,7 +52,7 @@ var Delete_Stat = map[int]string{
 }
 
 func (uabs *userappbankservice) GetUserAppBankDetails(requestObj *UserAppBankDetailsRequestStruct) (r *UserAppBankDetailsResponseStruct, err error) {
-	Logger.Info("GetUserAppBankDetails input param:", requestObj)
+	Logger.Info("GetUserAppBankDetails requestObj:", requestObj)
 	uabdr := new(uab.UserAppBankDetailsRequest)
 	uabdr.UserID = requestObj.GetUserID()
 	uabdr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
@@ -88,6 +88,7 @@ func (uabs *userappbankservice) GetUserAppBankDetails(requestObj *UserAppBankDet
 }
 
 func (uabs *userappbankservice) UpdateUserAppBank(requestObj *UserAppBankUpdateRequestStruct) (r *UserAppBankUpdateResponseStruct, err error) {
+	Logger.Infof("UpdateUserAppBank requestObj:%v", requestObj)
 	uabur := new(uab.UserAppBankUpdateRequest)
 	uabur.ID = requestObj.GetID()
 	uabur.UserID = requestObj.GetUserID()
@@ -117,7 +118,7 @@ func (uabs *userappbankservice) UpdateUserAppBank(requestObj *UserAppBankUpdateR
 }
 
 func (uabs *userappbankservice) InsertUserAppBank(requestObj *UserAppBankInsertRequestStruct) (r *UserAppBankInsertResponseStruct, err error) {
-	Logger.Info("InsertUserAppBank input param:", requestObj)
+	Logger.Info("InsertUserAppBank requestObj:", requestObj)
 	uabir := new(uab.UserAppBankInsertRequest)
 	uabir.ID = requestObj.GetID()
 	uabir.UserID = requestObj.GetUserID()
@@ -147,7 +148,7 @@ func (uabs *userappbankservice) InsertUserAppBank(requestObj *UserAppBankInsertR
 }
 
 func (uabs *userappbankservice) DeletetUserAppBank(requestObj *UserAppBankDeleteRequestStruct) (r *UserAppBankDeleteResponseStruct, err error) {
-	Logger.Info("DeletetUserAppBank input param:", requestObj)
+	Logger.Info("DeletetUserAppBank requestObj:", requestObj)
 	uabdr := new(uab.UserAppBankDeleteRequest)
 	uabdr.UserID = requestObj.GetUserID()
 	uabdr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()

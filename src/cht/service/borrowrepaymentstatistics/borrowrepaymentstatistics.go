@@ -32,7 +32,7 @@ var Total_Stat = map[int]string{
 }
 
 func (brss *borrowrepaymentstatisticsservice) GetRepaymentStatisticsList(requestObj *RepaymentStatisticsRequestStruct) (r *RepaymentStatisticsResponseStruct, err error) {
-	Logger.Info("GetRepaymentStatisticsList request param:", requestObj)
+	Logger.Infof("GetRepaymentStatisticsList requestObj:%v", requestObj)
 	rsr := new(brs.RepaymentStatisticsRequest)
 	rsr.UserID = requestObj.GetUserID()
 	rsr.Status = requestObj.GetStatus()
@@ -63,7 +63,7 @@ func (brss *borrowrepaymentstatisticsservice) GetRepaymentStatisticsList(request
 }
 
 func (brss *borrowrepaymentstatisticsservice) GetTotalReplaymentMoney(requestObj *RepaymentStatisticsRequestStruct) (r *TotalReplaymentMoneyResponseStruct, err error) {
-	Logger.Info("GetTotalReplaymentMoney request param:", requestObj)
+	Logger.Info("GetTotalReplaymentMoney requestObj:", requestObj)
 	rsr := new(brs.RepaymentStatisticsRequest)
 	rsr.UserID = requestObj.GetUserID()
 	rsr.Status = requestObj.GetStatus()

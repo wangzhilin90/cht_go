@@ -22,6 +22,7 @@ var Status = map[int]string{
 }
 
 func (gts *gettenderredservice) GetUserTenderRedbagDestails(requestObj *UserTenderRedbagDestailsRequestStruct) (r *UserTenderRedbagDestailsResponseStruct, err error) {
+	Logger.Info("GetUserTenderRedbagDestails requestObj:", requestObj)
 	trr := new(gettenderredbag.TenderRedbagRequest)
 	trr.UserId = requestObj.GetUserId()
 	trr.TenderId = requestObj.GetTenderId()

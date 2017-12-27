@@ -12,6 +12,7 @@ import (
 type juanzengservice struct{}
 
 func (js *juanzengservice) GetInfo(requestObj *RequestStruct) (r *JuanzengResponseStruct, err error) {
+	Logger.Infof("GetInfo requestObj:%v", requestObj)
 	rs := new(juanzeng.RequestStruct)
 	rs.UserID = requestObj.GetUserID()
 	rs.Content = requestObj.GetContent()

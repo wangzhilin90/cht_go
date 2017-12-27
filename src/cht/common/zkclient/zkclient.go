@@ -168,7 +168,7 @@ func CallService(conn *zk.Conn, path string, servicemap ServiceMap) error {
  * @DateTime 2017-08-23T19:26:26+0800
  */
 func ConnectZk(zkServers []string) (*zk.Conn, error) {
-	conn, _, err := zk.Connect(zkServers, time.Second*10, zk.WithMaxBufferSize(1048576))
+	conn, _, err := zk.Connect(zkServers, time.Second*300, zk.WithMaxBufferSize(1048576))
 	if err != nil {
 		fmt.Println("zkConnect faild ", err)
 		return nil, err

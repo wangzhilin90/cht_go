@@ -6,13 +6,38 @@ import (
 	"cht/models/juanzeng"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
+	"reflect"
+	"regexp"
 	"time"
 )
 
 type juanzengservice struct{}
 
+func fiterSpecialCharacters(input *RequestStruct) *RequestStruct {
+	str := `select|Update|and|or|delete|insert|trancate| \
+			char|into|substr|ascii|declare|exec|count|master|into| \
+			drop|execute|\"|%|;|\(|\)|&|\+`
+	var re, _ = regexp.Compile(str)
+	t := reflect.ValueOf(input).Elem()
+	for i := 0; i < t.NumField(); i++ {
+		f := t.Field(i)
+		switch f.Kind() {
+		case reflect.String:
+			if f.CanInterface() {
+				if str, ok := f.Interface().(string); ok {
+					new1 := re.ReplaceAllString(str, "")
+					f.SetString(new1)
+				}
+			}
+		}
+	}
+
+	return input
+}
+
 func (js *juanzengservice) GetInfo(requestObj *RequestStruct) (r *JuanzengResponseStruct, err error) {
 	Logger.Infof("GetInfo requestObj:%v", requestObj)
+	requestObj = fiterSpecialCharacters(requestObj)
 	rs := new(juanzeng.RequestStruct)
 	rs.UserID = requestObj.GetUserID()
 	rs.Content = requestObj.GetContent()
@@ -71,6 +96,7 @@ func (js *juanzengservice) GetInfo(requestObj *RequestStruct) (r *JuanzengRespon
  * @DateTime 2017-09-20T16:15:48+0800
  */
 func (js *juanzengservice) AddMess(requestObj *RequestStruct) (r int32, err error) {
+	requestObj = fiterSpecialCharacters(requestObj)
 	rs := new(juanzeng.RequestStruct)
 	rs.UserID = requestObj.GetUserID()
 	rs.Content = requestObj.GetContent()

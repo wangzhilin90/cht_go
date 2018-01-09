@@ -16,7 +16,7 @@ type juanzengservice struct{}
 func fiterSpecialCharacters(input *RequestStruct) *RequestStruct {
 	str := `select|Update|and|or|delete|insert|trancate| \
 			char|into|substr|ascii|declare|exec|count|master|into| \
-			drop|execute|\"|%|;|\(|\)|&|\+`
+			drop|execute|\"|'|%|;|\(|\)|&|\+`
 	var re, _ = regexp.Compile(str)
 	t := reflect.ValueOf(input).Elem()
 	for i := 0; i < t.NumField(); i++ {

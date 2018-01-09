@@ -13,7 +13,7 @@ func NewRequestStruct(user_id int32, content string) *RequestStruct {
 }
 
 func TestGetInfo(t *testing.T) {
-	rs := NewRequestStruct(214, "selecttestcontent")
+	rs := NewRequestStruct(214, "selecttestcontent'")
 	js := juanzengservice{}
 	res, err := js.GetInfo(rs)
 	if err != nil {

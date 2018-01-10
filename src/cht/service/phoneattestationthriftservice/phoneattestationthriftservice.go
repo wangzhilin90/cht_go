@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	"cht/models/phoneattestation"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -18,6 +19,7 @@ const (
 
 func (pts *phoneattestationservice) CheckPhoneUse(requestObj *CheckPhoneUseRequestStruct) (string, error) {
 	Logger.Infof("CheckPhoneUse requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*CheckPhoneUseRequestStruct)
 	cpur := new(phoneattestation.CheckPhoneUseRequest)
 	cpur.Phone = requestObj.GetPhone()
 	cpur.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
@@ -33,6 +35,7 @@ func (pts *phoneattestationservice) CheckPhoneUse(requestObj *CheckPhoneUseReque
 
 func (pts *phoneattestationservice) GetUserIdByhsid(requestObj *GetUserIdByhsidRequestStruct) (int32, error) {
 	Logger.Infof("GetUserIdByhsid requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*GetUserIdByhsidRequestStruct)
 	gibr := new(phoneattestation.GetUserIdByhsidRequest)
 	gibr.Hsid = requestObj.GetHsid()
 	gibr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
@@ -46,6 +49,7 @@ func (pts *phoneattestationservice) GetUserIdByhsid(requestObj *GetUserIdByhsidR
 
 func (pts *phoneattestationservice) UpdatePhone(requestObj *UpdatePhoneRequestStruct) (string, error) {
 	Logger.Infof("UpdatePhone requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*UpdatePhoneRequestStruct)
 	upr := new(phoneattestation.UpdatePhoneRequest)
 	upr.Phone = requestObj.GetPhone()
 	upr.UserID = requestObj.GetUserID()

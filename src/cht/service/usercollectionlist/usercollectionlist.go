@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	"cht/models/collection"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -23,6 +24,7 @@ var Status = map[int]string{
 
 func (cs *collectionservice) GetUserCollectionList(requestObj *UserCollectionListRequestStruct) (r *UserCollectionListResponseStruct, err error) {
 	Logger.Infof("GetUserCollectionList requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*UserCollectionListRequestStruct)
 	cr := new(collection.UserCollectionListRequest)
 	cr.UserID = requestObj.GetUserID()
 	cr.Starttime = requestObj.GetStarttime()

@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	"cht/models/roleadd"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -23,6 +24,7 @@ var Status = map[int]string{
 
 func (rs *roleaddservice) AddRole(requestObj *RoleAddRequestStruct) (r *RoleAddResponseStruct, err error) {
 	Logger.Infof("AddRole requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*RoleAddRequestStruct)
 	rars := new(roleadd.RoleAddRequestStruct)
 	rars.Remark = requestObj.GetRemark()
 	rars.RoleName = requestObj.GetRoleName()

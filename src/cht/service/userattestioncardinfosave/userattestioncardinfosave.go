@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	uacis "cht/models/userattestioncardinfosave"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -23,6 +24,7 @@ type userattestioncardinfosaveservice struct{}
 
 func (uis *userattestioncardinfosaveservice) SaveUserAttestionCardInfo(requestObj *UserAttestionCardInfoSaveRequestStruct) (r *UserAttestionCardInfoSaveResponseStruct, err error) {
 	Logger.Infof("SaveUserAttestionCardInfo requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*UserAttestionCardInfoSaveRequestStruct)
 	uacisr := new(uacis.UserAttestionCardInfoSaveRequest)
 	uacisr.UserID = requestObj.GetUserID()
 	uacisr.CardType = requestObj.GetCardType()

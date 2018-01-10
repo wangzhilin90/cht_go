@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	adDel "cht/models/advertdel"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -25,6 +26,7 @@ type advertdelservice struct{}
 
 func (ads *advertdelservice) DelAdvert(requestObj *AdvertDelRequestStruct) (r *AdvertDelResponseStruct, err error) {
 	Logger.Infof("DelAdvert requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*AdvertDelRequestStruct)
 	adr := new(adDel.AdvertDelRequest)
 	adr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	adr.ID = requestObj.GetID()

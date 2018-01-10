@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	gd "cht/models/goodsdetails"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -22,6 +23,7 @@ var Stat = map[int]string{
 type goodsdetailsservice struct{}
 
 func (gds *goodsdetailsservice) GetGoodsDetails(requestObj *GoodsDetailsRequestStruct) (r *GoodsDetailsResponseStruct, err error) {
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*GoodsDetailsRequestStruct)
 	gdr := new(gd.GoodsDetailsRequest)
 	gdr.ID = requestObj.GetID()
 	gdr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()

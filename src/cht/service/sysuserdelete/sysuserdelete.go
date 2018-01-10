@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	userdelete "cht/models/sysuserdelete"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -22,6 +23,7 @@ var Stat = map[int]string{
 type sysuserdeleteservice struct{}
 
 func (suds *sysuserdeleteservice) DeleteSysUser(requestObj *SysUserDeleteRequestStruct) (r *SysUserDeleteResponseStruct, err error) {
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*SysUserDeleteRequestStruct)
 	sudr := new(userdelete.SysUserDeleteRequest)
 	sudr.UserIDStr = requestObj.GetUserIDStr()
 	sudr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()

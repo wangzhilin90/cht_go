@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	adList "cht/models/advertlist"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -25,6 +26,7 @@ type advertlistservice struct{}
 
 func (als *advertlistservice) GetAdvertList(requestObj *AdvertListRequestStruct) (r *AdvertListResponseStruct, err error) {
 	Logger.Infof("GetAdvertList requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*AdvertListRequestStruct)
 	alr := new(adList.AdvertListRequest)
 	alr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 

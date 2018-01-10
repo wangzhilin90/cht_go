@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	"cht/models/rateroupon"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -13,6 +14,7 @@ type CouponService struct{}
 
 func (cps *CouponService) GetUserCouponList(requestObj *UserCouponListRequestStruct) (r *UserCouponListResponseStruct, err error) {
 	Logger.Info("GetUserCouponList requestObj:", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*UserCouponListRequestStruct)
 	req := new(rateroupon.CouponRequest)
 	req.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	req.Limit = requestObj.GetLimit()

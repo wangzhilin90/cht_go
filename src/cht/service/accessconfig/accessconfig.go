@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	ac "cht/models/accessconfig"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -23,6 +24,7 @@ type accessconfigservice struct{}
 
 func (acs *accessconfigservice) GetAccessConfig(requestObj *AccessConfigRequestStruct) (r *AccessConfigResponseStruct, err error) {
 	Logger.Infof("GetAccessConfig requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*AccessConfigRequestStruct)
 	acr := new(ac.AccessConfigRequest)
 	acr.Source = requestObj.GetSource()
 	acr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()

@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	"cht/models/loguserlogin"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -38,6 +39,7 @@ var Query_Stat = map[int]string{
 
 func (luls *LogUserLoginService) UpdateUserLoginLogDetails(requestObj *UpdateUserLoginLogDetailsRequestStruct) (r *UpdateUserLoginLogDetailsResponseStruct, err error) {
 	Logger.Infof("UpdateUserLoginLogDetails requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*UpdateUserLoginLogDetailsRequestStruct)
 	llr := new(loguserlogin.LogUserlLoginRequest)
 	llr.UserID = requestObj.GetUserID()
 	llr.LoginIP = requestObj.GetLoginIP()
@@ -61,6 +63,7 @@ func (luls *LogUserLoginService) UpdateUserLoginLogDetails(requestObj *UpdateUse
 
 func (luls *LogUserLoginService) GetUserLoginLogDetails(requestObj *UserLoginLogDetailsRequestStruct) (r *UserLoginLogDetailsResponseStruct, err error) {
 	Logger.Infof("GetUserLoginLogDetails requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*UserLoginLogDetailsRequestStruct)
 	ulldr := new(loguserlogin.UserLoginLogDetailsRequest)
 	ulldr.UserID = requestObj.GetUserID()
 	ulldr.LoginStyle = requestObj.GetLoginStyle()

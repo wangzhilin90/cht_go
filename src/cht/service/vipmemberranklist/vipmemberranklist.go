@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	vmrl "cht/models/vipmemberranklist"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -25,6 +26,7 @@ type vipmemberranklistservice struct{}
 
 func (vmrls *vipmemberranklistservice) GetVipMemberRankList(requestObj *VipMemberRankListRequestStruct) (r *VipMemberRankListReponseStruct, err error) {
 	Logger.Info("GetVipMemberRankList requestObj:", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*VipMemberRankListRequestStruct)
 	vmrlr := new(vmrl.VipMemberRankListRequest)
 	vmrlr.Type = requestObj.GetType()
 	vmrlr.Keywords = requestObj.GetKeywords()

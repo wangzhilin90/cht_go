@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	kdl "cht/models/kefudutylist"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -24,6 +25,7 @@ var Stat = map[int]string{
 type kefudutylistservice struct{}
 
 func (kdls *kefudutylistservice) GetKefuDutyList(requestObj *KefuDutyListRequestStruct) (r *KefuDutyListResponseStruct, err error) {
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*KefuDutyListRequestStruct)
 	kdlr := new(kdl.KefuDutyListRequest)
 	kdlr.StartTime = requestObj.GetStartTime()
 	kdlr.EndTime = requestObj.GetEndTime()

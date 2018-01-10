@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	hcl "cht/models/hscashlist"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -31,6 +32,7 @@ type hscashlistservice struct{}
  */
 func (hcls *hscashlistservice) GetHsCashList(requestObj *HsCashListRequestStruct) (r *HsCashListResponseStruct, err error) {
 	Logger.Infof("GetHsCashList requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*HsCashListRequestStruct)
 	hclr := new(hcl.HsCashListRequest)
 	hclr.StartTime = requestObj.GetStartTime()
 	hclr.EndTime = requestObj.GetEndTime()

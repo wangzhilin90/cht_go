@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	up "cht/models/updatepasswd"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -27,6 +28,7 @@ var Status = map[int]string{
 
 func (ups *updatepasswdservice) UpdateUserPasswWord(requestObj *UpdateUserPasswWordRequestStruct) (r *UpdateUserPasswWordResponseStruct, err error) {
 	Logger.Infof("UpdateUserPasswWord requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*UpdateUserPasswWordRequestStruct)
 	upr := new(up.UpdatePasswdRequest)
 	upr.ID = requestObj.GetID()
 	upr.NewPassword_ = requestObj.GetNewPassword_()

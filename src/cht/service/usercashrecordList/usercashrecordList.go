@@ -4,10 +4,9 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	"cht/models/cashrecord"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
-	"reflect"
-	"regexp"
 	"time"
 )
 
@@ -23,31 +22,9 @@ var Status = map[int]string{
 	QUERY_CASHRECORD_SUCCESS: "查询提现记录成功",
 }
 
-func fiterSpecialCharacters(input *UserCashRecordListRequestStruct) *UserCashRecordListRequestStruct {
-	str := `select|Update|and|or|delete|insert|trancate| \
-			char|into|substr|ascii|declare|exec|count|master|into| \
-			drop|execute|\"|%|;|\(|\)|&|\+`
-	var re, _ = regexp.Compile(str)
-	t := reflect.ValueOf(input).Elem()
-	for i := 0; i < t.NumField(); i++ {
-		f := t.Field(i)
-		switch f.Kind() {
-		case reflect.String:
-			if f.CanInterface() {
-				if str, ok := f.Interface().(string); ok {
-					new1 := re.ReplaceAllString(str, "")
-					f.SetString(new1)
-				}
-			}
-		}
-	}
-
-	return input
-}
-
 func (cs *cashrecordservice) GetUserCashRecordList(requestObj *UserCashRecordListRequestStruct) (r *UserCashRecordListResponseStruct, err error) {
 	Logger.Infof("GetUserCashRecordList requestObj:%v", requestObj)
-	requestObj = fiterSpecialCharacters(requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*UserCashRecordListRequestStruct)
 	crrs := new(cashrecord.CashRecordRequestStruct)
 	crrs.UserID = requestObj.GetUserID()
 	crrs.StartTime = requestObj.GetStartTime()

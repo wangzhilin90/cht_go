@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	userdetails "cht/models/sysuserdetails"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -23,6 +24,7 @@ type sysuserdetailsservice struct{}
 
 func (suds *sysuserdetailsservice) GetSysUserDetails(requestObj *SysUserDetailsRequestStruct) (r *SysUserDetailsResponseStruct, err error) {
 	Logger.Infof("GetSysUserDetails requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*SysUserDetailsRequestStruct)
 	sudr := new(userdetails.SysUserDetailsRequest)
 	sudr.UserID = requestObj.GetUserID()
 	sudr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()

@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	"cht/models/makeborrow"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"strconv"
@@ -42,6 +43,7 @@ func checkAddCredit(borrow_type int32) bool {
 }
 
 func NewMakeBorrowRequest(requestObj *MakeBorrowRequestStruct) *makeborrow.Borrow {
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*MakeBorrowRequestStruct)
 	mbr := new(makeborrow.Borrow)
 	mbr.ID, _ = makeborrow.GetLatestBorrowID()
 	mbr.BorrowType = requestObj.GetBorrowType()

@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	ac "cht/models/articlecate"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -23,6 +24,7 @@ type articlecateservice struct{}
 
 func (acs *articlecateservice) GetArticleCateList(requestObj *ArticleCateListRequestStruct) (r *ArticleCateListResponseStruct, err error) {
 	Logger.Infof("GetArticleCateList requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*ArticleCateListRequestStruct)
 	aclr := new(ac.ArticleCateListRequest)
 	aclr.ID = requestObj.GetID()
 	aclr.Name = requestObj.GetName()

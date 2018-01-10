@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	"cht/models/talking"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -13,6 +14,7 @@ type talkingservcie struct{}
 
 func (ts *talkingservcie) GetTalkingList(requestObj *TalkingRequestStruct) (r *TalkingResponseStruct, err error) {
 	Logger.Infof("GetTalkingList requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*TalkingRequestStruct)
 	tr := new(talking.TalkingRequest)
 	tr.Cateid = requestObj.GetCateid()
 	tr.Status = requestObj.GetStatus()

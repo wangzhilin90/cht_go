@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	uab "cht/models/userappbank"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -53,6 +54,7 @@ var Delete_Stat = map[int]string{
 
 func (uabs *userappbankservice) GetUserAppBankDetails(requestObj *UserAppBankDetailsRequestStruct) (r *UserAppBankDetailsResponseStruct, err error) {
 	Logger.Info("GetUserAppBankDetails requestObj:", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*UserAppBankDetailsRequestStruct)
 	uabdr := new(uab.UserAppBankDetailsRequest)
 	uabdr.UserID = requestObj.GetUserID()
 	uabdr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
@@ -89,6 +91,7 @@ func (uabs *userappbankservice) GetUserAppBankDetails(requestObj *UserAppBankDet
 
 func (uabs *userappbankservice) UpdateUserAppBank(requestObj *UserAppBankUpdateRequestStruct) (r *UserAppBankUpdateResponseStruct, err error) {
 	Logger.Infof("UpdateUserAppBank requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*UserAppBankUpdateRequestStruct)
 	uabur := new(uab.UserAppBankUpdateRequest)
 	uabur.ID = requestObj.GetID()
 	uabur.UserID = requestObj.GetUserID()
@@ -119,6 +122,7 @@ func (uabs *userappbankservice) UpdateUserAppBank(requestObj *UserAppBankUpdateR
 
 func (uabs *userappbankservice) InsertUserAppBank(requestObj *UserAppBankInsertRequestStruct) (r *UserAppBankInsertResponseStruct, err error) {
 	Logger.Info("InsertUserAppBank requestObj:", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*UserAppBankInsertRequestStruct)
 	uabir := new(uab.UserAppBankInsertRequest)
 	uabir.ID = requestObj.GetID()
 	uabir.UserID = requestObj.GetUserID()
@@ -149,6 +153,7 @@ func (uabs *userappbankservice) InsertUserAppBank(requestObj *UserAppBankInsertR
 
 func (uabs *userappbankservice) DeletetUserAppBank(requestObj *UserAppBankDeleteRequestStruct) (r *UserAppBankDeleteResponseStruct, err error) {
 	Logger.Info("DeletetUserAppBank requestObj:", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*UserAppBankDeleteRequestStruct)
 	uabdr := new(uab.UserAppBankDeleteRequest)
 	uabdr.UserID = requestObj.GetUserID()
 	uabdr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()

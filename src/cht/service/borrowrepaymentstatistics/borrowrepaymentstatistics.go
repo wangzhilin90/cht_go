@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	brs "cht/models/borrowrepaymentstatistics"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -33,6 +34,7 @@ var Total_Stat = map[int]string{
 
 func (brss *borrowrepaymentstatisticsservice) GetRepaymentStatisticsList(requestObj *RepaymentStatisticsRequestStruct) (r *RepaymentStatisticsResponseStruct, err error) {
 	Logger.Infof("GetRepaymentStatisticsList requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*RepaymentStatisticsRequestStruct)
 	rsr := new(brs.RepaymentStatisticsRequest)
 	rsr.UserID = requestObj.GetUserID()
 	rsr.Status = requestObj.GetStatus()
@@ -64,6 +66,7 @@ func (brss *borrowrepaymentstatisticsservice) GetRepaymentStatisticsList(request
 
 func (brss *borrowrepaymentstatisticsservice) GetTotalReplaymentMoney(requestObj *RepaymentStatisticsRequestStruct) (r *TotalReplaymentMoneyResponseStruct, err error) {
 	Logger.Info("GetTotalReplaymentMoney requestObj:", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*RepaymentStatisticsRequestStruct)
 	rsr := new(brs.RepaymentStatisticsRequest)
 	rsr.UserID = requestObj.GetUserID()
 	rsr.Status = requestObj.GetStatus()

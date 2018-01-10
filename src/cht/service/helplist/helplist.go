@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	"cht/models/helplist"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -13,6 +14,7 @@ type helplistservice struct{}
 
 func (hs *helplistservice) GetHelpList(requestObj *HelpListRequestStruct) (r *HelpListResponseStrcut, err error) {
 	Logger.Infof("GetHelpList requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*HelpListRequestStruct)
 	hr := new(helplist.HelpListRequest)
 	hr.Status = requestObj.GetStatus()
 	hr.Cateid = requestObj.GetCateid()

@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	adAdd "cht/models/advertadd"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -23,6 +24,7 @@ type advertaddservice struct{}
 
 func (aas *advertaddservice) AddAdvert(requestObj *AdvertAddRequestStruct) (r *AdvertAddResponseStruct, err error) {
 	Logger.Infof("AddAdvert requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*AdvertAddRequestStruct)
 	aar := new(adAdd.AdvertAddRequest)
 	aar.Type = requestObj.GetType()
 	aar.Img = requestObj.GetImg()

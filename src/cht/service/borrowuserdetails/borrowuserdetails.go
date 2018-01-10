@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	"cht/models/borrower"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"strconv"
@@ -29,6 +30,7 @@ type BorrowerInfoRequest struct {
 
 func (bs *borrowerservice) GetBorrowUserDetails(requestObj *BorrowUserDetailsRequestStruct) (r *BorrowUserDetailsResponseStruct, err error) {
 	Logger.Infof("GetBorrowUserDetails requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*BorrowUserDetailsRequestStruct)
 	bir := new(borrower.BorrowerInfoRequest)
 	bir.Name = requestObj.GetName()
 	bir.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()

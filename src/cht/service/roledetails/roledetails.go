@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	"cht/models/roledetails"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -23,6 +24,7 @@ var Status = map[int]string{
 
 func (rdss *roledetailsservice) GetRoleDetails(requestObj *RoleDetailsRequestStruct) (r *RoleDetailsResponseStruct, err error) {
 	Logger.Infof("GetRoleDetails requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*RoleDetailsRequestStruct)
 	rdrs := new(roledetails.RoleDetailsRequestStruct)
 	rdrs.RoleID = requestObj.GetRoleID()
 	res, err := roledetails.GetRoleDetails(rdrs)

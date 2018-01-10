@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	userlist "cht/models/sysuserlist"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -23,6 +24,7 @@ type sysuserlistservice struct{}
 
 func (suls *sysuserlistservice) GetSysUserList(requestObj *SysUserListRequestStruct) (r *SysUserListResponseStruct, err error) {
 	Logger.Infof("GetSysUserList requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*SysUserListRequestStruct)
 	sulr := new(userlist.SysUserListRequest)
 	sulr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	res, err := userlist.GetSysUserList(sulr)

@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	cl "cht/models/customerlist"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -25,6 +26,7 @@ type customerlistservice struct{}
 
 func (cls *customerlistservice) GetCustomerList(requestObj *CustomerListRequestStruct) (r *CustomerListResponseStruct, err error) {
 	Logger.Infof("GetCustomerList requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*CustomerListRequestStruct)
 	clr := new(cl.CustomerListRequest)
 	clr.Customer = requestObj.GetCustomer()
 	clr.StartTime = requestObj.GetStartTime()

@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	cu "cht/models/customerupdate"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -23,6 +24,7 @@ type customerupdateservice struct{}
 
 func (cus *customerupdateservice) UpdateCustomer(requestObj *CustomerUpdateRequestStruct) (r *CustomerUpdateResponseStruct, err error) {
 	Logger.Infof("UpdateCustomer requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*CustomerUpdateRequestStruct)
 	cur := new(cu.CustomerUpdateRequest)
 	cur.ID = requestObj.GetID()
 	cur.Islock = requestObj.GetIslock()

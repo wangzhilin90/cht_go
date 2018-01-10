@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	"cht/models/roleedit"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -23,6 +24,7 @@ var Status = map[int]string{
 
 func (res *roleeditservice) EditRole(requestObj *RoleEditRequestStruct) (r *RoleEditResponseStruct, err error) {
 	Logger.Infof("EditRole requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*RoleEditRequestStruct)
 	rers := new(roleedit.RoleEditRequestStruct)
 	rers.Remark = requestObj.GetRemark()
 	rers.RoleID = requestObj.GetRoleID()

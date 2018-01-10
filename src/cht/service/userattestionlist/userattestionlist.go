@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	ual "cht/models/userattestionlist"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -25,6 +26,7 @@ type userattestionlistservice struct{}
 
 func (uals *userattestionlistservice) UserAttestionList(requestObj *UserAttestionListRequestStruct) (r *UserAttestionListResponseStruct, err error) {
 	Logger.Infof("UserAttestionList requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*UserAttestionListRequestStruct)
 	ualr := new(ual.UserAttestionListRequest)
 	ualr.Username = requestObj.GetUsername()
 	ualr.Realname = requestObj.GetRealname()

@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	useradd "cht/models/sysuseradd"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -22,6 +23,7 @@ var Stat = map[int]string{
 type sysuseraddservice struct{}
 
 func NewSysUserAddRequest(requestObj *SysUserAddRequestStruct) *useradd.SysUserAddRequest {
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*SysUserAddRequestStruct)
 	suars := new(useradd.SysUserAddRequest)
 	suars.Account = requestObj.GetAccount()
 	suars.Password = requestObj.GetPassword()

@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	ga "cht/models/goodsadd"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -22,6 +23,7 @@ var Stat = map[int]string{
 type goodsaddservice struct{}
 
 func NewGoodsAddRequest(requestObj *GoodsAddRequestStruct) *ga.GoodsAddRequest {
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*GoodsAddRequestStruct)
 	gar := new(ga.GoodsAddRequest)
 	gar.ShowTime = requestObj.GetShowTime()
 	gar.CloseTime = requestObj.GetCloseTime()

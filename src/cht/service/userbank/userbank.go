@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	ub "cht/models/userbank"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -53,6 +54,7 @@ var Count_Stat = map[int]string{
 
 func (ubs *userbankservice) GetUserBankDetails(requestObj *UserBankDetailsRequestStruct) (r *UserBankDetailsResponseStruct, err error) {
 	Logger.Info("GetUserBankDetails requestObj:", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*UserBankDetailsRequestStruct)
 	ubd := new(ub.UserBankDetailsRequest)
 	ubd.UserID = requestObj.GetUserID()
 	ubd.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
@@ -89,6 +91,7 @@ func (ubs *userbankservice) GetUserBankDetails(requestObj *UserBankDetailsReques
 
 func (ubs *userbankservice) UpdateUserBank(requestObj *UserBankUpdateRequestStruct) (r *UserBankUpdateResponseStruct, err error) {
 	Logger.Infof("UpdateUserBank requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*UserBankUpdateRequestStruct)
 	ubur := new(ub.UserBankUpdateRequest)
 	ubur.ID = requestObj.GetID()
 	ubur.UserID = requestObj.GetUserID()
@@ -119,6 +122,7 @@ func (ubs *userbankservice) UpdateUserBank(requestObj *UserBankUpdateRequestStru
 
 func (ubs *userbankservice) InsertUserBank(requestObj *UserBankInsertRequestStruct) (r *UserBankInsertResponseStruct, err error) {
 	Logger.Info("InsertUserBank requestObj:", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*UserBankInsertRequestStruct)
 	ubir := new(ub.UserBankInsertRequest)
 	ubir.ID = requestObj.GetID()
 	ubir.UserID = requestObj.GetUserID()
@@ -149,6 +153,7 @@ func (ubs *userbankservice) InsertUserBank(requestObj *UserBankInsertRequestStru
 
 func (ubs *userbankservice) GetUserBankNum(requestObj *UserBankCountRequestStruct) (r *UserBankCountResponseStruct, err error) {
 	Logger.Info("GetUserBankNum requestObj:", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*UserBankCountRequestStruct)
 	ubcr := new(ub.UserBankCountRequest)
 	ubcr.UserID = requestObj.GetUserID()
 	ubcr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()

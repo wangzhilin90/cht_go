@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	useredit "cht/models/sysuseredit"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -23,6 +24,7 @@ type sysusereditservice struct{}
 
 func (sues *sysusereditservice) EditSysUser(requestObj *SysUserEditRequestStruct) (r *SysUserEditResponseStruct, err error) {
 	Logger.Infof("EditSysUser requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*SysUserEditRequestStruct)
 	suer := new(useredit.SysUserEditRequest)
 	suer.Account = requestObj.GetAccount()
 	suer.Password = requestObj.GetPassword()

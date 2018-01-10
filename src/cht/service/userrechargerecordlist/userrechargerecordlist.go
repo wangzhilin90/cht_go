@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	"cht/models/rechargerecord"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -23,6 +24,7 @@ var Status = map[int]string{
 
 func (rrs *rechargerecordservice) GetUserRechargeRecordList(requestObj *UserRechargeRecordListRequestStruct) (r *UserRechargeRecordListResponseStruct, err error) {
 	Logger.Info("GetUserRechargeRecordList requestObj:", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*UserRechargeRecordListRequestStruct)
 	rrr := new(rechargerecord.RechargeRecordRequest)
 	rrr.UserID = requestObj.GetUserID()
 	rrr.StartTime = requestObj.GetStartTime()

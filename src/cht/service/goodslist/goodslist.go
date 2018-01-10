@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	gl "cht/models/goodslist"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -24,6 +25,7 @@ var Stat = map[int]string{
 type goodslistservice struct{}
 
 func (gls *goodslistservice) GetGoodsList(requestObj *GoodsListRequestStruct) (r *GoodsListReponseStruct, err error) {
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*GoodsListRequestStruct)
 	glr := new(gl.GoodsListRequest)
 	glr.Name = requestObj.GetName()
 	glr.Category = requestObj.GetCategory()

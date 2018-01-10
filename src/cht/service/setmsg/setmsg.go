@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	sm "cht/models/setmsg"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -43,6 +44,7 @@ type setmsgservice struct{}
 
 func (sms *setmsgservice) GetSetMsgDetails(requestObj *SetMsgDetailsRequestStruct) (r *SetMsgDetailsResponseStruct, err error) {
 	Logger.Infof("GetSetMsgDetails requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*SetMsgDetailsRequestStruct)
 	smdr := new(sm.SetMsgDetailsRequest)
 	smdr.UserID = requestObj.GetUserID()
 	smdr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
@@ -82,6 +84,7 @@ func (sms *setmsgservice) GetSetMsgDetails(requestObj *SetMsgDetailsRequestStruc
 
 func (sms *setmsgservice) UpdateSetMsgDetails(requestObj *SetMsgDealRequestStruct) (r *SetMsgDealResponseStruct, err error) {
 	Logger.Infof("UpdateSetMsgDetails requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*SetMsgDealRequestStruct)
 	smdr := new(sm.SetMsgDealRequest)
 	smdr.UserID = requestObj.GetUserID()
 	smdr.Addtime = requestObj.GetAddtime()
@@ -111,6 +114,7 @@ func (sms *setmsgservice) UpdateSetMsgDetails(requestObj *SetMsgDealRequestStruc
 
 func (sms *setmsgservice) InsertSetMsgDetails(requestObj *SetMsgDealRequestStruct) (r *SetMsgDealResponseStruct, err error) {
 	Logger.Infof("InsertSetMsgDetails requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*SetMsgDealRequestStruct)
 	smdr := new(sm.SetMsgDealRequest)
 	smdr.UserID = requestObj.GetUserID()
 	smdr.Addtime = requestObj.GetAddtime()

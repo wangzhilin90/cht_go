@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	adDetails "cht/models/advertdetails"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -23,6 +24,7 @@ type advertdetailsservice struct{}
 
 func (ads *advertdetailsservice) GetAdvertDetails(requestObj *AdvertDetailsRequestStruct) (r *AdvertDetailsReponseStruct, err error) {
 	Logger.Infof("GetAdvertDetails requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*AdvertDetailsRequestStruct)
 	adr := new(adDetails.AdvertDetailsRequest)
 	adr.ID = requestObj.GetID()
 	adr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()

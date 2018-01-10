@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	ut "cht/models/usertimes"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -51,6 +52,7 @@ type usertimesservice struct{}
 
 func (uts *usertimesservice) GetUserTimesDetails(requestObj *UserTimesDetailsRequestStruct) (r *UserTimesDetailsResponseStruct, err error) {
 	Logger.Info("GetUserTimesDetails requestObj:", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*UserTimesDetailsRequestStruct)
 	utdr := new(ut.UserTimesDetailsRequest)
 	utdr.Username = requestObj.GetUsername()
 	utdr.Isadmin = requestObj.GetIsadmin()
@@ -85,6 +87,7 @@ func (uts *usertimesservice) GetUserTimesDetails(requestObj *UserTimesDetailsReq
 
 func (uts *usertimesservice) UpdateUserTimes(requestObj *UserTimesUpdateRequestStruct) (r *UserTimesUpdateResponseStruct, err error) {
 	Logger.Info("UpdateUserTimes requestObj:", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*UserTimesUpdateRequestStruct)
 	utur := new(ut.UserTimesUpdateRequest)
 	utur.Username = requestObj.GetUsername()
 	utur.IP = requestObj.GetIP()
@@ -109,6 +112,7 @@ func (uts *usertimesservice) UpdateUserTimes(requestObj *UserTimesUpdateRequestS
 
 func (uts *usertimesservice) InsertUserTimes(requestObj *UserTimesInsertRequestStruct) (r *UserTimesInsertResponseStruct, err error) {
 	Logger.Infof("InsertUserTimes requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*UserTimesInsertRequestStruct)
 	utdr := new(ut.UserTimesDetailsRequest)
 	utdr.Username = requestObj.GetUsername()
 	utdr.Isadmin = requestObj.GetIsadmin()
@@ -162,6 +166,7 @@ func (uts *usertimesservice) InsertUserTimes(requestObj *UserTimesInsertRequestS
 
 func (uts *usertimesservice) DeleteUserTimes(requestObj *UserTimesDeleteRequestStruct) (r *UserTimesDeleteResponseStruct, err error) {
 	Logger.Info("DeleteUserTimes requestObj:", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*UserTimesDeleteRequestStruct)
 	utdr := new(ut.UserTimesDeleteRequest)
 	utdr.Username = requestObj.GetUsername()
 	utdr.Type = requestObj.GetType()

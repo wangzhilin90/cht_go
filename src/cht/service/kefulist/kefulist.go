@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	"cht/models/kefulist"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -22,6 +23,7 @@ var Status = map[int]string{
 }
 
 func (kls *kefulistservice) GetKeFuList(requestObj *KeFuListRequestStruct) (r *KeFuListResponseStruct, err error) {
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*KeFuListRequestStruct)
 	kfrs := new(kefulist.KeFuListRequestStruct)
 	kfrs.Status = requestObj.GetStatus()
 	kfrs.RoleID = requestObj.GetRoleID()

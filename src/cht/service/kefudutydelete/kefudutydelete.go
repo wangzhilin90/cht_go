@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	kdd "cht/models/kefudutydelete"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -22,6 +23,7 @@ var Stat = map[int]string{
 type kefudutydeleteservice struct{}
 
 func (kdds *kefudutydeleteservice) DeleteKefuDuty(requestObj *KefuDutyDeleteRequestStruct) (r *KefuDutyDeleteResponseStruct, err error) {
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*KefuDutyDeleteRequestStruct)
 	kddr := new(kdd.KefuDutyDeleteRequest)
 	kddr.Idstr = requestObj.GetIdstr()
 	kddr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()

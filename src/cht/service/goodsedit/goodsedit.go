@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	ge "cht/models/goodsedit"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -22,6 +23,7 @@ var Stat = map[int]string{
 type goodseditservice struct{}
 
 func (ges *goodseditservice) EditGoods(requestObj *GoodsEditRequestStruct) (r *GoodsEditResponseStruct, err error) {
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*GoodsEditRequestStruct)
 	ger := new(ge.GoodsEditRequest)
 	ger.ID = requestObj.GetID()
 	ger.ShowTime = requestObj.GetShowTime()

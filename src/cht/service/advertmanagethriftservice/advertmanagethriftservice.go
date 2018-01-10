@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	"cht/models/advertmanage"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -23,6 +24,7 @@ type advertmanageservice struct{}
 
 func (ams *advertmanageservice) GetAdvertManage(requestObj *AdvertManageRequestStruct) (r *AdvertManageResponseStruct, err error) {
 	Logger.Infof("GetAdvertManage requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*AdvertManageRequestStruct)
 	amr := new(advertmanage.AdvertManageRequest)
 	amr.Type = requestObj.GetType()
 	amr.Limit = requestObj.GetLimit()

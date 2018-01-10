@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	kdu "cht/models/kefudutyupdate"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -22,6 +23,7 @@ var Stat = map[int]string{
 type kefudutyupdateservice struct{}
 
 func (kdus *kefudutyupdateservice) UpdateKefuDuty(requestObj *KefuDutyUpdateRequestStruct) (r *KefuDutyUpdateResponseStruct, err error) {
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*KefuDutyUpdateRequestStruct)
 	kdur := new(kdu.KefuDutyUpdateRequest)
 	kdur.ID = requestObj.GetID()
 	kdur.Customer = requestObj.GetCustomer()

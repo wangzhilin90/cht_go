@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	"cht/models/secured"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"strings"
@@ -24,6 +25,7 @@ var Status = map[int]string{
 
 func (ss *securedservice) GetSecuredList(requestObj *SecuredListRequestStruct) (r *SecuredListResponseStruct, err error) {
 	Logger.Infof("GetSecuredList requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*SecuredListRequestStruct)
 	srs := new(secured.SecuredRequestStruct)
 	srs.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	securedList, err := secured.GetSecuredList(srs)

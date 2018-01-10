@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	"cht/models/gettendercoupon"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -23,6 +24,7 @@ var Status = map[int]string{
 
 func (gts *gettendercouponservice) GetUserTenderCouponDetails(requestObj *UserTenderCouponDetailsRequestStruct) (r *UserTenderCouponDetailsResponseStruct, err error) {
 	Logger.Info("GetUserTenderCouponDetails requestObj:", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*UserTenderCouponDetailsRequestStruct)
 	tcr := new(gettendercoupon.TenderCouponRequest)
 	tcr.UserId = requestObj.GetUserId()
 	tcr.TenderId = requestObj.GetTenderId()

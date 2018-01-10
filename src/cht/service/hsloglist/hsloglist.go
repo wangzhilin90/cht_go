@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	hl "cht/models/hsloglist"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -25,6 +26,7 @@ type hsloglistservice struct{}
 
 func (hlls *hsloglistservice) GetHslogList(requestObj *HsLogListRequestStruct) (r *HsLogListReponseStruct, err error) {
 	Logger.Infof("GetHslogList requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*HsLogListRequestStruct)
 	hlr := new(hl.HsLogListRequest)
 	hlr.StartTime = requestObj.GetStartTime()
 	hlr.EndTime = requestObj.GetEndTime()

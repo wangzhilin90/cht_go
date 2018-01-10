@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	vcll "cht/models/vipcustomerloglist"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -25,6 +26,7 @@ type vipcustomerloglistservice struct{}
 
 func (vclls *vipcustomerloglistservice) GetVipCustomerLogList(requestObj *VipCustomerLogListRequestStruct) (r *VipCustomerLogListResponseStruct, err error) {
 	Logger.Info("GetVipCustomerLogList requestObj:", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*VipCustomerLogListRequestStruct)
 	vcllr := new(vcll.VipCustomerLogListRequest)
 	vcllr.StartTime = requestObj.GetStartTime()
 	vcllr.EndTime = requestObj.GetEndTime()

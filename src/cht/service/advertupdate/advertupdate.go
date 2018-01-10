@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	adup "cht/models/advertupdate"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -23,6 +24,7 @@ type advertupdateservice struct{}
 
 func (aus *advertupdateservice) UpdateAdvert(requestObj *AdvertUpdateRequestStruct) (r *AdvertUpdateResponseStruct, err error) {
 	Logger.Infof("UpdateAdvert requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*AdvertUpdateRequestStruct)
 	aur := new(adup.AdvertUpdateRequest)
 	aur.ID = requestObj.GetID()
 	aur.Type = requestObj.GetType()

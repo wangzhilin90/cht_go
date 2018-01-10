@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	"cht/models/sysconfig"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -23,6 +24,7 @@ type sysconfigservice struct{}
 
 func (scs *sysconfigservice) GetSysConfig(requestObj *SysConfigRequestStruct) (r *SysConfigResponseStruct, err error) {
 	Logger.Info("GetSysConfig requestObj:", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*SysConfigRequestStruct)
 	scrs := new(sysconfig.SysConfigRequestStruct)
 	scrs.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	SysConfig, err := sysconfig.GetSysConfig(scrs)

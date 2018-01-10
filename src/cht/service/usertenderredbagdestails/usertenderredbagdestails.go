@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	"cht/models/gettenderredbag"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -23,6 +24,7 @@ var Status = map[int]string{
 
 func (gts *gettenderredservice) GetUserTenderRedbagDestails(requestObj *UserTenderRedbagDestailsRequestStruct) (r *UserTenderRedbagDestailsResponseStruct, err error) {
 	Logger.Info("GetUserTenderRedbagDestails requestObj:", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*UserTenderRedbagDestailsRequestStruct)
 	trr := new(gettenderredbag.TenderRedbagRequest)
 	trr.UserId = requestObj.GetUserId()
 	trr.TenderId = requestObj.GetTenderId()

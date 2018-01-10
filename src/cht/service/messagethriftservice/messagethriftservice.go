@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	"cht/models/message"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -56,6 +57,7 @@ var Update_Stat = map[int]string{
 /*获取短信详情*/
 func (ms *messageservice) GetMessageDetails(requestObj *MessageRequestStruct) (r *MessageDetailsResponseStruct, err error) {
 	Logger.Infof("GetMessageDetails requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*MessageRequestStruct)
 	mr := new(message.MessageRequest)
 	mr.Smsid = requestObj.GetSmsid()
 	mr.Phone = requestObj.GetPhone()
@@ -95,6 +97,7 @@ func (ms *messageservice) GetMessageDetails(requestObj *MessageRequestStruct) (r
 /*获取短信记录数*/
 func (ms *messageservice) GetMessageCount(requestObj *MessageRequestStruct) (*MessageCountResponseStruct, error) {
 	Logger.Infof("GetMessageCount requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*MessageRequestStruct)
 	mr := new(message.MessageRequest)
 	mr.Smsid = requestObj.GetSmsid()
 	mr.Phone = requestObj.GetPhone()
@@ -119,6 +122,7 @@ func (ms *messageservice) GetMessageCount(requestObj *MessageRequestStruct) (*Me
 /*根据phone获取用户id和手机号*/
 func (ms *messageservice) GetUserDetials(requestObj *MessageRequestStruct) (r *UserDetailsResponseStruct, err error) {
 	Logger.Infof("GetUserDetials requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*MessageRequestStruct)
 	mr := new(message.MessageRequest)
 	mr.Smsid = requestObj.GetSmsid()
 	mr.Phone = requestObj.GetPhone()
@@ -148,6 +152,7 @@ func (ms *messageservice) GetUserDetials(requestObj *MessageRequestStruct) (r *U
 
 func (ms *messageservice) UpdateMessage(requestObj *MessageUpdateRequestStruct) (r *MessageUpdateResponseStruct, err error) {
 	Logger.Infof("UpdateMessage requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*MessageUpdateRequestStruct)
 	mur := new(message.MessageUpdateRequest)
 	mur.ToUser = requestObj.GetToUser()
 	mur.IsPushFlagOld = requestObj.GetIsPushFlagOld()

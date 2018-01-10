@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	pcl "cht/models/paymentconfiglist"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -23,6 +24,7 @@ type paymentconfiglistservice struct{}
 
 func (pcls *paymentconfiglistservice) GetPaymentConfigList(requestObj *PaymentConfigListRequestStruct) (r *PaymentConfigListResponseStruct, err error) {
 	Logger.Infof("GetPaymentConfigList requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*PaymentConfigListRequestStruct)
 	pclr := new(pcl.PaymentConfigListRequest)
 	pclr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 

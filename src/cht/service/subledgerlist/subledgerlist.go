@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	"cht/models/subledger"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -23,6 +24,7 @@ type subledgerservice struct{}
 
 func (ss *subledgerservice) GetSubledgerList(requestObj *SubledgerListRequestStruct) (r *SubledgerListResponseStruct, err error) {
 	Logger.Infof("GetSubledgerList requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*SubledgerListRequestStruct)
 	sr := new(subledger.SubledgerRequest)
 	sr.HsZhuanrangrenStr = requestObj.GetHsZhuanrangrenStr()
 	sr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()

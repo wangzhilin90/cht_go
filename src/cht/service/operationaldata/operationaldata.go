@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	"cht/models/operationaldata"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -39,6 +40,7 @@ type operationaldataservice struct{}
 
 func (ods *operationaldataservice) GetOperationalData(requestObj *OperationalDataRequestStruct) (r *OperationalDataResponseStruct, err error) {
 	Logger.Infof("GetOperationalData requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*OperationalDataRequestStruct)
 	odrs := new(operationaldata.OperationalDataRequestStruct)
 	odrs.Start = requestObj.GetStart()
 	odrs.StartMonth = requestObj.GetStartMonth()

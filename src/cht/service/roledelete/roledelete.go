@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	"cht/models/roledelete"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -23,6 +24,7 @@ var Status = map[int]string{
 
 func (rds *roledeleteservice) DeleteRole(requestObj *RoleDeleteRequestStruct) (r *RoleDeleteResponseStruct, err error) {
 	Logger.Infof("DeleteRole requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*RoleDeleteRequestStruct)
 	rdrs := new(roledelete.RoleDeleteRequestStruct)
 	rdrs.RoleIDStr = requestObj.GetRoleIDStr()
 	b := roledelete.DeleteRole(rdrs)

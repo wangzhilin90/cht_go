@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	fp "cht/models/forgetpassword"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -23,6 +24,7 @@ type forgetpasswordservice struct{}
 
 func (fps *forgetpasswordservice) ForgetPassword(requestObj *ForgetPasswordRequestStruct) (r *ForgetPasswordResponseStruct, err error) {
 	Logger.Infof("ForgetPassword requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*ForgetPasswordRequestStruct)
 	fpr := new(fp.ForgetPasswordRequest)
 	fpr.ID = requestObj.GetID()
 	fpr.Password = requestObj.GetPassword()

@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	uabs "cht/models/userattestionbaseinfosave"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -24,6 +25,7 @@ type userattestionbaseinfosaveservice struct{}
 /*保存用户认证信息*/
 func (uabss *userattestionbaseinfosaveservice) SaveUserAttestionBaseInfo(requestObj *UserAttestionBaseInfoSaveRequestStruct) (r *UserAttestionBaseInfoSaveResponseStruct, err error) {
 	Logger.Infof("SaveUserAttestionBaseInfo requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*UserAttestionBaseInfoSaveRequestStruct)
 	usr := new(uabs.UserAttestionBaseInfoSaveRequest)
 	usr.UserID = requestObj.GetUserID()
 	usr.VideoPic = requestObj.GetVideoPic()

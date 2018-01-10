@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	mhl "cht/models/memberhelperlist"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -25,6 +26,7 @@ type memberhelperlistservice struct{}
 
 func (mhls *memberhelperlistservice) GetMemberHelperList(requestObj *MemberHelperListRequestStruct) (r *MemberHelperListResponseStruct, err error) {
 	Logger.Infof("GetMemberHelperList requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*MemberHelperListRequestStruct)
 	mhlr := new(mhl.MemberHelperListRequest)
 	mhlr.Type = requestObj.GetType()
 	mhlr.Keywords = requestObj.GetKeywords()

@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	"cht/models/userdetailsbynamepassword"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -23,6 +24,7 @@ var Status = map[int]string{
 
 func (uds *userdetailsbynamepasswordservice) GetUseDetailsrByNamePassword(requestObj *UserDetailsByNamePasswordRequestStruct) (r *UserDetailsByNamePasswordResponseStruct, err error) {
 	Logger.Info("GetUseDetailsrByNamePassword requestObj:", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*UserDetailsByNamePasswordRequestStruct)
 	udbr := new(userdetailsbynamepassword.UserDetailsByNamePasswordRequest)
 	udbr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	udbr.Name = requestObj.GetName()

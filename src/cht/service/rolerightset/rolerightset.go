@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	"cht/models/rolerightset"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -23,6 +24,7 @@ var Status = map[int]string{
 
 func (rrss *rolerightsetservice) SetRoleRight(requestObj *RoleRightSetRequestStruct) (r *RoleRightSetResponseStruct, err error) {
 	Logger.Infof("SetRoleRight requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*RoleRightSetRequestStruct)
 	rrsrs := new(rolerightset.RoleRightSetRequestStruct)
 	rrsrs.RoleID = requestObj.GetRoleID()
 	rrsrs.PowerConfig = requestObj.GetPowerConfig()

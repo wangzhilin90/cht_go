@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	kdd "cht/models/kefudutydetails"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -22,6 +23,7 @@ var Stat = map[int]string{
 type kefudutydetailsservice struct{}
 
 func (kfdds *kefudutydetailsservice) GetKefuDutyDetails(requestObj *KefuDutyDetailsRequestStruct) (r *KefuDutyDetailsResponseStruct, err error) {
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*KefuDutyDetailsRequestStruct)
 	kddr := new(kdd.KefuDutyDetailsRequest)
 	kddr.ID = requestObj.GetID()
 	kddr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()

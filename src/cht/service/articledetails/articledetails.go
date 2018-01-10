@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	"cht/models/articledetails"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -43,6 +44,7 @@ type articledetailsservice struct{}
 
 func (ads *articledetailsservice) GetArticleDetails(requestObj *ArticleDetailsRequestStruct) (r *ArticleDetailsResponseStruct, err error) {
 	Logger.Infof("GetArticleDetails requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*ArticleDetailsRequestStruct)
 	adrs := new(articledetails.ArticleDetailsRequestStruct)
 	adrs.ID = requestObj.GetID()
 	adrs.Status = requestObj.GetStatus()
@@ -82,6 +84,7 @@ func (ads *articledetailsservice) GetArticleDetails(requestObj *ArticleDetailsRe
 
 func (ads *articledetailsservice) UpdateReadNum(requestObj *ArticleDetailsRequestStruct) (r int32, err error) {
 	Logger.Infof("UpdateReadNum requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*ArticleDetailsRequestStruct)
 	adrs := new(articledetails.ArticleDetailsRequestStruct)
 	adrs.ID = requestObj.GetID()
 	adrs.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
@@ -92,6 +95,7 @@ func (ads *articledetailsservice) UpdateReadNum(requestObj *ArticleDetailsReques
 
 func (ads *articledetailsservice) PrevArticle(requestObj *NextRequestStruct) (r *ArticleDetailsResponseStruct, err error) {
 	Logger.Infof("PrevArticle requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*NextRequestStruct)
 	nrs := new(articledetails.NextRequestStruct)
 	nrs.ID = requestObj.GetID()
 	nrs.Cateid = requestObj.GetCateid()
@@ -137,6 +141,7 @@ func (ads *articledetailsservice) PrevArticle(requestObj *NextRequestStruct) (r 
 
 func (ads *articledetailsservice) NextArticle(requestObj *NextRequestStruct) (r *ArticleDetailsResponseStruct, err error) {
 	Logger.Infof("NextArticle requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*NextRequestStruct)
 	nrs := new(articledetails.NextRequestStruct)
 	nrs.ID = requestObj.GetID()
 	nrs.Cateid = requestObj.GetCateid()

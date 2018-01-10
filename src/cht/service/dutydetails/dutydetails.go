@@ -4,6 +4,7 @@ import (
 	. "cht/common/logger"
 	"cht/common/zkclient"
 	"cht/models/dutydetails"
+	"cht/utils/filterspec"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"time"
@@ -23,6 +24,7 @@ var Status = map[int]string{
 
 func (ddss *dutydetailsservice) GetDutyDetails(requestObj *DutyDetailsRequestStruct) (r *DutyDetailsResponseStruct, err error) {
 	Logger.Infof("GetDutyDetails requestObj:%v", requestObj)
+	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*DutyDetailsRequestStruct)
 	ddrs := new(dutydetails.DutyDetailsRequestStruct)
 	ddrs.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	res, err := dutydetails.GetDutyDetails(ddrs)

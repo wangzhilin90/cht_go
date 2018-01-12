@@ -67,7 +67,6 @@ var _ = bytes.Equal
 //  - ReviewLock
 //  - FeeRate
 //  - BorrowName
-//  - VipLevelLimit
 type MakeBorrowRequestStruct struct {
 	ID              int32  `thrift:"id,1" db:"id" json:"id"`
 	BorrowType      int32  `thrift:"borrow_type,2" db:"borrow_type" json:"borrow_type"`
@@ -121,8 +120,11 @@ type MakeBorrowRequestStruct struct {
 	ReviewLock      int32  `thrift:"review_lock,50" db:"review_lock" json:"review_lock"`
 	FeeRate         string `thrift:"fee_rate,51" db:"fee_rate" json:"fee_rate"`
 	BorrowName      string `thrift:"borrow_name,52" db:"borrow_name" json:"borrow_name"`
-	VipLevelLimit   int32  `thrift:"vip_level_limit,53" db:"vip_level_limit" json:"vip_level_limit"`
 }
+
+// func NewMakeBorrowRequestStruct() *MakeBorrowRequestStruct {
+// 	return &MakeBorrowRequestStruct{}
+// }
 
 func (p *MakeBorrowRequestStruct) GetID() int32 {
 	return p.ID
@@ -330,10 +332,6 @@ func (p *MakeBorrowRequestStruct) GetFeeRate() string {
 
 func (p *MakeBorrowRequestStruct) GetBorrowName() string {
 	return p.BorrowName
-}
-
-func (p *MakeBorrowRequestStruct) GetVipLevelLimit() int32 {
-	return p.VipLevelLimit
 }
 func (p *MakeBorrowRequestStruct) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
@@ -555,10 +553,6 @@ func (p *MakeBorrowRequestStruct) Read(iprot thrift.TProtocol) error {
 			}
 		case 52:
 			if err := p.ReadField52(iprot); err != nil {
-				return err
-			}
-		case 53:
-			if err := p.ReadField53(iprot); err != nil {
 				return err
 			}
 		default:
@@ -1044,15 +1038,6 @@ func (p *MakeBorrowRequestStruct) ReadField52(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *MakeBorrowRequestStruct) ReadField53(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI32(); err != nil {
-		return thrift.PrependError("error reading field 53: ", err)
-	} else {
-		p.VipLevelLimit = v
-	}
-	return nil
-}
-
 func (p *MakeBorrowRequestStruct) Write(oprot thrift.TProtocol) error {
 	if err := oprot.WriteStructBegin("MakeBorrowRequestStruct"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
@@ -1212,9 +1197,6 @@ func (p *MakeBorrowRequestStruct) Write(oprot thrift.TProtocol) error {
 			return err
 		}
 		if err := p.writeField52(oprot); err != nil {
-			return err
-		}
-		if err := p.writeField53(oprot); err != nil {
 			return err
 		}
 	}
@@ -1903,19 +1885,6 @@ func (p *MakeBorrowRequestStruct) writeField52(oprot thrift.TProtocol) (err erro
 	return err
 }
 
-func (p *MakeBorrowRequestStruct) writeField53(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("vip_level_limit", thrift.I32, 53); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 53:vip_level_limit: ", p), err)
-	}
-	if err := oprot.WriteI32(int32(p.VipLevelLimit)); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.vip_level_limit (53) field write error: ", p), err)
-	}
-	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 53:vip_level_limit: ", p), err)
-	}
-	return err
-}
-
 func (p *MakeBorrowRequestStruct) String() string {
 	if p == nil {
 		return "<nil>"
@@ -2054,7 +2023,7 @@ func (p *MakeBorrowResponseStruct) String() string {
 type MakeBorrowThriftService interface {
 	// Parameters:
 	//  - RequestObj
-	MakeBorrow(requestObj *MakeBorrowRequestStruct) (r *MakeBorrowResponseStruct, err error)
+	makeBorrow(requestObj *MakeBorrowRequestStruct) (r *MakeBorrowResponseStruct, err error)
 }
 
 type MakeBorrowThriftServiceClient struct {
@@ -2085,14 +2054,14 @@ func NewMakeBorrowThriftServiceClientProtocol(t thrift.TTransport, iprot thrift.
 
 // Parameters:
 //  - RequestObj
-func (p *MakeBorrowThriftServiceClient) MakeBorrow(requestObj *MakeBorrowRequestStruct) (r *MakeBorrowResponseStruct, err error) {
-	if err = p.sendMakeBorrow(requestObj); err != nil {
+func (p *MakeBorrowThriftServiceClient) makeBorrow(requestObj *MakeBorrowRequestStruct) (r *MakeBorrowResponseStruct, err error) {
+	if err = p.sendmakeBorrow(requestObj); err != nil {
 		return
 	}
-	return p.recvMakeBorrow()
+	return p.recvmakeBorrow()
 }
 
-func (p *MakeBorrowThriftServiceClient) sendMakeBorrow(requestObj *MakeBorrowRequestStruct) (err error) {
+func (p *MakeBorrowThriftServiceClient) sendmakeBorrow(requestObj *MakeBorrowRequestStruct) (err error) {
 	oprot := p.OutputProtocol
 	if oprot == nil {
 		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -2102,7 +2071,7 @@ func (p *MakeBorrowThriftServiceClient) sendMakeBorrow(requestObj *MakeBorrowReq
 	if err = oprot.WriteMessageBegin("makeBorrow", thrift.CALL, p.SeqId); err != nil {
 		return
 	}
-	args := MakeBorrowThriftServiceMakeBorrowArgs{
+	args := MakeBorrowThriftServicemakeBorrowArgs{
 		RequestObj: requestObj,
 	}
 	if err = args.Write(oprot); err != nil {
@@ -2114,7 +2083,7 @@ func (p *MakeBorrowThriftServiceClient) sendMakeBorrow(requestObj *MakeBorrowReq
 	return oprot.Flush()
 }
 
-func (p *MakeBorrowThriftServiceClient) recvMakeBorrow() (value *MakeBorrowResponseStruct, err error) {
+func (p *MakeBorrowThriftServiceClient) recvmakeBorrow() (value *MakeBorrowResponseStruct, err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -2149,7 +2118,7 @@ func (p *MakeBorrowThriftServiceClient) recvMakeBorrow() (value *MakeBorrowRespo
 		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "makeBorrow failed: invalid message type")
 		return
 	}
-	result := MakeBorrowThriftServiceMakeBorrowResult{}
+	result := MakeBorrowThriftServicemakeBorrowResult{}
 	if err = result.Read(iprot); err != nil {
 		return
 	}
@@ -2181,7 +2150,7 @@ func (p *MakeBorrowThriftServiceProcessor) ProcessorMap() map[string]thrift.TPro
 func NewMakeBorrowThriftServiceProcessor(handler MakeBorrowThriftService) *MakeBorrowThriftServiceProcessor {
 
 	self2 := &MakeBorrowThriftServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
-	self2.processorMap["makeBorrow"] = &makeBorrowThriftServiceProcessorMakeBorrow{handler: handler}
+	self2.processorMap["makeBorrow"] = &MakeBorrowThriftServiceProcessormakeBorrow{handler: handler}
 	return self2
 }
 
@@ -2204,12 +2173,12 @@ func (p *MakeBorrowThriftServiceProcessor) Process(iprot, oprot thrift.TProtocol
 
 }
 
-type makeBorrowThriftServiceProcessorMakeBorrow struct {
+type MakeBorrowThriftServiceProcessormakeBorrow struct {
 	handler MakeBorrowThriftService
 }
 
-func (p *makeBorrowThriftServiceProcessorMakeBorrow) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := MakeBorrowThriftServiceMakeBorrowArgs{}
+func (p *MakeBorrowThriftServiceProcessormakeBorrow) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := MakeBorrowThriftServicemakeBorrowArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
@@ -2221,10 +2190,10 @@ func (p *makeBorrowThriftServiceProcessorMakeBorrow) Process(seqId int32, iprot,
 	}
 
 	iprot.ReadMessageEnd()
-	result := MakeBorrowThriftServiceMakeBorrowResult{}
+	result := MakeBorrowThriftServicemakeBorrowResult{}
 	var retval *MakeBorrowResponseStruct
 	var err2 error
-	if retval, err2 = p.handler.MakeBorrow(args.RequestObj); err2 != nil {
+	if retval, err2 = p.handler.makeBorrow(args.RequestObj); err2 != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing makeBorrow: "+err2.Error())
 		oprot.WriteMessageBegin("makeBorrow", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
@@ -2256,27 +2225,27 @@ func (p *makeBorrowThriftServiceProcessorMakeBorrow) Process(seqId int32, iprot,
 
 // Attributes:
 //  - RequestObj
-type MakeBorrowThriftServiceMakeBorrowArgs struct {
+type MakeBorrowThriftServicemakeBorrowArgs struct {
 	RequestObj *MakeBorrowRequestStruct `thrift:"requestObj,1" db:"requestObj" json:"requestObj"`
 }
 
-func NewMakeBorrowThriftServiceMakeBorrowArgs() *MakeBorrowThriftServiceMakeBorrowArgs {
-	return &MakeBorrowThriftServiceMakeBorrowArgs{}
+func NewMakeBorrowThriftServicemakeBorrowArgs() *MakeBorrowThriftServicemakeBorrowArgs {
+	return &MakeBorrowThriftServicemakeBorrowArgs{}
 }
 
-var MakeBorrowThriftServiceMakeBorrowArgs_RequestObj_DEFAULT *MakeBorrowRequestStruct
+var MakeBorrowThriftServicemakeBorrowArgs_RequestObj_DEFAULT *MakeBorrowRequestStruct
 
-func (p *MakeBorrowThriftServiceMakeBorrowArgs) GetRequestObj() *MakeBorrowRequestStruct {
+func (p *MakeBorrowThriftServicemakeBorrowArgs) GetRequestObj() *MakeBorrowRequestStruct {
 	if !p.IsSetRequestObj() {
-		return MakeBorrowThriftServiceMakeBorrowArgs_RequestObj_DEFAULT
+		return MakeBorrowThriftServicemakeBorrowArgs_RequestObj_DEFAULT
 	}
 	return p.RequestObj
 }
-func (p *MakeBorrowThriftServiceMakeBorrowArgs) IsSetRequestObj() bool {
+func (p *MakeBorrowThriftServicemakeBorrowArgs) IsSetRequestObj() bool {
 	return p.RequestObj != nil
 }
 
-func (p *MakeBorrowThriftServiceMakeBorrowArgs) Read(iprot thrift.TProtocol) error {
+func (p *MakeBorrowThriftServicemakeBorrowArgs) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -2309,67 +2278,15 @@ func (p *MakeBorrowThriftServiceMakeBorrowArgs) Read(iprot thrift.TProtocol) err
 	return nil
 }
 
-func (p *MakeBorrowThriftServiceMakeBorrowArgs) ReadField1(iprot thrift.TProtocol) error {
-	p.RequestObj = &MakeBorrowRequestStruct{
-		Title: " ",
-
-		Content: " ",
-
-		Litpic: " ",
-
-		TimeLimit: 1,
-
-		Account: "0.00",
-
-		AccountTender: "0.00",
-
-		Apr: "0.0000",
-
-		AprAdd: "0.0000",
-
-		MortgageFile: " ",
-
-		Pwd: " ",
-
-		LowestAccount: "50.00",
-
-		MostAccount: "0.00",
-
-		ValidTime: 1,
-
-		Bonus: "0.00",
-
-		OpenAccount: 1,
-
-		OpenBorrow: 1,
-
-		OpenTender: 1,
-
-		OpenCredit: 1,
-
-		OpenZiliao: 1,
-
-		Addip: " ",
-
-		VerifyRemark: " ",
-
-		Secured: " ",
-
-		Zhuanrangren: " ",
-
-		SignDate: " ",
-
-		FeeRate: "0.0000",
-
-		BorrowName: " ",
-	}
+func (p *MakeBorrowThriftServicemakeBorrowArgs) ReadField1(iprot thrift.TProtocol) error {
+	p.RequestObj = &MakeBorrowRequestStruct{}
 	if err := p.RequestObj.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.RequestObj), err)
 	}
 	return nil
 }
 
-func (p *MakeBorrowThriftServiceMakeBorrowArgs) Write(oprot thrift.TProtocol) error {
+func (p *MakeBorrowThriftServicemakeBorrowArgs) Write(oprot thrift.TProtocol) error {
 	if err := oprot.WriteStructBegin("makeBorrow_args"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
@@ -2387,7 +2304,7 @@ func (p *MakeBorrowThriftServiceMakeBorrowArgs) Write(oprot thrift.TProtocol) er
 	return nil
 }
 
-func (p *MakeBorrowThriftServiceMakeBorrowArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *MakeBorrowThriftServicemakeBorrowArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("requestObj", thrift.STRUCT, 1); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:requestObj: ", p), err)
 	}
@@ -2400,36 +2317,36 @@ func (p *MakeBorrowThriftServiceMakeBorrowArgs) writeField1(oprot thrift.TProtoc
 	return err
 }
 
-func (p *MakeBorrowThriftServiceMakeBorrowArgs) String() string {
+func (p *MakeBorrowThriftServicemakeBorrowArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("MakeBorrowThriftServiceMakeBorrowArgs(%+v)", *p)
+	return fmt.Sprintf("MakeBorrowThriftServicemakeBorrowArgs(%+v)", *p)
 }
 
 // Attributes:
 //  - Success
-type MakeBorrowThriftServiceMakeBorrowResult struct {
+type MakeBorrowThriftServicemakeBorrowResult struct {
 	Success *MakeBorrowResponseStruct `thrift:"success,0" db:"success" json:"success,omitempty"`
 }
 
-func NewMakeBorrowThriftServiceMakeBorrowResult() *MakeBorrowThriftServiceMakeBorrowResult {
-	return &MakeBorrowThriftServiceMakeBorrowResult{}
+func NewMakeBorrowThriftServicemakeBorrowResult() *MakeBorrowThriftServicemakeBorrowResult {
+	return &MakeBorrowThriftServicemakeBorrowResult{}
 }
 
-var MakeBorrowThriftServiceMakeBorrowResult_Success_DEFAULT *MakeBorrowResponseStruct
+var MakeBorrowThriftServicemakeBorrowResult_Success_DEFAULT *MakeBorrowResponseStruct
 
-func (p *MakeBorrowThriftServiceMakeBorrowResult) GetSuccess() *MakeBorrowResponseStruct {
+func (p *MakeBorrowThriftServicemakeBorrowResult) GetSuccess() *MakeBorrowResponseStruct {
 	if !p.IsSetSuccess() {
-		return MakeBorrowThriftServiceMakeBorrowResult_Success_DEFAULT
+		return MakeBorrowThriftServicemakeBorrowResult_Success_DEFAULT
 	}
 	return p.Success
 }
-func (p *MakeBorrowThriftServiceMakeBorrowResult) IsSetSuccess() bool {
+func (p *MakeBorrowThriftServicemakeBorrowResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *MakeBorrowThriftServiceMakeBorrowResult) Read(iprot thrift.TProtocol) error {
+func (p *MakeBorrowThriftServicemakeBorrowResult) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -2462,7 +2379,7 @@ func (p *MakeBorrowThriftServiceMakeBorrowResult) Read(iprot thrift.TProtocol) e
 	return nil
 }
 
-func (p *MakeBorrowThriftServiceMakeBorrowResult) ReadField0(iprot thrift.TProtocol) error {
+func (p *MakeBorrowThriftServicemakeBorrowResult) ReadField0(iprot thrift.TProtocol) error {
 	p.Success = &MakeBorrowResponseStruct{}
 	if err := p.Success.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Success), err)
@@ -2470,7 +2387,7 @@ func (p *MakeBorrowThriftServiceMakeBorrowResult) ReadField0(iprot thrift.TProto
 	return nil
 }
 
-func (p *MakeBorrowThriftServiceMakeBorrowResult) Write(oprot thrift.TProtocol) error {
+func (p *MakeBorrowThriftServicemakeBorrowResult) Write(oprot thrift.TProtocol) error {
 	if err := oprot.WriteStructBegin("makeBorrow_result"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
@@ -2488,7 +2405,7 @@ func (p *MakeBorrowThriftServiceMakeBorrowResult) Write(oprot thrift.TProtocol) 
 	return nil
 }
 
-func (p *MakeBorrowThriftServiceMakeBorrowResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *MakeBorrowThriftServicemakeBorrowResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err := oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T write field begin error 0:success: ", p), err)
@@ -2503,9 +2420,9 @@ func (p *MakeBorrowThriftServiceMakeBorrowResult) writeField0(oprot thrift.TProt
 	return err
 }
 
-func (p *MakeBorrowThriftServiceMakeBorrowResult) String() string {
+func (p *MakeBorrowThriftServicemakeBorrowResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("MakeBorrowThriftServiceMakeBorrowResult(%+v)", *p)
+	return fmt.Sprintf("MakeBorrowThriftServicemakeBorrowResult(%+v)", *p)
 }

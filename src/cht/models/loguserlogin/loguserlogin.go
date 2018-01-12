@@ -95,7 +95,7 @@ func UpdateLogUserlLogin(lulr *LogUserlLoginRequest) (bool, error) {
 	o := orm.NewOrm()
 	o.Using("default")
 
-	_, err = o.Raw(sql,
+	ret, err := o.Raw(sql,
 		lulr.UserID,
 		time.Now().Unix(),
 		lulr.LoginStyle,
@@ -106,6 +106,15 @@ func UpdateLogUserlLogin(lulr *LogUserlLoginRequest) (bool, error) {
 		Logger.Error("insert mysql failed", err)
 		return false, err
 	}
+
+	affect_num, _ := ret.RowsAffected()
+	if affect_num == 0 {
+		Logger.Errorf("UpdateLogUserlLogin failed")
+		return false, nil
+	}
+
+	last_insert_num, _ := ret.LastInsertId()
+	Logger.Debugf("UpdateLogUserlLogin last insert:%v", last_insert_num)
 	return true, nil
 }
 

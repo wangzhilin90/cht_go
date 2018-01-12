@@ -103,7 +103,7 @@ func UpdateLogUserlLogin(lulr *LogUserlLoginRequest) (bool, error) {
 		accountAct,
 		addTime).Exec()
 	if err != nil {
-		Logger.Error("insert mysql failed", err)
+		Logger.Error("UpdateLogUserlLogin insert mysql failed", err)
 		return false, err
 	}
 

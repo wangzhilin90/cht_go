@@ -67,7 +67,6 @@ type Borrow struct {
 	ReviewLock      int32  `orm:"column(review_lock);-"`
 	FeeRate         string `orm:"column(fee_rate);-"`
 	BorrowName      string `orm:"column(borrow_name);-"`
-	VipLevelLimit   int32  `orm:"column(vip_level_limit);-"`
 }
 
 /**
@@ -413,10 +412,6 @@ func InsertBorrowTbl(bs *Borrow) (int32, error) {
 
 	if bs.ReviewLock != 0 {
 		str += fmt.Sprintf("review_lock=%d,", bs.ReviewLock)
-	}
-
-	if bs.VipLevelLimit != 0 {
-		str += fmt.Sprintf("vip_level_limit=%d,", bs.VipLevelLimit)
 	}
 
 	str = strings.TrimSuffix(str, ",")

@@ -101,7 +101,7 @@ func NewMakeBorrowRequest(requestObj *MakeBorrowRequestStruct) *makeborrow.Borro
 	return mbr
 }
 
-func (bs *borrowservice) makeBorrow(requestObj *MakeBorrowRequestStruct) (r *MakeBorrowResponseStruct, err error) {
+func (bs *borrowservice) MakeBorrow(requestObj *MakeBorrowRequestStruct) (r *MakeBorrowResponseStruct, err error) {
 	mbr := NewMakeBorrowRequest(requestObj)
 	Logger.Debug("requestObj:", requestObj)
 	Logger.Debug("NewMakeBorrowRequest:", mbr)

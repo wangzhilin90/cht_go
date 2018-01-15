@@ -22,7 +22,7 @@ func NewMakeBorrowRequestStruct(userID int32, borrowtype int32, borrowUse int32)
 func TestMakeBorrow(t *testing.T) {
 	brs := NewMakeBorrowRequestStruct(29, 3, 0)
 	bs := borrowservice{}
-	res, _ := bs.makeBorrow(brs)
+	res, _ := bs.MakeBorrow(brs)
 	if res.Status != ISSURE_SUCCESS {
 		t.Fatal("TestMakeBorrowNotDepositAccount failed:%v", res)
 	}

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -73,7 +74,12 @@ func GetCollectionInfo(trr *UserCollectionListRequest) ([]CollectionInfoStruct, 
 		Where(fmt.Sprintf("BC.user_id=%d", trr.UserID))
 
 	if trr.Borrowid != "" {
-		qb.And(fmt.Sprintf("BC.borrow_id=%s", strings.TrimPrefix(trr.Borrowid, "CHT")))
+		borrow_id_str := strings.TrimPrefix(trr.Borrowid, "CHT")
+		borrow_id, err := strconv.ParseInt(borrow_id_str, 10, 32)
+		if err != nil {
+			return nil, 0, err
+		}
+		qb.And(fmt.Sprintf("BC.borrow_id=%d", borrow_id))
 	}
 
 	if trr.CheckZhuanrangren > 0 {

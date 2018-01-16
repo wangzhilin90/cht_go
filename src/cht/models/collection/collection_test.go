@@ -22,7 +22,8 @@ func NewUserCollectionListRequest(user_id, start, end, search, status, offset, l
 }
 
 func TestGetCollectionInfo(t *testing.T) {
-	trr := NewUserCollectionListRequest(2, 0, 0, 0, 0, 1, 1, 2, "CHT00011", 3, 20)
+	// trr := NewUserCollectionListRequest(2, 0, 0, 0, 0, 1, 1, 2, "CHT00011", 3, 20)
+	trr := NewUserCollectionListRequest(2, 0, 0, 0, 0, 1, 1, 2, "666=666", 3, 20)
 	res, num, err := GetCollectionInfo(trr)
 	if err != nil {
 		t.Fatalf("TestGetCollectionInfo failed ", err)

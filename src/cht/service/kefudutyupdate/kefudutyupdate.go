@@ -36,7 +36,7 @@ func (kdus *kefudutyupdateservice) UpdateKefuDuty(requestObj *KefuDutyUpdateRequ
 
 	b := kdu.UpdateKefuDuty(kdur)
 	if b == false {
-		Logger.Debugf("UpdateKefuDuty update failed")
+		Logger.Errorf("UpdateKefuDuty update failed")
 		return &KefuDutyUpdateResponseStruct{
 			Status: UPDATE_KEFU_DUTY_FAILED,
 			Msg:    Stat[UPDATE_KEFU_DUTY_FAILED],

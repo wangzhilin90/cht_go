@@ -37,6 +37,7 @@ func (cs *cashrecordservice) GetUserCashRecordList(requestObj *UserCashRecordLis
 
 	res, CashStat, num, err := cashrecord.GetCashRecord(crrs)
 	if err != nil {
+		Logger.Errorf("GetUserCashRecordList get cash record failed:%v", err)
 		return &UserCashRecordListResponseStruct{
 			Status: QUERY_CASHRECORD_FAILED,
 			Msg:    Status[QUERY_CASHRECORD_FAILED],

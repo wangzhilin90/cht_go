@@ -29,7 +29,7 @@ func (scs *sysconfigservice) GetSysConfig(requestObj *SysConfigRequestStruct) (r
 	scrs.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	SysConfig, err := sysconfig.GetSysConfig(scrs)
 	if err != nil {
-		Logger.Debugf("GetSysConfig query failed :%v", err)
+		Logger.Errorf("GetSysConfig query failed :%v", err)
 		return &SysConfigResponseStruct{
 			Status: QUERY_SYS_CONFIG_FAILED,
 			Msg:    Status[QUERY_SYS_CONFIG_FAILED],

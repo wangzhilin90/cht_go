@@ -32,6 +32,7 @@ func (uis *userattestioncardinfosaveservice) SaveUserAttestionCardInfo(requestOb
 	uacisr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	b := uacis.SaveUserAttestionCardInfo(uacisr)
 	if b == false {
+		Logger.Errorf("SaveUserAttestionCardInfo save user attention failed")
 		return &UserAttestionCardInfoSaveResponseStruct{
 			Status: SAVE_USER_ATTESTION_CARDINFO_FAILED,
 			Msg:    Stat[SAVE_USER_ATTESTION_CARDINFO_FAILED],

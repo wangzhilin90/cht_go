@@ -61,6 +61,7 @@ func (ubs *userbankservice) GetUserBankDetails(requestObj *UserBankDetailsReques
 
 	res, err := ub.GetUserBankDetails(ubd)
 	if err != nil {
+		Logger.Errorf("GetUserBankDetails get user bank details failed:%v", err)
 		return &UserBankDetailsResponseStruct{
 			Status: QUERY_USER_BANK_DETAILS_FAILED,
 			Msg:    Details_Stat[QUERY_USER_BANK_DETAILS_FAILED],
@@ -108,6 +109,7 @@ func (ubs *userbankservice) UpdateUserBank(requestObj *UserBankUpdateRequestStru
 
 	b := ub.UpdateUserBank(ubur)
 	if b == false {
+		Logger.Errorf("UpdateUserBank update user bank failed")
 		return &UserBankUpdateResponseStruct{
 			Status: UPDATE_USER_BANK_FAILED,
 			Msg:    Update_Stat[UPDATE_USER_BANK_FAILED],
@@ -139,6 +141,7 @@ func (ubs *userbankservice) InsertUserBank(requestObj *UserBankInsertRequestStru
 
 	b := ub.InsertUserBank(ubir)
 	if b == false {
+		Logger.Errorf("InsertUserBank insert failed")
 		return &UserBankInsertResponseStruct{
 			Status: INSERT_USER_BANK_FAILED,
 			Msg:    Insert_Stat[INSERT_USER_BANK_FAILED],
@@ -160,6 +163,7 @@ func (ubs *userbankservice) GetUserBankNum(requestObj *UserBankCountRequestStruc
 
 	num, err := ub.GetUserBankNum(ubcr)
 	if err != nil {
+		Logger.Errorf("GetUserBankNum get num failed:%v", err)
 		return &UserBankCountResponseStruct{
 			Status: COUNT_USER_BANK_FAILED,
 			Msg:    Count_Stat[COUNT_USER_BANK_FAILED],

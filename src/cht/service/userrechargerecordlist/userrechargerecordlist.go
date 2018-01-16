@@ -37,6 +37,7 @@ func (rrs *rechargerecordservice) GetUserRechargeRecordList(requestObj *UserRech
 
 	res, num, money, err := rechargerecord.GetRechargeRecord(rrr)
 	if err != nil {
+		Logger.Errorf("GetUserRechargeRecordList get recharge record failed:%v", err)
 		return &UserRechargeRecordListResponseStruct{
 			Status:               QUERY_RECHAGE_FAILED,
 			Msg:                  Status[QUERY_RECHAGE_FAILED],

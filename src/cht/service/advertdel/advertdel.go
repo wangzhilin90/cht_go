@@ -33,7 +33,7 @@ func (ads *advertdelservice) DelAdvert(requestObj *AdvertDelRequestStruct) (r *A
 
 	fid, err := adDel.GetAdvertFid(adr)
 	if err != nil {
-		Logger.Debugf("DelAdvert get fid failed:%v", err)
+		Logger.Errorf("DelAdvert get fid failed:%v", err)
 		return &AdvertDelResponseStruct{
 			Status: GET_ADVERT_FID_FAILED,
 			Msg:    Stat[GET_ADVERT_FID_FAILED],
@@ -42,6 +42,7 @@ func (ads *advertdelservice) DelAdvert(requestObj *AdvertDelRequestStruct) (r *A
 
 	b := adDel.DelAdvert(adr)
 	if b == false {
+		Logger.Errorf("DelAdvert delete failed")
 		return &AdvertDelResponseStruct{
 			Status: DELETE_ADVERT_FAILED,
 			Msg:    Stat[DELETE_ADVERT_FAILED],

@@ -51,6 +51,7 @@ func (ads *articledetailsservice) GetArticleDetails(requestObj *ArticleDetailsRe
 	adrs.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	res, err := articledetails.GetArticleDetails(adrs)
 	if err != nil {
+		Logger.Errorf("GetArticleDetails get details failed:%v", err)
 		return &ArticleDetailsResponseStruct{
 			Status: QUERY_ARTICLE_DETAILS_FAILED,
 			Msg:    ArticleStatus[QUERY_ARTICLE_DETAILS_FAILED],
@@ -107,6 +108,7 @@ func (ads *articledetailsservice) PrevArticle(requestObj *NextRequestStruct) (r 
 	nrs.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	res, err := articledetails.GetPrevArticle(nrs)
 	if err != nil {
+		Logger.Errorf("PrevArticle failed:%v", err)
 		return &ArticleDetailsResponseStruct{
 			Status: QUERY_PREV_ARTICLE_FAILED,
 			Msg:    PrevArticleStatus[QUERY_PREV_ARTICLE_FAILED],
@@ -153,6 +155,7 @@ func (ads *articledetailsservice) NextArticle(requestObj *NextRequestStruct) (r 
 	nrs.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	res, err := articledetails.GetNextArticle(nrs)
 	if err != nil {
+		Logger.Errorf("NextArticle failed:%v", err)
 		return &ArticleDetailsResponseStruct{
 			Status: QUERY_NEXT_ARTICLE_FAILED,
 			Msg:    NextArticleStatus[QUERY_NEXT_ARTICLE_FAILED],

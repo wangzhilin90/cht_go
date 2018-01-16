@@ -30,6 +30,7 @@ func (suds *sysuserdetailsservice) GetSysUserDetails(requestObj *SysUserDetailsR
 	sudr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	res, err := userdetails.GetSysUserDetails(sudr)
 	if err != nil {
+		Logger.Errorf("GetSysUserDetails get sys user details failed:%v", err)
 		return &SysUserDetailsResponseStruct{
 			Status: QUERY_SYS_USER_DETAILS_FAILED,
 			Msg:    Stat[QUERY_SYS_USER_DETAILS_FAILED],

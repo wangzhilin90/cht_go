@@ -43,6 +43,7 @@ func (uls *UserLoginService) GetUserLoginInfo(requestObj *UserLoginRequestStruct
 	var max_retry_times int32 = 5
 	times, err := userlogin.GetLoginFailedTimes(ulr)
 	if times >= max_retry_times {
+		Logger.Errorf("GetUserLoginInfo failed times bigger than max_retry_times")
 		userlogin.InsertLoginLog(ulr)
 		v = UserLoginResponseStruct{
 			Status: RETRY_TOO_MUCH,
@@ -53,6 +54,7 @@ func (uls *UserLoginService) GetUserLoginInfo(requestObj *UserLoginRequestStruct
 
 	res, bExists, _ := userlogin.CheckLoginUserExists(ulr)
 	if bExists == false {
+		Logger.Errorf("GetUserLoginInfo user not exist")
 		userlogin.InsertLoginLog(ulr)
 		v = UserLoginResponseStruct{
 			Status: ACCOUNT_NOT_EXIST,
@@ -62,6 +64,7 @@ func (uls *UserLoginService) GetUserLoginInfo(requestObj *UserLoginRequestStruct
 	}
 
 	if res.Islock == true {
+		Logger.Errorf("GetUserLoginInfo user is lock")
 		userlogin.InsertLoginLog(ulr)
 		v = UserLoginResponseStruct{
 			UserID: res.ID,

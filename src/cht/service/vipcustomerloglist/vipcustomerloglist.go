@@ -38,6 +38,7 @@ func (vclls *vipcustomerloglistservice) GetVipCustomerLogList(requestObj *VipCus
 
 	totalNum, err := vcll.GetVipCustomerLogListTotalNum(vcllr)
 	if err != nil {
+		Logger.Errorf("GetVipCustomerLogList get totalnum failed:%v", err)
 		return &VipCustomerLogListResponseStruct{
 			Status: QUERY_VIP_CUSTOMER_LOG_LIST_TOTAL_NUM_FAILED,
 			Msg:    Stat[QUERY_VIP_CUSTOMER_LOG_LIST_TOTAL_NUM_FAILED],
@@ -46,6 +47,7 @@ func (vclls *vipcustomerloglistservice) GetVipCustomerLogList(requestObj *VipCus
 
 	res, err := vcll.GetVipCustomerLogList(vcllr)
 	if err != nil {
+		Logger.Errorf("GetVipCustomerLogList get vip log list failed:%v", err)
 		return &VipCustomerLogListResponseStruct{
 			Status: QUERY_VIP_CUSTOMER_LOG_LIST_FAILED,
 			Msg:    Stat[QUERY_VIP_CUSTOMER_LOG_LIST_FAILED],

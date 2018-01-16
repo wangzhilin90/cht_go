@@ -66,6 +66,7 @@ func (ods *operationaldataservice) GetOperationalData(requestObj *OperationalDat
 	/*得到最近12个月每月成交量结果*/
 	tmr, err := operationaldata.GetTwelveMonthResult(odrs)
 	if err != nil {
+		Logger.Errorf("GetOperationalData get twelve month failed:%v", err)
 		return &OperationalDataResponseStruct{
 			Status: QUERY_TWELVE_MONTH_RESULT_FAILED,
 			Msg:    Stat[QUERY_TWELVE_MONTH_RESULT_FAILED],
@@ -82,6 +83,7 @@ func (ods *operationaldataservice) GetOperationalData(requestObj *OperationalDat
 	/*得到最近1个月每月成交量结果*/
 	omr, err := operationaldata.GetOneMonthResult(odrs)
 	if err != nil {
+		Logger.Errorf("GetOperationalData get one month failed:%v", err)
 		return &OperationalDataResponseStruct{
 			Status: QUERY_TWELVE_MONTH_RESULT_FAILED,
 			Msg:    Stat[QUERY_TWELVE_MONTH_RESULT_FAILED],
@@ -98,6 +100,7 @@ func (ods *operationaldataservice) GetOperationalData(requestObj *OperationalDat
 	/*得到借款周期占比结果*/
 	pr, err := operationaldata.GetPeriodResult(odrs)
 	if err != nil {
+		Logger.Errorf("GetOperationalData get period failed:%v", err)
 		return &OperationalDataResponseStruct{
 			Status: QUERY_PERIOD_RESULT_FAILED,
 			Msg:    Stat[QUERY_PERIOD_RESULT_FAILED],
@@ -114,6 +117,7 @@ func (ods *operationaldataservice) GetOperationalData(requestObj *OperationalDat
 	/*得到投资金额占比结果*/
 	ir, err := operationaldata.GetInvestResult(odrs)
 	if err != nil {
+		Logger.Errorf("GetOperationalData get invest failed:%v", err)
 		return &OperationalDataResponseStruct{
 			Status: QUERY_INVEST_RESULT_FAILED,
 			Msg:    Stat[QUERY_INVEST_RESULT_FAILED],
@@ -133,6 +137,7 @@ func (ods *operationaldataservice) GetOperationalData(requestObj *OperationalDat
 	/*得到标的比例结果*/
 	br, err := operationaldata.GetBidResult(odrs)
 	if err != nil {
+		Logger.Errorf("GetOperationalData git bid failed:%v", err)
 		return &OperationalDataResponseStruct{
 			Status: QUERY_BID_RESULT_FAILED,
 			Msg:    Stat[QUERY_BID_RESULT_FAILED],
@@ -149,6 +154,7 @@ func (ods *operationaldataservice) GetOperationalData(requestObj *OperationalDat
 	/*得到实时待收排行榜结果*/
 	wr, err := operationaldata.GetWaitResult(odrs)
 	if err != nil {
+		Logger.Errorf("GetOperationalData get wait failed:%v", err)
 		return &OperationalDataResponseStruct{
 			Status: QUERY_WAITRESULT_FAILED,
 			Msg:    Stat[QUERY_WAITRESULT_FAILED],
@@ -165,6 +171,7 @@ func (ods *operationaldataservice) GetOperationalData(requestObj *OperationalDat
 	/*得到12个月之前成交总量*/
 	tmtn, err := operationaldata.GetTwelveMonthTotalNum(odrs)
 	if err != nil {
+		Logger.Errorf("GetOperationalData get twelve month total num failed", err)
 		return &OperationalDataResponseStruct{
 			Status: QUERY_TWELVE_MONTH_TOTALNUM_FAILED,
 			Msg:    Stat[QUERY_TWELVE_MONTH_TOTALNUM_FAILED],
@@ -175,6 +182,7 @@ func (ods *operationaldataservice) GetOperationalData(requestObj *OperationalDat
 	/*得到目前累计成功还款金额*/
 	tr, err := operationaldata.GetTotalRepayment(odrs)
 	if err != nil {
+		Logger.Errorf("GetOperationalData get total repatyment failed:%v", err)
 		return &OperationalDataResponseStruct{
 			Status: QUERY_TOTALREPAYMENT_FAILED,
 			Msg:    Stat[QUERY_TOTALREPAYMENT_FAILED],

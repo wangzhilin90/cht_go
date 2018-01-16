@@ -41,6 +41,7 @@ func (cs *collectionservice) GetUserCollectionList(requestObj *UserCollectionLis
 
 	res, num, err := collection.GetCollectionInfo(cr)
 	if err != nil {
+		Logger.Errorf("GetUserCollectionList get collection failed:%v", err)
 		return &UserCollectionListResponseStruct{
 			Status:   QUERY_COLLECTION_FAILED,
 			Msg:      Status[QUERY_COLLECTION_FAILED],

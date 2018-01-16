@@ -31,6 +31,7 @@ func (acs *accessconfigservice) GetAccessConfig(requestObj *AccessConfigRequestS
 
 	res, err := ac.GetAccessConfig(acr)
 	if err != nil {
+		Logger.Errorf("GetAccessConfig failed:%v", err)
 		return &AccessConfigResponseStruct{
 			Status: QUERY_ACCESS_CONFIG_FAILED,
 			Msg:    Stat[QUERY_ACCESS_CONFIG_FAILED],

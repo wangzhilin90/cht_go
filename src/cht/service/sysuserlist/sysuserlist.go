@@ -29,6 +29,7 @@ func (suls *sysuserlistservice) GetSysUserList(requestObj *SysUserListRequestStr
 	sulr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	res, err := userlist.GetSysUserList(sulr)
 	if err != nil {
+		Logger.Errorf("GetSysUserList get sys user list failed:%v", err)
 		return &SysUserListResponseStruct{
 			Status: QUERY_SYS_USER_LIST_FAILED,
 			Msg:    Stat[QUERY_SYS_USER_LIST_FAILED],

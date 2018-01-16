@@ -39,6 +39,7 @@ func (uabss *userattestionbaseinfosaveservice) SaveUserAttestionBaseInfo(request
 
 	b := uabs.SaveUserAttestionBaseInfo(usr)
 	if b == false {
+		Logger.Errorf("SaveUserAttestionBaseInfo save user attention failed")
 		return &UserAttestionBaseInfoSaveResponseStruct{
 			Status: SAVE_USER_ATTESTION_BASE_INFO_FAILED,
 			Msg:    Stat[SAVE_USER_ATTESTION_BASE_INFO_FAILED],

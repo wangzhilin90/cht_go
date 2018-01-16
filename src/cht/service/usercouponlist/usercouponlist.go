@@ -24,7 +24,8 @@ func (cps *CouponService) GetUserCouponList(requestObj *UserCouponListRequestStr
 
 	res, err := rateroupon.GetRateRoupon(req)
 	if err != nil {
-		Logger.Fatalf("GetRateRoupon failed", err)
+		Logger.Errorf("GetRateRoupon failed:%v", err)
+		return nil, nil
 	}
 	var crs UserCouponListResponseStruct
 	for _, v := range res {

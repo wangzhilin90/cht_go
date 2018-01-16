@@ -61,6 +61,7 @@ func (uabs *userappbankservice) GetUserAppBankDetails(requestObj *UserAppBankDet
 
 	res, err := uab.GetUserAppBankDetails(uabdr)
 	if err != nil {
+		Logger.Errorf("GetUserAppBankDetails get app bank details failed:%v", err)
 		return &UserAppBankDetailsResponseStruct{
 			Status: QUERY_USER_BANK_DETAILS_FAILED,
 			Msg:    Details_Stat[QUERY_USER_BANK_DETAILS_FAILED],
@@ -108,6 +109,7 @@ func (uabs *userappbankservice) UpdateUserAppBank(requestObj *UserAppBankUpdateR
 
 	b := uab.UpdateUserAppBank(uabur)
 	if b == false {
+		Logger.Errorf("UpdateUserAppBank update failed")
 		return &UserAppBankUpdateResponseStruct{
 			Status: UPDATE_USER_APP_BANK_FAILED,
 			Msg:    Update_Stat[UPDATE_USER_APP_BANK_FAILED],
@@ -139,6 +141,7 @@ func (uabs *userappbankservice) InsertUserAppBank(requestObj *UserAppBankInsertR
 
 	b := uab.InsertUserAppBank(uabir)
 	if b == false {
+		Logger.Errorf("InsertUserAppBank insert user app bank failed")
 		return &UserAppBankInsertResponseStruct{
 			Status: INSERT_USER_APP_BANK_FAILED,
 			Msg:    Insert_Stat[INSERT_USER_APP_BANK_FAILED],
@@ -160,6 +163,7 @@ func (uabs *userappbankservice) DeletetUserAppBank(requestObj *UserAppBankDelete
 
 	b := uab.DeletetUserAppBank(uabdr)
 	if b == false {
+		Logger.Errorf("DeletetUserAppBank delete user app bank failed")
 		return &UserAppBankDeleteResponseStruct{
 			Status: DELETE_USER_APP_BANK_FAILED,
 			Msg:    Delete_Stat[DELETE_USER_APP_BANK_FAILED],

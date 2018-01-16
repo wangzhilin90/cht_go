@@ -18,12 +18,15 @@ func (hs *helplistservice) GetHelpList(requestObj *HelpListRequestStruct) (r *He
 	hr := new(helplist.HelpListRequest)
 	hr.Status = requestObj.GetStatus()
 	hr.Cateid = requestObj.GetCateid()
+	hr.LimitNum = requestObj.GetLimitNum()
+	hr.LimitOffset = requestObj.GetLimitOffset()
 	hr.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 
 	var response HelpListResponseStrcut
 	res, _ := helplist.GetHelpList(hr)
 	for _, v := range res {
 		hlrs := new(HelpListResultStruct)
+		hlrs.ID = v.ID
 		hlrs.Title = v.Title
 		hlrs.Content = v.Content
 		response.HelpList = append(response.HelpList, hlrs)

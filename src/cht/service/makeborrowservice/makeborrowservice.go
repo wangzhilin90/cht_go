@@ -98,6 +98,7 @@ func NewMakeBorrowRequest(requestObj *MakeBorrowRequestStruct) *makeborrow.Borro
 	mbr.FeeRate = requestObj.GetFeeRate()
 	mbr.BorrowName = requestObj.GetBorrowName()
 	mbr.VipLevelLimit = requestObj.GetVipLevelLimit()
+	mbr.ContractAmount = requestObj.GetContractAmount()
 	return mbr
 }
 

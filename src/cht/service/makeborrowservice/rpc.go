@@ -68,6 +68,7 @@ var _ = bytes.Equal
 //  - FeeRate
 //  - BorrowName
 //  - VipLevelLimit
+//  - ContractAmount
 type MakeBorrowRequestStruct struct {
 	ID              int32  `thrift:"id,1" db:"id" json:"id"`
 	BorrowType      int32  `thrift:"borrow_type,2" db:"borrow_type" json:"borrow_type"`
@@ -122,6 +123,7 @@ type MakeBorrowRequestStruct struct {
 	FeeRate         string `thrift:"fee_rate,51" db:"fee_rate" json:"fee_rate"`
 	BorrowName      string `thrift:"borrow_name,52" db:"borrow_name" json:"borrow_name"`
 	VipLevelLimit   int32  `thrift:"vip_level_limit,53" db:"vip_level_limit" json:"vip_level_limit"`
+	ContractAmount  string `thrift:"contract_amount,54" db:"contract_amount" json:"contract_amount"`
 }
 
 func (p *MakeBorrowRequestStruct) GetID() int32 {
@@ -334,6 +336,10 @@ func (p *MakeBorrowRequestStruct) GetBorrowName() string {
 
 func (p *MakeBorrowRequestStruct) GetVipLevelLimit() int32 {
 	return p.VipLevelLimit
+}
+
+func (p *MakeBorrowRequestStruct) GetContractAmount() string {
+	return p.ContractAmount
 }
 func (p *MakeBorrowRequestStruct) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
@@ -559,6 +565,10 @@ func (p *MakeBorrowRequestStruct) Read(iprot thrift.TProtocol) error {
 			}
 		case 53:
 			if err := p.ReadField53(iprot); err != nil {
+				return err
+			}
+		case 54:
+			if err := p.ReadField54(iprot); err != nil {
 				return err
 			}
 		default:
@@ -1053,6 +1063,15 @@ func (p *MakeBorrowRequestStruct) ReadField53(iprot thrift.TProtocol) error {
 	return nil
 }
 
+func (p *MakeBorrowRequestStruct) ReadField54(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 54: ", err)
+	} else {
+		p.ContractAmount = v
+	}
+	return nil
+}
+
 func (p *MakeBorrowRequestStruct) Write(oprot thrift.TProtocol) error {
 	if err := oprot.WriteStructBegin("MakeBorrowRequestStruct"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
@@ -1215,6 +1234,9 @@ func (p *MakeBorrowRequestStruct) Write(oprot thrift.TProtocol) error {
 			return err
 		}
 		if err := p.writeField53(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField54(oprot); err != nil {
 			return err
 		}
 	}
@@ -1916,6 +1938,19 @@ func (p *MakeBorrowRequestStruct) writeField53(oprot thrift.TProtocol) (err erro
 	return err
 }
 
+func (p *MakeBorrowRequestStruct) writeField54(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("contract_amount", thrift.STRING, 54); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 54:contract_amount: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.ContractAmount)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.contract_amount (54) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 54:contract_amount: ", p), err)
+	}
+	return err
+}
+
 func (p *MakeBorrowRequestStruct) String() string {
 	if p == nil {
 		return "<nil>"
@@ -2362,6 +2397,8 @@ func (p *MakeBorrowThriftServiceMakeBorrowArgs) ReadField1(iprot thrift.TProtoco
 		FeeRate: "0.0000",
 
 		BorrowName: " ",
+
+		ContractAmount: "0.00",
 	}
 	if err := p.RequestObj.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.RequestObj), err)

@@ -55,6 +55,7 @@ struct MakeBorrowRequestStruct {
 	51:string fee_rate = "0.0000"
 	52:string borrow_name = " "
 	53:i32 vip_level_limit = 0
+	54:string contract_amount = "0.00"
 }
 
 struct MakeBorrowResponseStruct {

@@ -38,7 +38,7 @@ func GetHelpList(hr *HelpListRequest) ([]HelpListResultStruct, error) {
 		qb.Limit(int(hr.LimitNum))
 	}
 
-	if hr.LimitOffset != 0 {
+	if hr.LimitNum != 0 && hr.LimitOffset != 0 {
 		qb.Offset(int(hr.LimitOffset))
 	}
 	sql := qb.String()

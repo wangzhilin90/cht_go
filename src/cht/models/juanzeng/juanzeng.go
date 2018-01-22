@@ -53,7 +53,7 @@ func GetMesslistResult(rs *RequestStruct) ([]MesslistResultStruct, error) {
 	buf.WriteString("FROM  jl_juanmess p LEFT JOIN jl_user u ON u.id=p.user_id ")
 	buf.WriteString("ORDER BY p.id desc ")
 	sql := buf.String()
-	Logger.Debugf("GetMesslistResult sql %v", sql)
+	Logger.Debugf("GetMesslistResult sql: %v", sql)
 
 	var mrs []MesslistResultStruct
 	_, err := o.Raw(sql).QueryRows(&mrs)
@@ -73,10 +73,10 @@ func GetFundlistResult(rs *RequestStruct) ([]FundlistResultStruct, error) {
 
 	buf := bytes.Buffer{}
 	buf.WriteString("SELECT p.type,u.username,p.money,p.addtime ")
-	buf.WriteString("FROM jl_point_juanzeng p LEFT JOIN jl_user u ON u.id=p.user_id ")
+	buf.WriteString("FROM jl_point_juanzeng p LEFT JOIN jl_user u ON u.id=p.user_id where p.addtime>=1515427200 ")
 	buf.WriteString("ORDER BY p.id DESC LIMIT 100 ")
 	sql := buf.String()
-	Logger.Debugf("GetFundlistResult sql %v", sql)
+	Logger.Debugf("GetFundlistResult sql: %v", sql)
 
 	var frs []FundlistResultStruct
 	_, err := o.Raw(sql).QueryRows(&frs)
@@ -97,7 +97,7 @@ func GetNumlistResult(rs *RequestStruct) (*NumlistResultStruct, error) {
 	buf := bytes.Buffer{}
 	buf.WriteString("select num,money from jl_juannum limit 1")
 	sql := buf.String()
-	Logger.Debugf("GetNumlistResult sql %v", sql)
+	Logger.Debugf("GetNumlistResult sql: %v", sql)
 
 	var nlrs NumlistResultStruct
 	err := o.Raw(sql).QueryRow(&nlrs)
@@ -118,9 +118,9 @@ func GetTotalJuanNum(rs *RequestStruct) (string, error) {
 	Logger.Debug("GetTotalJuanNum input param:", rs)
 
 	buf := bytes.Buffer{}
-	buf.WriteString("SELECT SUM(money) FROM jl_point_juanzeng")
+	buf.WriteString("SELECT SUM(money) FROM jl_point_juanzeng where addtime>=1515427200")
 	sql := buf.String()
-	Logger.Debugf("GetTotalJuanNum sql %v", sql)
+	Logger.Debugf("GetTotalJuanNum sql: %v", sql)
 
 	var totalJuanNum string
 	o.Raw(sql).QueryRow(&totalJuanNum)

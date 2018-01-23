@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"cht/common/localtime"
 	. "cht/common/logger"
+	"cht/utils"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 	"time"
@@ -16,6 +17,9 @@ const (
 type OperationalDataRequestStruct struct {
 	StartMonth           int32 //12个月前时间搓
 	Start                int32 //1个月前时间搓
+	TodayTime            int32
+	YesterdayTime        int32
+	TomorrowTime         int32
 	ChengHuiTongTraceLog string
 }
 
@@ -271,4 +275,139 @@ func GetTotalRepayment(odrs *OperationalDataRequestStruct) (string, error) {
 	}
 	Logger.Debugf("GetTotalRepayment return value:%v", totalRepayment)
 	return totalRepayment, nil
+}
+
+/**
+ * [GetTender 获取今天前投标且已经审核通过的投资总额]
+ * @param    odrs *OperationalDataRequestStruct 请求入参
+ * @return   string 投资总额
+ * @DateTime 2018-01-22T17:40:03+0800
+ */
+func GetTender(odrs *OperationalDataRequestStruct) (string, error) {
+	Logger.Debugf("GetTender input param: %v", odrs)
+
+	var tender string
+	err := utils.GetCache("borrow:tender:account_act", &tender)
+	if err != nil {
+		o := orm.NewOrm()
+		o.Using("default")
+
+		buf := bytes.Buffer{}
+		buf.WriteString("SELECT SUM(BT.account_act) FROM jl_borrow_tender BT JOIN jl_borrow B ON BT.borrow_id=B.id ")
+		buf.WriteString("WHERE BT.status=1 AND B.review_time<?")
+		sql := buf.String()
+		Logger.Debugf("GetTender sql: %v", sql)
+
+		err := o.Raw(sql, odrs.TodayTime).QueryRow(&tender)
+		if err == orm.ErrNoRows {
+			return "0.00", nil
+		} else if err != nil {
+			Logger.Errorf("GetTender query failed:%v", err)
+			return "0.00", err
+		}
+		utils.SetCache("borrow:tender", tender, 600)
+	}
+
+	Logger.Debugf("GetTender return value:%v", tender)
+	return tender, nil
+}
+
+/**
+ * [GetTenderToday 获取昨日满标复审通过的标的总额]
+ * @param    odrs *OperationalDataRequestStruct 请求入参
+ * @return   string 总额
+ * @DateTime 2018-01-22T17:40:58+0800
+ */
+func GetTenderToday(odrs *OperationalDataRequestStruct) (string, error) {
+	Logger.Debugf("GetTenderToday input param: %v", odrs)
+
+	var tenderToday string
+	err := utils.GetCache("borrow:account", &tenderToday)
+	if err != nil {
+		o := orm.NewOrm()
+		o.Using("default")
+
+		buf := bytes.Buffer{}
+		buf.WriteString("SELECT SUM(account) FROM jl_borrow ")
+		buf.WriteString("WHERE status=6 AND review_time>=? AND review_time<?")
+		sql := buf.String()
+		Logger.Debugf("GetTenderToday sql: %v", sql)
+
+		err := o.Raw(sql, odrs.YesterdayTime, odrs.TodayTime).QueryRow(&tenderToday)
+		if err == orm.ErrNoRows {
+			return "0.00", nil
+		} else if err != nil {
+			Logger.Errorf("GetTenderToday query failed:%v", err)
+			return "0.00", err
+		}
+		utils.SetCache("borrow:account", tenderToday, 600)
+	}
+
+	Logger.Debugf("GetTenderToday return value:%v", tenderToday)
+	return tenderToday, nil
+}
+
+/**
+ * [GetProfit 获取今天前已还利息总额]
+ * @param    odrs *OperationalDataRequestStruct 请求入参
+ * @return   string 已还利息总额
+ * @DateTime 2018-01-22T17:41:38+0800
+ */
+func GetProfit(odrs *OperationalDataRequestStruct) (string, error) {
+	Logger.Debugf("GetProfit input param: %v", odrs)
+
+	var profit string
+	err := utils.GetCache("borrow:collection:interest", &profit)
+	if err != nil {
+		o := orm.NewOrm()
+		o.Using("default")
+
+		buf := bytes.Buffer{}
+		buf.WriteString("SELECT SUM(interest) FROM jl_borrow_collection ")
+		buf.WriteString("WHERE status=1 AND repay_yestime<?")
+		sql := buf.String()
+
+		Logger.Debugf("GetProfit sql: %v", sql)
+
+		err := o.Raw(sql, odrs.TodayTime).QueryRow(&profit)
+		if err == orm.ErrNoRows {
+			return "0.00", nil
+		} else if err != nil {
+			Logger.Errorf("GetProfit query failed:%v", err)
+			return "0.00", err
+		}
+		utils.SetCache("borrow:collection:interest", profit, 600)
+	}
+
+	Logger.Debugf("GetProfit return value:%v", profit)
+	return profit, nil
+}
+
+/**
+ * [GetTenderUserCount 获取出借人数]
+ * @param    odrs *OperationalDataRequestStruct 请求入参
+ * @return   string 获取出借人数
+ * @DateTime 2018-01-22T17:43:30+0800
+ */
+func GetTenderUserCount(odrs *OperationalDataRequestStruct) (int32, error) {
+	Logger.Debugf("GetTenderUserCount input param: %v", odrs)
+	o := orm.NewOrm()
+	o.Using("default")
+
+	buf := bytes.Buffer{}
+	buf.WriteString("SELECT COUNT(DISTINCT user_id) AS user_count FROM jl_borrow_tender")
+	sql := buf.String()
+
+	Logger.Debugf("GetTenderUserCount sql: %v", sql)
+
+	var tenderUserCount int32
+	err := o.Raw(sql).QueryRow(&tenderUserCount)
+	if err == orm.ErrNoRows {
+		return 0, nil
+	} else if err != nil {
+		Logger.Errorf("GetTenderUserCount query failed:%v", err)
+		return 0, err
+	}
+	Logger.Debugf("GetTenderUserCount return value:%v", tenderUserCount)
+	return tenderUserCount, nil
 }

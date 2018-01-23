@@ -30,7 +30,6 @@ func GetSysConfig(scrs *SysConfigRequestStruct) ([]SysConfigStruct, error) {
 	err := utils.GetCache("sys:config", &scs)
 	if err != nil {
 		cache_expire := cf.BConf.Redis.Expire_time
-		Logger.Debugf("cache_expire:%v", cache_expire)
 		o := orm.NewOrm()
 		o.Using("default")
 		qb, _ := orm.NewQueryBuilder("mysql")

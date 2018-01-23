@@ -17,15 +17,21 @@ var _ = bytes.Equal
 // Attributes:
 //  - StartMonth
 //  - Start
+//  - TodayTime
+//  - YesterdayTime
+//  - TomorrowTime
 //  - ChengHuiTongTraceLog
 type OperationalDataRequestStruct struct {
 	StartMonth           int32  `thrift:"startMonth,1" db:"startMonth" json:"startMonth"`
 	Start                int32  `thrift:"start,2" db:"start" json:"start"`
-	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,3" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
+	TodayTime            int32  `thrift:"today_time,3" db:"today_time" json:"today_time"`
+	YesterdayTime        int32  `thrift:"yesterday_time,4" db:"yesterday_time" json:"yesterday_time"`
+	TomorrowTime         int32  `thrift:"tomorrow_time,5" db:"tomorrow_time" json:"tomorrow_time"`
+	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,6" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
 }
 
 // func NewOperationalDataRequestStruct() *OperationalDataRequestStruct {
-//   return &OperationalDataRequestStruct{}
+// 	return &OperationalDataRequestStruct{}
 // }
 
 func (p *OperationalDataRequestStruct) GetStartMonth() int32 {
@@ -34,6 +40,18 @@ func (p *OperationalDataRequestStruct) GetStartMonth() int32 {
 
 func (p *OperationalDataRequestStruct) GetStart() int32 {
 	return p.Start
+}
+
+func (p *OperationalDataRequestStruct) GetTodayTime() int32 {
+	return p.TodayTime
+}
+
+func (p *OperationalDataRequestStruct) GetYesterdayTime() int32 {
+	return p.YesterdayTime
+}
+
+func (p *OperationalDataRequestStruct) GetTomorrowTime() int32 {
+	return p.TomorrowTime
 }
 
 func (p *OperationalDataRequestStruct) GetChengHuiTongTraceLog() string {
@@ -63,6 +81,18 @@ func (p *OperationalDataRequestStruct) Read(iprot thrift.TProtocol) error {
 			}
 		case 3:
 			if err := p.ReadField3(iprot); err != nil {
+				return err
+			}
+		case 4:
+			if err := p.ReadField4(iprot); err != nil {
+				return err
+			}
+		case 5:
+			if err := p.ReadField5(iprot); err != nil {
+				return err
+			}
+		case 6:
+			if err := p.ReadField6(iprot); err != nil {
 				return err
 			}
 		default:
@@ -99,8 +129,35 @@ func (p *OperationalDataRequestStruct) ReadField2(iprot thrift.TProtocol) error 
 }
 
 func (p *OperationalDataRequestStruct) ReadField3(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI32(); err != nil {
 		return thrift.PrependError("error reading field 3: ", err)
+	} else {
+		p.TodayTime = v
+	}
+	return nil
+}
+
+func (p *OperationalDataRequestStruct) ReadField4(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadI32(); err != nil {
+		return thrift.PrependError("error reading field 4: ", err)
+	} else {
+		p.YesterdayTime = v
+	}
+	return nil
+}
+
+func (p *OperationalDataRequestStruct) ReadField5(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadI32(); err != nil {
+		return thrift.PrependError("error reading field 5: ", err)
+	} else {
+		p.TomorrowTime = v
+	}
+	return nil
+}
+
+func (p *OperationalDataRequestStruct) ReadField6(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 6: ", err)
 	} else {
 		p.ChengHuiTongTraceLog = v
 	}
@@ -119,6 +176,15 @@ func (p *OperationalDataRequestStruct) Write(oprot thrift.TProtocol) error {
 			return err
 		}
 		if err := p.writeField3(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField4(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField5(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField6(oprot); err != nil {
 			return err
 		}
 	}
@@ -158,14 +224,53 @@ func (p *OperationalDataRequestStruct) writeField2(oprot thrift.TProtocol) (err 
 }
 
 func (p *OperationalDataRequestStruct) writeField3(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("chengHuiTongTraceLog", thrift.STRING, 3); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:chengHuiTongTraceLog: ", p), err)
+	if err := oprot.WriteFieldBegin("today_time", thrift.I32, 3); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:today_time: ", p), err)
 	}
-	if err := oprot.WriteString(string(p.ChengHuiTongTraceLog)); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.chengHuiTongTraceLog (3) field write error: ", p), err)
+	if err := oprot.WriteI32(int32(p.TodayTime)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.today_time (3) field write error: ", p), err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:chengHuiTongTraceLog: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:today_time: ", p), err)
+	}
+	return err
+}
+
+func (p *OperationalDataRequestStruct) writeField4(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("yesterday_time", thrift.I32, 4); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 4:yesterday_time: ", p), err)
+	}
+	if err := oprot.WriteI32(int32(p.YesterdayTime)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.yesterday_time (4) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 4:yesterday_time: ", p), err)
+	}
+	return err
+}
+
+func (p *OperationalDataRequestStruct) writeField5(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("tomorrow_time", thrift.I32, 5); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 5:tomorrow_time: ", p), err)
+	}
+	if err := oprot.WriteI32(int32(p.TomorrowTime)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.tomorrow_time (5) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 5:tomorrow_time: ", p), err)
+	}
+	return err
+}
+
+func (p *OperationalDataRequestStruct) writeField6(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("chengHuiTongTraceLog", thrift.STRING, 6); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 6:chengHuiTongTraceLog: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.ChengHuiTongTraceLog)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.chengHuiTongTraceLog (6) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 6:chengHuiTongTraceLog: ", p), err)
 	}
 	return err
 }
@@ -1179,6 +1284,169 @@ func (p *WaitResultStruct) String() string {
 }
 
 // Attributes:
+//  - Tender
+//  - TenderToday
+//  - Profit
+type SumResultStruct struct {
+	Tender      string `thrift:"tender,1" db:"tender" json:"tender"`
+	TenderToday string `thrift:"tender_today,2" db:"tender_today" json:"tender_today"`
+	Profit      string `thrift:"profit,3" db:"profit" json:"profit"`
+}
+
+func NewSumResultStruct() *SumResultStruct {
+	return &SumResultStruct{}
+}
+
+func (p *SumResultStruct) GetTender() string {
+	return p.Tender
+}
+
+func (p *SumResultStruct) GetTenderToday() string {
+	return p.TenderToday
+}
+
+func (p *SumResultStruct) GetProfit() string {
+	return p.Profit
+}
+func (p *SumResultStruct) Read(iprot thrift.TProtocol) error {
+	if _, err := iprot.ReadStructBegin(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
+		if err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+		switch fieldId {
+		case 1:
+			if err := p.ReadField1(iprot); err != nil {
+				return err
+			}
+		case 2:
+			if err := p.ReadField2(iprot); err != nil {
+				return err
+			}
+		case 3:
+			if err := p.ReadField3(iprot); err != nil {
+				return err
+			}
+		default:
+			if err := iprot.Skip(fieldTypeId); err != nil {
+				return err
+			}
+		}
+		if err := iprot.ReadFieldEnd(); err != nil {
+			return err
+		}
+	}
+	if err := iprot.ReadStructEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+	}
+	return nil
+}
+
+func (p *SumResultStruct) ReadField1(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 1: ", err)
+	} else {
+		p.Tender = v
+	}
+	return nil
+}
+
+func (p *SumResultStruct) ReadField2(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 2: ", err)
+	} else {
+		p.TenderToday = v
+	}
+	return nil
+}
+
+func (p *SumResultStruct) ReadField3(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 3: ", err)
+	} else {
+		p.Profit = v
+	}
+	return nil
+}
+
+func (p *SumResultStruct) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("SumResultStruct"); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+	}
+	if p != nil {
+		if err := p.writeField1(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField2(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField3(oprot); err != nil {
+			return err
+		}
+	}
+	if err := oprot.WriteFieldStop(); err != nil {
+		return thrift.PrependError("write field stop error: ", err)
+	}
+	if err := oprot.WriteStructEnd(); err != nil {
+		return thrift.PrependError("write struct stop error: ", err)
+	}
+	return nil
+}
+
+func (p *SumResultStruct) writeField1(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("tender", thrift.STRING, 1); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:tender: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.Tender)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.tender (1) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 1:tender: ", p), err)
+	}
+	return err
+}
+
+func (p *SumResultStruct) writeField2(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("tender_today", thrift.STRING, 2); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:tender_today: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.TenderToday)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.tender_today (2) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:tender_today: ", p), err)
+	}
+	return err
+}
+
+func (p *SumResultStruct) writeField3(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("profit", thrift.STRING, 3); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:profit: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.Profit)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.profit (3) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:profit: ", p), err)
+	}
+	return err
+}
+
+func (p *SumResultStruct) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("SumResultStruct(%+v)", *p)
+}
+
+// Attributes:
 //  - Status
 //  - Msg
 //  - ThirtyDaysList
@@ -1190,6 +1458,8 @@ func (p *WaitResultStruct) String() string {
 //  - InvestAccount
 //  - BidList
 //  - WaitList
+//  - Sum
+//  - TenderUserCount
 type OperationalDataResponseStruct struct {
 	Status          int32                      `thrift:"status,1" db:"status" json:"status"`
 	Msg             string                     `thrift:"msg,2" db:"msg" json:"msg"`
@@ -1202,6 +1472,8 @@ type OperationalDataResponseStruct struct {
 	InvestAccount   *InvestResultStruct        `thrift:"InvestAccount,9" db:"InvestAccount" json:"InvestAccount"`
 	BidList         []*BidResultStruct         `thrift:"BidList,10" db:"BidList" json:"BidList"`
 	WaitList        []*WaitResultStruct        `thrift:"WaitList,11" db:"WaitList" json:"WaitList"`
+	Sum             *SumResultStruct           `thrift:"Sum,12" db:"Sum" json:"Sum"`
+	TenderUserCount int32                      `thrift:"tenderUserCount,13" db:"tenderUserCount" json:"tenderUserCount"`
 }
 
 func NewOperationalDataResponseStruct() *OperationalDataResponseStruct {
@@ -1256,8 +1528,25 @@ func (p *OperationalDataResponseStruct) GetBidList() []*BidResultStruct {
 func (p *OperationalDataResponseStruct) GetWaitList() []*WaitResultStruct {
 	return p.WaitList
 }
+
+var OperationalDataResponseStruct_Sum_DEFAULT *SumResultStruct
+
+func (p *OperationalDataResponseStruct) GetSum() *SumResultStruct {
+	if !p.IsSetSum() {
+		return OperationalDataResponseStruct_Sum_DEFAULT
+	}
+	return p.Sum
+}
+
+func (p *OperationalDataResponseStruct) GetTenderUserCount() int32 {
+	return p.TenderUserCount
+}
 func (p *OperationalDataResponseStruct) IsSetInvestAccount() bool {
 	return p.InvestAccount != nil
+}
+
+func (p *OperationalDataResponseStruct) IsSetSum() bool {
+	return p.Sum != nil
 }
 
 func (p *OperationalDataResponseStruct) Read(iprot thrift.TProtocol) error {
@@ -1316,6 +1605,14 @@ func (p *OperationalDataResponseStruct) Read(iprot thrift.TProtocol) error {
 			}
 		case 11:
 			if err := p.ReadField11(iprot); err != nil {
+				return err
+			}
+		case 12:
+			if err := p.ReadField12(iprot); err != nil {
+				return err
+			}
+		case 13:
+			if err := p.ReadField13(iprot); err != nil {
 				return err
 			}
 		default:
@@ -1497,6 +1794,23 @@ func (p *OperationalDataResponseStruct) ReadField11(iprot thrift.TProtocol) erro
 	return nil
 }
 
+func (p *OperationalDataResponseStruct) ReadField12(iprot thrift.TProtocol) error {
+	p.Sum = &SumResultStruct{}
+	if err := p.Sum.Read(iprot); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Sum), err)
+	}
+	return nil
+}
+
+func (p *OperationalDataResponseStruct) ReadField13(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadI32(); err != nil {
+		return thrift.PrependError("error reading field 13: ", err)
+	} else {
+		p.TenderUserCount = v
+	}
+	return nil
+}
+
 func (p *OperationalDataResponseStruct) Write(oprot thrift.TProtocol) error {
 	if err := oprot.WriteStructBegin("OperationalDataResponseStruct"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
@@ -1533,6 +1847,12 @@ func (p *OperationalDataResponseStruct) Write(oprot thrift.TProtocol) error {
 			return err
 		}
 		if err := p.writeField11(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField12(oprot); err != nil {
+			return err
+		}
+		if err := p.writeField13(oprot); err != nil {
 			return err
 		}
 	}
@@ -1732,6 +2052,32 @@ func (p *OperationalDataResponseStruct) writeField11(oprot thrift.TProtocol) (er
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field end error 11:WaitList: ", p), err)
+	}
+	return err
+}
+
+func (p *OperationalDataResponseStruct) writeField12(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("Sum", thrift.STRUCT, 12); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 12:Sum: ", p), err)
+	}
+	if err := p.Sum.Write(oprot); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", p.Sum), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 12:Sum: ", p), err)
+	}
+	return err
+}
+
+func (p *OperationalDataResponseStruct) writeField13(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("tenderUserCount", thrift.I32, 13); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 13:tenderUserCount: ", p), err)
+	}
+	if err := oprot.WriteI32(int32(p.TenderUserCount)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.tenderUserCount (13) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 13:tenderUserCount: ", p), err)
 	}
 	return err
 }

@@ -7,8 +7,11 @@ import (
 
 func NewOperationalDataRequestStruct(startMonth, start int32) *OperationalDataRequestStruct {
 	return &OperationalDataRequestStruct{
-		StartMonth: startMonth,
-		Start:      start,
+		StartMonth:    startMonth,
+		Start:         start,
+		TodayTime:     1516614552,
+		YesterdayTime: 1316614552,
+		TomorrowTime:  0,
 	}
 }
 

@@ -7,8 +7,11 @@ import (
 
 func NewOperationalDataRequestStruct(startMonth, start int32) *OperationalDataRequestStruct {
 	return &OperationalDataRequestStruct{
-		StartMonth: startMonth,
-		Start:      start,
+		StartMonth:    startMonth,
+		Start:         start,
+		TodayTime:     1516614552,
+		YesterdayTime: 1316614552,
+		TomorrowTime:  0,
 	}
 }
 
@@ -91,4 +94,40 @@ func TestGetTotalRepayment(t *testing.T) {
 		t.Fatalf("TestGetTotalRepayment failed %v", err)
 	}
 	t.Logf("TestGetTotalRepayment return value:%v", res)
+}
+
+func TestGetTender(t *testing.T) {
+	odrs := NewOperationalDataRequestStruct(1476176400, 1505120400)
+	res, err := GetTender(odrs)
+	if err != nil {
+		t.Fatalf("TestGetTender failed %v", err)
+	}
+	t.Logf("TestGetTender return value:%v", res)
+}
+
+func TestGetTenderToday(t *testing.T) {
+	odrs := NewOperationalDataRequestStruct(1476176400, 1505120400)
+	res, err := GetTenderToday(odrs)
+	if err != nil {
+		t.Fatalf("TestGetTenderToday failed %v", err)
+	}
+	t.Logf("TestGetTenderToday return value:%v", res)
+}
+
+func TestGetProfit(t *testing.T) {
+	odrs := NewOperationalDataRequestStruct(1476176400, 1505120400)
+	res, err := GetProfit(odrs)
+	if err != nil {
+		t.Fatalf("TestGetProfit failed %v", err)
+	}
+	t.Logf("TestGetProfit return value:%v", res)
+}
+
+func TestGetTenderUserCount(t *testing.T) {
+	odrs := NewOperationalDataRequestStruct(1476176400, 1505120400)
+	res, err := GetTenderUserCount(odrs)
+	if err != nil {
+		t.Fatalf("TestGetTenderUserCount failed %v", err)
+	}
+	t.Logf("TestGetTenderUserCount return value:%v", res)
 }

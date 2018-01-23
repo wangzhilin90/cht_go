@@ -21,6 +21,10 @@ const (
 	QUERY_WAITRESULT_FAILED            = 1007
 	QUERY_TWELVE_MONTH_TOTALNUM_FAILED = 1008
 	QUERY_TOTALREPAYMENT_FAILED        = 1009
+	QUERY_TENDER_FAILED                = 1010
+	QUERY_TENDER_TODAY_FAILED          = 1011
+	QUERY_PROFIT_FAILED                = 1012
+	QUERY_USER_TENDER_ACCOUNT_FAILED   = 1013
 )
 
 var Stat = map[int]string{
@@ -34,6 +38,10 @@ var Stat = map[int]string{
 	QUERY_WAITRESULT_FAILED:            "查询实时待收排行榜失败",
 	QUERY_TWELVE_MONTH_TOTALNUM_FAILED: "查询12个月之前成交总量失败",
 	QUERY_TOTALREPAYMENT_FAILED:        "查询目前累计成功还款失败",
+	QUERY_TENDER_FAILED:                "获取今天前投标且已经审核通过的投资总额失败",
+	QUERY_TENDER_TODAY_FAILED:          "获取昨日满标复审通过的标的总额失败",
+	QUERY_PROFIT_FAILED:                "获取今天前已还利息总额失败",
+	QUERY_USER_TENDER_ACCOUNT_FAILED:   "获取出借人数失败",
 }
 
 type operationaldataservice struct{}
@@ -44,6 +52,9 @@ func (ods *operationaldataservice) GetOperationalData(requestObj *OperationalDat
 	odrs := new(operationaldata.OperationalDataRequestStruct)
 	odrs.Start = requestObj.GetStart()
 	odrs.StartMonth = requestObj.GetStartMonth()
+	odrs.TodayTime = requestObj.GetTodayTime()
+	odrs.YesterdayTime = requestObj.GetYesterdayTime()
+	odrs.TomorrowTime = requestObj.GetTomorrowTime()
 	odrs.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 
 	var response OperationalDataResponseStruct
@@ -188,8 +199,51 @@ func (ods *operationaldataservice) GetOperationalData(requestObj *OperationalDat
 			Msg:    Stat[QUERY_TOTALREPAYMENT_FAILED],
 		}, nil
 	}
-
 	response.Repayment = tr
+
+	tender, err := operationaldata.GetTender(odrs)
+	if err != nil {
+		Logger.Errorf("GetOperationalData get tender failed:%v", err)
+		return &OperationalDataResponseStruct{
+			Status: QUERY_TENDER_FAILED,
+			Msg:    Stat[QUERY_TENDER_FAILED],
+		}, nil
+	}
+
+	tenderToday, err := operationaldata.GetTenderToday(odrs)
+	if err != nil {
+		Logger.Errorf("GetOperationalData get tender today failed:%v", err)
+		return &OperationalDataResponseStruct{
+			Status: QUERY_TENDER_TODAY_FAILED,
+			Msg:    Stat[QUERY_TENDER_TODAY_FAILED],
+		}, nil
+	}
+
+	profit, err := operationaldata.GetProfit(odrs)
+	if err != nil {
+		Logger.Errorf("GetOperationalData get profit failed:%v", err)
+		return &OperationalDataResponseStruct{
+			Status: QUERY_PROFIT_FAILED,
+			Msg:    Stat[QUERY_PROFIT_FAILED],
+		}, nil
+	}
+
+	tenderUserCount, err := operationaldata.GetTenderUserCount(odrs)
+	if err != nil {
+		Logger.Errorf("GetOperationalData get tenderUserCount failed:%v", err)
+		return &OperationalDataResponseStruct{
+			Status: QUERY_USER_TENDER_ACCOUNT_FAILED,
+			Msg:    Stat[QUERY_USER_TENDER_ACCOUNT_FAILED],
+		}, nil
+	}
+
+	srs := new(SumResultStruct)
+	srs.Tender = tender
+	srs.TenderToday = tenderToday
+	srs.Profit = profit
+	response.Sum = srs
+
+	response.TenderUserCount = tenderUserCount
 	response.Status = QUERY_OPERATIONAL_DATA_SUCCESS
 	response.Msg = Stat[QUERY_OPERATIONAL_DATA_SUCCESS]
 	Logger.Debugf("GetOperationalData return value:%v", response)

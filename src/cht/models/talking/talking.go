@@ -14,10 +14,10 @@ type TalkingRequest struct {
 }
 
 type TalkListResult struct {
-	ID      int32  `orm:column(id)`
-	Title   string `orm:column(title)`
-	ImgURL  string `orm:column(img_url)`
-	Content string `orm:column(content)`
+	ID      int32  `orm:"column(id)"`
+	Title   string `orm:"column(title)"`
+	ImgURL  string `orm:"column(img_url)"`
+	Content string `orm:"column(content)"`
 }
 
 func GetTalkinglist(tr *TalkingRequest) ([]TalkListResult, error) {

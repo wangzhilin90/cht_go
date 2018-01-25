@@ -106,7 +106,7 @@ func WatchNode(conn *zk.Conn, key, value string) error {
 	event := <-ch
 	Logger.Debugf("WatchNode event:%v", event)
 	//临时节点被删除时，重新注册节点，再重新watch
-	if event.Type == zk.EventNodeDeleted {
+	if event.Type == zk.EventNodeDeleted || event.Type == zk.EventNotWatching {
 		err := RegisterNode(conn, key, value)
 		if err != nil {
 			Logger.Errorf("RegisterNode %v failed:%v", path, err)

@@ -25,6 +25,7 @@ const (
 
 	QUERY_USER_LOGIN_LOG_SUCCESS = 1000
 	QUERY_USER_LOGIN_LOG_FAILED  = 1001
+	QUERY_USER_LOGIN_LOG_EMPTY   = 1002
 )
 
 var Stat = map[int]string{
@@ -35,6 +36,7 @@ var Stat = map[int]string{
 var Query_Stat = map[int]string{
 	QUERY_USER_LOGIN_LOG_SUCCESS: "查询登录日志详情成功",
 	QUERY_USER_LOGIN_LOG_FAILED:  "查询登录日志详情失败",
+	QUERY_USER_LOGIN_LOG_EMPTY:   "查询登录日志详情为空",
 }
 
 func (luls *LogUserLoginService) UpdateUserLoginLogDetails(requestObj *UpdateUserLoginLogDetailsRequestStruct) (r *UpdateUserLoginLogDetailsResponseStruct, err error) {
@@ -75,6 +77,14 @@ func (luls *LogUserLoginService) GetUserLoginLogDetails(requestObj *UserLoginLog
 		return &UserLoginLogDetailsResponseStruct{
 			Status: QUERY_USER_LOGIN_LOG_FAILED,
 			Msg:    Query_Stat[QUERY_USER_LOGIN_LOG_FAILED],
+		}, nil
+	}
+
+	if res == nil {
+		Logger.Debugf("GetUserLoginLogDetails query empty")
+		return &UserLoginLogDetailsResponseStruct{
+			Status: QUERY_USER_LOGIN_LOG_EMPTY,
+			Msg:    Query_Stat[QUERY_USER_LOGIN_LOG_EMPTY],
 		}, nil
 	}
 

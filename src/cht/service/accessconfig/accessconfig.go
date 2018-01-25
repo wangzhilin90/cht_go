@@ -13,11 +13,13 @@ import (
 const (
 	QUERY_ACCESS_CONFIG_SUCCESS = 1000
 	QUERY_ACCESS_CONFIG_FAILED  = 1001
+	QUERY_ACCESS_CONFIG_EMPTY   = 1002
 )
 
 var Stat = map[int]string{
 	QUERY_ACCESS_CONFIG_SUCCESS: "查询推广名称记录表成功",
 	QUERY_ACCESS_CONFIG_FAILED:  "查询推广名称记录表失败",
+	QUERY_ACCESS_CONFIG_EMPTY:   "查询推广名称记录表为空",
 }
 
 type accessconfigservice struct{}
@@ -35,6 +37,14 @@ func (acs *accessconfigservice) GetAccessConfig(requestObj *AccessConfigRequestS
 		return &AccessConfigResponseStruct{
 			Status: QUERY_ACCESS_CONFIG_FAILED,
 			Msg:    Stat[QUERY_ACCESS_CONFIG_FAILED],
+		}, nil
+	}
+
+	if res == nil {
+		Logger.Debugf("GetAccessConfig query empty")
+		return &AccessConfigResponseStruct{
+			Status: QUERY_ACCESS_CONFIG_EMPTY,
+			Msg:    Stat[QUERY_ACCESS_CONFIG_EMPTY],
 		}, nil
 	}
 

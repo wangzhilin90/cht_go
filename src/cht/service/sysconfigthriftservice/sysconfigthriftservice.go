@@ -13,11 +13,13 @@ import (
 const (
 	QUERY_SYS_CONFIG_SUCCESS = 1000
 	QUERY_SYS_CONFIG_FAILED  = 1001
+	QUERY_SYS_CONFIG_EMPTY   = 1002
 )
 
 var Status = map[int]string{
 	QUERY_SYS_CONFIG_SUCCESS: "查询系统配置成功",
 	QUERY_SYS_CONFIG_FAILED:  "查询系统配置失败",
+	QUERY_SYS_CONFIG_EMPTY:   "查询系统配置为空",
 }
 
 type sysconfigservice struct{}
@@ -33,6 +35,14 @@ func (scs *sysconfigservice) GetSysConfig(requestObj *SysConfigRequestStruct) (r
 		return &SysConfigResponseStruct{
 			Status: QUERY_SYS_CONFIG_FAILED,
 			Msg:    Status[QUERY_SYS_CONFIG_FAILED],
+		}, nil
+	}
+
+	if SysConfig == nil {
+		Logger.Debugf("GetSysConfig query empty")
+		return &SysConfigResponseStruct{
+			Status: QUERY_SYS_CONFIG_EMPTY,
+			Msg:    Status[QUERY_SYS_CONFIG_EMPTY],
 		}, nil
 	}
 

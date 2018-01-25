@@ -16,11 +16,13 @@ type securedservice struct{}
 const (
 	QUERY_SECURED_SUCCESS = 1000
 	QUERY_SECURED_FAILED  = 1001
+	QUERY_SECURED_EMPTY   = 1002
 )
 
 var Status = map[int]string{
 	QUERY_SECURED_SUCCESS: "查询担保人成功",
 	QUERY_SECURED_FAILED:  "查询担保人失败",
+	QUERY_SECURED_EMPTY:   "查询担保人为空",
 }
 
 func (ss *securedservice) GetSecuredList(requestObj *SecuredListRequestStruct) (r *SecuredListResponseStruct, err error) {
@@ -36,7 +38,13 @@ func (ss *securedservice) GetSecuredList(requestObj *SecuredListRequestStruct) (
 			Msg:    Status[QUERY_SECURED_FAILED],
 		}, nil
 	}
-
+	if securedList == nil {
+		Logger.Debugf("GetSecuredList query empty")
+		return &SecuredListResponseStruct{
+			Status: QUERY_SECURED_EMPTY,
+			Msg:    Status[QUERY_SECURED_EMPTY],
+		}, nil
+	}
 	response := new(SecuredListResponseStruct)
 	//固定担保人
 	var PermanentSecured = []SecuredDetailsStruct{

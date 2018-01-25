@@ -13,11 +13,13 @@ import (
 const (
 	QUERY_PAYMENT_CONFIG_LIST_SUCCESS = 1000
 	QUERY_PAYMENT_CONFIG_LIST_FAILED  = 1001
+	QUERY_PAYMENT_CONFIG_LIST_EMPTY   = 1002
 )
 
 var Stat = map[int]string{
 	QUERY_PAYMENT_CONFIG_LIST_SUCCESS: "查询第三方支付列表成功",
 	QUERY_PAYMENT_CONFIG_LIST_FAILED:  "查询第三方支付列表失败",
+	QUERY_PAYMENT_CONFIG_LIST_EMPTY:   "查询第三方支付列表为空",
 }
 
 type paymentconfiglistservice struct{}
@@ -34,6 +36,14 @@ func (pcls *paymentconfiglistservice) GetPaymentConfigList(requestObj *PaymentCo
 		return &PaymentConfigListResponseStruct{
 			Status: QUERY_PAYMENT_CONFIG_LIST_FAILED,
 			Msg:    Stat[QUERY_PAYMENT_CONFIG_LIST_FAILED],
+		}, nil
+	}
+
+	if res == nil {
+		Logger.Debugf("GetPaymentConfigList query empty")
+		return &PaymentConfigListResponseStruct{
+			Status: QUERY_PAYMENT_CONFIG_LIST_EMPTY,
+			Msg:    Stat[QUERY_PAYMENT_CONFIG_LIST_EMPTY],
 		}, nil
 	}
 

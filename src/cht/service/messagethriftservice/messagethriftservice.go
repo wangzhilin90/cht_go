@@ -23,12 +23,14 @@ type messageservice struct{}
 const (
 	QUERY_MES_INFO_SUCCESS = 1000
 	QUERY_MES_INFO_FAILED  = 1001
+	QUERY_MES_INFO_EMPTY   = 1002
 
 	QUERY_MES_COUNT_SUCCESS = 1000
-	QUERY_MES_COUNT_FAILED  = 1002
+	QUERY_MES_COUNT_FAILED  = 1001
 
 	QUERY_USER_INFO_SUCCESS = 1000
-	QUERY_USER_INFO_FAILED  = 1003
+	QUERY_USER_INFO_FAILED  = 1001
+	QUERY_USER_INFO_EMPTY   = 1002
 
 	UPDATE_MES_SUCCESS = 1000
 	UPDATE_MES_FAILED  = 1001
@@ -69,6 +71,14 @@ func (ms *messageservice) GetMessageDetails(requestObj *MessageRequestStruct) (r
 		return &MessageDetailsResponseStruct{
 			Status: QUERY_MES_INFO_FAILED,
 			Msg:    MesInfoStatus[QUERY_MES_INFO_FAILED],
+		}, nil
+	}
+
+	if mes == nil {
+		Logger.Debugf("GetMessageDetails query empty")
+		return &MessageDetailsResponseStruct{
+			Status: QUERY_MES_INFO_EMPTY,
+			Msg:    MesInfoStatus[QUERY_MES_INFO_EMPTY],
 		}, nil
 	}
 
@@ -134,6 +144,14 @@ func (ms *messageservice) GetUserDetials(requestObj *MessageRequestStruct) (r *U
 		return &UserDetailsResponseStruct{
 			Status: QUERY_USER_INFO_FAILED,
 			Msg:    UserInfoStatus[QUERY_USER_INFO_FAILED],
+		}, nil
+	}
+
+	if userInfo == nil {
+		Logger.Debugf("GetUserDetials query empty")
+		return &UserDetailsResponseStruct{
+			Status: QUERY_USER_INFO_EMPTY,
+			Msg:    UserInfoStatus[QUERY_USER_INFO_EMPTY],
 		}, nil
 	}
 

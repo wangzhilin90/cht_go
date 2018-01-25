@@ -15,7 +15,7 @@ func NewAdvertManageRequestStruct() *AdvertManageRequestStruct {
 func TestGetAdvertManage(t *testing.T) {
 	amrs := NewAdvertManageRequestStruct()
 	ams := advertmanageservice{}
-	res, err := ams.GetAdvertManage(amrs)
+	res, _ := ams.GetAdvertManage(amrs)
 	if err != nil {
 		t.Fatalf("TestGetAdvertManage failed")
 	}

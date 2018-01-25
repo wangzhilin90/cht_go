@@ -14,6 +14,7 @@ import (
 type borrowservice struct{}
 
 const (
+	ISSURE_SUCCESS              = 1000
 	NOT_DEPOSIT_ACCOUNT         = 1001
 	EXCEED_REDIT_LIMIT          = 1002
 	GET_REDIT_LIMIT_FAILED      = 1003
@@ -21,10 +22,10 @@ const (
 	GET_FEE_RATE_FAILED         = 1005
 	ISSURE_FAILD                = 1006
 	QUERY_REVIEW_ACCOUNT_FAILED = 1007
-	ISSURE_SUCCESS              = 1000
 )
 
 var Status = map[int]string{
+	ISSURE_SUCCESS:              "发标成功",
 	NOT_DEPOSIT_ACCOUNT:         "未开通存管账户",
 	GET_REDIT_LIMIT_FAILED:      "获取信用额度失败",
 	GET_BORROW_MONEY_FAILED:     "获取借款金额失败",
@@ -32,7 +33,6 @@ var Status = map[int]string{
 	GET_FEE_RATE_FAILED:         "获取利率失败",
 	ISSURE_FAILD:                "发标插入失败",
 	QUERY_REVIEW_ACCOUNT_FAILED: "查询用户发标待审金额失败",
-	ISSURE_SUCCESS:              "发标成功",
 }
 
 func checkAddCredit(borrow_type int32) bool {

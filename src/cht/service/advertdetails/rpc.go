@@ -22,9 +22,9 @@ type AdvertDetailsRequestStruct struct {
 	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,2" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
 }
 
-func NewAdvertDetailsRequestStruct() *AdvertDetailsRequestStruct {
-	return &AdvertDetailsRequestStruct{}
-}
+// func NewAdvertDetailsRequestStruct() *AdvertDetailsRequestStruct {
+// 	return &AdvertDetailsRequestStruct{}
+// }
 
 func (p *AdvertDetailsRequestStruct) GetID() int32 {
 	return p.ID

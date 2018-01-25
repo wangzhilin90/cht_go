@@ -13,11 +13,13 @@ import (
 const (
 	QUERY_SUBLEDGER_SUCCESS = 1000
 	QUERY_SUBLEDGER_FAILED  = 1001
+	QUERY_SUBLEDGER_EMPTY   = 1002
 )
 
 var Status = map[int]string{
-	QUERY_SUBLEDGER_FAILED:  "查询分账人信息失败",
 	QUERY_SUBLEDGER_SUCCESS: "查询分账人信息成功",
+	QUERY_SUBLEDGER_FAILED:  "查询分账人信息失败",
+	QUERY_SUBLEDGER_EMPTY:   "查询分账人信息为空",
 }
 
 type subledgerservice struct{}
@@ -34,6 +36,14 @@ func (ss *subledgerservice) GetSubledgerList(requestObj *SubledgerListRequestStr
 		return &SubledgerListResponseStruct{
 			Status: QUERY_SUBLEDGER_FAILED,
 			Msg:    Status[QUERY_SUBLEDGER_FAILED],
+		}, nil
+	}
+
+	if sublederList == nil {
+		Logger.Debugf("GetSubledgerList query empty")
+		return &SubledgerListResponseStruct{
+			Status: QUERY_SUBLEDGER_EMPTY,
+			Msg:    Status[QUERY_SUBLEDGER_EMPTY],
 		}, nil
 	}
 

@@ -15,11 +15,13 @@ type userdetailsbynamepasswordservice struct{}
 const (
 	QUERY_USER_DETAILS_SUCCESS = 1000
 	QUERY_USER_DETAILS_FAILED  = 1001
+	QUERY_USER_DETAILS_EMPTY   = 1002
 )
 
 var Status = map[int]string{
 	QUERY_USER_DETAILS_SUCCESS: "查询后台用户详情成功",
 	QUERY_USER_DETAILS_FAILED:  "查询后台用户详情失败",
+	QUERY_USER_DETAILS_EMPTY:   "查询后台用户详情为空",
 }
 
 func (uds *userdetailsbynamepasswordservice) GetUseDetailsrByNamePassword(requestObj *UserDetailsByNamePasswordRequestStruct) (r *UserDetailsByNamePasswordResponseStruct, err error) {
@@ -35,6 +37,14 @@ func (uds *userdetailsbynamepasswordservice) GetUseDetailsrByNamePassword(reques
 		return &UserDetailsByNamePasswordResponseStruct{
 			Status: QUERY_USER_DETAILS_FAILED,
 			Msg:    Status[QUERY_USER_DETAILS_FAILED],
+		}, nil
+	}
+
+	if userDetails == nil {
+		Logger.Debugf("GetUseDetailsrByNamePassword query empty")
+		return &UserDetailsByNamePasswordResponseStruct{
+			Status: QUERY_USER_DETAILS_EMPTY,
+			Msg:    Status[QUERY_USER_DETAILS_EMPTY],
 		}, nil
 	}
 

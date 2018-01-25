@@ -13,11 +13,13 @@ import (
 const (
 	QUERY_SET_MSG_DETAILS_SUCCESS = 1000
 	QUERY_SET_MSG_DETAILS_FAILED  = 1001
+	QUERY_SET_MSG_DETAILS_EMPTY   = 1002
 )
 
 var Details_Stat = map[int]string{
 	QUERY_SET_MSG_DETAILS_SUCCESS: "查询用户设置提醒表详情成功",
 	QUERY_SET_MSG_DETAILS_FAILED:  "查询用户设置提醒表详情失败",
+	QUERY_SET_MSG_DETAILS_EMPTY:   "查询用户设置提醒表详情为空",
 }
 
 const (
@@ -57,11 +59,16 @@ func (sms *setmsgservice) GetSetMsgDetails(requestObj *SetMsgDetailsRequestStruc
 			Msg:    Details_Stat[QUERY_SET_MSG_DETAILS_FAILED],
 		}, nil
 	}
+	if res == nil {
+		Logger.Debugf("GetSetMsgDetails query empty")
+		return &SetMsgDetailsResponseStruct{
+			Status: QUERY_SET_MSG_DETAILS_EMPTY,
+			Msg:    Details_Stat[QUERY_SET_MSG_DETAILS_EMPTY],
+		}, nil
+	}
 
 	var response SetMsgDetailsResponseStruct
-	if res == nil {
-		response.SetMsgDetails = nil
-	} else {
+	if res != nil {
 		smdrs := new(SetMsgDetailsStruct)
 		smdrs.ID = res.ID
 		smdrs.UserID = res.UserID

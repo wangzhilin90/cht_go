@@ -14,12 +14,14 @@ const (
 	QUERY_VIPMEMBERRANKLIST_SUCCESS          = 1000
 	QUERY_VIPMEMBERRANKLIST_TOTAL_NUM_FAILED = 1001
 	QUERY_VIPMEMBERRANKLIST_FAILED           = 1002
+	QUERY_VIPMEMBERRANKLIST_EMPTY            = 1003
 )
 
 var Stat = map[int]string{
 	QUERY_VIPMEMBERRANKLIST_SUCCESS:          "查询VIP会员等级成功",
 	QUERY_VIPMEMBERRANKLIST_TOTAL_NUM_FAILED: "查询VIP会员等级总条目数失败",
 	QUERY_VIPMEMBERRANKLIST_FAILED:           "查询VIP会员等级列表失败",
+	QUERY_VIPMEMBERRANKLIST_EMPTY:            "查询VIP会员等级列表为空",
 }
 
 type vipmemberranklistservice struct{}
@@ -49,6 +51,14 @@ func (vmrls *vipmemberranklistservice) GetVipMemberRankList(requestObj *VipMembe
 		return &VipMemberRankListReponseStruct{
 			Status: QUERY_VIPMEMBERRANKLIST_FAILED,
 			Msg:    Stat[QUERY_VIPMEMBERRANKLIST_FAILED],
+		}, nil
+	}
+
+	if res == nil {
+		Logger.Debugf("GetVipMemberRankList query empty")
+		return &VipMemberRankListReponseStruct{
+			Status: QUERY_VIPMEMBERRANKLIST_EMPTY,
+			Msg:    Stat[QUERY_VIPMEMBERRANKLIST_EMPTY],
 		}, nil
 	}
 

@@ -13,11 +13,13 @@ import (
 const (
 	QUERY_SYS_USER_DETAILS_SUCCESS = 1000
 	QUERY_SYS_USER_DETAILS_FAILED  = 1001
+	QUERY_SYS_USER_DETAILS_EMPTY   = 1002
 )
 
 var Stat = map[int]string{
 	QUERY_SYS_USER_DETAILS_SUCCESS: "查询后台管理员详情成功",
 	QUERY_SYS_USER_DETAILS_FAILED:  "查询后台管理员详情失败",
+	QUERY_SYS_USER_DETAILS_EMPTY:   "查询后台管理员详情为空",
 }
 
 type sysuserdetailsservice struct{}
@@ -37,6 +39,13 @@ func (suds *sysuserdetailsservice) GetSysUserDetails(requestObj *SysUserDetailsR
 		}, nil
 	}
 
+	if res == nil {
+		Logger.Debugf("GetSysUserDetails query empty")
+		return &SysUserDetailsResponseStruct{
+			Status: QUERY_SYS_USER_DETAILS_EMPTY,
+			Msg:    Stat[QUERY_SYS_USER_DETAILS_EMPTY],
+		}, nil
+	}
 	var response SysUserDetailsResponseStruct
 	if res != nil {
 		sud := new(SysUserDetailsStruct)

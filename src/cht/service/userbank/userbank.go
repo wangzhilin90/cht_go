@@ -15,11 +15,13 @@ type userbankservice struct{}
 const (
 	QUERY_USER_BANK_DETAILS_SUCCESS = 1000
 	QUERY_USER_BANK_DETAILS_FAILED  = 1001
+	QUERY_USER_BANK_DETAILS_EMPTY   = 1002
 )
 
 var Details_Stat = map[int]string{
 	QUERY_USER_BANK_DETAILS_SUCCESS: "查询会员银行信息表详情成功",
 	QUERY_USER_BANK_DETAILS_FAILED:  "查询会员银行信息表详情失败",
+	QUERY_USER_BANK_DETAILS_EMPTY:   "查询会员银行信息表详情为空",
 }
 
 const (
@@ -65,6 +67,14 @@ func (ubs *userbankservice) GetUserBankDetails(requestObj *UserBankDetailsReques
 		return &UserBankDetailsResponseStruct{
 			Status: QUERY_USER_BANK_DETAILS_FAILED,
 			Msg:    Details_Stat[QUERY_USER_BANK_DETAILS_FAILED],
+		}, nil
+	}
+
+	if res == nil {
+		Logger.Debugf("GetUserBankDetails query empty")
+		return &UserBankDetailsResponseStruct{
+			Status: QUERY_USER_BANK_DETAILS_EMPTY,
+			Msg:    Details_Stat[QUERY_USER_BANK_DETAILS_EMPTY],
 		}, nil
 	}
 

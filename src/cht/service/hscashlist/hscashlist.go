@@ -14,12 +14,14 @@ const (
 	QUERY_HS_CASH_LIST_SUCCESS     = 1000
 	QUERY_HS_CASH_TOTAL_NUM_FAILED = 1001
 	QUERY_HS_CASH_LIST_FAILED      = 1002
+	QUERY_HS_CASH_LIST_EMPTY       = 1003
 )
 
 var Stat = map[int]string{
 	QUERY_HS_CASH_LIST_SUCCESS:     "获取徽商提现记录成功",
 	QUERY_HS_CASH_TOTAL_NUM_FAILED: "获取徽商提现记录总数失败",
 	QUERY_HS_CASH_LIST_FAILED:      "获取徽商提现记录列表失败",
+	QUERY_HS_CASH_LIST_EMPTY:       "获取徽商提现记录列表为空",
 }
 
 type hscashlistservice struct{}
@@ -62,6 +64,14 @@ func (hcls *hscashlistservice) GetHsCashList(requestObj *HsCashListRequestStruct
 		return &HsCashListResponseStruct{
 			Status: QUERY_HS_CASH_LIST_FAILED,
 			Msg:    Stat[QUERY_HS_CASH_LIST_FAILED],
+		}, nil
+	}
+
+	if res == nil {
+		Logger.Debugf("GetHsCashList query empty")
+		return &HsCashListResponseStruct{
+			Status: QUERY_HS_CASH_LIST_EMPTY,
+			Msg:    Stat[QUERY_HS_CASH_LIST_EMPTY],
 		}, nil
 	}
 

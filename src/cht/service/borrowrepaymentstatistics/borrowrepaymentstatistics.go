@@ -15,11 +15,13 @@ type borrowrepaymentstatisticsservice struct{}
 const (
 	QUERY_REPAYMENT_SUCCESS = 1000
 	QUERY_REPAYMENT_FAILED  = 1001
+	QUERY_REPAYMENT_EMPTY   = 1002
 )
 
 var Borrow_Stat = map[int]string{
 	QUERY_REPAYMENT_SUCCESS: "查询标分期还款记录表成功",
 	QUERY_REPAYMENT_FAILED:  "查询标分期还款记录表失败",
+	QUERY_REPAYMENT_EMPTY:   "查询标分期还款记录表为空",
 }
 
 const (
@@ -46,6 +48,14 @@ func (brss *borrowrepaymentstatisticsservice) GetRepaymentStatisticsList(request
 		return &RepaymentStatisticsResponseStruct{
 			Status: QUERY_REPAYMENT_FAILED,
 			Msg:    Borrow_Stat[QUERY_REPAYMENT_FAILED],
+		}, nil
+	}
+
+	if res == nil {
+		Logger.Debugf("GetRepaymentStatisticsList query empty")
+		return &RepaymentStatisticsResponseStruct{
+			Status: QUERY_REPAYMENT_EMPTY,
+			Msg:    Borrow_Stat[QUERY_REPAYMENT_EMPTY],
 		}, nil
 	}
 

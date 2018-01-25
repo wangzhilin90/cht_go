@@ -14,12 +14,14 @@ const (
 	QUERY_USER_ATTESTION_SUCCESS          = 1000
 	QUERY_USER_ATTESTION_TOTAL_NUM_FAILED = 1001
 	QUERY_USER_ATTESTION_LIST_FAILED      = 1002
+	QUERY_USER_ATTESTION_LIST_EMPTY       = 1003
 )
 
 var Stat = map[int]string{
 	QUERY_USER_ATTESTION_SUCCESS:          "基础认证信息查找成功",
 	QUERY_USER_ATTESTION_TOTAL_NUM_FAILED: "基础认证信息记录数获取失败",
 	QUERY_USER_ATTESTION_LIST_FAILED:      "基础认证信息列表获取失败",
+	QUERY_USER_ATTESTION_LIST_EMPTY:       "基础认证信息列表获取为空",
 }
 
 type userattestionlistservice struct{}
@@ -53,6 +55,14 @@ func (uals *userattestionlistservice) UserAttestionList(requestObj *UserAttestio
 		return &UserAttestionListResponseStruct{
 			Status: QUERY_USER_ATTESTION_LIST_FAILED,
 			Msg:    Stat[QUERY_USER_ATTESTION_LIST_FAILED],
+		}, nil
+	}
+
+	if res == nil {
+		Logger.Debugf("UserAttestionList query empty")
+		return &UserAttestionListResponseStruct{
+			Status: QUERY_USER_ATTESTION_LIST_EMPTY,
+			Msg:    Stat[QUERY_USER_ATTESTION_LIST_EMPTY],
 		}, nil
 	}
 

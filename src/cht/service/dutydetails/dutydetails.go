@@ -13,13 +13,15 @@ import (
 type dutydetailsservice struct{}
 
 const (
-	QUERY_DUTY_DETAILS_FAILED  = 1001
 	QUERY_DUTY_DETAILS_SUCCESS = 1000
+	QUERY_DUTY_DETAILS_FAILED  = 1001
+	QUERY_DUTY_DETAILS_EMPTY   = 1002
 )
 
 var Status = map[int]string{
 	QUERY_DUTY_DETAILS_FAILED:  "查询值班人失败",
 	QUERY_DUTY_DETAILS_SUCCESS: "查询值班人成功",
+	QUERY_DUTY_DETAILS_EMPTY:   "查询值班人为空",
 }
 
 func (ddss *dutydetailsservice) GetDutyDetails(requestObj *DutyDetailsRequestStruct) (r *DutyDetailsResponseStruct, err error) {
@@ -33,6 +35,14 @@ func (ddss *dutydetailsservice) GetDutyDetails(requestObj *DutyDetailsRequestStr
 		return &DutyDetailsResponseStruct{
 			Status: QUERY_DUTY_DETAILS_FAILED,
 			Msg:    Status[QUERY_DUTY_DETAILS_FAILED],
+		}, nil
+	}
+
+	if res == nil {
+		Logger.Debugf("GetDutyDetails query empty")
+		return &DutyDetailsResponseStruct{
+			Status: QUERY_DUTY_DETAILS_EMPTY,
+			Msg:    Status[QUERY_DUTY_DETAILS_EMPTY],
 		}, nil
 	}
 

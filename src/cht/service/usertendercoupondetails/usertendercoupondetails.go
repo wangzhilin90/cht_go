@@ -13,13 +13,15 @@ import (
 type gettendercouponservice struct{}
 
 const (
-	QUERY_COUPON_FAILED  = 1001
 	QUERY_COUPON_SUCCESS = 1000
+	QUERY_COUPON_FAILED  = 1001
+	QUERY_COUPON_EMPTY   = 1002
 )
 
 var Status = map[int]string{
-	QUERY_COUPON_FAILED:  "查询加息值出错",
 	QUERY_COUPON_SUCCESS: "查询加息值成功",
+	QUERY_COUPON_FAILED:  "查询加息值出错",
+	QUERY_COUPON_EMPTY:   "查询加息值为空",
 }
 
 func (gts *gettendercouponservice) GetUserTenderCouponDetails(requestObj *UserTenderCouponDetailsRequestStruct) (r *UserTenderCouponDetailsResponseStruct, err error) {
@@ -41,8 +43,13 @@ func (gts *gettendercouponservice) GetUserTenderCouponDetails(requestObj *UserTe
 			Msg:    Status[QUERY_COUPON_SUCCESS],
 		}, nil
 	}
-
-	Logger.Debug("GetUserTenderCouponDetails res ", res)
+	if res == nil {
+		Logger.Debugf("GetUserTenderCouponDetails query empty")
+		return &UserTenderCouponDetailsResponseStruct{
+			Status: QUERY_COUPON_EMPTY,
+			Msg:    Status[QUERY_COUPON_EMPTY],
+		}, nil
+	}
 
 	return &UserTenderCouponDetailsResponseStruct{
 		Status: QUERY_COUPON_SUCCESS,

@@ -14,12 +14,14 @@ const (
 	QUERY_MEMBER_HELP_LIST_SUCCESS          = 1000
 	QUERY_MEMBER_HELP_LIST_TOTAL_NUM_FAILED = 1001
 	QUERY_MEMBER_HELP_LIST_FAILED           = 1002
+	QUERY_MEMBER_HELP_LIST_EMPTY            = 1003
 )
 
 var Stat = map[int]string{
 	QUERY_MEMBER_HELP_LIST_SUCCESS:          "查询会员紧急联系人成功",
 	QUERY_MEMBER_HELP_LIST_TOTAL_NUM_FAILED: "查询会员紧急联系人总记录数失败",
 	QUERY_MEMBER_HELP_LIST_FAILED:           "查询会员紧急联系人列表失败",
+	QUERY_MEMBER_HELP_LIST_EMPTY:            "查询会员紧急联系人列表为空",
 }
 
 type memberhelperlistservice struct{}
@@ -49,6 +51,14 @@ func (mhls *memberhelperlistservice) GetMemberHelperList(requestObj *MemberHelpe
 		return &MemberHelperListResponseStruct{
 			Status: QUERY_MEMBER_HELP_LIST_FAILED,
 			Msg:    Stat[QUERY_MEMBER_HELP_LIST_FAILED],
+		}, nil
+	}
+
+	if res == nil {
+		Logger.Debugf("GetMemberHelperList query empty")
+		return &MemberHelperListResponseStruct{
+			Status: QUERY_MEMBER_HELP_LIST_EMPTY,
+			Msg:    Stat[QUERY_MEMBER_HELP_LIST_EMPTY],
 		}, nil
 	}
 

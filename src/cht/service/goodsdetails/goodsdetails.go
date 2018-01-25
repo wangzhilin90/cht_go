@@ -13,11 +13,13 @@ import (
 const (
 	QUERY_GOODS_DETAILS_SUCCESS = 1000
 	QUERY_GOODS_DETAILS_FAILED  = 1001
+	QUERY_GOODS_DETAILS_EMPTY   = 1002
 )
 
 var Stat = map[int]string{
 	QUERY_GOODS_DETAILS_SUCCESS: "获取商品详情成功",
 	QUERY_GOODS_DETAILS_FAILED:  "获取商品详情失败",
+	QUERY_GOODS_DETAILS_EMPTY:   "获取商品详情为空",
 }
 
 type goodsdetailsservice struct{}
@@ -36,8 +38,16 @@ func (gds *goodsdetailsservice) GetGoodsDetails(requestObj *GoodsDetailsRequestS
 		}, nil
 	}
 
+	if res == nil {
+		Logger.Debugf("GetGoodsDetails query empty")
+		return &GoodsDetailsResponseStruct{
+			Status: QUERY_GOODS_DETAILS_EMPTY,
+			Msg:    Stat[QUERY_GOODS_DETAILS_EMPTY],
+		}, nil
+	}
+
 	var response GoodsDetailsResponseStruct
-	if err != nil {
+	if res != nil {
 		gdss := new(GoodsDetailsStruct)
 		gdss.ID = res.ID
 		gdss.Addtime = res.Addtime

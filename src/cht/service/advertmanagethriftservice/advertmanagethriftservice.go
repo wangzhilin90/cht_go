@@ -13,11 +13,13 @@ import (
 const (
 	QUERY_ADVERT_MANAGE_SUCCESS = 1000
 	QUERY_ADVERT_MANAGE_FAILED  = 1001
+	QUERY_ADVERT_MANAGE_EMPTY   = 1002
 )
 
 var Status = map[int]string{
 	QUERY_ADVERT_MANAGE_SUCCESS: "查询广告成功",
 	QUERY_ADVERT_MANAGE_FAILED:  "查询广告失败",
+	QUERY_ADVERT_MANAGE_EMPTY:   "查询广告为空",
 }
 
 type advertmanageservice struct{}
@@ -36,6 +38,15 @@ func (ams *advertmanageservice) GetAdvertManage(requestObj *AdvertManageRequestS
 			Msg:    Status[QUERY_ADVERT_MANAGE_FAILED],
 		}, nil
 	}
+
+	if AdvertManage == nil {
+		Logger.Debugf("GetAdvertManage query empty")
+		return &AdvertManageResponseStruct{
+			Status: QUERY_ADVERT_MANAGE_EMPTY,
+			Msg:    Status[QUERY_ADVERT_MANAGE_EMPTY],
+		}, nil
+	}
+
 	var response AdvertManageResponseStruct
 	for _, v := range AdvertManage {
 		ams := new(AdvertManageStruct)

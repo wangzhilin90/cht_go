@@ -15,11 +15,13 @@ type kefulistservice struct{}
 const (
 	QUERY_KEFU_LIST_SUCCESS = 1000
 	QUERY_KEFU_LIST_FAILED  = 1001
+	QUERY_KEFU_LIST_EMPTY   = 1002
 )
 
 var Status = map[int]string{
 	QUERY_KEFU_LIST_SUCCESS: "查询客服列表成功",
 	QUERY_KEFU_LIST_FAILED:  "查询客服列表失败",
+	QUERY_KEFU_LIST_EMPTY:   "查询客服列表为空",
 }
 
 func (kls *kefulistservice) GetKeFuList(requestObj *KeFuListRequestStruct) (r *KeFuListResponseStruct, err error) {
@@ -34,6 +36,14 @@ func (kls *kefulistservice) GetKeFuList(requestObj *KeFuListRequestStruct) (r *K
 		return &KeFuListResponseStruct{
 			Status: QUERY_KEFU_LIST_FAILED,
 			Msg:    Status[QUERY_KEFU_LIST_FAILED],
+		}, nil
+	}
+
+	if KeFuDetailslist == nil {
+		Logger.Debugf("GetKeFuList query empty")
+		return &KeFuListResponseStruct{
+			Status: QUERY_KEFU_LIST_EMPTY,
+			Msg:    Status[QUERY_KEFU_LIST_EMPTY],
 		}, nil
 	}
 

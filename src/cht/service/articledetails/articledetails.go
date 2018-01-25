@@ -13,31 +13,37 @@ import (
 const (
 	QUERY_ARTICLE_DETAILS_SUCCESS = 1000
 	QUERY_ARTICLE_DETAILS_FAILED  = 1001
+	QUERY_ARTICLE_DETAILS_EMPTY   = 1002
 )
 
 var ArticleStatus = map[int]string{
 	QUERY_ARTICLE_DETAILS_SUCCESS: "查询文章详情成功",
 	QUERY_ARTICLE_DETAILS_FAILED:  "查询文章详情失败",
+	QUERY_ARTICLE_DETAILS_EMPTY:   "查询文章详情为空",
 }
 
 const (
 	QUERY_PREV_ARTICLE_SUCCESS = 1000
 	QUERY_PREV_ARTICLE_FAILED  = 1001
+	QUERY_PREV_ARTICLE_EMPTY   = 1002
 )
 
 var PrevArticleStatus = map[int]string{
 	QUERY_PREV_ARTICLE_SUCCESS: "查询上一篇文章成功",
 	QUERY_PREV_ARTICLE_FAILED:  "查询下一篇文章失败",
+	QUERY_PREV_ARTICLE_EMPTY:   "查询下一篇文章为空",
 }
 
 const (
 	QUERY_NEXT_ARTICLE_SUCCESS = 1000
 	QUERY_NEXT_ARTICLE_FAILED  = 1001
+	QUERY_NEXT_ARTICLE_EMPTY   = 1002
 )
 
 var NextArticleStatus = map[int]string{
 	QUERY_NEXT_ARTICLE_SUCCESS: "查询下一篇文章成功",
 	QUERY_NEXT_ARTICLE_FAILED:  "查询下一篇文章失败",
+	QUERY_NEXT_ARTICLE_EMPTY:   "查询下一篇文章为空",
 }
 
 type articledetailsservice struct{}
@@ -57,6 +63,15 @@ func (ads *articledetailsservice) GetArticleDetails(requestObj *ArticleDetailsRe
 			Msg:    ArticleStatus[QUERY_ARTICLE_DETAILS_FAILED],
 		}, nil
 	}
+
+	if res == nil {
+		Logger.Debugf("GetArticleDetails query empty")
+		return &ArticleDetailsResponseStruct{
+			Status: QUERY_ARTICLE_DETAILS_EMPTY,
+			Msg:    ArticleStatus[QUERY_ARTICLE_DETAILS_EMPTY],
+		}, nil
+	}
+
 	var response ArticleDetailsResponseStruct
 	if res != nil {
 		adst := new(ArticleDetailsStruct)
@@ -115,6 +130,14 @@ func (ads *articledetailsservice) PrevArticle(requestObj *NextRequestStruct) (r 
 		}, nil
 	}
 
+	if res == nil {
+		Logger.Debugf("PrevArticle query empty")
+		return &ArticleDetailsResponseStruct{
+			Status: QUERY_PREV_ARTICLE_EMPTY,
+			Msg:    PrevArticleStatus[QUERY_PREV_ARTICLE_EMPTY],
+		}, nil
+	}
+
 	var response ArticleDetailsResponseStruct
 	if res != nil {
 		adst := new(ArticleDetailsStruct)
@@ -159,6 +182,14 @@ func (ads *articledetailsservice) NextArticle(requestObj *NextRequestStruct) (r 
 		return &ArticleDetailsResponseStruct{
 			Status: QUERY_NEXT_ARTICLE_FAILED,
 			Msg:    NextArticleStatus[QUERY_NEXT_ARTICLE_FAILED],
+		}, nil
+	}
+
+	if res == nil {
+		Logger.Debugf("NextArticle query empty")
+		return &ArticleDetailsResponseStruct{
+			Status: QUERY_NEXT_ARTICLE_EMPTY,
+			Msg:    NextArticleStatus[QUERY_NEXT_ARTICLE_EMPTY],
 		}, nil
 	}
 

@@ -14,12 +14,14 @@ const (
 	GET_GOODS_LIST_SUCCESS          = 1000
 	GET_GOODS_LIST_TOTAL_NUM_FAILED = 1001
 	GET_GOODS_LIST_FAILED           = 1002
+	GET_GOODS_LIST_EMPTY            = 1003
 )
 
 var Stat = map[int]string{
 	GET_GOODS_LIST_SUCCESS:          "获取商品管理列表成功",
 	GET_GOODS_LIST_TOTAL_NUM_FAILED: "获取商品管理列表总数失败",
 	GET_GOODS_LIST_FAILED:           "获取商品管理列表失败",
+	GET_GOODS_LIST_EMPTY:            "获取商品管理列表为空",
 }
 
 type goodslistservice struct{}
@@ -49,6 +51,14 @@ func (gls *goodslistservice) GetGoodsList(requestObj *GoodsListRequestStruct) (r
 		return &GoodsListReponseStruct{
 			Status: GET_GOODS_LIST_FAILED,
 			Msg:    Stat[GET_GOODS_LIST_FAILED],
+		}, nil
+	}
+
+	if res == nil {
+		Logger.Debugf("GetGoodsList query empty")
+		return &GoodsListReponseStruct{
+			Status: GET_GOODS_LIST_EMPTY,
+			Msg:    Stat[GET_GOODS_LIST_EMPTY],
 		}, nil
 	}
 

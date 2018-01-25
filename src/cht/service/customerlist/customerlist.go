@@ -14,12 +14,14 @@ const (
 	QUERY_CUSTOMER_LIST_SUCCESS         = 1000
 	QUERY_CUSTOMER_LIST_TOTALNUM_FAILED = 1001
 	QUERY_CUSTOMER_LIST_FAILED          = 1002
+	QUERY_CUSTOMER_LIST_EMPTY           = 1003
 )
 
 var Stat = map[int]string{
 	QUERY_CUSTOMER_LIST_SUCCESS:         "查询专属客服列表成功",
 	QUERY_CUSTOMER_LIST_TOTALNUM_FAILED: "查询专属客服列表总数失败",
 	QUERY_CUSTOMER_LIST_FAILED:          "查询专属客服列表详情失败",
+	QUERY_CUSTOMER_LIST_EMPTY:           "查询专属客服列表详情为空",
 }
 
 type customerlistservice struct{}
@@ -53,6 +55,14 @@ func (cls *customerlistservice) GetCustomerList(requestObj *CustomerListRequestS
 		return &CustomerListResponseStruct{
 			Status: QUERY_CUSTOMER_LIST_FAILED,
 			Msg:    Stat[QUERY_CUSTOMER_LIST_FAILED],
+		}, nil
+	}
+
+	if res == nil {
+		Logger.Debugf("GetCustomerList query empty")
+		return &CustomerListResponseStruct{
+			Status: QUERY_CUSTOMER_LIST_EMPTY,
+			Msg:    Stat[QUERY_CUSTOMER_LIST_EMPTY],
 		}, nil
 	}
 

@@ -13,11 +13,13 @@ import (
 const (
 	QUERY_SYS_USER_LIST_SUCCESS = 1000
 	QUERY_SYS_USER_LIST_FAILED  = 1001
+	QUERY_SYS_USER_LIST_EMPTY   = 1002
 )
 
 var Stat = map[int]string{
 	QUERY_SYS_USER_LIST_SUCCESS: "获取后台管理员列表成功",
 	QUERY_SYS_USER_LIST_FAILED:  "获取后台管理员列表失败",
+	QUERY_SYS_USER_LIST_EMPTY:   "获取后台管理员列表为空",
 }
 
 type sysuserlistservice struct{}
@@ -33,6 +35,14 @@ func (suls *sysuserlistservice) GetSysUserList(requestObj *SysUserListRequestStr
 		return &SysUserListResponseStruct{
 			Status: QUERY_SYS_USER_LIST_FAILED,
 			Msg:    Stat[QUERY_SYS_USER_LIST_FAILED],
+		}, nil
+	}
+
+	if res == nil {
+		Logger.Debugf("GetSysUserList query empty")
+		return &SysUserListResponseStruct{
+			Status: QUERY_SYS_USER_LIST_EMPTY,
+			Msg:    Stat[QUERY_SYS_USER_LIST_EMPTY],
 		}, nil
 	}
 

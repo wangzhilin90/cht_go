@@ -14,12 +14,14 @@ const (
 	QUERY_HS_LOG_SUCCESS          = 1000
 	QUERY_HS_LOG_TOTAL_NUM_FAILED = 1001
 	QUERY_HS_LOG_DETAILS_FAILED   = 1002
+	QUERY_HS_LOG_DETAILS_EMPTY    = 1003
 )
 
 var Stat = map[int]string{
 	QUERY_HS_LOG_SUCCESS:          "查询徽商日志成功",
 	QUERY_HS_LOG_TOTAL_NUM_FAILED: "查询徽商总数失败",
 	QUERY_HS_LOG_DETAILS_FAILED:   "查询徽商日志详情失败",
+	QUERY_HS_LOG_DETAILS_EMPTY:    "查询徽商日志详情为空",
 }
 
 type hsloglistservice struct{}
@@ -56,6 +58,14 @@ func (hlls *hsloglistservice) GetHslogList(requestObj *HsLogListRequestStruct) (
 		return &HsLogListReponseStruct{
 			Status: QUERY_HS_LOG_DETAILS_FAILED,
 			Msg:    Stat[QUERY_HS_LOG_DETAILS_FAILED],
+		}, nil
+	}
+
+	if res == nil {
+		Logger.Debugf("GetHslogList query empty")
+		return &HsLogListReponseStruct{
+			Status: QUERY_HS_LOG_DETAILS_EMPTY,
+			Msg:    Stat[QUERY_HS_LOG_DETAILS_EMPTY],
 		}, nil
 	}
 

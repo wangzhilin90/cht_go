@@ -13,11 +13,13 @@ import (
 const (
 	GET_ADVERT_DETAILS_SUCCESS = 1000
 	GET_ADVERT_DETAILS_FAILED  = 1001
+	GET_ADVERT_DETAILS_EMPTY   = 1002
 )
 
 var Stat = map[int]string{
 	GET_ADVERT_DETAILS_SUCCESS: "获取广告详情成功",
 	GET_ADVERT_DETAILS_FAILED:  "获取广告详情失败",
+	GET_ADVERT_DETAILS_EMPTY:   "获取广告详情为空",
 }
 
 type advertdetailsservice struct{}
@@ -38,8 +40,16 @@ func (ads *advertdetailsservice) GetAdvertDetails(requestObj *AdvertDetailsReque
 		}, nil
 	}
 
+	if res == nil {
+		Logger.Debugf("GetAdvertDetails query empty")
+		return &AdvertDetailsReponseStruct{
+			Status: GET_ADVERT_DETAILS_EMPTY,
+			Msg:    Stat[GET_ADVERT_DETAILS_EMPTY],
+		}, nil
+	}
+
 	var response AdvertDetailsReponseStruct
-	if err != nil {
+	if res != nil {
 		adst := new(AdvertDetailsStruct)
 		adst.ID = res.ID
 		adst.Type = res.Type

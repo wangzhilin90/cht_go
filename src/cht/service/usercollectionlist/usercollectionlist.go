@@ -13,13 +13,15 @@ import (
 type collectionservice struct{}
 
 const (
-	QUERY_COLLECTION_FAILED  = 1001
 	QUERY_COLLECTION_SUCCESS = 1000
+	QUERY_COLLECTION_FAILED  = 1001
+	QUERY_COLLECTION_EMPTY   = 1002
 )
 
 var Status = map[int]string{
-	QUERY_COLLECTION_FAILED:  "查询回款明细出错",
 	QUERY_COLLECTION_SUCCESS: "查询回款明细成功成功",
+	QUERY_COLLECTION_FAILED:  "查询回款明细出错",
+	QUERY_COLLECTION_EMPTY:   "查询回款明细为空",
 }
 
 func (cs *collectionservice) GetUserCollectionList(requestObj *UserCollectionListRequestStruct) (r *UserCollectionListResponseStruct, err error) {
@@ -43,10 +45,17 @@ func (cs *collectionservice) GetUserCollectionList(requestObj *UserCollectionLis
 	if err != nil {
 		Logger.Errorf("GetUserCollectionList get collection failed:%v", err)
 		return &UserCollectionListResponseStruct{
-			Status:   QUERY_COLLECTION_FAILED,
-			Msg:      Status[QUERY_COLLECTION_FAILED],
-			TotalNum: 0,
+			Status: QUERY_COLLECTION_FAILED,
+			Msg:    Status[QUERY_COLLECTION_FAILED],
 		}, nil
+	}
+
+	if res == nil {
+		Logger.Debugf("GetUserCollectionList query empty")
+		return &UserCollectionListResponseStruct{
+			Status: QUERY_COLLECTION_EMPTY,
+			Msg:    Status[QUERY_COLLECTION_EMPTY],
+		}
 	}
 
 	var response UserCollectionListResponseStruct

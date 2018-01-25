@@ -14,12 +14,14 @@ const (
 	QUERY_VIP_CUSTOMER_LOG_LIST_SUCCESS          = 1000
 	QUERY_VIP_CUSTOMER_LOG_LIST_TOTAL_NUM_FAILED = 1001
 	QUERY_VIP_CUSTOMER_LOG_LIST_FAILED           = 1002
+	QUERY_VIP_CUSTOMER_LOG_LIST_EMPTY            = 1003
 )
 
 var Stat = map[int]string{
 	QUERY_VIP_CUSTOMER_LOG_LIST_SUCCESS:          "专属客服日志记录查询成功",
 	QUERY_VIP_CUSTOMER_LOG_LIST_TOTAL_NUM_FAILED: "专属客服日志记录总数查询失败",
 	QUERY_VIP_CUSTOMER_LOG_LIST_FAILED:           "专属客服日志记录列表查询失败",
+	QUERY_VIP_CUSTOMER_LOG_LIST_EMPTY:            "专属客服日志记录列表查询为空",
 }
 
 type vipcustomerloglistservice struct{}
@@ -51,6 +53,14 @@ func (vclls *vipcustomerloglistservice) GetVipCustomerLogList(requestObj *VipCus
 		return &VipCustomerLogListResponseStruct{
 			Status: QUERY_VIP_CUSTOMER_LOG_LIST_FAILED,
 			Msg:    Stat[QUERY_VIP_CUSTOMER_LOG_LIST_FAILED],
+		}, nil
+	}
+
+	if res == nil {
+		Logger.Debugf("GetVipCustomerLogList query empty")
+		return &VipCustomerLogListResponseStruct{
+			Status: QUERY_VIP_CUSTOMER_LOG_LIST_EMPTY,
+			Msg:    Stat[QUERY_VIP_CUSTOMER_LOG_LIST_EMPTY],
 		}, nil
 	}
 

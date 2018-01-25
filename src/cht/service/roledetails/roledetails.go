@@ -15,11 +15,13 @@ type roledetailsservice struct{}
 const (
 	ROLE_DETAILS_SUCCESS = 1000
 	ROLE_DETAILS_FAILED  = 1001
+	ROLE_DETAILS_EMPTY   = 1002
 )
 
 var Status = map[int]string{
-	ROLE_DETAILS_SUCCESS: "角色添加成功",
-	ROLE_DETAILS_FAILED:  "角色添加失败",
+	ROLE_DETAILS_SUCCESS: "角色详情获取成功",
+	ROLE_DETAILS_FAILED:  "角色详情获取失败",
+	ROLE_DETAILS_EMPTY:   "角色详情获取为空",
 }
 
 func (rdss *roledetailsservice) GetRoleDetails(requestObj *RoleDetailsRequestStruct) (r *RoleDetailsResponseStruct, err error) {
@@ -33,6 +35,14 @@ func (rdss *roledetailsservice) GetRoleDetails(requestObj *RoleDetailsRequestStr
 		return &RoleDetailsResponseStruct{
 			Status: ROLE_DETAILS_FAILED,
 			Msg:    Status[ROLE_DETAILS_FAILED],
+		}, nil
+	}
+
+	if res == nil {
+		Logger.Debugf("GetRoleDetails query empty")
+		return &RoleDetailsResponseStruct{
+			Status: ROLE_DETAILS_EMPTY,
+			Msg:    Status[ROLE_DETAILS_EMPTY],
 		}, nil
 	}
 

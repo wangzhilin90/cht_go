@@ -13,13 +13,15 @@ import (
 type rechargerecordservice struct{}
 
 const (
-	QUERY_RECHAGE_FAILED  = 1001
 	QUERY_RECHAGE_SUCCESS = 1000
+	QUERY_RECHAGE_FAILED  = 1001
+	QUERY_RECHAGE_EMPTY   = 1002
 )
 
 var Status = map[int]string{
-	QUERY_RECHAGE_FAILED:  "查询充值记录失败",
 	QUERY_RECHAGE_SUCCESS: "查询充值记录成功",
+	QUERY_RECHAGE_FAILED:  "查询充值记录失败",
+	QUERY_RECHAGE_EMPTY:   "查询充值记录为空",
 }
 
 func (rrs *rechargerecordservice) GetUserRechargeRecordList(requestObj *UserRechargeRecordListRequestStruct) (r *UserRechargeRecordListResponseStruct, err error) {
@@ -39,12 +41,19 @@ func (rrs *rechargerecordservice) GetUserRechargeRecordList(requestObj *UserRech
 	if err != nil {
 		Logger.Errorf("GetUserRechargeRecordList get recharge record failed:%v", err)
 		return &UserRechargeRecordListResponseStruct{
-			Status:               QUERY_RECHAGE_FAILED,
-			Msg:                  Status[QUERY_RECHAGE_FAILED],
-			Totalnum:             0,
-			TotalHsRechargeMoney: "0.00",
-		}, err
+			Status: QUERY_RECHAGE_FAILED,
+			Msg:    Status[QUERY_RECHAGE_FAILED],
+		}, nil
 	}
+
+	if res == nil {
+		Logger.Debugf("GetUserRechargeRecordList query empty")
+		return &UserRechargeRecordListResponseStruct{
+			Status: QUERY_RECHAGE_EMPTY,
+			Msg:    Status[QUERY_RECHAGE_EMPTY],
+		}, nil
+	}
+
 	var rrrs UserRechargeRecordListResponseStruct
 	for _, v := range res {
 		rrs := new(UserRechargeRecordDetailsStruct)

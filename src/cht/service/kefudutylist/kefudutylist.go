@@ -14,12 +14,14 @@ const (
 	QUERY_KEFU_DUTY_LIST_SUCCESS          = 1000
 	QUERY_KEFU_DUTY_LIST_TOTAL_NUM_FAILED = 1001
 	QUERY_KEFU_DUTY_LIST_FAILED           = 1002
+	QUERY_KEFU_DUTY_LIST_EMPTY            = 1003
 )
 
 var Stat = map[int]string{
 	QUERY_KEFU_DUTY_LIST_SUCCESS:          "客服值班列表查询成功",
 	QUERY_KEFU_DUTY_LIST_TOTAL_NUM_FAILED: "客服值班列表总条目数查询失败",
 	QUERY_KEFU_DUTY_LIST_FAILED:           "客服值班列表查询失败",
+	QUERY_KEFU_DUTY_LIST_EMPTY:            "客服值班列表查询为空",
 }
 
 type kefudutylistservice struct{}
@@ -50,6 +52,14 @@ func (kdls *kefudutylistservice) GetKefuDutyList(requestObj *KefuDutyListRequest
 		return &KefuDutyListResponseStruct{
 			Status: QUERY_KEFU_DUTY_LIST_FAILED,
 			Msg:    Stat[QUERY_KEFU_DUTY_LIST_FAILED],
+		}, nil
+	}
+
+	if res == nil {
+		Logger.Debugf("GetKefuDutyList query empty")
+		return &KefuDutyListResponseStruct{
+			Status: QUERY_KEFU_DUTY_LIST_EMPTY,
+			Msg:    Stat[QUERY_KEFU_DUTY_LIST_EMPTY],
 		}, nil
 	}
 

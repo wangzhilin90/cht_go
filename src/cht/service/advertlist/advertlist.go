@@ -14,12 +14,14 @@ const (
 	QUERY_ADVERT_LIST_SUCCESS          = 1000
 	QUERY_ADVERT_LIST_TOTAL_NUM_FAILED = 1001
 	QUERY_ADVERT_LIST_FAILED           = 1002
+	QUERY_ADVERT_LIST_EMPTY            = 1003
 )
 
 var Stat = map[int]string{
 	QUERY_ADVERT_LIST_SUCCESS:          "广告图片列表查询成功",
 	QUERY_ADVERT_LIST_TOTAL_NUM_FAILED: "广告图片列表总记录数查询失败",
 	QUERY_ADVERT_LIST_FAILED:           "广告图片列表查询失败",
+	QUERY_ADVERT_LIST_EMPTY:            "广告图片列表查询为空",
 }
 
 type advertlistservice struct{}
@@ -45,6 +47,14 @@ func (als *advertlistservice) GetAdvertList(requestObj *AdvertListRequestStruct)
 		return &AdvertListResponseStruct{
 			Status: QUERY_ADVERT_LIST_FAILED,
 			Msg:    Stat[QUERY_ADVERT_LIST_FAILED],
+		}, nil
+	}
+
+	if res == nil {
+		Logger.Debugf("GetAdvertList query empty")
+		return &AdvertListResponseStruct{
+			Status: QUERY_ADVERT_LIST_EMPTY,
+			Msg:    Stat[QUERY_ADVERT_LIST_EMPTY],
 		}, nil
 	}
 

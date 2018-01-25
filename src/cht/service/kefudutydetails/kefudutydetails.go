@@ -13,11 +13,13 @@ import (
 const (
 	QUERY_KEFU_DUTY_DETAILS_SUCCESS = 1000
 	QUERY_KEFU_DUTY_DETAILS_FAILED  = 1001
+	QUERY_KEFU_DUTY_DETAILS_EMPTY   = 1002
 )
 
 var Stat = map[int]string{
 	QUERY_KEFU_DUTY_DETAILS_SUCCESS: "查询值班详情成功",
 	QUERY_KEFU_DUTY_DETAILS_FAILED:  "查询值班详情失败",
+	QUERY_KEFU_DUTY_DETAILS_EMPTY:   "查询值班详情为空",
 }
 
 type kefudutydetailsservice struct{}
@@ -34,6 +36,14 @@ func (kfdds *kefudutydetailsservice) GetKefuDutyDetails(requestObj *KefuDutyDeta
 		return &KefuDutyDetailsResponseStruct{
 			Status: QUERY_KEFU_DUTY_DETAILS_FAILED,
 			Msg:    Stat[QUERY_KEFU_DUTY_DETAILS_FAILED],
+		}, nil
+	}
+
+	if res == nil {
+		Logger.Debugf("GetKefuDutyDetails query empty")
+		return &KefuDutyDetailsResponseStruct{
+			Status: QUERY_KEFU_DUTY_DETAILS_EMPTY,
+			Msg:    Stat[QUERY_KEFU_DUTY_DETAILS_EMPTY],
 		}, nil
 	}
 

@@ -13,13 +13,15 @@ import (
 type cashrecordservice struct{}
 
 const (
-	QUERY_CASHRECORD_FAILED  = 1001
 	QUERY_CASHRECORD_SUCCESS = 1000
+	QUERY_CASHRECORD_FAILED  = 1001
+	QUERY_CASHRECORD_EMPTY   = 1002
 )
 
 var Status = map[int]string{
-	QUERY_CASHRECORD_FAILED:  "查询提现记录失败",
 	QUERY_CASHRECORD_SUCCESS: "查询提现记录成功",
+	QUERY_CASHRECORD_FAILED:  "查询提现记录失败",
+	QUERY_CASHRECORD_EMPTY:   "查询提现记录为空",
 }
 
 func (cs *cashrecordservice) GetUserCashRecordList(requestObj *UserCashRecordListRequestStruct) (r *UserCashRecordListResponseStruct, err error) {
@@ -42,6 +44,14 @@ func (cs *cashrecordservice) GetUserCashRecordList(requestObj *UserCashRecordLis
 			Status: QUERY_CASHRECORD_FAILED,
 			Msg:    Status[QUERY_CASHRECORD_FAILED],
 		}, err
+	}
+
+	if res == nil {
+		Logger.Debugf("GetUserCashRecordList query empty")
+		return &UserCashRecordListResponseStruct{
+			Status: QUERY_CASHRECORD_EMPTY,
+			Msg:    Status[QUERY_CASHRECORD_EMPTY],
+		}, nil
 	}
 
 	var response UserCashRecordListResponseStruct

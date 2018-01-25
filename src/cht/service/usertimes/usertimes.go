@@ -13,6 +13,7 @@ import (
 const (
 	QUERY_USER_TIMES_SUCCESS = 1000
 	QUERY_USER_TIMES_FAILED  = 1001
+	QUERY_USER_TIMES_EMPTY   = 1002
 
 	UPDATE_USER_TIMES_SUCCESS = 1000
 	UPDATE_USER_TIMES_FAILED  = 1001
@@ -29,6 +30,7 @@ const (
 var Query_Stat = map[int]string{
 	QUERY_USER_TIMES_SUCCESS: "查询会员登陆次数限制表成功",
 	QUERY_USER_TIMES_FAILED:  "查询会员登陆次数限制表失败",
+	QUERY_USER_TIMES_EMPTY:   "查询会员登陆次数限制表为空",
 }
 
 var Update_Stat = map[int]string{
@@ -65,6 +67,14 @@ func (uts *usertimesservice) GetUserTimesDetails(requestObj *UserTimesDetailsReq
 		return &UserTimesDetailsResponseStruct{
 			Status: QUERY_USER_TIMES_FAILED,
 			Msg:    Query_Stat[QUERY_USER_TIMES_FAILED],
+		}, nil
+	}
+
+	if res == nil {
+		Logger.Debugf("GetUserTimesDetails query empty")
+		return &UserTimesDetailsResponseStruct{
+			Status: QUERY_USER_TIMES_EMPTY,
+			Msg:    Query_Stat[QUERY_USER_TIMES_EMPTY],
 		}, nil
 	}
 

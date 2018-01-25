@@ -13,11 +13,13 @@ import (
 const (
 	QUERY_ARTICLE_CATE_SUCCESS = 1000
 	QUERY_ARTICLE_CATE_FAILED  = 1001
+	QUERY_ARTICLE_CATE_EMPTY   = 1002
 )
 
 var Stat = map[int]string{
 	QUERY_ARTICLE_CATE_SUCCESS: "查询文章分类表详情成功",
 	QUERY_ARTICLE_CATE_FAILED:  "查询文章分类表详情失败",
+	QUERY_ARTICLE_CATE_EMPTY:   "查询文章分类表详情为空",
 }
 
 type articlecateservice struct{}
@@ -39,6 +41,14 @@ func (acs *articlecateservice) GetArticleCateList(requestObj *ArticleCateListReq
 		return &ArticleCateListResponseStruct{
 			Status: QUERY_ARTICLE_CATE_FAILED,
 			Msg:    Stat[QUERY_ARTICLE_CATE_FAILED],
+		}, nil
+	}
+
+	if res == nil {
+		Logger.Debugf("GetArticleCateList query empty")
+		return &ArticleCateListResponseStruct{
+			Status: QUERY_ARTICLE_CATE_EMPTY,
+			Msg:    Stat[QUERY_ARTICLE_CATE_EMPTY],
 		}, nil
 	}
 

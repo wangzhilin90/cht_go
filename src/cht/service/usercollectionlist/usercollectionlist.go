@@ -55,7 +55,7 @@ func (cs *collectionservice) GetUserCollectionList(requestObj *UserCollectionLis
 		return &UserCollectionListResponseStruct{
 			Status: QUERY_COLLECTION_EMPTY,
 			Msg:    Status[QUERY_COLLECTION_EMPTY],
-		}
+		}, nil
 	}
 
 	var response UserCollectionListResponseStruct

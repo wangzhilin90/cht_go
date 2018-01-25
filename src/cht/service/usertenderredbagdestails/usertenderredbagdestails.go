@@ -15,13 +15,11 @@ type gettenderredservice struct{}
 const (
 	QUERY_RED_BAG_SUCCESS = 1000
 	QUERY_RED_BAG_FAILED  = 1001
-	QUERY_RED_BAG_EMPTY   = 1002
 )
 
 var Status = map[int]string{
 	QUERY_RED_BAG_SUCCESS: "查询红包金额成功",
 	QUERY_RED_BAG_FAILED:  "查询红包金额出错",
-	QUERY_RED_BAG_EMPTY:   "查询红包金额为空",
 }
 
 func (gts *gettenderredservice) GetUserTenderRedbagDestails(requestObj *UserTenderRedbagDestailsRequestStruct) (r *UserTenderRedbagDestailsResponseStruct, err error) {
@@ -41,14 +39,6 @@ func (gts *gettenderredservice) GetUserTenderRedbagDestails(requestObj *UserTend
 		return &UserTenderRedbagDestailsResponseStruct{
 			Status: QUERY_RED_BAG_FAILED,
 			Msg:    Status[QUERY_RED_BAG_FAILED],
-		}, nil
-	}
-
-	if res == nil {
-		Logger.Debugf("GetUserTenderRedbagDestails query empty")
-		return &UserTenderRedbagDestailsResponseStruct{
-			Status: QUERY_RED_BAG_EMPTY,
-			Msg:    Status[QUERY_RED_BAG_EMPTY],
 		}, nil
 	}
 

@@ -11,6 +11,7 @@ import (
 )
 
 const (
+	ONE_DAT_TIME      = int64(24 * 3600)
 	ONE_MONTH_QUANTUM = int64(24 * 3600 * 30)
 )
 
@@ -88,7 +89,7 @@ func GetThirtyDaysResult(odrs *OperationalDataRequestStruct) ([]ThirtyDaysResult
 			Logger.Errorf("GetThirtyDaysResult query failed %v", err)
 			return nil, err
 		}
-		utils.SetCache("borrow:tender:thirtyDays", tdr, 3600)
+		utils.SetCache("borrow:tender:thirtyDays", tdr, ONE_DAT_TIME)
 	}
 
 	Logger.Debugf("GetThirtyDaysResult return value:%v", tdr)
@@ -114,7 +115,7 @@ func GetTwelveMonthResult(odrs *OperationalDataRequestStruct) ([]TwelveMonthResu
 			Logger.Errorf("GetTwelveMonthResult query failed %v", err)
 			return nil, err
 		}
-		utils.SetCache("borrow:twelveMonth", tmr, 3600)
+		utils.SetCache("borrow:twelveMonth", tmr, ONE_DAT_TIME)
 	}
 	Logger.Debugf("GetTwelveMonthResult return value:%v", tmr)
 	return tmr, nil
@@ -138,7 +139,7 @@ func GetOneMonthResult(odrs *OperationalDataRequestStruct) ([]OneMonthResult, er
 			Logger.Errorf("GetOneMonthResultStruct query failed %v", err)
 			return nil, err
 		}
-		utils.SetCache("borrow:oneMonth", omrs, 3600)
+		utils.SetCache("borrow:oneMonth", omrs, ONE_DAT_TIME)
 	}
 
 	Logger.Debugf("GetOneMonthResultStruct return value:%v", omrs)
@@ -164,7 +165,7 @@ func GetPeriodResult(odrs *OperationalDataRequestStruct) ([]PeriodResult, error)
 			Logger.Errorf("GetPeriodResultStruct query failed %v", err)
 			return nil, err
 		}
-		utils.SetCache("borrow:period", pr, 3600)
+		utils.SetCache("borrow:period", pr, ONE_DAT_TIME)
 	}
 
 	Logger.Debugf("GetPeriodResultStruct return value:%v", pr)
@@ -195,7 +196,7 @@ func GetInvestResult(odrs *OperationalDataRequestStruct) (*InvestResult, error) 
 			Logger.Errorf("GetInvestResult query failed %v", err)
 			return nil, err
 		}
-		utils.SetCache("borrow:tender:invest", ir, 3600)
+		utils.SetCache("borrow:tender:invest", ir, ONE_DAT_TIME)
 	}
 
 	Logger.Debugf("GetInvestResult return value:%v", ir)
@@ -220,7 +221,7 @@ func GetBidResult(odrs *OperationalDataRequestStruct) ([]BidResult, error) {
 			Logger.Errorf("GetBidResult query failed %v", err)
 			return nil, err
 		}
-		utils.SetCache("borrow:bid", br, 3600)
+		utils.SetCache("borrow:bid", br, ONE_DAT_TIME)
 	}
 
 	Logger.Debugf("GetBidResult return value:%v", br)
@@ -245,7 +246,7 @@ func GetWaitResult(odrs *OperationalDataRequestStruct) ([]WaitResult, error) {
 			Logger.Errorf("GetWaitResult query failed %v", err)
 			return nil, err
 		}
-		utils.SetCache("user:wait", wr, 3600)
+		utils.SetCache("user:wait", wr, ONE_DAT_TIME)
 	}
 
 	Logger.Debugf("GetWaitResult return value:%v", wr)
@@ -272,7 +273,7 @@ func GetTwelveMonthTotalNum(odrs *OperationalDataRequestStruct) (string, error) 
 			Logger.Errorf("GetTwelveMonthTotalNum query failed:%v", err)
 			return "0.00", err
 		}
-		utils.SetCache("borrow:twelveMonth:account", totalNum, 3600)
+		utils.SetCache("borrow:twelveMonth:account", totalNum, ONE_DAT_TIME)
 	}
 
 	Logger.Debugf("GetTwelveMonthTotalNum return value:%v", totalNum)
@@ -299,7 +300,7 @@ func GetTotalRepayment(odrs *OperationalDataRequestStruct) (string, error) {
 			Logger.Errorf("GetTwelveMonthTotalNum query failed:%v", err)
 			return "0.00", err
 		}
-		utils.SetCache("borrow:repayment:money", totalRepayment, 3600)
+		utils.SetCache("borrow:repayment:money", totalRepayment, ONE_DAT_TIME)
 	}
 
 	Logger.Debugf("GetTotalRepayment return value:%v", totalRepayment)
@@ -332,7 +333,7 @@ func GetTender(odrs *OperationalDataRequestStruct) (string, error) {
 			Logger.Errorf("GetTender query failed:%v", err)
 			return "0.00", err
 		}
-		utils.SetCache("borrow:tender", tender, 3600)
+		utils.SetCache("borrow:tender", tender, ONE_DAT_TIME)
 	}
 
 	Logger.Debugf("GetTender return value:%v", tender)
@@ -365,7 +366,7 @@ func GetTenderToday(odrs *OperationalDataRequestStruct) (string, error) {
 			Logger.Errorf("GetTenderToday query failed:%v", err)
 			return "0.00", err
 		}
-		utils.SetCache("borrow:account", tenderToday, 3600)
+		utils.SetCache("borrow:account", tenderToday, ONE_DAT_TIME)
 	}
 
 	Logger.Debugf("GetTenderToday return value:%v", tenderToday)
@@ -398,7 +399,7 @@ func GetProfit(odrs *OperationalDataRequestStruct) (string, error) {
 			Logger.Errorf("GetProfit query failed:%v", err)
 			return "0.00", err
 		}
-		utils.SetCache("borrow:collection:interest", profit, 3600)
+		utils.SetCache("borrow:collection:interest", profit, ONE_DAT_TIME)
 	}
 
 	Logger.Debugf("GetProfit return value:%v", profit)
@@ -429,7 +430,7 @@ func GetTenderUserCount(odrs *OperationalDataRequestStruct) (int32, error) {
 			Logger.Errorf("GetTenderUserCount query failed:%v", err)
 			return 0, err
 		}
-		utils.SetCache("borrow:tender:user:count", tenderUserCount, 3600)
+		utils.SetCache("borrow:tender:user:count", tenderUserCount, ONE_DAT_TIME)
 	}
 
 	Logger.Debugf("GetTenderUserCount return value:%v", tenderUserCount)

@@ -20,6 +20,7 @@ func (eas *emailattestationservice) CheckEmailUse(requestObj *CheckEmailUseReque
 	eurs.UserID = requestObj.GetUserID()
 	eurs.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	res := emailattestation.CheckEmailUse(eurs)
+	Logger.Infof("CheckEmailUse return value:%v", res)
 	return res, nil
 }
 
@@ -31,6 +32,7 @@ func (eas *emailattestationservice) UserAttestationSave(requestObj *UserAttestat
 	uass.EmailStatus = requestObj.GetEmailStatus()
 	uass.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	res := emailattestation.UserAttestationSave(uass)
+	Logger.Infof("UserAttestationSave return value:%v", res)
 	return res, nil
 }
 
@@ -42,6 +44,7 @@ func (eas *emailattestationservice) UserEmailSave(requestObj *UserEmailSaveReque
 	uesrs.UserID = requestObj.GetUserID()
 	uesrs.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	res := emailattestation.UserEmailSave(uesrs)
+	Logger.Infof("UserEmailSave return value:%v", res)
 	return res, nil
 }
 
@@ -57,6 +60,7 @@ func (eas *emailattestationservice) SendEmail(requestObj *SendEmailRequestStruct
 	sers.Addtime = requestObj.GetAddtime()
 	sers.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	res := emailattestation.SendEmail(sers)
+	Logger.Infof("SendEmail return value:%v", res)
 	return res, nil
 }
 

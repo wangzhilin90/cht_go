@@ -50,6 +50,7 @@ func (eas *emailattestationservice) UserEmailSave(requestObj *UserEmailSaveReque
 
 func (eas *emailattestationservice) SendEmail(requestObj *SendEmailRequestStruct) (r int32, err error) {
 	Logger.Infof("SendEmail requestObj:%v", requestObj)
+	start := time.Now().Unix()
 	requestObj = filterspec.FiterSpecialCharacters(requestObj).(*SendEmailRequestStruct)
 	sers := new(emailattestation.SendEmailRequestStruct)
 	sers.UserID = requestObj.GetUserID()
@@ -60,6 +61,8 @@ func (eas *emailattestationservice) SendEmail(requestObj *SendEmailRequestStruct
 	sers.Addtime = requestObj.GetAddtime()
 	sers.ChengHuiTongTraceLog = requestObj.GetChengHuiTongTraceLog()
 	res := emailattestation.SendEmail(sers)
+	end := time.Now().Unix()
+	Logger.Debugf("SendEmail cost time:%v second", (end - start))
 	Logger.Infof("SendEmail return value:%v", res)
 	return res, nil
 }

@@ -255,6 +255,7 @@ func SendEmail(sers *SendEmailRequestStruct) int32 {
 	}
 	err = SendSmtpMail(sers)
 	if err != nil {
+		Logger.Errorf("SendEmail SendSmtpMail failed:%v", err)
 		return 0
 	}
 	err = UpdateEmailLog(num)

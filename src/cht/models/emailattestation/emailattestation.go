@@ -238,7 +238,7 @@ func SendSmtpMail(sers *SendEmailRequestStruct) error {
 	m.SetBody("text/html", sers.Content)                                    // 正文
 
 	//发送邮件服务器、端口、发件人账号、发件人密码
-	d := gomail.NewPlainDialer("smtp.263.net", 25, "service2@chenghuitong.net", "ChengHuiTong@2013-")
+	d := gomail.NewPlainDialer("smtp.263.net", 25, "service3@chenghuitong.net", "ChengHuiTong@2013-")
 	if err := d.DialAndSend(m); err != nil {
 		Logger.Errorf("SendSmtpMail send failed:%v", err)
 		return err

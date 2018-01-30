@@ -6,7 +6,6 @@ import (
 	"cht/service/advertadd"
 	"cht/service/advertdel"
 	"cht/service/advertdetails"
-	"cht/service/advertlist"
 	"cht/service/advertmanagethriftservice"
 	"cht/service/advertupdate"
 	"cht/service/articlecate"
@@ -329,11 +328,6 @@ func main() {
 	go func() {
 		/*开启[后台]广告图片管理---图片详情服务*/
 		advertdetails.StartAdvertDetailsServer()
-	}()
-
-	go func() {
-		/*开启[后台]广告图片管理---列表服务*/
-		advertlist.StartAdvertListServer()
 	}()
 
 	go func() {

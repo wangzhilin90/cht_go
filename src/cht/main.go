@@ -331,10 +331,10 @@ func main() {
 		advertdetails.StartAdvertDetailsServer()
 	}()
 
-	go func() {
-		/*开启[后台]广告图片管理---列表服务*/
-		advertlist.StartAdvertListServer()
-	}()
+	// go func() {
+	// 	/*开启[后台]广告图片管理---列表服务*/
+	// 	advertlist.StartAdvertListServer()
+	// }()
 
 	go func() {
 		/*开启[后台]广告图片管理---修改广告图片*/

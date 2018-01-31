@@ -318,7 +318,7 @@ func InsertBorrowTbl(bs *Borrow) (int32, error) {
 		str += fmt.Sprintf("is_dxb=%d,", bs.IsDxb)
 	}
 
-	if bs.ValidTime != 0 {
+	if bs.ValidTime != 1 {
 		str += fmt.Sprintf("valid_time=%d,", bs.ValidTime)
 	}
 
@@ -330,23 +330,23 @@ func InsertBorrowTbl(bs *Borrow) (int32, error) {
 		str += fmt.Sprintf("is_false=%d,", bs.IsFalse)
 	}
 
-	if bs.OpenAccount != 0 {
+	if bs.OpenAccount != 1 {
 		str += fmt.Sprintf("open_account=%d,", bs.OpenAccount)
 	}
 
-	if bs.OpenBorrow != 0 {
+	if bs.OpenBorrow != 1 {
 		str += fmt.Sprintf("open_borrow=%d,", bs.OpenBorrow)
 	}
 
-	if bs.OpenTender != 0 {
+	if bs.OpenTender != 1 {
 		str += fmt.Sprintf("open_tender=%d,", bs.OpenTender)
 	}
 
-	if bs.OpenCredit != 0 {
+	if bs.OpenCredit != 1 {
 		str += fmt.Sprintf("open_credit=%d,", bs.OpenCredit)
 	}
 
-	if bs.OpenZiliao != 0 {
+	if bs.OpenZiliao != 1 {
 		str += fmt.Sprintf("open_ziliao=%d,", bs.OpenZiliao)
 	}
 

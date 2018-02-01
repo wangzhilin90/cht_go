@@ -232,7 +232,7 @@ func UpdateEmailLog(lastInsertNum int32) error {
 func SendSmtpMail(sers *SendEmailRequestStruct) error {
 	Logger.Debug("SendSmtpMail input param:", sers)
 	m := gomail.NewMessage()
-	m.SetAddressHeader("From", "service1@chenghuitong.net", "chenghuitong") // 发件人
+	m.SetAddressHeader("From", "service3@chenghuitong.net", "chenghuitong") // 发件人
 	m.SetHeader("To", m.FormatAddress(sers.SendTo, "cht"))                  // 收件人
 	m.SetHeader("Subject", sers.Subject)                                    // 主题
 	m.SetBody("text/html", sers.Content)                                    // 正文

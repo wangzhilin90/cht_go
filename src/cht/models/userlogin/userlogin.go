@@ -44,6 +44,7 @@ type UserInfoResult struct {
  * @DateTime 2017-08-28T14:39:48+0800
  */
 func GetLoginFailedTimes(ulr *UserlLoginRequest) (int32, error) {
+	Logger.Debugf("GetLoginFailedTimes input param:%v", ulr)
 	if ulr == nil || ulr.Username == "" {
 		err := fmt.Errorf("input param nil")
 		Logger.Errorf("input param nil")
@@ -52,9 +53,19 @@ func GetLoginFailedTimes(ulr *UserlLoginRequest) (int32, error) {
 
 	o := orm.NewOrm()
 	o.Using("default")
+	buf := bytes.Buffer{}
+	buf.WriteString("SELECT times FROM jl_user_times WHERE username=?")
+	sql := buf.String()
+	Logger.Debugf("GetLoginFailedTimes sql:%v", sql)
 
 	var temp int32
-	o.Raw("SELECT times FROM jl_user_times WHERE username=?", ulr.Username).QueryRow(&temp)
+	err := o.Raw(sql, ulr.Username).QueryRow(&temp)
+	if err == orm.ErrNoRows {
+		return 0, nil
+	} else if err != nil {
+		Logger.Errorf("GetLoginFailedTimes query failed:%v", err)
+		return 0, err
+	}
 	Logger.Debugf("GetLoginFailedTimes res", temp)
 	return temp, nil
 }
@@ -64,26 +75,32 @@ func GetLoginFailedTimes(ulr *UserlLoginRequest) (int32, error) {
  * @param    username string 用户名
  * @DateTime 2017-08-28T14:35:03+0800
  */
-func CheckLoginUserExists(ulr *UserlLoginRequest) (*UserInfoResult, bool, error) {
+func CheckLoginUserExists(ulr *UserlLoginRequest) (*UserInfoResult, error) {
+	Logger.Debugf("CheckLoginUserExists input param:%v", ulr)
 	if ulr == nil || ulr.Username == "" {
 		Logger.Errorf("input param nil")
 		err := fmt.Errorf("input param nil")
-		return nil, false, err
+		return nil, err
 	}
 
 	o := orm.NewOrm()
 	o.Using("default")
 
+	buf := bytes.Buffer{}
+	buf.WriteString("SELECT id,username,password,email,islock FROM  jl_user where username=? or email=? or phone=?")
+	sql := buf.String()
+	Logger.Debugf("CheckLoginUserExists sql:%v", sql)
+
 	var uir UserInfoResult
-	err := o.Raw("SELECT id,username,password,email,islock FROM  jl_user where username=? or email=? or phone=?", ulr.Username, ulr.Username, ulr.Username).QueryRow(&uir)
+	err := o.Raw(sql, ulr.Username, ulr.Username, ulr.Username).QueryRow(&uir)
 	if err == orm.ErrNoRows {
-		return nil, false, nil
+		return nil, nil
 	} else if err != nil {
-		Logger.Error("CheckLoginUserExists query failed", err.Error())
-		return nil, false, err
+		Logger.Error("CheckLoginUserExists query failed", err)
+		return nil, err
 	}
-	Logger.Debugf("GetLoginFailedTimes res", uir)
-	return &uir, true, nil
+	Logger.Debugf("CheckLoginUserExists res", uir)
+	return &uir, nil
 }
 
 /**
@@ -93,12 +110,14 @@ func CheckLoginUserExists(ulr *UserlLoginRequest) (*UserInfoResult, bool, error)
  * @DateTime 2017-08-28T14:42:38+0800
  */
 func Checkpassword(ulr *UserlLoginRequest) bool {
+	Logger.Debugf("Checkpassword input param:%v", ulr)
 	if ulr == nil || ulr.Username == "" {
+		Logger.Errorf("Checkpassword input not valid")
 		return false
 	}
 
-	res, b, err := CheckLoginUserExists(ulr)
-	if err != nil || b == false || res.Password != ulr.Password {
+	res, err := CheckLoginUserExists(ulr)
+	if err != nil || res == nil || res.Password != ulr.Password {
 		return false
 	}
 	return true
@@ -109,27 +128,35 @@ func Checkpassword(ulr *UserlLoginRequest) bool {
  * @param    ulr *UserlLoginRequest 用户请求入参
  * @DateTime 2017-08-28T18:52:52+0800
  */
-func CheckUserTimesTbExist(ulr *UserlLoginRequest) (bool, error) {
+func CheckUserTimesTbExist(ulr *UserlLoginRequest) bool {
+	Logger.Debugf("CheckUserTimesTbExist input param:%v", ulr)
 	if ulr == nil || ulr.Username == "" {
-		Logger.Errorf("input param nil")
-		err := fmt.Errorf("input param nil")
-		return false, err
+		Logger.Errorf("input param not valid")
+		return false
 	}
 
 	o := orm.NewOrm()
 	o.Using("default")
+	buf := bytes.Buffer{}
+	buf.WriteString("SELECT username  FROM  jl_user_times where username=?")
+	sql := buf.String()
+	Logger.Debugf("CheckUserTimesTbExist sql:%v", sql)
 
 	var userNm string
-	err := o.Raw("SELECT username  FROM  jl_user_times where username=?", ulr.Username).QueryRow(&userNm)
-	if err != nil {
-		Logger.Debug("CheckUserTimesTbExist query failed")
-		return false, nil
+	err := o.Raw(sql, ulr.Username).QueryRow(&userNm)
+	if err == orm.ErrNoRows {
+		Logger.Debugf("CheckUserTimesTbExist query nil")
+		return false
+	} else if err != nil {
+		Logger.Errorf("CheckUserTimesTbExist query failed:%v", err)
+		return false
 	}
-	Logger.Debugf("GetLoginFailedTimes res", userNm)
-	return true, nil
+	Logger.Debugf("CheckUserTimesTbExist res", userNm)
+	return true
 }
 
 func InsertUserTimesTb(ulr *UserlLoginRequest) (bool, error) {
+	Logger.Debugf("InsertUserTimesTb input param:%v", ulr)
 	if ulr == nil || ulr.Username == "" {
 		Logger.Errorf("input param nil")
 		err := fmt.Errorf("input param nil")
@@ -148,6 +175,7 @@ func InsertUserTimesTb(ulr *UserlLoginRequest) (bool, error) {
 }
 
 func UpdateUserTimesTb(ulr *UserlLoginRequest) (bool, error) {
+	Logger.Debugf("UpdateUserTimesTb input param:%v", ulr)
 	if ulr == nil || ulr.Username == "" {
 		Logger.Errorf("input param nil")
 		err := fmt.Errorf("input param nil")
@@ -166,6 +194,7 @@ func UpdateUserTimesTb(ulr *UserlLoginRequest) (bool, error) {
 }
 
 func DeleteUserTimesTb(ulr *UserlLoginRequest) (bool, error) {
+	Logger.Debugf("DeleteUserTimesTb input param:%v", ulr)
 	if ulr == nil || ulr.Username == "" {
 		Logger.Errorf("input param nil")
 		err := fmt.Errorf("input param nil")

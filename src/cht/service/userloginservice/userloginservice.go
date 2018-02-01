@@ -42,7 +42,7 @@ func (uls *UserLoginService) GetUserLoginInfo(requestObj *UserLoginRequestStruct
 	var v UserLoginResponseStruct
 	var max_retry_times int32 = 5
 	times, err := userlogin.GetLoginFailedTimes(ulr)
-	if times >= max_retry_times {
+	if err != nil || times >= max_retry_times {
 		Logger.Errorf("GetUserLoginInfo failed times bigger than max_retry_times")
 		userlogin.InsertLoginLog(ulr)
 		v = UserLoginResponseStruct{
@@ -52,8 +52,8 @@ func (uls *UserLoginService) GetUserLoginInfo(requestObj *UserLoginRequestStruct
 		return &v, nil
 	}
 
-	res, bExists, _ := userlogin.CheckLoginUserExists(ulr)
-	if bExists == false {
+	res, err := userlogin.CheckLoginUserExists(ulr)
+	if err != nil || res == nil {
 		Logger.Errorf("GetUserLoginInfo user not exist")
 		userlogin.InsertLoginLog(ulr)
 		v = UserLoginResponseStruct{
@@ -76,7 +76,7 @@ func (uls *UserLoginService) GetUserLoginInfo(requestObj *UserLoginRequestStruct
 	bl := userlogin.Checkpassword(ulr)
 	if bl == false {
 		userlogin.InsertLoginLog(ulr)
-		b2, _ := userlogin.CheckUserTimesTbExist(ulr)
+		b2 := userlogin.CheckUserTimesTbExist(ulr)
 		if b2 == false {
 			userlogin.InsertUserTimesTb(ulr)
 		} else {

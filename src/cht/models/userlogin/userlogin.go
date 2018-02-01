@@ -105,19 +105,14 @@ func CheckLoginUserExists(ulr *UserlLoginRequest) (*UserInfoResult, error) {
 
 /**
  * [Checkpassword 检查密码和数据库是否一致]
+ * @param    save_password 数据库查找到的密码
  * @param    ulr *UserlLoginRequest  用户请求入参
  * @return 	 bool true为一致，false为不一致
  * @DateTime 2017-08-28T14:42:38+0800
  */
-func Checkpassword(ulr *UserlLoginRequest) bool {
-	Logger.Debugf("Checkpassword input param:%v", ulr)
-	if ulr == nil || ulr.Username == "" {
-		Logger.Errorf("Checkpassword input not valid")
-		return false
-	}
-
-	res, err := CheckLoginUserExists(ulr)
-	if err != nil || res == nil || res.Password != ulr.Password {
+func Checkpassword(save_password string, ulr *UserlLoginRequest) bool {
+	Logger.Debugf("Checkpassword input param save_password:%v,UserlLoginRequest:%v", save_password, ulr)
+	if save_password == "" || ulr == nil || save_password != ulr.Password {
 		return false
 	}
 	return true

@@ -52,8 +52,8 @@ func (uls *UserLoginService) GetUserLoginInfo(requestObj *UserLoginRequestStruct
 		return &v, nil
 	}
 
-	res, err := userlogin.CheckLoginUserExists(ulr)
-	if err != nil || res == nil {
+	userInfo, err := userlogin.CheckLoginUserExists(ulr)
+	if err != nil || userInfo == nil {
 		Logger.Errorf("GetUserLoginInfo user not exist")
 		userlogin.InsertLoginLog(ulr)
 		v = UserLoginResponseStruct{
@@ -63,17 +63,17 @@ func (uls *UserLoginService) GetUserLoginInfo(requestObj *UserLoginRequestStruct
 		return &v, nil
 	}
 
-	if res.Islock == true {
+	if userInfo.Islock == true {
 		Logger.Errorf("GetUserLoginInfo user is lock")
 		userlogin.InsertLoginLog(ulr)
 		v = UserLoginResponseStruct{
-			UserID: res.ID,
+			UserID: userInfo.ID,
 			Status: ACCOUNT_LOCKED,
 			Msg:    Status[ACCOUNT_LOCKED],
 		}
 		return &v, nil
 	}
-	bl := userlogin.Checkpassword(ulr)
+	bl := userlogin.Checkpassword(userInfo.Password, ulr)
 	if bl == false {
 		userlogin.InsertLoginLog(ulr)
 		b2 := userlogin.CheckUserTimesTbExist(ulr)
@@ -83,7 +83,7 @@ func (uls *UserLoginService) GetUserLoginInfo(requestObj *UserLoginRequestStruct
 			userlogin.UpdateUserTimesTb(ulr)
 		}
 		v = UserLoginResponseStruct{
-			UserID: res.ID,
+			UserID: userInfo.ID,
 			Status: VERIFY_FAILED,
 			Msg:    Status[VERIFY_FAILED],
 			Flag:   max_retry_times - times - 1,
@@ -91,7 +91,7 @@ func (uls *UserLoginService) GetUserLoginInfo(requestObj *UserLoginRequestStruct
 	} else {
 		userlogin.DeleteUserTimesTb(ulr)
 		v = UserLoginResponseStruct{
-			UserID: res.ID,
+			UserID: userInfo.ID,
 			Status: VERIFY_PASS,
 			Msg:    Status[VERIFY_PASS],
 			Flag:   max_retry_times,

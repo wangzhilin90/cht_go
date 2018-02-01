@@ -26,7 +26,7 @@ func TestGetLoginFailedTimes(t *testing.T) {
 
 func TestCheckLoginUserExists(t *testing.T) {
 	req := NewUserlLoginRequest("111", "", "", "")
-	_, _, err := CheckLoginUserExists(req)
+	_, err := CheckLoginUserExists(req)
 	if err != nil {
 		t.Fatal("TestCheckLoginUserExists failed", err)
 	}
@@ -50,9 +50,9 @@ func TestInsertUserTimesTb(t *testing.T) {
 
 func TestCheckUserTimesTbExist(t *testing.T) {
 	ulr := NewUserlLoginRequest("mamaipi", "9f7add09b41ac15889441e467ff208bf", "", "")
-	b, err := CheckUserTimesTbExist(ulr)
-	if b == false || err != nil {
-		t.Fatalf("TestCheckUserTimesTbExist failed", err)
+	b := CheckUserTimesTbExist(ulr)
+	if b == false {
+		t.Fatalf("TestCheckUserTimesTbExist failed")
 	}
 }
 

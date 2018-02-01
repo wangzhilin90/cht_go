@@ -34,7 +34,7 @@ func TestCheckLoginUserExists(t *testing.T) {
 
 func TestCheckpassword(t *testing.T) {
 	ulr := NewUserlLoginRequest("july", "9f7add09b41ac15889441e467ff208bf", "", "")
-	b := Checkpassword(ulr)
+	b := Checkpassword("9f7add09b41ac15889441e467ff208bf", ulr)
 	if b == false {
 		t.Fatal("TestCheckpassword failed")
 	}

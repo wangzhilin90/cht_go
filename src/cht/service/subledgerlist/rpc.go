@@ -22,9 +22,9 @@ type SubledgerListRequestStruct struct {
 	ChengHuiTongTraceLog string `thrift:"chengHuiTongTraceLog,2" db:"chengHuiTongTraceLog" json:"chengHuiTongTraceLog"`
 }
 
-func NewSubledgerListRequestStruct() *SubledgerListRequestStruct {
-	return &SubledgerListRequestStruct{}
-}
+// func NewSubledgerListRequestStruct() *SubledgerListRequestStruct {
+// 	return &SubledgerListRequestStruct{}
+// }
 
 func (p *SubledgerListRequestStruct) GetHsZhuanrangrenStr() string {
 	return p.HsZhuanrangrenStr
@@ -149,7 +149,7 @@ func (p *SubledgerListRequestStruct) String() string {
 type SubledgerDetailsStruct struct {
 	UserID   int32  `thrift:"user_id,1" db:"user_id" json:"user_id"`
 	Realname string `thrift:"realname,2" db:"realname" json:"realname"`
-	CardID   int32  `thrift:"card_id,3" db:"card_id" json:"card_id"`
+	CardID   string `thrift:"card_id,3" db:"card_id" json:"card_id"`
 }
 
 func NewSubledgerDetailsStruct() *SubledgerDetailsStruct {
@@ -164,7 +164,7 @@ func (p *SubledgerDetailsStruct) GetRealname() string {
 	return p.Realname
 }
 
-func (p *SubledgerDetailsStruct) GetCardID() int32 {
+func (p *SubledgerDetailsStruct) GetCardID() string {
 	return p.CardID
 }
 func (p *SubledgerDetailsStruct) Read(iprot thrift.TProtocol) error {
@@ -227,7 +227,7 @@ func (p *SubledgerDetailsStruct) ReadField2(iprot thrift.TProtocol) error {
 }
 
 func (p *SubledgerDetailsStruct) ReadField3(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI32(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return thrift.PrependError("error reading field 3: ", err)
 	} else {
 		p.CardID = v
@@ -286,10 +286,10 @@ func (p *SubledgerDetailsStruct) writeField2(oprot thrift.TProtocol) (err error)
 }
 
 func (p *SubledgerDetailsStruct) writeField3(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("card_id", thrift.I32, 3); err != nil {
+	if err := oprot.WriteFieldBegin("card_id", thrift.STRING, 3); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:card_id: ", p), err)
 	}
-	if err := oprot.WriteI32(int32(p.CardID)); err != nil {
+	if err := oprot.WriteString(string(p.CardID)); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T.card_id (3) field write error: ", p), err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {

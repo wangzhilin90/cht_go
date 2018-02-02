@@ -11,7 +11,7 @@ struct SubledgerListRequestStruct {
 struct SubledgerDetailsStruct {
 	1:i32 user_id, 	   //用户ID
 	2:string realname, //真实姓名
-	3:i32 card_id 	   //身份证号
+	3:string card_id 	   //身份证号
 }
 
 struct SubledgerListResponseStruct {

@@ -17,7 +17,7 @@ type SubledgerRequest struct {
 type SubledgerInfo struct {
 	UserID   int32  `orm:"column(user_id)"`
 	Realname string `orm:"column(realname)"`
-	CardID   int32  `orm:"column(card_id)"`
+	CardID   string `orm:"column(card_id)"`
 }
 
 /**
